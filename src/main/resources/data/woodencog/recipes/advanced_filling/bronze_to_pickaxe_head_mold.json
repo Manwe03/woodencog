@@ -1,0 +1,21 @@
+{
+    "type": "woodencog:filling",
+    "ingredients": [
+        {
+            "item": "tfc:ceramic/pickaxe_head_mold"
+        },
+        {
+            "fluid": "tfc:metal/bronze",
+            "nbt": {},
+            "amount": 100
+        }
+    ],
+    "results": [
+        {
+            "stack": {
+                "item": "tfc:ceramic/pickaxe_head_mold",
+                "count": 1
+            }
+        }
+    ]
+}

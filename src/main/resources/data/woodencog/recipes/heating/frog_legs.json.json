@@ -1,0 +1,9 @@
+{
+    "type": "minecraft:smoking",
+    "ingredient": {
+        "item": "tfc:food/frog_legs"
+    },
+    "result": "tfc:food/cooked_frog_legs",
+    "experience": 0,
+    "cookingtime": 200
+}

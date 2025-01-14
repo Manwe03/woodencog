@@ -1,0 +1,17 @@
+{
+    "type": "create:milling",
+    "ingredients": [
+        {
+            "tag": "tfc:makes_white_dye"
+        }
+    ],
+    "results": [
+        {
+            "item": "minecraft:white_dye"
+        },
+        {
+            "item": "minecraft:white_dye"
+        }
+    ],
+    "processingTime": 400
+}

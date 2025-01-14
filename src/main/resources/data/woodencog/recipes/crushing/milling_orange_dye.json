@@ -1,0 +1,17 @@
+{
+    "type": "create:milling",
+    "ingredients": [
+        {
+            "tag": "tfc:makes_orange_dye"
+        }
+    ],
+    "results": [
+        {
+            "item": "minecraft:orange_dye"
+        },
+        {
+            "item": "minecraft:orange_dye"
+        }
+    ],
+    "processingTime": 400
+}

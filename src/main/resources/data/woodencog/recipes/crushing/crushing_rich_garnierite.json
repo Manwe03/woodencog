@@ -1,0 +1,32 @@
+{
+    "type": "create:crushing",
+    "ingredients": [
+        {
+            "item": "tfc:ore/rich_garnierite"
+        }
+    ],
+    "results": [
+        {
+            "item": "tfc:powder/garnierite"
+        },
+        {
+            "item": "tfc:powder/garnierite"
+        },
+        {
+            "item": "tfc:powder/garnierite"
+        },
+        {
+            "item": "tfc:powder/garnierite"
+        },
+        {
+            "item": "tfc:powder/garnierite"
+        },
+        {
+            "item": "tfc:powder/garnierite"
+        },
+        {
+            "item": "tfc:powder/garnierite"
+        }
+    ],
+    "processingTime": 400
+}

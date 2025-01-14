@@ -1,0 +1,17 @@
+{
+    "type": "create:milling",
+    "ingredients": [
+        {
+            "item": "tfc:ore/small_cassiterite"
+        }
+    ],
+    "results": [
+        {
+            "item": "tfc:powder/cassiterite"
+        },
+        {
+            "item": "tfc:powder/cassiterite"
+        }
+    ],
+    "processingTime": 400
+}

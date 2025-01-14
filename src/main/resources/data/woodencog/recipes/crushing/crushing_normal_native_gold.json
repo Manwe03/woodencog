@@ -1,0 +1,26 @@
+{
+    "type": "create:crushing",
+    "ingredients": [
+        {
+            "item": "tfc:ore/normal_native_gold"
+        }
+    ],
+    "results": [
+        {
+            "item": "tfc:powder/native_gold"
+        },
+        {
+            "item": "tfc:powder/native_gold"
+        },
+        {
+            "item": "tfc:powder/native_gold"
+        },
+        {
+            "item": "tfc:powder/native_gold"
+        },
+        {
+            "item": "tfc:powder/native_gold"
+        }
+    ],
+    "processingTime": 400
+}

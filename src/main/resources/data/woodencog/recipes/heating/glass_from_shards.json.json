@@ -1,9 +1,0 @@
-{
-    "type": "minecraft:smelting",
-    "ingredient": {
-        "item": "tfc:glass_shard"
-    },
-    "result": "minecraft:glass",
-    "experience": 0,
-    "cookingtime": 200
-}

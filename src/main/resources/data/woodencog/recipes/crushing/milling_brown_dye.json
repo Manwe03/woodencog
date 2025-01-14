@@ -1,0 +1,17 @@
+{
+    "type": "create:milling",
+    "ingredients": [
+        {
+            "tag": "tfc:makes_brown_dye"
+        }
+    ],
+    "results": [
+        {
+            "item": "minecraft:brown_dye"
+        },
+        {
+            "item": "minecraft:brown_dye"
+        }
+    ],
+    "processingTime": 400
+}

@@ -1,0 +1,20 @@
+{
+  "type": "create:deploying",
+  "ingredients": [
+    {
+      "tag": "tfc:igneous_extrusive_rock"
+    },
+    {
+      "tag": "tfc:chisels"
+    }
+  ],
+  "results": [
+    {
+      "item": "create:andesite_alloy"
+    },
+    {
+      "item": "create:andesite_alloy",
+      "chance": 0.25
+    }
+  ]
+}

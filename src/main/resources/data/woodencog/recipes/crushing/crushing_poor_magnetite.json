@@ -1,0 +1,20 @@
+{
+    "type": "create:crushing",
+    "ingredients": [
+        {
+            "item": "tfc:ore/poor_magnetite"
+        }
+    ],
+    "results": [
+        {
+            "item": "tfc:powder/magnetite"
+        },
+        {
+            "item": "tfc:powder/magnetite"
+        },
+        {
+            "item": "tfc:powder/magnetite"
+        }
+    ],
+    "processingTime": 400
+}

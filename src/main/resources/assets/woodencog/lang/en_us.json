@@ -1,10 +1,6 @@
 {
   "sealed_on": "Sealed on",
   "barrel_crafting": "Crafting",
-  "item.woodencog.unfired_fireclay_crucible": "Unfired fireclay crucible",
-  "item.woodencog.fireclay_crucible": "Fireclay crucible",
-  "item.woodencog.fireclay_crucible.tooltip": "Stackable container holding 1 ingot of fluid",
-  "item.woodencog.fireclay_crucible.contents": "Contains: 1 ingot %s",
 
   "woodencog.ponder.heat.header": "Heating items",
   "woodencog.ponder.heat.text_1": "An item capable of receiving heat will be heated by lava, the maximum temperature is 1700°.",

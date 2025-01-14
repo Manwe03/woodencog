@@ -1,0 +1,14 @@
+{
+    "type": "create:milling",
+    "ingredients": [
+        {
+            "item": "tfc:food/barley_grain"
+        }
+    ],
+    "results": [
+        {
+            "item": "tfc:food/barley_flour"
+        }
+    ],
+    "processingTime": 400
+}

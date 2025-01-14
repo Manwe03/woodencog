@@ -1,0 +1,23 @@
+{
+    "type": "create:compacting",
+    "ingredients": [
+        {
+            "tag": "tfc:fire_clay_knapping"
+        },
+        {
+            "tag": "tfc:fire_clay_knapping"
+        },
+        {
+            "tag": "tfc:fire_clay_knapping"
+        },
+        {
+            "tag": "tfc:fire_clay_knapping"
+        }
+    ],
+    "results": [
+        {
+            "item": "tfc:ceramic/unfired_fire_ingot_mold",
+            "count": 2
+        }
+    ]
+}

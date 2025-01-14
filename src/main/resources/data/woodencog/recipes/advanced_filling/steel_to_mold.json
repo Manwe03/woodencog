@@ -1,0 +1,21 @@
+{
+    "type": "woodencog:filling",
+    "ingredients": [
+        {
+            "item": "tfc:ceramic/ingot_mold"
+        },
+        {
+            "fluid": "tfc:metal/steel",
+            "nbt": {},
+            "amount": 100
+        }
+    ],
+    "results": [
+        {
+            "stack": {
+                "item": "tfc:ceramic/ingot_mold",
+                "count": 1
+            }
+        }
+    ]
+}

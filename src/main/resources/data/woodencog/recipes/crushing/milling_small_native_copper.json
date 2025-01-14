@@ -1,0 +1,17 @@
+{
+    "type": "create:milling",
+    "ingredients": [
+        {
+            "item": "tfc:ore/small_native_copper"
+        }
+    ],
+    "results": [
+        {
+            "item": "tfc:powder/native_copper"
+        },
+        {
+            "item": "tfc:powder/native_copper"
+        }
+    ],
+    "processingTime": 400
+}

@@ -1,7 +1,0 @@
-{
-    "type": "minecraft:smelting",
-    "ingredient": {},
-    "result": "minecraft:glass",
-    "experience": 0,
-    "cookingtime": 200
-}

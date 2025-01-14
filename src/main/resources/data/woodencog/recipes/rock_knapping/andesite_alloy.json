@@ -1,5 +1,6 @@
 {
-  "type": "tfc:rock_knapping",
+  "type": "tfc:knapping",
+  "knapping_type": "tfc:rock",
   "outside_slot_required": false,
   "pattern": [
     "XXXX ",

@@ -1,0 +1,17 @@
+{
+    "type": "create:crushing",
+    "ingredients": [
+        {
+            "tag": "tfc:makes_magenta_dye"
+        }
+    ],
+    "results": [
+        {
+            "item": "minecraft:magenta_dye"
+        },
+        {
+            "item": "minecraft:magenta_dye"
+        }
+    ],
+    "processingTime": 400
+}

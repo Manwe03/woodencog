@@ -1,0 +1,17 @@
+{
+    "type": "create:milling",
+    "ingredients": [
+        {
+            "tag": "tfc:makes_yellow_dye"
+        }
+    ],
+    "results": [
+        {
+            "item": "minecraft:yellow_dye"
+        },
+        {
+            "item": "minecraft:yellow_dye"
+        }
+    ],
+    "processingTime": 400
+}

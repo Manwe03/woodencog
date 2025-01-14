@@ -1,0 +1,17 @@
+{
+    "type": "create:milling",
+    "ingredients": [
+        {
+            "tag": "tfc:makes_lime_dye"
+        }
+    ],
+    "results": [
+        {
+            "item": "minecraft:lime_dye"
+        },
+        {
+            "item": "minecraft:lime_dye"
+        }
+    ],
+    "processingTime": 400
+}

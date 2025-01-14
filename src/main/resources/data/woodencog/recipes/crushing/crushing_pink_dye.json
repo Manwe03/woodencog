@@ -1,0 +1,17 @@
+{
+    "type": "create:crushing",
+    "ingredients": [
+        {
+            "tag": "tfc:makes_pink_dye"
+        }
+    ],
+    "results": [
+        {
+            "item": "minecraft:pink_dye"
+        },
+        {
+            "item": "minecraft:pink_dye"
+        }
+    ],
+    "processingTime": 400
+}

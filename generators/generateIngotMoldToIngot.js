@@ -6,12 +6,16 @@ export const generateIngotMoldToIngot = (name) => {
         "type": "create:deploying",
         "ingredients": [
             {
-                "type": "forge:nbt",
-                "item": "tfc:ceramic/ingot_mold",
-                "nbt": {
-                    "tank": {
-                        "Amount": 100,
-                        "FluidName": `tfc:metal/${name}`
+                "type": "tfc:heatable",
+                "max_temp": 200,
+                "ingredient": {
+                    "type": "forge:nbt",
+                    "item": "tfc:ceramic/ingot_mold",
+                    "nbt": {
+                        "tank": {
+                            "Amount": 100,
+                            "FluidName": `tfc:metal/${name}`
+                        }
                     }
                 }
             },

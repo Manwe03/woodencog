@@ -1,0 +1,17 @@
+{
+    "type": "create:milling",
+    "ingredients": [
+        {
+            "item": "tfc:ore/small_native_gold"
+        }
+    ],
+    "results": [
+        {
+            "item": "tfc:powder/native_gold"
+        },
+        {
+            "item": "tfc:powder/native_gold"
+        }
+    ],
+    "processingTime": 400
+}

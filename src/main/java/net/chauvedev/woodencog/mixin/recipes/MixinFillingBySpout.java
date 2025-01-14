@@ -8,10 +8,13 @@ import com.simibubi.create.content.processing.sequenced.SequencedAssemblyRecipe;
 import com.simibubi.create.foundation.fluid.FluidIngredient;
 import net.chauvedev.woodencog.recipes.advancedProcessingRecipe.AllAdvancedRecipeTypes;
 import net.chauvedev.woodencog.recipes.advancedProcessingRecipe.baseRecipes.SetItemStackProvider;
+import net.dries007.tfc.common.capabilities.MoldLike;
+import net.dries007.tfc.util.Metal;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.Recipe;
 import net.minecraft.world.level.Level;
 import net.minecraftforge.fluids.FluidStack;
+import net.minecraftforge.fluids.capability.IFluidHandler;
 import net.minecraftforge.items.wrapper.RecipeWrapper;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
@@ -94,7 +97,13 @@ public class MixinFillingBySpout {
 
                 SetItemStackProvider provider = AllAdvancedRecipeTypes.CACHES.get(fillingRecipe.getId().toString());
                 (results).forEach(o -> {
-                    ItemStack baseItem = provider.onResultStackSingle(stack,o);
+                    ItemStack baseItem = provider.onResultStackSingle(stack.copyWithCount(o.getCount()),o);
+                    var mold = MoldLike.get(baseItem);
+                    if (mold != null) {
+                        mold.fill(toFill, IFluidHandler.FluidAction.EXECUTE);
+                        var metal = Metal.get(mold.getFluidInTank(0).getFluid());
+                        if (metal != null) mold.setTemperature(metal.getMeltTemperature());
+                    }
                     newStacks.add(baseItem);
                 });
 

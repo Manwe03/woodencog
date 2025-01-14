@@ -1,0 +1,17 @@
+{
+    "type": "create:milling",
+    "ingredients": [
+        {
+            "tag": "tfc:makes_light_gray_dye"
+        }
+    ],
+    "results": [
+        {
+            "item": "minecraft:light_gray_dye"
+        },
+        {
+            "item": "minecraft:light_gray_dye"
+        }
+    ],
+    "processingTime": 400
+}

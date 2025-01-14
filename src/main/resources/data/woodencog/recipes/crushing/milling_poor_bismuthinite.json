@@ -1,0 +1,20 @@
+{
+    "type": "create:milling",
+    "ingredients": [
+        {
+            "item": "tfc:ore/poor_bismuthinite"
+        }
+    ],
+    "results": [
+        {
+            "item": "tfc:powder/bismuthinite"
+        },
+        {
+            "item": "tfc:powder/bismuthinite"
+        },
+        {
+            "item": "tfc:powder/bismuthinite"
+        }
+    ],
+    "processingTime": 400
+}

@@ -1,0 +1,21 @@
+{
+    "type": "woodencog:filling",
+    "ingredients": [
+        {
+            "item": "tfc:ceramic/chisel_head_mold"
+        },
+        {
+            "fluid": "tfc:metal/bismuth_bronze",
+            "nbt": {},
+            "amount": 100
+        }
+    ],
+    "results": [
+        {
+            "stack": {
+                "item": "tfc:ceramic/chisel_head_mold",
+                "count": 1
+            }
+        }
+    ]
+}

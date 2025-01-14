@@ -1,0 +1,31 @@
+{
+    "type": "create:deploying",
+    "ingredients": [
+        {
+            "type": "tfc:heatable",
+            "max_temp": 200,
+            "ingredient": {
+                "type": "forge:nbt",
+                "item": "tfc:ceramic/bell_mold",
+                "nbt": {
+                    "tank": {
+                        "Amount": 100,
+                        "FluidName": "tfc:metal/bronze"
+                    }
+                }
+            }
+        },
+        {
+            "tag": "tfc:chisels"
+        }
+    ],
+    "results": [
+        {
+            "item": "tfc:metal/bell/bronze"
+        },
+        {
+            "item": "tfc:ceramic/bell_mold",
+            "chance": 0.75
+        }
+    ]
+}

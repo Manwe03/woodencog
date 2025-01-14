@@ -11,6 +11,7 @@ import net.chauvedev.woodencog.recipes.advancedProcessingRecipe.baseRecipes.SetI
 import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.Recipe;
+import net.minecraft.world.level.Level;
 import net.minecraftforge.items.ItemHandlerHelper;
 import org.checkerframework.checker.units.qual.A;
 import org.spongepowered.asm.mixin.Mixin;
@@ -33,13 +34,10 @@ public class MixinRecipeApplier {
      * @reason Replace method to allow usage of current item not referenced item
      */
     @Overwrite
-    public static List<ItemStack> applyRecipeOn(ItemStack stackIn, Recipe<?> recipe) {
-        List<ItemStack> stacks;
-
+    public static List<ItemStack> applyRecipeOn(Level level, ItemStack stackIn, Recipe<?> recipe) {
+        Object stacks;
         if (recipe instanceof ProcessingRecipe<?> pr) {
-            stacks = new ArrayList<>();
-
-
+            stacks = new ArrayList();
             boolean is_advanced_recipe = AllAdvancedRecipeTypes.CACHES.containsKey(pr.getId().toString());
             for(int i = 0; i < stackIn.getCount(); ++i) {
                 List var10000;
@@ -50,17 +48,14 @@ public class MixinRecipeApplier {
                 }
 
                 List<ProcessingOutput> outputs = var10000;
+                Iterator var13 = pr.rollResults(outputs).iterator();
 
-                Iterator var12 = pr.rollResults(outputs).iterator();
+                while(var13.hasNext()) {
+                    ItemStack stack = (ItemStack)var13.next();
+                    Iterator var9 = ((List)stacks).iterator();
 
-                while(var12.hasNext()) {
-                    ItemStack stack = (ItemStack)var12.next();
-                    Iterator var8 = ((List)stacks).iterator();
-
-
-
-                    while(var8.hasNext()) {
-                        ItemStack previouslyRolled = (ItemStack)var8.next();
+                    while(var9.hasNext()) {
+                        ItemStack previouslyRolled = (ItemStack)var9.next();
                         if (!stack.isEmpty() && ItemHandlerHelper.canItemStacksStack(stack, previouslyRolled)) {
                             int amount = Math.min(previouslyRolled.getMaxStackSize() - previouslyRolled.getCount(), stack.getCount());
                             previouslyRolled.grow(amount);
@@ -69,7 +64,7 @@ public class MixinRecipeApplier {
                     }
 
                     if (!stack.isEmpty()) {
-                        stacks.add(stack);
+                        ((List)stacks).add(stack);
                     }
                 }
             }
@@ -78,19 +73,18 @@ public class MixinRecipeApplier {
                 ArrayList<ItemStack> newStacks = new ArrayList<>();
 
                 SetItemStackProvider provider = AllAdvancedRecipeTypes.CACHES.get(pr.getId().toString());
-                (stacks).forEach(o -> {
-                    newStacks.add(provider.onResultStackSingle(stackIn,o));
+                ((List)stacks).forEach(o -> {
+                    newStacks.add(provider.onResultStackSingle(stackIn,(ItemStack) o));
                 });
 
                 stacks = newStacks;
 
             }
-
         } else {
-            ItemStack out = recipe.getResultItem().copy();
+            ItemStack out = recipe.getResultItem(level.registryAccess()).copy();
             stacks = ItemHelper.multipliedOutput(stackIn, out);
         }
 
-        return stacks;
+        return (List)stacks;
     }
 }

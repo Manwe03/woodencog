@@ -1,0 +1,9 @@
+{
+    "type": "minecraft:smoking",
+    "ingredient": {
+        "item": "tfc:food/lake_trout"
+    },
+    "result": "tfc:food/cooked_lake_trout",
+    "experience": 0,
+    "cookingtime": 200
+}

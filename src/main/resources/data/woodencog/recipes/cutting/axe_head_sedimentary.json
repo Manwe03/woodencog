@@ -1,0 +1,13 @@
+{
+    "type": "create:cutting",
+    "ingredients": [
+        {
+            "tag": "tfc:rock_knapping"
+        }
+    ],
+    "results": [
+        {
+            "item": "tfc:stone/axe_head/sedimentary"
+        }
+    ]
+}

@@ -1,0 +1,9 @@
+{
+    "type": "minecraft:smelting",
+    "ingredient": {
+        "item": "tfc:ceramic/unfired_blowpipe"
+    },
+    "result": "tfc:ceramic_blowpipe",
+    "experience": 0,
+    "cookingtime": 200
+}

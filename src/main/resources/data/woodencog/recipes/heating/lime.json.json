@@ -1,0 +1,9 @@
+{
+    "type": "minecraft:smelting",
+    "ingredient": {
+        "item": "tfc:powder/flux"
+    },
+    "result": "tfc:powder/lime",
+    "experience": 0,
+    "cookingtime": 200
+}

@@ -1,0 +1,31 @@
+{
+    "type": "create:deploying",
+    "ingredients": [
+        {
+            "type": "tfc:heatable",
+            "max_temp": 200,
+            "ingredient": {
+                "type": "forge:nbt",
+                "item": "tfc:ceramic/scythe_blade_mold",
+                "nbt": {
+                    "tank": {
+                        "Amount": 100,
+                        "FluidName": "tfc:metal/bronze"
+                    }
+                }
+            }
+        },
+        {
+            "tag": "tfc:chisels"
+        }
+    ],
+    "results": [
+        {
+            "item": "tfc:metal/scythe_blade/bronze"
+        },
+        {
+            "item": "tfc:ceramic/scythe_blade_mold",
+            "chance": 0.75
+        }
+    ]
+}

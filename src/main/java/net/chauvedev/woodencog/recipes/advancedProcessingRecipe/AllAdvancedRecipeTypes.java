@@ -37,18 +37,7 @@ import java.util.function.Supplier;
 public enum AllAdvancedRecipeTypes {
 
     PRESSING(AllRecipeTypes.PRESSING, PressingRecipe::new),
-    CRUSHING(AllRecipeTypes.CRUSHING, CrushingRecipe::new),
-    CUTTING(AllRecipeTypes.CUTTING, CuttingRecipe::new),
-    MILLING(AllRecipeTypes.MILLING, MillingRecipe::new),
-    BASIN(AllRecipeTypes.BASIN, BasinRecipe::new),
-    MIXING(AllRecipeTypes.MIXING, MixingRecipe::new),
-    COMPACTING(AllRecipeTypes.COMPACTING, CompactingRecipe::new),
-    SANDPAPER_POLISHING(AllRecipeTypes.SANDPAPER_POLISHING, SandPaperPolishingRecipe::new),
-    SPLASHING(AllRecipeTypes.SPLASHING, SplashingRecipe::new),
-    HAUNTING(AllRecipeTypes.HAUNTING, HauntingRecipe::new),
-    DEPLOYING(AllRecipeTypes.DEPLOYING, DeployerApplicationRecipe::new),
-    FILLING(AllRecipeTypes.FILLING, FillingRecipe::new),
-    EMPTYING(AllRecipeTypes.EMPTYING, EmptyingRecipe::new);
+    FILLING(AllRecipeTypes.FILLING, FillingRecipe::new);
 
     private final RegistryObject<RecipeSerializer<?>> serializerObject;
 

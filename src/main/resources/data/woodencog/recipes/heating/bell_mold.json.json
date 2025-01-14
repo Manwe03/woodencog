@@ -1,0 +1,9 @@
+{
+    "type": "minecraft:smelting",
+    "ingredient": {
+        "item": "tfc:ceramic/unfired_bell_mold"
+    },
+    "result": "tfc:ceramic/bell_mold",
+    "experience": 0,
+    "cookingtime": 200
+}

@@ -5,7 +5,6 @@ import com.simibubi.create.content.kinetics.belt.transport.TransportedItemStack;
 import com.simibubi.create.content.kinetics.fan.processing.AllFanProcessingTypes;
 import com.simibubi.create.content.kinetics.fan.processing.FanProcessing;
 import com.simibubi.create.content.kinetics.fan.processing.FanProcessingType;
-import net.chauvedev.woodencog.config.CustomBlockConfig;
 import net.chauvedev.woodencog.config.WoodenCogCommonConfigs;
 import net.chauvedev.woodencog.utils.ModTags;
 import net.dries007.tfc.common.capabilities.food.FoodCapability;
@@ -14,7 +13,6 @@ import net.dries007.tfc.common.capabilities.heat.HeatCapability;
 import net.dries007.tfc.common.capabilities.heat.IHeat;
 import net.dries007.tfc.common.recipes.HeatingRecipe;
 import net.dries007.tfc.common.recipes.inventory.ItemStackInventory;
-import net.minecraft.core.Registry;
 import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
@@ -23,8 +21,6 @@ import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
-
-import java.util.Map;
 
 @Mixin(value = FanProcessing.class, remap = false)
 public class MixinFanProcessing {
@@ -62,13 +58,13 @@ public class MixinFanProcessing {
 
         if (recipe!=null){
             if ((double)itemTemp > 1.1 * (double)recipe.getTemperature()) {
-                if (recipe.assemble(new ItemStackInventory(inputStack)).isEmpty()){
+                if (recipe.assemble(new ItemStackInventory(inputStack), null).isEmpty()){
                     return null;
                 }
             }
             if (recipe.isValidTemperature(cap.getTemperature()))
             {
-                ItemStack output = recipe.assemble(new ItemStackInventory(inputStack));
+                ItemStack output = recipe.assemble(new ItemStackInventory(inputStack), null);
                 FluidStack fluidStack = recipe.assembleFluid(new ItemStackInventory(inputStack));
                 if(!fluidStack.isEmpty()) {
                     return ItemStack.EMPTY;
@@ -91,12 +87,6 @@ public class MixinFanProcessing {
             cancellable = true
     )
     private static void applyProcessing(TransportedItemStack transported, Level world, FanProcessingType type,CallbackInfoReturnable<TransportedItemStackHandlerBehaviour.TransportedResult> cir) {
-        CustomBlockConfig.registeredBlocks.forEach((s, blockInformation) -> {
-            System.out.println(s);
-        });
-
-        CustomBlockConfig.registeredBlocks.get("create:shaft");
-
         boolean hasHeat = transported.stack.getCapability(HeatCapability.CAPABILITY).isPresent();
         boolean isUnburnable = transported.stack.is(ModTags.Items.UNBURNABLE);
 

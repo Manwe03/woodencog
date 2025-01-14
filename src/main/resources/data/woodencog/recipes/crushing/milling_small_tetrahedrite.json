@@ -1,0 +1,17 @@
+{
+    "type": "create:milling",
+    "ingredients": [
+        {
+            "item": "tfc:ore/small_tetrahedrite"
+        }
+    ],
+    "results": [
+        {
+            "item": "tfc:powder/tetrahedrite"
+        },
+        {
+            "item": "tfc:powder/tetrahedrite"
+        }
+    ],
+    "processingTime": 400
+}

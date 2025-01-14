@@ -1,0 +1,19 @@
+{
+    "type": "create:mixing",
+    "ingredients": [
+        {
+            "item": "tfc:papyrus_strip"
+        },
+        {
+            "fluid": "minecraft:water",
+            "amount": 200
+        }
+    ],
+    "results": [
+        {
+            "item": "tfc:soaked_papyrus_strip",
+            "count": 1
+        }
+    ],
+    "processingTime": 800
+}

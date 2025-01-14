@@ -1,0 +1,31 @@
+{
+    "type": "create:deploying",
+    "ingredients": [
+        {
+            "type": "tfc:heatable",
+            "max_temp": 200,
+            "ingredient": {
+                "type": "forge:nbt",
+                "item": "tfc:ceramic/shovel_head_mold",
+                "nbt": {
+                    "tank": {
+                        "Amount": 100,
+                        "FluidName": "tfc:metal/bismuth_bronze"
+                    }
+                }
+            }
+        },
+        {
+            "tag": "tfc:chisels"
+        }
+    ],
+    "results": [
+        {
+            "item": "tfc:metal/shovel_head/bismuth_bronze"
+        },
+        {
+            "item": "tfc:ceramic/shovel_head_mold",
+            "chance": 0.75
+        }
+    ]
+}

@@ -1,0 +1,21 @@
+{
+    "type": "woodencog:filling",
+    "ingredients": [
+        {
+            "item": "tfc:ceramic/knife_blade_mold"
+        },
+        {
+            "fluid": "tfc:metal/black_bronze",
+            "nbt": {},
+            "amount": 100
+        }
+    ],
+    "results": [
+        {
+            "stack": {
+                "item": "tfc:ceramic/knife_blade_mold",
+                "count": 1
+            }
+        }
+    ]
+}

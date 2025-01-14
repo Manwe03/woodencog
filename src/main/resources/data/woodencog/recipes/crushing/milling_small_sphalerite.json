@@ -1,0 +1,17 @@
+{
+    "type": "create:milling",
+    "ingredients": [
+        {
+            "item": "tfc:ore/small_sphalerite"
+        }
+    ],
+    "results": [
+        {
+            "item": "tfc:powder/sphalerite"
+        },
+        {
+            "item": "tfc:powder/sphalerite"
+        }
+    ],
+    "processingTime": 400
+}

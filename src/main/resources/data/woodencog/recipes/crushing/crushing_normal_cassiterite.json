@@ -1,0 +1,26 @@
+{
+    "type": "create:crushing",
+    "ingredients": [
+        {
+            "item": "tfc:ore/normal_cassiterite"
+        }
+    ],
+    "results": [
+        {
+            "item": "tfc:powder/cassiterite"
+        },
+        {
+            "item": "tfc:powder/cassiterite"
+        },
+        {
+            "item": "tfc:powder/cassiterite"
+        },
+        {
+            "item": "tfc:powder/cassiterite"
+        },
+        {
+            "item": "tfc:powder/cassiterite"
+        }
+    ],
+    "processingTime": 400
+}

@@ -5,6 +5,7 @@
   "compatibilityLevel": "JAVA_17",
   "refmap": "woodencog.refmap.json",
   "mixins": [
+    "MixinAnimatedBlazeBurner",
     "MixinBasin",
     "MixinBasinCategory",
     "MixinBasinRecipe",
@@ -13,9 +14,10 @@
     "MixinCharcoalForgeBlock",
     "MixinCrucibleBlock",
     "MixinFanProcessing",
-    "MixinKineticBlock",
-    "MixinKineticBlockEntity",
-    "MixinNetheriteDivingHandler"
+    "MixinNetheriteDivingHandler",
+    "recipes.MixinFillingBySpout",
+    "recipes.MixinRecipeApplier"
   ],
+  "client": ["MixinCreateRecipeCategory"],
   "minVersion": "0.8.5"
 }
