@@ -1,4 +1,5 @@
 # Wooden Cog
+Forked from https://github.com/Sparks-and-Rotation/woodencog
 
 ## INFO
 this mod is a compatibility mod for tfc and create.
