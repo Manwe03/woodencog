@@ -10,6 +10,7 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.world.item.crafting.Recipe;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
+import org.lwjgl.system.CallbackI;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Overwrite;
 import org.spongepowered.asm.mixin.Shadow;
@@ -35,8 +36,14 @@ public abstract class MixinBasinRecipe extends KineticBlockEntity {
         } else {
             List<Recipe<?>> list = RecipeFinder.get(this.getRecipeCacheKey(), this.level, this::matchStaticFilters);
             return list.stream().filter(this::matchBasinRecipe).sorted((r1, r2) -> {
-                int r1Size = (r1.getIngredients().size() + ((BasinRecipe)r1).getFluidIngredients().size());
-                int r2Size = (r2.getIngredients().size() + ((BasinRecipe)r2).getFluidIngredients().size());
+                int r1Size = 0;
+                int r2Size = 0;
+                if (r1 instanceof BasinRecipe basinR1){
+                    r1Size = (basinR1.getIngredients().size() + basinR1.getFluidIngredients().size());
+                }
+                if(r2 instanceof BasinRecipe basinR2){
+                    r2Size = (basinR2.getIngredients().size() + basinR2.getFluidIngredients().size());
+                }
                 return r2Size - r1Size;
             }).collect(Collectors.toList());
         }
