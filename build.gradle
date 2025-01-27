@@ -194,10 +194,10 @@ dependencies {
     compileOnly fg.deobf("vazkii.patchouli:Patchouli:${minecraft_version}-${patchouli_version}:api")
     runtimeOnly fg.deobf("vazkii.patchouli:Patchouli:${minecraft_version}-${patchouli_version}")
 
-    implementation fg.deobf("com.jozufozu.flywheel:flywheel-forge-${minecraft_version}:${flywheel_version}")
+    //implementation fg.deobf("com.jozufozu.flywheel:flywheel-forge-${minecraft_version}:${flywheel_version}")
 
-    implementation fg.deobf("curse.maven:create-328085:4835191")
-    implementation fg.deobf("curse.maven:terrafirmacraft-302973:4845122")
+    implementation fg.deobf("curse.maven:create-328085:5689514")
+    implementation fg.deobf("curse.maven:terrafirmacraft-302973:6103204")
 
     annotationProcessor "org.spongepowered:mixin:${mixin_version}:processor"
 }

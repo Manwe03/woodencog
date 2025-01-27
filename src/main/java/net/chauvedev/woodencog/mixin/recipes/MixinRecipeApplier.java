@@ -21,7 +21,7 @@ public class MixinRecipeApplier {
 
 
     /**
-     * @author DeltaAnto
+     * @author Manwe - DeltaAnto
      * @reason Replace method to allow usage of current item not referenced item
      */
     @Inject(

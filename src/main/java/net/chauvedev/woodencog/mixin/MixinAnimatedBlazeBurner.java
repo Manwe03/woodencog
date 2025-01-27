@@ -21,6 +21,7 @@ import org.spongepowered.asm.mixin.Mixin;
 public class MixinAnimatedBlazeBurner extends AnimatedKinetics {
     @Override
     public void draw(GuiGraphics guiGraphics, int xOffset, int yOffset) {
+        /* To remade for new flywheel 0.6.11 implementation
         PoseStack matrixStack = guiGraphics.pose();
         matrixStack.pushPose();
         matrixStack.translate((float)xOffset, (float)yOffset, 200.0F);
@@ -32,5 +33,6 @@ public class MixinAnimatedBlazeBurner extends AnimatedKinetics {
         matrixStack.translate(0.0, -1.8, 0.0);
         Minecraft mc = Minecraft.getInstance();
         matrixStack.popPose();
+         */
     }
 }

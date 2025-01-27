@@ -3,13 +3,13 @@ package net.chauvedev.woodencog.recipes.advancedProcessingRecipe;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import com.simibubi.create.AllRecipeTypes;
-import com.simibubi.create.content.kinetics.press.PressingBehaviour;
 import com.simibubi.create.content.processing.recipe.ProcessingOutput;
 import com.simibubi.create.content.processing.recipe.ProcessingRecipe;
 import com.simibubi.create.content.processing.recipe.ProcessingRecipeBuilder;
 import com.simibubi.create.content.processing.recipe.ProcessingRecipeSerializer;
 import net.chauvedev.woodencog.recipes.advancedProcessingRecipe.baseRecipes.AdvancedRecipe;
 import net.dries007.tfc.common.recipes.outputs.ItemStackProvider;
+import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.ItemStack;
@@ -37,8 +37,16 @@ public class AdvancedRecipeSerializer<T extends ProcessingRecipe<?> > extends Pr
         JsonArray results = recipeJson.get("results").getAsJsonArray();
         ArrayList<ItemStack> itemStacks = new ArrayList<>();
         results.forEach(jsonElement -> {
-            ItemStackProvider itemStackProvider = ItemStackProvider.fromJson(jsonElement.getAsJsonObject());
+            JsonObject resultElement = jsonElement.getAsJsonObject();
+            ItemStackProvider itemStackProvider = ItemStackProvider.fromJson(resultElement);
             ItemStack stack = itemStackProvider.getEmptyStack();
+            if (resultElement.has("temperature")) {
+                float temperature = resultElement.get("temperature").getAsFloat();
+                if (!stack.hasTag()) {
+                    stack.setTag(new CompoundTag());
+                }
+                stack.getTag().putFloat("temperature", temperature);
+            }
             itemStacks.add(stack);
         });
         return itemStacks;

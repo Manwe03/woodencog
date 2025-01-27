@@ -16,12 +16,12 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 import java.util.List;
 
 @Mixin(value = BasinBlockEntity.class, remap = false)
-public abstract class MixinBasinTileEntity {
+public abstract class MixinBasinBlockEntity {
 
     @Shadow public SmartFluidTankBehaviour inputTank;
     @Shadow private boolean contentsChanged;
 
-    public MixinBasinTileEntity() {
+    public MixinBasinBlockEntity() {
     }
 
 
