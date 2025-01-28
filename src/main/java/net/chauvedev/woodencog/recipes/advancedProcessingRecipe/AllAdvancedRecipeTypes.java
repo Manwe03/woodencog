@@ -37,8 +37,7 @@ import java.util.function.Supplier;
 public enum AllAdvancedRecipeTypes {
 
     PRESSING(AllRecipeTypes.PRESSING, PressingRecipe::new),
-    FILLING(AllRecipeTypes.FILLING, FillingRecipe::new),
-    MIXIN(AllRecipeTypes.MIXING, MixingRecipe::new);
+    FILLING(AllRecipeTypes.FILLING, FillingRecipe::new);
 
     private final RegistryObject<RecipeSerializer<?>> serializerObject;
 

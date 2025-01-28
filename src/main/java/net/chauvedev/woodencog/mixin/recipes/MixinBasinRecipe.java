@@ -163,17 +163,15 @@ public abstract class MixinBasinRecipe {
                         // Ejemplo Aplica temperatura a todos los items
                         for (ItemStack outputItem : recipeOutputItems) {
                             if (outputItem != null && !outputItem.isEmpty()) {
-                                if (outputItem.hasTag() && outputItem.getTag().contains("temperature")){
-                                    boolean hasHeat = outputItem.getCapability(HeatCapability.CAPABILITY).isPresent();
-                                    float temp = outputItem.getTag().getFloat("temperature");
-                                    if(hasHeat){
-                                        System.out.println("Has Heat Capability and applied to: "+outputItem.getItem().getName(outputItem));
-                                        IHeat cap = outputItem.getCapability(HeatCapability.CAPABILITY).resolve().get();
-                                        cap.setTemperature(temp);
+                                if (outputItem.hasTag()){
+                                    if(outputItem.getTag().contains("temperature")) {
+                                        boolean hasHeat = outputItem.getCapability(HeatCapability.CAPABILITY).isPresent();
+                                        float temp = outputItem.getTag().getFloat("temperature");
+                                        if (hasHeat) {
+                                            IHeat cap = outputItem.getCapability(HeatCapability.CAPABILITY).resolve().get();
+                                            cap.setTemperature(temp);
+                                        }
                                     }
-                                    System.out.println("TEMPERATURA " + temp);
-                                }else {
-                                    System.out.println("NO TIENE TAG TEMPERATURA");
                                 }
                             }
                         }

@@ -9,13 +9,14 @@
     "MixinBasinBlockEntity",
     "MixinBasinCategory",
     "MixinBasinOperatingBlockEntity",
-    "recipes.MixinBasinRecipe",
     "MixinBlockHelper",
     "MixinCharcoalForgeBlock",
     "MixinCrucibleBlock",
     "MixinFanProcessing",
     "MixinNetheriteDivingHandler",
+    "recipes.MixinBasinRecipe",
     "recipes.MixinFillingBySpout",
+    "recipes.MixinProcessingOutput",
     "recipes.MixinRecipeApplier"
   ],
   "client": [
