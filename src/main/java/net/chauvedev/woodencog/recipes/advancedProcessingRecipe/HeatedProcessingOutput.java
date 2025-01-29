@@ -11,23 +11,26 @@ import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.ItemStack;
 
-public class CustomProcessingOutput extends ProcessingOutput {
+public class HeatedProcessingOutput extends ProcessingOutput {
 
     private Pair<ResourceLocation, Integer> childCompatDatagenOutput;
     private final float temperature;
     private final boolean copyHeat;
+    private final float cooling;
 
-    public CustomProcessingOutput(ItemStack stack, float chance, float temperature, boolean copyHeat) {
+    public HeatedProcessingOutput(ItemStack stack, float chance, float temperature, boolean copyHeat, float cooling) {
         super(stack, chance);
         this.temperature = temperature;
         this.copyHeat = copyHeat;
+        this.cooling = cooling;
     }
 
-    public CustomProcessingOutput(Pair<ResourceLocation, Integer> item, float chance, float temperature, boolean copyHeat) {
+    public HeatedProcessingOutput(Pair<ResourceLocation, Integer> item, float chance, float temperature, boolean copyHeat, float cooling) {
         super(item,chance);
         this.childCompatDatagenOutput = item;
         this.temperature = temperature;
         this.copyHeat = copyHeat;
+        this.cooling = cooling;
     }
 
     public float getTemperature() {
@@ -35,6 +38,9 @@ public class CustomProcessingOutput extends ProcessingOutput {
     }
     public boolean getCopyHeat(){
         return copyHeat;
+    }
+    public float getCooling(){
+        return cooling;
     }
 
     @Override
@@ -58,6 +64,7 @@ public class CustomProcessingOutput extends ProcessingOutput {
         if (WoodenCogCommonConfigs.HANDLE_TEMPERATURE.get()){
             json.addProperty("temperature", this.getTemperature());
             json.addProperty("copyheat",this.getCopyHeat());
+            json.addProperty("cooling",this.getCooling());
         }
         return json;
     }
@@ -67,9 +74,10 @@ public class CustomProcessingOutput extends ProcessingOutput {
         super.write(buf);
         buf.writeFloat(getTemperature());
         buf.writeBoolean(getCopyHeat());
+        buf.writeFloat(getCooling());
     }
 
-    public static CustomProcessingOutput read(FriendlyByteBuf buf) {
-        return new CustomProcessingOutput(buf.readItem(), buf.readFloat(),buf.readFloat(),buf.readBoolean());
+    public static HeatedProcessingOutput read(FriendlyByteBuf buf) {
+        return new HeatedProcessingOutput(buf.readItem(), buf.readFloat(),buf.readFloat(),buf.readBoolean(),buf.readFloat());
     }
 }

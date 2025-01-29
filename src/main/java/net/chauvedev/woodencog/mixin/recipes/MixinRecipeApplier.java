@@ -5,56 +5,21 @@ import com.simibubi.create.content.processing.recipe.ProcessingOutput;
 import com.simibubi.create.content.processing.recipe.ProcessingRecipe;
 import com.simibubi.create.foundation.item.ItemHelper;
 import com.simibubi.create.foundation.recipe.RecipeApplier;
+import net.chauvedev.woodencog.recipes.IMixinProcessingRecipe;
 import net.chauvedev.woodencog.recipes.advancedProcessingRecipe.AllAdvancedRecipeTypes;
-import net.chauvedev.woodencog.recipes.advancedProcessingRecipe.CustomProcessingOutput;
 import net.chauvedev.woodencog.recipes.advancedProcessingRecipe.baseRecipes.SetItemStackProvider;
-import net.dries007.tfc.common.capabilities.heat.HeatCapability;
-import net.dries007.tfc.common.capabilities.heat.IHeat;
-import net.dries007.tfc.common.recipes.outputs.CopyHeatModifier;
-import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.Recipe;
 import net.minecraft.world.level.Level;
 import net.minecraftforge.items.ItemHandlerHelper;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Overwrite;
-import org.spongepowered.asm.mixin.injection.At;
-import org.spongepowered.asm.mixin.injection.Inject;
-import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
-import org.spongepowered.asm.mixin.injection.callback.LocalCapture;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 
 @Mixin(value = RecipeApplier.class, remap = false)
 public class MixinRecipeApplier {
-
-    /**
-     * @author Manwe - DeltaAnto
-     * @reason Replace method to allow usage of current item not referenced item
-     *//*
-    @Inject(
-        method = "applyRecipeOn(Lnet/minecraft/world/level/Level;Lnet/minecraft/world/item/ItemStack;Lnet/minecraft/world/item/crafting/Recipe;)Ljava/util/List;",
-        at = @At(value = "INVOKE", target = "Lcom/simibubi/create/content/processing/recipe/ProcessingRecipe;rollResults(Ljava/util/List;)Ljava/util/List;"),
-        locals = LocalCapture.CAPTURE_FAILSOFT
-    )
-    private static void injectBeforeRollResults(Level level, ItemStack stackIn, Recipe<?> recipe, CallbackInfoReturnable<List<ItemStack>> cir,List<Object> outputs){
-        System.out.println("INJECTION");
-        System.out.println(outputs);
-        for (Object output : outputs){
-            System.out.println("For loop"); //No entra aqui que mierda???
-            if (output instanceof CustomProcessingOutput processingOutput){
-                System.out.println("CUSTOM PROCESSING OUTPUT");
-                if(processingOutput.getCopyHeat()){
-                    System.out.println("CopyHeat");
-                    boolean hasHeat = stackIn.getCapability(HeatCapability.CAPABILITY).isPresent();
-                    if (!hasHeat) continue;
-                    CopyHeatModifier.INSTANCE.apply(processingOutput.getStack(),stackIn);
-                }
-            }
-        }
-    }*/
 
     /**
      * @author Manwe - DeltaAnto
@@ -86,8 +51,9 @@ public class MixinRecipeApplier {
     }*/
 
     /**
-     * @author
-     * @reason
+     * @author Manwe
+     * @reason Adds call to custom rollResults method that take into account the item input temperature if specified
+     * in the recipe as copyHeat = true
      */
     @Overwrite
     public static List<ItemStack> applyRecipeOn(Level level, ItemStack stackIn, Recipe<?> recipe) {
@@ -97,8 +63,8 @@ public class MixinRecipeApplier {
             stacks = new ArrayList<>();
             for (int i = 0; i < stackIn.getCount(); i++) {
                 List<ProcessingOutput> outputs = pr instanceof ManualApplicationRecipe mar ? mar.getRollableResults() : pr.getRollableResults();
-                for (ItemStack stack : pr.rollResults(outputs)) {
-                    CopyHeatModifier.INSTANCE.apply(stack,stackIn);
+                List<ItemStack> rollResultsItemStacks = ((IMixinProcessingRecipe) pr).rollResultsHeated(outputs,stackIn);
+                for (ItemStack stack : rollResultsItemStacks) {
                     for (ItemStack previouslyRolled : stacks) {
                         if (stack.isEmpty())
                             continue;

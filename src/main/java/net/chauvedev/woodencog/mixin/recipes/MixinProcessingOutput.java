@@ -7,7 +7,7 @@ import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import com.simibubi.create.Create;
 import com.simibubi.create.content.processing.recipe.ProcessingOutput;
 import net.chauvedev.woodencog.config.WoodenCogCommonConfigs;
-import net.chauvedev.woodencog.recipes.advancedProcessingRecipe.CustomProcessingOutput;
+import net.chauvedev.woodencog.recipes.advancedProcessingRecipe.HeatedProcessingOutput;
 import net.minecraft.nbt.TagParser;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.GsonHelper;
@@ -44,9 +44,10 @@ public class MixinProcessingOutput {
                 }
             }
             if (WoodenCogCommonConfigs.HANDLE_TEMPERATURE.get()){
-                boolean copy = GsonHelper.getAsBoolean(json,"copyheat",false);
                 float temperature = GsonHelper.getAsFloat(json,"temperature",0.0f);
-                return new CustomProcessingOutput(itemstack, chance, temperature, copy);
+                boolean copy = GsonHelper.getAsBoolean(json,"copyheat",false);
+                float cooling = GsonHelper.getAsFloat(json,"cooling",0.0f);
+                return new HeatedProcessingOutput(itemstack, chance, temperature, copy, cooling);
             }
 
             return new ProcessingOutput(itemstack, chance);
