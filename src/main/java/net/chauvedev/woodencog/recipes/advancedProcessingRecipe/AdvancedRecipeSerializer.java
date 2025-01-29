@@ -63,6 +63,7 @@ public class AdvancedRecipeSerializer<T extends ProcessingRecipe<?> > extends Pr
     public JsonObject writeStackToJson(JsonObject recipeJson,ArrayList<ItemStack> stacks){
         JsonArray results = new JsonArray();
         stacks.forEach(stack -> {
+            //If stack has temperature tag (mixin) serialize handles it
             results.add(new ProcessingOutput(stack, 1).serialize());
         });
 
