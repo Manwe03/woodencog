@@ -99,8 +99,6 @@ public class MixinRecipeApplier {
                 });
                 return newStacks;
             }
-
-            List<ProcessingOutput> outputs = pr instanceof ManualApplicationRecipe mar ? mar.getRollableResults() : pr.getRollableResults();
         }
 
         return stacks;

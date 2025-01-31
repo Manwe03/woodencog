@@ -1,4 +1,4 @@
-package net.chauvedev.woodencog.recipes.advancedProcessingRecipe;
+package net.chauvedev.woodencog.recipes.heatedRecipes;
 
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;

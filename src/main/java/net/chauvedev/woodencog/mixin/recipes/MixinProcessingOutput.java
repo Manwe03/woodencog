@@ -7,7 +7,7 @@ import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import com.simibubi.create.Create;
 import com.simibubi.create.content.processing.recipe.ProcessingOutput;
 import net.chauvedev.woodencog.config.WoodenCogCommonConfigs;
-import net.chauvedev.woodencog.recipes.advancedProcessingRecipe.HeatedProcessingOutput;
+import net.chauvedev.woodencog.recipes.heatedRecipes.HeatedProcessingOutput;
 import net.minecraft.nbt.TagParser;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.GsonHelper;

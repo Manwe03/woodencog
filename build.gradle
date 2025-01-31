@@ -198,6 +198,12 @@ dependencies {
 
     implementation fg.deobf("curse.maven:create-328085:5689514")
     implementation fg.deobf("curse.maven:terrafirmacraft-302973:6103204")
+    implementation fg.deobf("curse.maven:kubejscreate-429371:4884096")
+    implementation fg.deobf("curse.maven:kubejs-238086:5853326")
+    implementation fg.deobf("curse.maven:rhino-416294:5655836")
+    implementation fg.deobf("curse.maven:rhino-419699:5137938")
+
+
 
     annotationProcessor "org.spongepowered:mixin:${mixin_version}:processor"
 }
