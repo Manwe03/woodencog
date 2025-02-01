@@ -16,6 +16,10 @@ public class AllHeatedProcessingRecipes {
             SERIALIZERS.register("heated_pressing", () -> new ProxyProcessingRecipeSerializer<>(
                     () -> new ProxyProcessingRecipeSerializer<>(()-> (RecipeSerializer<PressingRecipe>) AllRecipeTypes.PRESSING.getSerializer())
             ));
+    public static final RegistryObject<RecipeSerializer<PressingRecipe>> HEATED_MIXING_SERIALIZER =
+            SERIALIZERS.register("heated_mixing", () -> new ProxyProcessingRecipeSerializer<>(
+                    () -> new ProxyProcessingRecipeSerializer<>(()-> (RecipeSerializer<PressingRecipe>) AllRecipeTypes.MIXING.getSerializer())
+            ));
 
     public static void register(IEventBus eventBus){
         SERIALIZERS.register(eventBus);
