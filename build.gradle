@@ -32,7 +32,7 @@ mixin {
 }
 
 
-version = "1.0.6-${minecraft_version}"
+version = "1.1.0-${minecraft_version}"
 group = 'net.chauvedev.woodencog' // http://maven.apache.org/guides/mini/guide-naming-conventions.html
 archivesBaseName = 'woodencog'
 
@@ -198,10 +198,10 @@ dependencies {
 
     implementation fg.deobf("curse.maven:create-328085:5689514")
     implementation fg.deobf("curse.maven:terrafirmacraft-302973:6103204")
-    implementation fg.deobf("curse.maven:kubejscreate-429371:4884096")
-    implementation fg.deobf("curse.maven:kubejs-238086:5853326")
-    implementation fg.deobf("curse.maven:rhino-416294:5655836")
-    implementation fg.deobf("curse.maven:rhino-419699:5137938")
+    //implementation fg.deobf("curse.maven:kubejscreate-429371:4884096")
+    //implementation fg.deobf("curse.maven:kubejs-238086:5853326")
+    //implementation fg.deobf("curse.maven:rhino-416294:5655836")
+    //implementation fg.deobf("curse.maven:architectury-419699:5137938")
 
 
 
