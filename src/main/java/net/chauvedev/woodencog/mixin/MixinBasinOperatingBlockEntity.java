@@ -5,12 +5,10 @@ import com.simibubi.create.content.processing.basin.BasinBlockEntity;
 import com.simibubi.create.content.processing.basin.BasinOperatingBlockEntity;
 import com.simibubi.create.content.processing.basin.BasinRecipe;
 import com.simibubi.create.foundation.recipe.RecipeFinder;
-import net.chauvedev.woodencog.WoodenCog;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.item.crafting.Recipe;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
-import org.lwjgl.system.CallbackI;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Overwrite;
 import org.spongepowered.asm.mixin.Shadow;
@@ -20,8 +18,8 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Mixin(value = BasinOperatingBlockEntity.class, remap = false)
-public abstract class MixinBasinRecipe extends KineticBlockEntity {
-    public MixinBasinRecipe(BlockEntityType<?> typeIn, BlockPos pos, BlockState state) {
+public abstract class MixinBasinOperatingBlockEntity extends KineticBlockEntity {
+    public MixinBasinOperatingBlockEntity(BlockEntityType<?> typeIn, BlockPos pos, BlockState state) {
         super(typeIn, pos, state);
     }
 

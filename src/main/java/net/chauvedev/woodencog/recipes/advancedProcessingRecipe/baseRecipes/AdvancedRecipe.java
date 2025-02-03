@@ -1,21 +1,10 @@
 package net.chauvedev.woodencog.recipes.advancedProcessingRecipe.baseRecipes;
 
-import com.simibubi.create.content.kinetics.press.PressingRecipe;
 import com.simibubi.create.content.processing.recipe.ProcessingOutput;
-import com.simibubi.create.content.processing.recipe.ProcessingRecipe;
-import com.simibubi.create.content.processing.recipe.ProcessingRecipeBuilder;
-import net.chauvedev.woodencog.WoodenCog;
-import net.chauvedev.woodencog.recipes.advancedProcessingRecipe.AllAdvancedRecipeTypes;
-import net.dries007.tfc.common.recipes.outputs.ItemStackModifier;
 import net.dries007.tfc.common.recipes.outputs.ItemStackProvider;
 import net.minecraft.core.NonNullList;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.crafting.RecipeSerializer;
-import org.checkerframework.checker.units.qual.A;
-import org.jetbrains.annotations.NotNull;
-
 import java.util.ArrayList;
-import java.util.List;
 
 public class AdvancedRecipe implements SetItemStackProvider{
 
@@ -52,8 +41,7 @@ public class AdvancedRecipe implements SetItemStackProvider{
     public ItemStack onResultStackSingle(ItemStack input,ItemStack stack) {
         boolean hasItem = false;
         ItemStackProvider output = null;
-        for (ItemStackProvider itemStackProvider: this.list
-             ) {
+        for (ItemStackProvider itemStackProvider: this.list) {
             if (input.is(itemStackProvider.getEmptyStack().getItem())){
                 output = itemStackProvider;
                 hasItem = true;

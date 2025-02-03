@@ -6,18 +6,21 @@
   "refmap": "woodencog.refmap.json",
   "mixins": [
     "MixinAnimatedBlazeBurner",
-    "MixinBasin",
+    "MixinBasinBlockEntity",
     "MixinBasinCategory",
-    "MixinBasinRecipe",
-    "MixinBasinTileEntity",
+    "MixinBasinOperatingBlockEntity",
     "MixinBlockHelper",
     "MixinCharcoalForgeBlock",
     "MixinCrucibleBlock",
     "MixinFanProcessing",
     "MixinNetheriteDivingHandler",
     "recipes.MixinFillingBySpout",
+    "recipes.MixinProcessingOutput",
+    "recipes.MixinProcessingRecipe",
     "recipes.MixinRecipeApplier"
   ],
-  "client": ["MixinCreateRecipeCategory"],
+  "client": [
+    "MixinCreateRecipeCategory"
+  ],
   "minVersion": "0.8.5"
 }

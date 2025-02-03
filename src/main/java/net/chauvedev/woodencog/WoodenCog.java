@@ -6,6 +6,7 @@ import com.simibubi.create.foundation.ponder.PonderRegistrationHelper;
 import net.chauvedev.woodencog.config.WoodenCogCommonConfigs;
 import net.chauvedev.woodencog.interaction.CustomArmInteractionPointTypes;
 import net.chauvedev.woodencog.recipes.advancedProcessingRecipe.AllAdvancedRecipeTypes;
+import net.chauvedev.woodencog.recipes.heatedRecipes.AllHeatedProcessingRecipes;
 import net.dries007.tfc.common.items.TFCItems;
 import net.minecraft.world.item.Item;
 import net.minecraftforge.api.distmarker.Dist;
@@ -21,7 +22,6 @@ import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 import net.minecraftforge.fml.loading.FMLEnvironment;
 import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ForgeRegistries;
-import net.minecraftforge.registries.RegistryObject;
 import org.slf4j.Logger;
 
 @Mod(WoodenCog.MOD_ID)
@@ -41,6 +41,7 @@ public class WoodenCog
         CustomArmInteractionPointTypes.registerAll();
 
         AllAdvancedRecipeTypes.register(modEventBus);
+        AllHeatedProcessingRecipes.register(modEventBus);
 
         if(FMLEnvironment.dist == Dist.CLIENT) {
             /*PONDER_HELPER
@@ -65,12 +66,14 @@ public class WoodenCog
 
     private void setup(final FMLCommonSetupEvent event)
     {
+
     }
 
     @SubscribeEvent
     public void onRegisterCommandEvent(RegisterCommandsEvent event) {
 
     }
+
 }
 
 
