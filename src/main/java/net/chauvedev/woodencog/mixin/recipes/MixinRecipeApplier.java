@@ -17,17 +17,80 @@ import net.minecraft.world.level.Level;
 import net.minecraftforge.items.ItemHandlerHelper;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Overwrite;
+import org.spongepowered.asm.mixin.Shadow;
+import org.spongepowered.asm.mixin.injection.At;
+import org.spongepowered.asm.mixin.injection.Inject;
+import org.spongepowered.asm.mixin.injection.ModifyVariable;
+import org.spongepowered.asm.mixin.injection.Redirect;
+import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
+import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
+import org.spongepowered.asm.mixin.injection.callback.LocalCapture;
 
 import java.util.ArrayList;
 import java.util.List;
 
 @Mixin(value = RecipeApplier.class, remap = false)
-public class MixinRecipeApplier {
+public abstract class MixinRecipeApplier {
+
+    /**
+     * @author Manwe
+     * @reason Applies heat to item entity in world
+     */
+    @Overwrite
+    public static void applyRecipeOn(ItemEntity entity, Recipe<?> recipe) {
+        List<ItemStack> stacks = RecipeApplier.applyRecipeOn(entity.level(), entity.getItem(), recipe);
+        if (stacks == null)
+            return;
+        if (stacks.isEmpty()) {
+            entity.discard();
+            return;
+        }
+        ItemStack itemStack = stacks.remove(0);
+        if(WoodenCogCommonConfigs.HANDLE_TEMPERATURE.get()){
+            CopyHeatModifier.INSTANCE.apply(itemStack,entity.getItem());
+        }
+        entity.setItem(itemStack);
+        for (ItemStack additional : stacks) {
+            ItemEntity entityIn = new ItemEntity(entity.level(), entity.getX(), entity.getY(), entity.getZ(), additional);
+            entityIn.setDeltaMovement(entity.getDeltaMovement());
+            entity.level().addFreshEntity(entityIn);
+        }
+    }
+
+    private static ItemStack tempStackIn;
+    private static Recipe<?> tempRecipe;
+
+    /**
+     * @author Manwe
+     * @reason Get temporary stackIn and recipe to use in redirect
+     */
+    @Inject(
+            method = "applyRecipeOn(Lnet/minecraft/world/level/Level;Lnet/minecraft/world/item/ItemStack;Lnet/minecraft/world/item/crafting/Recipe;)Ljava/util/List;",
+            at = @At("HEAD")
+    )
+    private static void captureParameters(Level level, ItemStack stackIn, Recipe<?> recipe, CallbackInfoReturnable<List<ItemStack>> cir){
+        tempStackIn = stackIn;
+        tempRecipe = recipe;
+    }
+
+    /**
+     * @author Manwe
+     * @reason Adds call to custom rollResults method that take into account the item input temperature if specified in recipe
+     */
+    @Redirect(
+            method = "applyRecipeOn(Lnet/minecraft/world/level/Level;Lnet/minecraft/world/item/ItemStack;Lnet/minecraft/world/item/crafting/Recipe;)Ljava/util/List;",
+            at = @At(
+                    value = "INVOKE",
+                    target = "Lcom/simibubi/create/content/processing/recipe/ProcessingRecipe;rollResults(Ljava/util/List;)Ljava/util/List;")
+    )
+    private static List<ItemStack> interceptRollResultsHeated(ProcessingRecipe instance, List<ProcessingOutput> outputs) {
+        return ((IMixinProcessingRecipe) instance).rollResultsHeated(outputs,tempStackIn,tempRecipe);
+    }
 
     /**
      * @author Manwe - DeltaAnto
      * @reason Replace method to allow usage of current item not referenced item
-     *//*
+     */
     @Inject(
             method = "applyRecipeOn(Lnet/minecraft/world/level/Level;Lnet/minecraft/world/item/ItemStack;Lnet/minecraft/world/item/crafting/Recipe;)Ljava/util/List;",
             at = @At("RETURN"),
@@ -51,27 +114,6 @@ public class MixinRecipeApplier {
 
             List<ProcessingOutput> outputs = pr instanceof ManualApplicationRecipe mar ? mar.getRollableResults() : pr.getRollableResults();
         }
-    }*/
-
-    @Overwrite
-    public static void applyRecipeOn(ItemEntity entity, Recipe<?> recipe) {
-        List<ItemStack> stacks = applyRecipeOn(entity.level(), entity.getItem(), recipe);
-        if (stacks == null)
-            return;
-        if (stacks.isEmpty()) {
-            entity.discard();
-            return;
-        }
-        ItemStack itemStack = stacks.remove(0);
-        if(WoodenCogCommonConfigs.HANDLE_TEMPERATURE.get()){
-            CopyHeatModifier.INSTANCE.apply(itemStack,entity.getItem());
-        }
-        entity.setItem(itemStack);
-        for (ItemStack additional : stacks) {
-            ItemEntity entityIn = new ItemEntity(entity.level(), entity.getX(), entity.getY(), entity.getZ(), additional);
-            entityIn.setDeltaMovement(entity.getDeltaMovement());
-            entity.level().addFreshEntity(entityIn);
-        }
     }
 
     /**
@@ -79,6 +121,7 @@ public class MixinRecipeApplier {
      * @reason Adds call to custom rollResults method that take into account the item input temperature if specified
      * in the recipe as copyHeat = true
      */
+    /*
     @Overwrite
     public static List<ItemStack> applyRecipeOn(Level level, ItemStack stackIn, Recipe<?> recipe) {
         List<ItemStack> stacks = null;
@@ -124,6 +167,6 @@ public class MixinRecipeApplier {
 
         return stacks;
     }
-
+    */
 
 }

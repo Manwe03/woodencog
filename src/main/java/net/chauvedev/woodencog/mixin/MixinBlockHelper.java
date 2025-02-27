@@ -19,7 +19,7 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
-@Mixin({BlockHelper.class})
+@Mixin(value = BlockHelper.class, remap = false)
 public class MixinBlockHelper {
     public MixinBlockHelper() {
     }

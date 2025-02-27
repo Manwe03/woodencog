@@ -21,7 +21,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Supplier;
 
-@Mixin({ProcessingRecipe.class})
+@Mixin(value = ProcessingRecipe.class, remap = false)
 public abstract class MixinProcessingRecipe implements IMixinProcessingRecipe {
 
     @Shadow protected NonNullList<ProcessingOutput> results;
