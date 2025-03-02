@@ -3,43 +3,57 @@ package net.chauvedev.woodencog.recipes.heatedRecipes;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
+import com.google.gson.JsonSyntaxException;
+import com.mojang.brigadier.exceptions.CommandSyntaxException;
+import com.simibubi.create.Create;
 import com.simibubi.create.content.processing.recipe.ProcessingOutput;
 import com.simibubi.create.foundation.utility.Pair;
 import com.simibubi.create.foundation.utility.RegisteredObjects;
 import net.chauvedev.woodencog.config.WoodenCogCommonConfigs;
+import net.minecraft.nbt.TagParser;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.util.GsonHelper;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.ItemLike;
+import net.minecraftforge.registries.ForgeRegistries;
 
 public class HeatedProcessingOutput extends ProcessingOutput {
 
     private Pair<ResourceLocation, Integer> childCompatDatagenOutput;
-    private final float temperature;
+    private final int temperature;
     private final boolean copyHeat;
-    private final float cooling;
+    private final int cooling;
 
-    public HeatedProcessingOutput(ItemStack stack, float chance, float temperature, boolean copyHeat, float cooling) {
+    public HeatedProcessingOutput(ItemStack stack, float chance, int temperature, boolean copyHeat, int cooling) {
         super(stack, chance);
         this.temperature = temperature;
         this.copyHeat = copyHeat;
         this.cooling = cooling;
     }
 
-    public HeatedProcessingOutput(Pair<ResourceLocation, Integer> item, float chance, float temperature, boolean copyHeat, float cooling) {
-        super(item,chance);
-        this.childCompatDatagenOutput = item;
-        this.temperature = temperature;
-        this.copyHeat = copyHeat;
-        this.cooling = cooling;
+    public HeatedProcessingOutput(ItemStack stack, float chance, HeatedProcessingRecipeBuilder.HeatedIngridientParams params) {
+        super(stack, chance);
+        this.temperature = params.temperature;
+        this.copyHeat = params.copyHeat;
+        this.cooling = params.cooling;
     }
 
-    public float getTemperature() {
+    public HeatedProcessingOutput(Pair<ResourceLocation, Integer> item, float chance, HeatedProcessingRecipeBuilder.HeatedIngridientParams params) {
+        super(item,chance);
+        this.childCompatDatagenOutput = item;
+        this.temperature = params.temperature;
+        this.copyHeat = params.copyHeat;
+        this.cooling = params.cooling;
+    }
+
+    public int getTemperature() {
         return temperature;
     }
     public boolean getCopyHeat(){
         return copyHeat;
     }
-    public float getCooling(){
+    public int getCooling(){
         return cooling;
     }
 
@@ -69,15 +83,42 @@ public class HeatedProcessingOutput extends ProcessingOutput {
         return json;
     }
 
+    //TO IMPLEMENT CHANGE TO GET TEMP COOLING...
+    public static HeatedProcessingOutput deserialize(JsonElement je) {
+        if (!je.isJsonObject()) {
+            throw new JsonSyntaxException("ProcessingOutput must be a json object");
+        } else {
+            JsonObject json = je.getAsJsonObject();
+            String itemId = GsonHelper.getAsString(json, "item");
+            int count = GsonHelper.getAsInt(json, "count", 1);
+            float chance = GsonHelper.isValidNode(json, "chance") ? GsonHelper.getAsFloat(json, "chance") : 1.0F;
+            ItemStack itemstack = new ItemStack((ItemLike) ForgeRegistries.ITEMS.getValue(new ResourceLocation(itemId)), count);
+            if (GsonHelper.isValidNode(json, "nbt")) {
+                try {
+                    JsonElement element = json.get("nbt");
+                    itemstack.setTag(TagParser.parseTag(element.isJsonObject() ? Create.GSON.toJson(element) : GsonHelper.convertToString(element, "nbt")));
+                } catch (CommandSyntaxException var7) {
+                    var7.printStackTrace();
+                }
+            }
+
+            int temperature = GsonHelper.getAsInt(json, "temperature");
+            boolean copyHeat = GsonHelper.getAsBoolean(json, "copyheat");
+            int cooling = GsonHelper.getAsInt(json, "cooling");
+
+            return new HeatedProcessingOutput(itemstack, chance, temperature, copyHeat, cooling);
+        }
+    }
+
     @Override
     public void write(FriendlyByteBuf buf) {
         super.write(buf);
-        buf.writeFloat(getTemperature());
+        buf.writeInt(getTemperature());
         buf.writeBoolean(getCopyHeat());
-        buf.writeFloat(getCooling());
+        buf.writeInt(getCooling());
     }
 
     public static HeatedProcessingOutput read(FriendlyByteBuf buf) {
-        return new HeatedProcessingOutput(buf.readItem(), buf.readFloat(),buf.readFloat(),buf.readBoolean(),buf.readFloat());
+        return new HeatedProcessingOutput(buf.readItem(), buf.readFloat(),buf.readInt(),buf.readBoolean(),buf.readInt());
     }
 }

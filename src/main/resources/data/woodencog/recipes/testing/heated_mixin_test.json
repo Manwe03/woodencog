@@ -1,0 +1,21 @@
+{
+  "type": "woodencog:heated_mixing",
+  "ingredients": [
+    {
+      "min_temp": 300,
+      "item": "tfc:metal/ingot/black_bronze"
+    },
+    {
+      "min_temp": 100,
+      "item": "tfc:metal/ingot/bismuth_bronze"
+    }
+  ],
+  "results": [
+    {
+      "item": "tfc:refined_iron_bloom",
+      "temperature": 400
+    }
+  ],
+  "heatRequirement": "heated",
+  "processingTime": 400
+}

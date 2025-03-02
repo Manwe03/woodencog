@@ -1,12 +1,12 @@
-package net.chauvedev.woodencog.recipes.heatedRecipes;
+package net.chauvedev.woodencog.recipes.heatedRecipes.recipes;
 
 import com.simibubi.create.compat.jei.category.sequencedAssembly.SequencedAssemblySubCategory;
-import com.simibubi.create.content.processing.recipe.ProcessingRecipe;
-import com.simibubi.create.content.processing.recipe.ProcessingRecipeBuilder;
 import com.simibubi.create.content.processing.sequenced.IAssemblyRecipe;
 import com.simibubi.create.foundation.recipe.IRecipeTypeInfo;
 import com.simibubi.create.foundation.utility.Lang;
 import net.chauvedev.woodencog.WoodenCog;
+import net.chauvedev.woodencog.recipes.heatedRecipes.HeatedProcessingRecipe;
+import net.chauvedev.woodencog.recipes.heatedRecipes.HeatedProcessingRecipeBuilder;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.crafting.Ingredient;
@@ -24,8 +24,8 @@ import java.util.List;
 import java.util.Set;
 import java.util.function.Supplier;
 
-public class HeatedPressingRecipe extends ProcessingRecipe<RecipeWrapper> implements IAssemblyRecipe {
-    public HeatedPressingRecipe(ProcessingRecipeBuilder.ProcessingRecipeParams params) {
+public class HeatedPressingRecipe extends HeatedProcessingRecipe<RecipeWrapper> implements IAssemblyRecipe {
+    public HeatedPressingRecipe(HeatedProcessingRecipeBuilder.HeatedProcessingRecipeParams params) {
         super(Type.INSTANCE, params);
     }
 
