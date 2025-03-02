@@ -6,7 +6,6 @@ import com.simibubi.create.foundation.ponder.PonderRegistrationHelper;
 import net.chauvedev.woodencog.config.WoodenCogCommonConfigs;
 import net.chauvedev.woodencog.interaction.CustomArmInteractionPointTypes;
 import net.chauvedev.woodencog.recipes.advancedProcessingRecipe.AllAdvancedRecipeTypes;
-import net.chauvedev.woodencog.recipes.heatedRecipes.AllHeatedProcessingRecipes;
 import net.chauvedev.woodencog.recipes.heatedRecipes.AllHeatedRecipeTypes;
 import net.dries007.tfc.common.items.TFCItems;
 import net.minecraft.world.item.Item;

@@ -2,19 +2,19 @@ package net.chauvedev.woodencog.recipes.heatedRecipes.recipes;
 
 import com.simibubi.create.AllRecipeTypes;
 import com.simibubi.create.content.processing.basin.BasinBlockEntity;
-import com.simibubi.create.content.processing.basin.BasinRecipe;
 import com.simibubi.create.content.processing.burner.BlazeBurnerBlock;
 import com.simibubi.create.content.processing.recipe.ProcessingRecipeBuilder;
 import com.simibubi.create.foundation.blockEntity.behaviour.filtering.FilteringBehaviour;
 import com.simibubi.create.foundation.blockEntity.behaviour.fluid.SmartFluidTankBehaviour;
 import com.simibubi.create.foundation.fluid.FluidIngredient;
-import com.simibubi.create.foundation.item.SmartInventory;
 import com.simibubi.create.foundation.recipe.DummyCraftingContainer;
 import com.simibubi.create.foundation.recipe.IRecipeTypeInfo;
 import com.simibubi.create.foundation.utility.Iterate;
 import net.chauvedev.woodencog.recipes.heatedRecipes.HeatedProcessingRecipe;
 import net.chauvedev.woodencog.recipes.heatedRecipes.HeatedProcessingRecipeBuilder;
 import net.minecraft.client.Minecraft;
+import net.minecraft.world.Container;
+import net.minecraft.world.inventory.CraftingContainer;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.CraftingRecipe;
 import net.minecraft.world.item.crafting.Ingredient;
@@ -28,23 +28,28 @@ import net.minecraftforge.items.IItemHandler;
 import javax.annotation.Nonnull;
 import java.util.*;
 
-public class HeatedBasinRecipe extends HeatedProcessingRecipe<SmartInventory> {
+public class HeatedBasinRecipe extends HeatedProcessingRecipe<Container> {
 
     public static boolean match(BasinBlockEntity basin, Recipe<?> recipe) {
         FilteringBehaviour filter = basin.getFilter();
-        if (filter == null) {
+        if (filter == null)
             return false;
-        } else {
-            boolean filterTest = filter.test(recipe.getResultItem(basin.getLevel().registryAccess()));
-            if (recipe instanceof BasinRecipe) {
-                BasinRecipe basinRecipe = (BasinRecipe)recipe;
-                if (basinRecipe.getRollableResults().isEmpty() && !basinRecipe.getFluidResults().isEmpty()) {
-                    filterTest = filter.test((FluidStack)basinRecipe.getFluidResults().get(0));
-                }
-            }
 
-            return !filterTest ? false : apply(basin, recipe, true);
+        boolean filterTest = filter.test(recipe.getResultItem(basin.getLevel()
+                .registryAccess()));
+        if (recipe instanceof HeatedBasinRecipe basinRecipe) {
+            if (basinRecipe.getRollableResults()
+                    .isEmpty()
+                    && !basinRecipe.getFluidResults()
+                    .isEmpty())
+                filterTest = filter.test(basinRecipe.getFluidResults()
+                        .get(0));
         }
+
+        if (!filterTest)
+            return false;
+
+        return apply(basin, recipe, true);
     }
 
     public static boolean apply(BasinBlockEntity basin, Recipe<?> recipe) {
@@ -52,131 +57,120 @@ public class HeatedBasinRecipe extends HeatedProcessingRecipe<SmartInventory> {
     }
 
     private static boolean apply(BasinBlockEntity basin, Recipe<?> recipe, boolean test) {
-        boolean isBasinRecipe = recipe instanceof BasinRecipe;
-        IItemHandler availableItems = (IItemHandler)basin.getCapability(ForgeCapabilities.ITEM_HANDLER).orElse((Object)null);
-        IFluidHandler availableFluids = (IFluidHandler)basin.getCapability(ForgeCapabilities.FLUID_HANDLER).orElse((Object)null);
-        if (availableItems != null && availableFluids != null) {
-            BlazeBurnerBlock.HeatLevel heat = BasinBlockEntity.getHeatLevelOf(basin.getLevel().getBlockState(basin.getBlockPos().below(1)));
-            if (isBasinRecipe && !((BasinRecipe)recipe).getRequiredHeat().testBlazeBurner(heat)) {
-                return false;
-            } else {
-                List<ItemStack> recipeOutputItems = new ArrayList();
-                List<FluidStack> recipeOutputFluids = new ArrayList();
-                List<Ingredient> ingredients = new LinkedList(recipe.getIngredients());
-                List<FluidIngredient> fluidIngredients = isBasinRecipe ? ((BasinRecipe)recipe).getFluidIngredients() : Collections.emptyList();
-                boolean[] var11 = Iterate.trueAndFalse;
-                int var12 = var11.length;
+        boolean isBasinRecipe = recipe instanceof HeatedBasinRecipe;
+        IItemHandler availableItems = basin.getCapability(ForgeCapabilities.ITEM_HANDLER)
+                .orElse(null);
+        IFluidHandler availableFluids = basin.getCapability(ForgeCapabilities.FLUID_HANDLER)
+                .orElse(null);
 
-                for(int var13 = 0; var13 < var12; ++var13) {
-                    boolean simulate = var11[var13];
-                    if (!simulate && test) {
-                        return true;
-                    }
+        if (availableItems == null || availableFluids == null)
+            return false;
 
-                    int[] extractedItemsFromSlot = new int[availableItems.getSlots()];
-                    int[] extractedFluidsFromTank = new int[availableFluids.getTanks()];
+        BlazeBurnerBlock.HeatLevel heat = BasinBlockEntity.getHeatLevelOf(basin.getLevel()
+                .getBlockState(basin.getBlockPos()
+                        .below(1)));
+        if (isBasinRecipe && !((HeatedBasinRecipe) recipe).getRequiredHeat()
+                .testBlazeBurner(heat))
+            return false;
 
-                    ItemStack stack;
-                    label110:
-                    for(int i = 0; i < ingredients.size(); ++i) {
-                        Ingredient ingredient = (Ingredient)ingredients.get(i);
+        List<ItemStack> recipeOutputItems = new ArrayList<>();
+        List<FluidStack> recipeOutputFluids = new ArrayList<>();
 
-                        for(int slot = 0; slot < availableItems.getSlots(); ++slot) {
-                            if (!simulate || availableItems.getStackInSlot(slot).getCount() > extractedItemsFromSlot[slot]) {
-                                stack = availableItems.extractItem(slot, 1, true);
-                                if (ingredient.test(stack)) {
-                                    if (!simulate) {
-                                        availableItems.extractItem(slot, 1, false);
-                                    }
+        List<Ingredient> ingredients = new LinkedList<>(recipe.getIngredients());
+        List<FluidIngredient> fluidIngredients =
+                isBasinRecipe ? ((HeatedBasinRecipe) recipe).getFluidIngredients() : Collections.emptyList();
 
-                                    int var10002 = extractedItemsFromSlot[slot]++;
-                                    continue label110;
-                                }
-                            }
-                        }
+        for (boolean simulate : Iterate.trueAndFalse) {
 
-                        return false;
-                    }
+            if (!simulate && test)
+                return true;
 
-                    boolean fluidsAffected = false;
+            int[] extractedItemsFromSlot = new int[availableItems.getSlots()];
+            int[] extractedFluidsFromTank = new int[availableFluids.getTanks()];
 
-                    label129:
-                    for(int i = 0; i < ((List)fluidIngredients).size(); ++i) {
-                        FluidIngredient fluidIngredient = (FluidIngredient)((List)fluidIngredients).get(i);
-                        int amountRequired = fluidIngredient.getRequiredAmount();
-
-                        for(int tank = 0; tank < availableFluids.getTanks(); ++tank) {
-                            FluidStack fluidStack = availableFluids.getFluidInTank(tank);
-                            if ((!simulate || fluidStack.getAmount() > extractedFluidsFromTank[tank]) && fluidIngredient.test(fluidStack)) {
-                                int drainedAmount = Math.min(amountRequired, fluidStack.getAmount());
-                                if (!simulate) {
-                                    fluidStack.shrink(drainedAmount);
-                                    fluidsAffected = true;
-                                }
-
-                                amountRequired -= drainedAmount;
-                                if (amountRequired == 0) {
-                                    extractedFluidsFromTank[tank] += drainedAmount;
-                                    continue label129;
-                                }
-                            }
-                        }
-
-                        return false;
-                    }
-
-                    if (fluidsAffected) {
-                        ((SmartFluidTankBehaviour)basin.getBehaviour(SmartFluidTankBehaviour.INPUT)).forEach(SmartFluidTankBehaviour.TankSegment::onFluidStackChanged);
-                        ((SmartFluidTankBehaviour)basin.getBehaviour(SmartFluidTankBehaviour.OUTPUT)).forEach(SmartFluidTankBehaviour.TankSegment::onFluidStackChanged);
-                    }
-
-                    if (simulate) {
-                        if (!(recipe instanceof BasinRecipe)) {
-                            recipeOutputItems.add(recipe.getResultItem(basin.getLevel().registryAccess()));
-                            if (recipe instanceof CraftingRecipe) {
-                                CraftingRecipe craftingRecipe = (CraftingRecipe)recipe;
-                                Iterator var32 = craftingRecipe.getRemainingItems(new DummyCraftingContainer(availableItems, extractedItemsFromSlot)).iterator();
-
-                                while(var32.hasNext()) {
-                                    ItemStack stack = (ItemStack)var32.next();
-                                    if (!stack.isEmpty()) {
-                                        recipeOutputItems.add(stack);
-                                    }
-                                }
-                            }
-                        } else {
-                            BasinRecipe basinRecipe = (BasinRecipe)recipe;
-                            recipeOutputItems.addAll(basinRecipe.rollResults());
-                            Iterator var28 = basinRecipe.getFluidResults().iterator();
-
-                            while(var28.hasNext()) {
-                                FluidStack fluidStack = (FluidStack)var28.next();
-                                if (!fluidStack.isEmpty()) {
-                                    recipeOutputFluids.add(fluidStack);
-                                }
-                            }
-
-                            var28 = basinRecipe.getRemainingItems(basin.getInputInventory()).iterator();
-
-                            while(var28.hasNext()) {
-                                stack = (ItemStack)var28.next();
-                                if (!stack.isEmpty()) {
-                                    recipeOutputItems.add(stack);
-                                }
-                            }
-                        }
-                    }
-
-                    if (!basin.acceptOutputs(recipeOutputItems, recipeOutputFluids, simulate)) {
-                        return false;
-                    }
+            Ingredients:
+            for (Ingredient ingredient : ingredients) {
+                for (int slot = 0; slot < availableItems.getSlots(); slot++) {
+                    if (simulate && availableItems.getStackInSlot(slot)
+                            .getCount() <= extractedItemsFromSlot[slot])
+                        continue;
+                    ItemStack extracted = availableItems.extractItem(slot, 1, true);
+                    if (!ingredient.test(extracted))
+                        continue;
+                    if (!simulate)
+                        availableItems.extractItem(slot, 1, false);
+                    extractedItemsFromSlot[slot]++;
+                    continue Ingredients;
                 }
 
-                return true;
+                // something wasn't found
+                return false;
             }
-        } else {
-            return false;
+
+            boolean fluidsAffected = false;
+            FluidIngredients:
+            for (FluidIngredient fluidIngredient : fluidIngredients) {
+                int amountRequired = fluidIngredient.getRequiredAmount();
+
+                for (int tank = 0; tank < availableFluids.getTanks(); tank++) {
+                    FluidStack fluidStack = availableFluids.getFluidInTank(tank);
+                    if (simulate && fluidStack.getAmount() <= extractedFluidsFromTank[tank])
+                        continue;
+                    if (!fluidIngredient.test(fluidStack))
+                        continue;
+                    int drainedAmount = Math.min(amountRequired, fluidStack.getAmount());
+                    if (!simulate) {
+                        fluidStack.shrink(drainedAmount);
+                        fluidsAffected = true;
+                    }
+                    amountRequired -= drainedAmount;
+                    if (amountRequired != 0)
+                        continue;
+                    extractedFluidsFromTank[tank] += drainedAmount;
+                    continue FluidIngredients;
+                }
+
+                // something wasn't found
+                return false;
+            }
+
+            if (fluidsAffected) {
+                basin.getBehaviour(SmartFluidTankBehaviour.INPUT)
+                        .forEach(SmartFluidTankBehaviour.TankSegment::onFluidStackChanged);
+                basin.getBehaviour(SmartFluidTankBehaviour.OUTPUT)
+                        .forEach(SmartFluidTankBehaviour.TankSegment::onFluidStackChanged);
+            }
+
+            if (simulate) {
+                CraftingContainer remainderContainer = new DummyCraftingContainer(availableItems, extractedItemsFromSlot);
+
+                if (recipe instanceof HeatedBasinRecipe basinRecipe) {
+                    recipeOutputItems.addAll(basinRecipe.rollResults());
+
+                    for (FluidStack fluidStack : basinRecipe.getFluidResults())
+                        if (!fluidStack.isEmpty())
+                            recipeOutputFluids.add(fluidStack);
+                    for (ItemStack stack : basinRecipe.getRemainingItems(remainderContainer))
+                        if (!stack.isEmpty())
+                            recipeOutputItems.add(stack);
+
+                } else {
+                    recipeOutputItems.add(recipe.getResultItem(basin.getLevel()
+                            .registryAccess()));
+
+                    if (recipe instanceof CraftingRecipe craftingRecipe) {
+                        for (ItemStack stack : craftingRecipe.getRemainingItems(remainderContainer))
+                            if (!stack.isEmpty())
+                                recipeOutputItems.add(stack);
+                    }
+                }
+            }
+
+            if (!basin.acceptOutputs(recipeOutputItems, recipeOutputFluids, simulate))
+                return false;
         }
+
+        return true;
     }
 
     protected HeatedBasinRecipe(IRecipeTypeInfo type, HeatedProcessingRecipeBuilder.HeatedProcessingRecipeParams params) {
@@ -187,31 +181,38 @@ public class HeatedBasinRecipe extends HeatedProcessingRecipe<SmartInventory> {
         this(AllRecipeTypes.BASIN, params);
     }
 
+    @Override
     protected int getMaxInputCount() {
         return 9;
     }
 
+    @Override
     protected int getMaxOutputCount() {
         return 4;
     }
 
+    @Override
     protected int getMaxFluidInputCount() {
-        return 2;
+        return 4;
     }
 
+    @Override
     protected int getMaxFluidOutputCount() {
         return 2;
     }
 
+    @Override
     protected boolean canRequireHeat() {
         return true;
     }
 
+    @Override
     protected boolean canSpecifyDuration() {
         return true;
     }
 
-    public boolean matches(SmartInventory inv, @Nonnull Level worldIn) {
+    @Override
+    public boolean matches(Container inv, @Nonnull Level worldIn) {
         return false;
     }
 }

@@ -45,9 +45,9 @@ import java.util.function.Predicate;
 import java.util.function.Supplier;
 
 public enum AllHeatedRecipeTypes implements IRecipeTypeInfo {
-    BASIN(HeatedBasinRecipe::new),
-    PRESSING(HeatedPressingRecipe::new),
-    MIXING(HeatedMixingRecipe::new);
+    HEATED_BASIN(HeatedBasinRecipe::new),
+    HEATED_PRESSING(HeatedPressingRecipe::new),
+    HEATED_MIXING(HeatedMixingRecipe::new);
 
     public static final Predicate<? super Recipe<?>> CAN_BE_AUTOMATED = (r) -> {
         return !r.getId().getPath().endsWith("_manual_only");
@@ -68,7 +68,6 @@ public enum AllHeatedRecipeTypes implements IRecipeTypeInfo {
             this.typeObject = null;
             this.type = typeSupplier;
         }
-
     }
 
     private AllHeatedRecipeTypes(Supplier serializerSupplier) {
@@ -82,9 +81,7 @@ public enum AllHeatedRecipeTypes implements IRecipeTypeInfo {
     }
 
     private AllHeatedRecipeTypes(HeatedProcessingRecipeBuilder.HeatedProcessingRecipeFactory processingFactory) {
-        this(() -> {
-            return new HeatedProcessingRecipeSerializer<>(processingFactory);
-        });
+        this(() -> new HeatedProcessingRecipeSerializer<>(processingFactory));
     }
 
     public static void register(IEventBus modEventBus) {
@@ -111,7 +108,7 @@ public enum AllHeatedRecipeTypes implements IRecipeTypeInfo {
 
     public static boolean shouldIgnoreInAutomation(Recipe<?> recipe) {
         RecipeSerializer<?> serializer = recipe.getSerializer();
-        if (serializer != null && AllTags.AllRecipeSerializerTags.AUTOMATION_IGNORE.matches(serializer)) {
+        if (AllTags.AllRecipeSerializerTags.AUTOMATION_IGNORE.matches(serializer)) {
             return true;
         } else {
             return !CAN_BE_AUTOMATED.test(recipe);

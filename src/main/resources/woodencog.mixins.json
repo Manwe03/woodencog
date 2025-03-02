@@ -14,12 +14,7 @@
     "MixinCrucibleBlock",
     "MixinFanProcessing",
     "MixinNetheriteDivingHandler",
-    "jei.MixinMixingCategory",
-    "jei.MixinPressingCategory",
     "recipes.MixinFillingBySpout",
-    "recipes.MixinProcessingOutput",
-    "recipes.MixinProcessingRecipe",
-    "recipes.MixinProcessingRecipeSerializer",
     "recipes.MixinRecipeApplier"
   ],
   "client": [

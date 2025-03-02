@@ -1,6 +1,10 @@
 package net.chauvedev.woodencog.recipes.heatedRecipes.recipes;
 
+import com.simibubi.create.AllBlocks;
+import com.simibubi.create.AllRecipeTypes;
+import com.simibubi.create.Create;
 import com.simibubi.create.compat.jei.category.sequencedAssembly.SequencedAssemblySubCategory;
+import com.simibubi.create.content.processing.recipe.ProcessingRecipeBuilder;
 import com.simibubi.create.content.processing.sequenced.IAssemblyRecipe;
 import com.simibubi.create.foundation.recipe.IRecipeTypeInfo;
 import com.simibubi.create.foundation.utility.Lang;
@@ -20,13 +24,15 @@ import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.items.wrapper.RecipeWrapper;
 import net.minecraftforge.registries.ForgeRegistries;
 
+
 import java.util.List;
 import java.util.Set;
 import java.util.function.Supplier;
 
 public class HeatedPressingRecipe extends HeatedProcessingRecipe<RecipeWrapper> implements IAssemblyRecipe {
+
     public HeatedPressingRecipe(HeatedProcessingRecipeBuilder.HeatedProcessingRecipeParams params) {
-        super(Type.INSTANCE, params);
+        super(AllRecipeTypes.PRESSING, params);
     }
 
     @Override
@@ -53,45 +59,15 @@ public class HeatedPressingRecipe extends HeatedProcessingRecipe<RecipeWrapper> 
     @Override
     @OnlyIn(Dist.CLIENT)
     public Component getDescriptionForAssembly() {
-        return Lang.translateDirect("recipe.assembly.pressing");
+        return Lang.translateDirect("recipe.assembly.pressing"); //Change to CreateLang in future create version
     }
 
-    @Override
     public void addRequiredMachines(Set<ItemLike> list) {
-        Block mechanicalPress = ForgeRegistries.BLOCKS.getValue(new ResourceLocation("create", "mechanical_press"));
-        if (mechanicalPress != null) {
-            list.add(mechanicalPress);
-        }
+        list.add(ForgeRegistries.BLOCKS.getValue(Create.asResource("mechanical_press")));
     }
 
     @Override
     public Supplier<Supplier<SequencedAssemblySubCategory>> getJEISubCategory() {
         return () -> SequencedAssemblySubCategory.AssemblyPressing::new;
-    }
-
-    private static class Type implements IRecipeTypeInfo {
-        private static final Type INSTANCE = new Type();
-        @Override
-        public ResourceLocation getId() {
-            return new ResourceLocation(WoodenCog.MOD_ID, "heated_pressing");
-        }
-
-        @Override
-        public <T extends RecipeSerializer<?>> T getSerializer() {
-            return (T) AllHeatedProcessingRecipes.HEATED_PRESSING_SERIALIZER.get();
-        }
-
-        @Override
-        public <T extends RecipeType<?>> T getType() {
-            return (T) HEATED_PRESSING_TYPE;
-        }
-
-        // Define el RecipeType para HeatedPressingRecipe
-        private static final RecipeType<HeatedPressingRecipe> HEATED_PRESSING_TYPE = new RecipeType<>() {
-            @Override
-            public String toString() {
-                return WoodenCog.MOD_ID + ":heated_pressing";
-            }
-        };
     }
 }
