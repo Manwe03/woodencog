@@ -1,28 +1,7 @@
 package net.chauvedev.woodencog.recipes.heatedRecipes;
 
-import com.simibubi.create.AllRecipeTypes;
 import com.simibubi.create.AllTags;
 import com.simibubi.create.Create;
-import com.simibubi.create.compat.jei.ConversionRecipe;
-import com.simibubi.create.content.equipment.sandPaper.SandPaperPolishingRecipe;
-import com.simibubi.create.content.equipment.toolbox.ToolboxDyeingRecipe;
-import com.simibubi.create.content.fluids.transfer.EmptyingRecipe;
-import com.simibubi.create.content.fluids.transfer.FillingRecipe;
-import com.simibubi.create.content.kinetics.crafter.MechanicalCraftingRecipe;
-import com.simibubi.create.content.kinetics.crusher.CrushingRecipe;
-import com.simibubi.create.content.kinetics.deployer.DeployerApplicationRecipe;
-import com.simibubi.create.content.kinetics.deployer.ManualApplicationRecipe;
-import com.simibubi.create.content.kinetics.fan.processing.HauntingRecipe;
-import com.simibubi.create.content.kinetics.fan.processing.SplashingRecipe;
-import com.simibubi.create.content.kinetics.millstone.MillingRecipe;
-import com.simibubi.create.content.kinetics.mixer.CompactingRecipe;
-import com.simibubi.create.content.kinetics.mixer.MixingRecipe;
-import com.simibubi.create.content.kinetics.press.PressingRecipe;
-import com.simibubi.create.content.kinetics.saw.CuttingRecipe;
-import com.simibubi.create.content.processing.basin.BasinRecipe;
-import com.simibubi.create.content.processing.recipe.ProcessingRecipeBuilder;
-import com.simibubi.create.content.processing.recipe.ProcessingRecipeSerializer;
-import com.simibubi.create.content.processing.sequenced.SequencedAssemblyRecipeSerializer;
 import com.simibubi.create.foundation.recipe.IRecipeTypeInfo;
 import com.simibubi.create.foundation.utility.Lang;
 import net.chauvedev.woodencog.WoodenCog;
@@ -59,7 +38,7 @@ public enum AllHeatedRecipeTypes implements IRecipeTypeInfo {
 
     private AllHeatedRecipeTypes(Supplier serializerSupplier, Supplier typeSupplier, boolean registerType) {
         String name = Lang.asId(this.name());
-        this.id = Create.asResource(name);
+        this.id = new ResourceLocation(WoodenCog.MOD_ID, name);
         this.serializerObject = Registers.SERIALIZER_REGISTER.register(name, serializerSupplier);
         if (registerType) {
             this.typeObject = Registers.TYPE_REGISTER.register(name, typeSupplier);
@@ -72,7 +51,7 @@ public enum AllHeatedRecipeTypes implements IRecipeTypeInfo {
 
     private AllHeatedRecipeTypes(Supplier serializerSupplier) {
         String name = Lang.asId(this.name());
-        this.id = Create.asResource(name);
+        this.id = new ResourceLocation(WoodenCog.MOD_ID, name);
         this.serializerObject = Registers.SERIALIZER_REGISTER.register(name, serializerSupplier);
         this.typeObject = Registers.TYPE_REGISTER.register(name, () -> {
             return RecipeType.simple(this.id);
@@ -90,16 +69,22 @@ public enum AllHeatedRecipeTypes implements IRecipeTypeInfo {
         Registers.TYPE_REGISTER.register(modEventBus);
     }
 
+    @Override
     public ResourceLocation getId() {
         return this.id;
     }
 
+    @SuppressWarnings("unchecked")
+    @Override
     public <T extends RecipeSerializer<?>> T getSerializer() {
-        return (T) this.serializerObject.get();
+        return (T) serializerObject.get();
     }
 
+    @SuppressWarnings("unchecked")
+    @Override
     public <T extends RecipeType<?>> T getType() {
-        return (T) this.type.get();
+        //WoodenCog.LOGGER.info("Find Recipe - Get Type "+this.type.get());
+        return (T) type.get();
     }
 
     public <C extends Container, T extends Recipe<C>> Optional<T> find(C inv, Level world) {

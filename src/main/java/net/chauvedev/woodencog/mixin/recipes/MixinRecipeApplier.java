@@ -5,16 +5,23 @@ import com.simibubi.create.content.processing.recipe.ProcessingOutput;
 import com.simibubi.create.content.processing.recipe.ProcessingRecipe;
 import com.simibubi.create.foundation.item.ItemHelper;
 import com.simibubi.create.foundation.recipe.RecipeApplier;
+import net.chauvedev.woodencog.WoodenCog;
 import net.chauvedev.woodencog.config.WoodenCogCommonConfigs;
 import net.chauvedev.woodencog.recipes.IMixinProcessingRecipe;
 import net.chauvedev.woodencog.recipes.advancedProcessingRecipe.AllAdvancedRecipeTypes;
 import net.chauvedev.woodencog.recipes.advancedProcessingRecipe.baseRecipes.SetItemStackProvider;
+import net.chauvedev.woodencog.recipes.heatedRecipes.HeatedProcessingOutput;
+import net.chauvedev.woodencog.recipes.heatedRecipes.HeatedProcessingRecipe;
+import net.chauvedev.woodencog.recipes.heatedRecipes.recipes.HeatedPressingRecipe;
+import net.dries007.tfc.common.capabilities.heat.HeatCapability;
 import net.dries007.tfc.common.recipes.outputs.CopyHeatModifier;
 import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.Recipe;
 import net.minecraft.world.level.Level;
+import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.items.ItemHandlerHelper;
+import org.checkerframework.checker.units.qual.A;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Overwrite;
 import org.spongepowered.asm.mixin.Shadow;
@@ -31,6 +38,63 @@ import java.util.List;
 
 @Mixin(value = RecipeApplier.class, remap = false)
 public abstract class MixinRecipeApplier {
+
+    @Inject(
+            method = "applyRecipeOn(Lnet/minecraft/world/entity/item/ItemEntity;Lnet/minecraft/world/item/crafting/Recipe;)V",
+            at = @At("HEAD")
+    )
+    private static void applyRecipeOn(ItemEntity entity, Recipe<?> recipe, CallbackInfo ci) {
+        WoodenCog.LOGGER.info("APPLY RECIPE ON, entity");
+    }
+
+    /**
+     * @author Manwe
+     * @reason Inject handling heated recipes in world (pressing recipes)
+     */
+    @Inject(
+            method = "applyRecipeOn(Lnet/minecraft/world/level/Level;Lnet/minecraft/world/item/ItemStack;Lnet/minecraft/world/item/crafting/Recipe;)Ljava/util/List;",
+            at = @At("HEAD"),
+            cancellable = true
+    )
+    private static void onApplyRecipeOnAtHead(Level level, ItemStack stackIn, Recipe<?> recipe, CallbackInfoReturnable<List<ItemStack>> cir) {
+        List<ItemStack> stacks;
+
+        WoodenCog.LOGGER.info("APPLY RECIPE ON, level");
+        if (recipe instanceof HeatedProcessingRecipe<?> pr) {
+            WoodenCog.LOGGER.info("INSTANCE OF HeatedProcessingRecipe");
+
+            List<Float> outputTemps = new ArrayList<>(); //list of output temperature applied in order
+            stackIn.getCapability(HeatCapability.CAPABILITY).ifPresent(iHeat -> {
+                outputTemps.add(iHeat.getTemperature());
+            });
+
+            stacks = new ArrayList<>();
+            for (int i = 0; i < stackIn.getCount(); i++) {
+                List<HeatedProcessingOutput> outputs = pr.getRollableResults(); //get HeatedOutputs
+                for (ItemStack stack : pr.rollResults(outputs,outputTemps)) {
+                    for (ItemStack previouslyRolled : stacks) {
+                        if (stack.isEmpty())
+                            continue;
+                        if (!ItemHandlerHelper.canItemStacksStack(stack, previouslyRolled))
+                            continue;
+                        int amount = Math.min(previouslyRolled.getMaxStackSize() - previouslyRolled.getCount(),
+                                stack.getCount());
+                        previouslyRolled.grow(amount);
+                        stack.shrink(amount);
+                    }
+
+                    if (stack.isEmpty())
+                        continue;
+
+                    stacks.add(stack);
+                }
+            }
+            cir.setReturnValue(stacks);
+            cir.cancel();
+        }
+    }
+
+
     /**
      * @author DeltaAnto - Manwe
      * @reason Replace method to allow usage of current item not referenced item

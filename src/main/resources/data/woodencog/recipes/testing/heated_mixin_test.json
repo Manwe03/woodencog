@@ -2,12 +2,14 @@
   "type": "woodencog:heated_mixing",
   "ingredients": [
     {
-      "min_temp": 300,
-      "item": "tfc:metal/ingot/black_bronze"
+      "ingredient": { "item": "tfc:metal/ingot/black_bronze" },
+      "min_temp": 200,
+      "max_temp": 1000
     },
     {
-      "min_temp": 100,
-      "item": "tfc:metal/ingot/bismuth_bronze"
+      "ingredient": { "item": "tfc:metal/ingot/bismuth_bronze" },
+      "min_temp": 0,
+      "max_temp": 1000
     }
   ],
   "results": [

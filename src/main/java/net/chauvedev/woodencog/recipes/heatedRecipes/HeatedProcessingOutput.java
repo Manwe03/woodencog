@@ -83,7 +83,6 @@ public class HeatedProcessingOutput extends ProcessingOutput {
         return json;
     }
 
-    //TO IMPLEMENT CHANGE TO GET TEMP COOLING...
     public static HeatedProcessingOutput deserialize(JsonElement je) {
         if (!je.isJsonObject()) {
             throw new JsonSyntaxException("ProcessingOutput must be a json object");
@@ -103,7 +102,7 @@ public class HeatedProcessingOutput extends ProcessingOutput {
             }
 
             int temperature = GsonHelper.getAsInt(json, "temperature");
-            boolean copyHeat = GsonHelper.getAsBoolean(json, "copyheat");
+            boolean copyHeat = GsonHelper.getAsBoolean(json, "copy_heat");
             int cooling = GsonHelper.getAsInt(json, "cooling");
 
             return new HeatedProcessingOutput(itemstack, chance, temperature, copyHeat, cooling);

@@ -10,6 +10,8 @@ import com.simibubi.create.foundation.fluid.FluidIngredient;
 import com.simibubi.create.foundation.recipe.DummyCraftingContainer;
 import com.simibubi.create.foundation.recipe.IRecipeTypeInfo;
 import com.simibubi.create.foundation.utility.Iterate;
+import net.chauvedev.woodencog.WoodenCog;
+import net.chauvedev.woodencog.recipes.heatedRecipes.AllHeatedRecipeTypes;
 import net.chauvedev.woodencog.recipes.heatedRecipes.HeatedProcessingRecipe;
 import net.chauvedev.woodencog.recipes.heatedRecipes.HeatedProcessingRecipeBuilder;
 import net.minecraft.client.Minecraft;
@@ -52,11 +54,13 @@ public class HeatedBasinRecipe extends HeatedProcessingRecipe<Container> {
         return apply(basin, recipe, true);
     }
 
+    //TODO - add item temp input to this calls
     public static boolean apply(BasinBlockEntity basin, Recipe<?> recipe) {
         return apply(basin, recipe, false);
     }
 
     private static boolean apply(BasinBlockEntity basin, Recipe<?> recipe, boolean test) {
+        WoodenCog.LOGGER.info("Apply Basin Recipe");
         boolean isBasinRecipe = recipe instanceof HeatedBasinRecipe;
         IItemHandler availableItems = basin.getCapability(ForgeCapabilities.ITEM_HANDLER)
                 .orElse(null);
@@ -178,7 +182,7 @@ public class HeatedBasinRecipe extends HeatedProcessingRecipe<Container> {
     }
 
     public HeatedBasinRecipe(HeatedProcessingRecipeBuilder.HeatedProcessingRecipeParams params) {
-        this(AllRecipeTypes.BASIN, params);
+        this(AllHeatedRecipeTypes.HEATED_BASIN, params);
     }
 
     @Override

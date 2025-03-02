@@ -1,10 +1,13 @@
-package net.chauvedev.woodencog.mixin;
+package net.chauvedev.woodencog.mixin.blockEnitites;
 
 import com.simibubi.create.content.kinetics.base.KineticBlockEntity;
 import com.simibubi.create.content.processing.basin.BasinBlockEntity;
 import com.simibubi.create.content.processing.basin.BasinOperatingBlockEntity;
 import com.simibubi.create.content.processing.basin.BasinRecipe;
+import com.simibubi.create.foundation.advancement.CreateAdvancement;
 import com.simibubi.create.foundation.recipe.RecipeFinder;
+import net.chauvedev.woodencog.WoodenCog;
+import net.chauvedev.woodencog.recipes.heatedRecipes.recipes.HeatedBasinRecipe;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.item.crafting.Recipe;
 import net.minecraft.world.level.block.entity.BlockEntityType;
@@ -12,6 +15,11 @@ import net.minecraft.world.level.block.state.BlockState;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Overwrite;
 import org.spongepowered.asm.mixin.Shadow;
+import org.spongepowered.asm.mixin.gen.Invoker;
+import org.spongepowered.asm.mixin.injection.At;
+import org.spongepowered.asm.mixin.injection.Inject;
+import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -28,7 +36,7 @@ public abstract class MixinBasinOperatingBlockEntity extends KineticBlockEntity 
      * @reason This function didn't take in account the fluid ingredients which is pretty bad in a basin
      */
     @Overwrite
-    protected List<Recipe<?>> getMatchingRecipes() {
+    protected List<Recipe<?>> getMatchingRecipes() { //TODO - get also heated_mixing recipes
         if (this.getBasin().map(BasinBlockEntity::isEmpty).orElse(true)) {
             return new ArrayList();
         } else {
@@ -46,6 +54,41 @@ public abstract class MixinBasinOperatingBlockEntity extends KineticBlockEntity 
             }).collect(Collectors.toList());
         }
     }
+
+    @Inject(
+            method = "applyBasinRecipe",
+            at = @At("HEAD"),
+            cancellable = true
+    )
+    protected void applyBasinRecipe(CallbackInfo ci) {
+        WoodenCog.LOGGER.info("applyBasinRecipe");
+        if (this.currentRecipe != null && this.currentRecipe instanceof HeatedBasinRecipe) {
+            Optional<BasinBlockEntity> optionalBasin = this.getBasin();
+            if (optionalBasin.isPresent()) {
+                BasinBlockEntity basin = (BasinBlockEntity)optionalBasin.get();
+                boolean wasEmpty = basin.canContinueProcessing();
+                if (HeatedBasinRecipe.apply(basin, this.currentRecipe)) {
+                    this.invokeGetProceddedRecipeTrigger().ifPresent(this::award);
+                    basin.inputTank.sendDataImmediately();
+                    if (wasEmpty && this.matchBasinRecipe(this.currentRecipe)) {
+                        this.invokeContinueWithPreviousRecipe();
+                        this.sendData();
+                    }
+
+                    basin.notifyChangeOfContents();
+                }
+            }
+            ci.cancel();
+        }
+    }
+
+    @Invoker("getProcessedRecipeTrigger")
+    protected abstract Optional<CreateAdvancement> invokeGetProceddedRecipeTrigger();
+
+    @Invoker("continueWithPreviousRecipe")
+    public abstract boolean invokeContinueWithPreviousRecipe();
+
+    @Shadow protected Recipe<?> currentRecipe;
 
     @Shadow() abstract boolean matchStaticFilters(Recipe<?> recipe);
 
