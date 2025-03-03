@@ -17,7 +17,7 @@ currently it includes :
 - custom basin to allow more fluids into it (4)
 - some fixes for create mod that where needed for liquid only crafts
 - some fixes on filters to allow tfc fluid usage (still need to check if it didn't broke anything else)
-I'm currently working on a partial (maybe entire) rewrite of the project to make it more compatible with JEI and other create addons
+### I'm currently working on a partial (maybe entire) rewrite of the project to make it more compatible with JEI and other create addons
 - (WIP) TFC heating capability for pressing, mixing and sequenced assembly recipes.
 - (WIP) JEI compatibility
 - (WIP) Move js recipe generation to java
