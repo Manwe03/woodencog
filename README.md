@@ -1,5 +1,7 @@
 # Wooden Cog
+Forked from [woodencog](https://github.com/Sparks-and-Rotation/woodencog)
 
+## INFO
 this mod is a compatibility mod for tfc and create.
 
 Some of it's code came from [SeriousCreeper](https://www.youtube.com/@SeriousCreeper)
@@ -16,7 +18,11 @@ currently it includes :
 - some fixes for create mod that where needed for liquid only crafts
 - some fixes on filters to allow tfc fluid usage (still need to check if it didn't broke anything else)
 
-I don't know if this mod is compatible with other mod that use mixins for create but if you know one that don't work
-open an issue on this repo i'll look into it
+I'm currently working on a partial (maybe entire) rewrite of the project to make it more compatible with JEI and other create addons
+- (WIP) TFC heating capability for pressing, mixing and sequenced assembly recipes.
+- (WIP) JEI compatibility
+- (WIP) Move js recipe generation to java
 
-pull requests are welcomed.
+If you know any issue with other mods open an issue on this repo i'll look into it
+
+Pull requests are welcomed, but open an issue before, maybe I am working on it already.
