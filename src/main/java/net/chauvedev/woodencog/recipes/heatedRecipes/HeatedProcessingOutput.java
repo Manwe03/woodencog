@@ -75,9 +75,10 @@ public class HeatedProcessingOutput extends ProcessingOutput {
             json.addProperty("chance", this.getChance());
         }
 
+        //TODO make this optional
         if (WoodenCogCommonConfigs.HANDLE_TEMPERATURE.get()){
             json.addProperty("temperature", this.getTemperature());
-            json.addProperty("copyheat",this.getCopyHeat());
+            json.addProperty("copy_heat",this.getCopyHeat());
             json.addProperty("cooling",this.getCooling());
         }
         return json;

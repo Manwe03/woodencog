@@ -6,6 +6,7 @@ import com.google.gson.JsonObject;
 import com.simibubi.create.content.processing.recipe.HeatCondition;
 import com.simibubi.create.foundation.fluid.FluidHelper;
 import com.simibubi.create.foundation.fluid.FluidIngredient;
+import net.chauvedev.woodencog.WoodenCog;
 import net.dries007.tfc.common.recipes.ingredients.HeatableIngredient;
 import net.minecraft.MethodsReturnNonnullByDefault;
 import net.minecraft.core.NonNullList;
@@ -28,6 +29,7 @@ public class HeatedProcessingRecipeSerializer<T extends HeatedProcessingRecipe<?
     }
 
     protected void writeToJson(JsonObject json, T recipe) {
+        //TODO add warnings for json parse errors in recipes
         JsonArray jsonIngredients = new JsonArray();
         JsonArray jsonOutputs = new JsonArray();
         recipe.ingredients.forEach((i) -> {
@@ -58,6 +60,7 @@ public class HeatedProcessingRecipeSerializer<T extends HeatedProcessingRecipe<?
     }
 
     protected T readFromJson(ResourceLocation recipeId, JsonObject json) {
+        //TODO add warnings for json parse errors in recipes
         HeatedProcessingRecipeBuilder<T> builder = new HeatedProcessingRecipeBuilder(this.factory, recipeId);
         NonNullList<HeatableIngredient> ingredients = NonNullList.create();
         NonNullList<FluidIngredient> fluidIngredients = NonNullList.create();
@@ -98,6 +101,9 @@ public class HeatedProcessingRecipeSerializer<T extends HeatedProcessingRecipe<?
 
         T recipe = builder.build();
         recipe.readAdditional(json);
+
+        WoodenCog.LOGGER.info("Get recipe form JSON "+ recipe.getId());
+        WoodenCog.LOGGER.info(recipe.toString());
         return recipe;
     }
 

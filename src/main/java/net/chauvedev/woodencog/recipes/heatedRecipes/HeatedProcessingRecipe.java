@@ -113,7 +113,7 @@ public abstract class HeatedProcessingRecipe<T extends Container> implements Rec
     }
 
     /**
-     * Do not use
+     * @deprecated Do not use, Use -> getHeatedIngredients();
      */
     public NonNullList<Ingredient> getIngredients() {
         return null;

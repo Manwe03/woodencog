@@ -15,6 +15,8 @@ import net.minecraft.world.level.block.state.BlockState;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Overwrite;
 import org.spongepowered.asm.mixin.Shadow;
+import org.spongepowered.asm.mixin.Unique;
+import org.spongepowered.asm.mixin.gen.Accessor;
 import org.spongepowered.asm.mixin.gen.Invoker;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
@@ -41,18 +43,33 @@ public abstract class MixinBasinOperatingBlockEntity extends KineticBlockEntity 
             return new ArrayList();
         } else {
             List<Recipe<?>> list = RecipeFinder.get(this.getRecipeCacheKey(), this.level, this::matchStaticFilters);
-            return list.stream().filter(this::matchBasinRecipe).sorted((r1, r2) -> {
-                int r1Size = 0;
-                int r2Size = 0;
-                if (r1 instanceof BasinRecipe basinR1){
-                    r1Size = (basinR1.getIngredients().size() + basinR1.getFluidIngredients().size());
-                }
-                if(r2 instanceof BasinRecipe basinR2){
-                    r2Size = (basinR2.getIngredients().size() + basinR2.getFluidIngredients().size());
-                }
-                return r2Size - r1Size;
-            }).collect(Collectors.toList());
+            System.out.println("GETMATCHIN RECIPES");
+            System.out.println(list);
+            list = list.stream().filter(this::matchBasinRecipe).sorted(this::woodencog$testFluids).collect(Collectors.toList());
+            System.out.println(list);
+            return list;
         }
+    }
+
+    //Add heated and normal test
+    @Unique
+    private int woodencog$testFluids(Recipe<?> r1, Recipe<?> r2) {
+        int r1Size = 0;
+        int r2Size = 0;
+
+        if (r1 instanceof BasinRecipe basinR1 && r2 instanceof BasinRecipe basinR2){
+            r1Size = (basinR1.getIngredients().size() + basinR1.getFluidIngredients().size());
+            r2Size = (basinR2.getIngredients().size() + basinR2.getFluidIngredients().size());
+            WoodenCog.LOGGER.info("testFluids BasinRecipe ->"+(r2Size - r1Size));
+            return r2Size - r1Size;
+        }
+        if(r1 instanceof HeatedBasinRecipe basinR1 && r2 instanceof HeatedBasinRecipe basinR2){
+            r1Size = (basinR1.getHeatedIngredients().size() + basinR1.getFluidIngredients().size());
+            r2Size = (basinR2.getHeatedIngredients().size() + basinR2.getFluidIngredients().size());
+            WoodenCog.LOGGER.info("testFluids HeatedBasinRecipe ->"+(r2Size - r1Size));
+            return r2Size - r1Size;
+        }
+        return 0;
     }
 
     @Inject(
