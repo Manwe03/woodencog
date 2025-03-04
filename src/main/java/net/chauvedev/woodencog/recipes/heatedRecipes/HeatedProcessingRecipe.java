@@ -8,6 +8,7 @@ import com.simibubi.create.content.processing.recipe.ProcessingOutput;
 import com.simibubi.create.content.processing.recipe.ProcessingRecipeBuilder;
 import com.simibubi.create.foundation.fluid.FluidIngredient;
 import com.simibubi.create.foundation.recipe.IRecipeTypeInfo;
+import net.chauvedev.woodencog.WoodenCog;
 import net.chauvedev.woodencog.config.WoodenCogCommonConfigs;
 import net.dries007.tfc.common.capabilities.heat.HeatCapability;
 import net.dries007.tfc.common.capabilities.heat.IHeat;
@@ -113,10 +114,12 @@ public abstract class HeatedProcessingRecipe<T extends Container> implements Rec
     }
 
     /**
-     * @deprecated Do not use, Use -> getHeatedIngredients();
+     * @implNote Do not use, Use -> getHeatedIngredients();
      */
     public NonNullList<Ingredient> getIngredients() {
-        return null;
+        WoodenCog.LOGGER.warn("Fetched [Ingredients] instead of [HeatableIngredients] for: " + this.id);
+        Thread.dumpStack();
+        return NonNullList.create();
     }
     public NonNullList<HeatableIngredient> getHeatedIngredients(){
         return this.ingredients;
@@ -143,15 +146,11 @@ public abstract class HeatedProcessingRecipe<T extends Container> implements Rec
         this.forcedResult = stack;
     }
 
-    public List<ItemStack> rollResults() {
-        return this.rollResults(this.getRollableResults(),List.of());
+    public List<ItemStack> rollResults(float temp) {
+        return this.rollResults(this.getRollableResults(),temp);
     }
 
-    public List<ItemStack> rollResults(List<Float> tempList) {
-        return this.rollResults(this.getRollableResults(),tempList);
-    }
-
-    public List<ItemStack> rollResults(List<HeatedProcessingOutput> rollableResults, List<Float> tempList) {
+    public List<ItemStack> rollResults(List<HeatedProcessingOutput> rollableResults, float temp) {
         List<ItemStack> results = new ArrayList();
         for(int i = 0; i < rollableResults.size(); ++i) {
             HeatedProcessingOutput output = rollableResults.get(i);
@@ -160,8 +159,7 @@ public abstract class HeatedProcessingRecipe<T extends Container> implements Rec
                 if(WoodenCogCommonConfigs.HANDLE_TEMPERATURE.get()){
                     HeatCapability.setTemperature(stack,output.getTemperature());
                     if(output.getCopyHeat()) { //If copy input item heat - cooling
-                        Float temp = tempList.get(i);
-                        if (temp != null) HeatCapability.setTemperature(stack, temp - output.getCooling());
+                        HeatCapability.setTemperature(stack, temp - output.getCooling());
                     }
                 }
                 results.add(stack);

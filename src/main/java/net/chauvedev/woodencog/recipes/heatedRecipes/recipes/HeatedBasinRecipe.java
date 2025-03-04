@@ -1,9 +1,7 @@
 package net.chauvedev.woodencog.recipes.heatedRecipes.recipes;
 
-import com.simibubi.create.AllRecipeTypes;
 import com.simibubi.create.content.processing.basin.BasinBlockEntity;
 import com.simibubi.create.content.processing.burner.BlazeBurnerBlock;
-import com.simibubi.create.content.processing.recipe.ProcessingRecipeBuilder;
 import com.simibubi.create.foundation.blockEntity.behaviour.filtering.FilteringBehaviour;
 import com.simibubi.create.foundation.blockEntity.behaviour.fluid.SmartFluidTankBehaviour;
 import com.simibubi.create.foundation.fluid.FluidIngredient;
@@ -11,20 +9,18 @@ import com.simibubi.create.foundation.recipe.DummyCraftingContainer;
 import com.simibubi.create.foundation.recipe.IRecipeTypeInfo;
 import com.simibubi.create.foundation.utility.Iterate;
 import net.chauvedev.woodencog.WoodenCog;
+import net.chauvedev.woodencog.config.WoodenCogCommonConfigs;
 import net.chauvedev.woodencog.recipes.heatedRecipes.AllHeatedRecipeTypes;
 import net.chauvedev.woodencog.recipes.heatedRecipes.HeatedProcessingRecipe;
 import net.chauvedev.woodencog.recipes.heatedRecipes.HeatedProcessingRecipeBuilder;
+import net.dries007.tfc.common.capabilities.heat.HeatCapability;
+import net.dries007.tfc.common.capabilities.heat.IHeat;
 import net.dries007.tfc.common.recipes.ingredients.HeatableIngredient;
-import net.minecraft.client.Minecraft;
 import net.minecraft.world.Container;
 import net.minecraft.world.inventory.CraftingContainer;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.crafting.CraftingRecipe;
-import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.item.crafting.Recipe;
 import net.minecraft.world.level.Level;
-import net.minecraft.world.level.block.entity.BlockEntity;
-import net.minecraft.world.level.block.state.BlockState;
 import net.minecraftforge.common.capabilities.ForgeCapabilities;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.capability.IFluidHandler;
@@ -40,8 +36,7 @@ public class HeatedBasinRecipe extends HeatedProcessingRecipe<Container> {
         if (filter == null)
             return false;
 
-        boolean filterTest = filter.test(recipe.getResultItem(basin.getLevel()
-                .registryAccess()));
+        boolean filterTest = filter.test(recipe.getResultItem(basin.getLevel().registryAccess()));
         if (recipe instanceof HeatedBasinRecipe basinRecipe) {
             if (basinRecipe.getRollableResults()
                     .isEmpty()
@@ -63,7 +58,7 @@ public class HeatedBasinRecipe extends HeatedProcessingRecipe<Container> {
     }
 
     private static boolean apply(BasinBlockEntity basin, Recipe<?> recipe, boolean test) {
-        WoodenCog.LOGGER.info("Apply Basin Recipe");
+        WoodenCog.LOGGER.info("Apply Heated Basin Recipe: "+ recipe.getId());
         if(recipe instanceof HeatedBasinRecipe heatedRecipe){
             IItemHandler availableItems = basin.getCapability(ForgeCapabilities.ITEM_HANDLER).orElse(null);
             IFluidHandler availableFluids = basin.getCapability(ForgeCapabilities.FLUID_HANDLER).orElse(null);
@@ -142,9 +137,27 @@ public class HeatedBasinRecipe extends HeatedProcessingRecipe<Container> {
                 }
 
                 if (simulate) {
-                    CraftingContainer remainderContainer = new DummyCraftingContainer(availableItems, extractedItemsFromSlot);
+                    if (WoodenCogCommonConfigs.HANDLE_TEMPERATURE.get()) {
 
-                    recipeOutputItems.addAll(heatedRecipe.rollResults());
+                        float totalTemp = 0f;
+                        int count = 0;
+                        for (int slot = 0; slot < availableItems.getSlots(); slot++) {
+                            int extractedCount = extractedItemsFromSlot[slot];
+                            if (extractedCount > 0) { //It's used in recipe
+                                ItemStack stack = availableItems.getStackInSlot(slot);
+                                float temp = stack.getCapability(HeatCapability.CAPABILITY).map(IHeat::getTemperature).orElse(0f);
+                                totalTemp += (temp*extractedCount); //get into account stacksize > 1
+                                count += extractedCount;
+                            }
+                        }
+                        float inputTemp = count > 0 ? totalTemp / count : 0f;
+                        recipeOutputItems.addAll(heatedRecipe.rollResults(inputTemp));
+                    } else {
+                        recipeOutputItems.addAll(heatedRecipe.rollResults(0));
+                    }
+
+
+                    CraftingContainer remainderContainer = new DummyCraftingContainer(availableItems, extractedItemsFromSlot);
 
                     for (FluidStack fluidStack : heatedRecipe.getFluidResults())
                         if (!fluidStack.isEmpty()) recipeOutputFluids.add(fluidStack);

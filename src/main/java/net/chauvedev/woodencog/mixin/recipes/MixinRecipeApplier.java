@@ -63,15 +63,17 @@ public abstract class MixinRecipeApplier {
         if (recipe instanceof HeatedProcessingRecipe<?> pr) {
             WoodenCog.LOGGER.info("INSTANCE OF HeatedProcessingRecipe");
 
-            List<Float> outputTemps = new ArrayList<>(); //list of output temperature applied in order
-            stackIn.getCapability(HeatCapability.CAPABILITY).ifPresent(iHeat -> {
-                outputTemps.add(iHeat.getTemperature());
-            });
+            float inputTemp = 0;
+            if(stackIn.getCapability(HeatCapability.CAPABILITY).isPresent()){
+                if(stackIn.getCapability(HeatCapability.CAPABILITY).resolve().isPresent()){
+                    inputTemp = stackIn.getCapability(HeatCapability.CAPABILITY).resolve().get().getTemperature();
+                }
+            }
 
             stacks = new ArrayList<>();
             for (int i = 0; i < stackIn.getCount(); i++) {
                 List<HeatedProcessingOutput> outputs = pr.getRollableResults(); //get HeatedOutputs
-                for (ItemStack stack : pr.rollResults(outputs,outputTemps)) {
+                for (ItemStack stack : pr.rollResults(outputs,inputTemp)) {
                     for (ItemStack previouslyRolled : stacks) {
                         if (stack.isEmpty())
                             continue;

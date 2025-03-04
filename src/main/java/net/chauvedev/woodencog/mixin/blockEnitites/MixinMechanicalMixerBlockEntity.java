@@ -20,13 +20,11 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.crafting.CraftingRecipe;
 import net.minecraft.world.item.crafting.Recipe;
 import net.minecraftforge.common.crafting.IShapedRecipe;
-import org.checkerframework.checker.units.qual.A;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Overwrite;
 import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
-import org.spongepowered.asm.mixin.injection.ModifyVariable;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 import java.util.Optional;
@@ -56,32 +54,6 @@ public abstract class MixinMechanicalMixerBlockEntity {
         return false;
     }
 
-
-    /**
-     * @author Manwe
-     * @reason Replaces recipe speed to take into account heatedRecipes
-     * @return recipeSpeed
-     *//*
-    @ModifyVariable(method = "tick",at = @At(value = "STORE"), ordinal = 1)
-    private float modifyRecipeSpeed(float recipeSpeed){
-        Recipe<?> currentRecipe = ((BasinOperatingBlockEntityAccessor) this).getCurrentRecipe();
-        WoodenCog.LOGGER.info("modifyRecipeSpeed");
-        if (currentRecipe instanceof ProcessingRecipe<?> processingRecipe) {
-            int t = processingRecipe.getProcessingDuration();
-            if (t != 0) {
-                return (float)t / 100.0F;
-            }
-        }
-        if (currentRecipe instanceof HeatedProcessingRecipe<?> processingRecipe){
-            int t = processingRecipe.getProcessingDuration();
-            if (t != 0) {
-                return (float)t / 100.0F;
-            }
-            WoodenCog.LOGGER.info("HIHIHAHA");
-        }
-        return 1.0F;
-    }*/
-
     /**
      * @author Manwe
      * @reason Modify tick logic for heated recipes
@@ -103,32 +75,14 @@ public abstract class MixinMechanicalMixerBlockEntity {
             thisInstance.basinChecker.scheduleUpdate();
         } else {
             float speed = Math.abs(thisInstance.getSpeed());
-            if (thisInstance.running && ((MechanicalMixerBlockEntity)(Object)this).getLevel() != null) {
-                WoodenCog.LOGGER.info("is running");
+            if (thisInstance.running && thisInstance.getLevel() != null) {
                 if (thisInstance.getLevel().isClientSide && thisInstance.runningTicks == 20) {
                     thisInstance.renderParticles();
                 }
 
                 if ((!thisInstance.getLevel().isClientSide || thisInstance.isVirtual()) && thisInstance.runningTicks == 20) {
-                    WoodenCog.LOGGER.info("runningTicks == 20");
                     if (thisInstance.processingTicks < 0) {
-                        WoodenCog.LOGGER.info("processingTicks < 0");
-                        float recipeSpeed = 1.0F;
-                        Recipe<?> currentRecipe = ((BasinOperatingBlockEntityAccessor) this).getCurrentRecipe();
-
-                        if (currentRecipe instanceof ProcessingRecipe<?> processingRecipe) {
-                            int t = processingRecipe.getProcessingDuration();
-                            if (t != 0) {
-                                recipeSpeed = (float)t / 100.0F;
-                            }
-                        }
-                        if (currentRecipe instanceof HeatedProcessingRecipe<?> processingRecipe){
-                            int t = processingRecipe.getProcessingDuration();
-                            if (t != 0) {
-                                recipeSpeed = (float)t / 100.0F;
-                            }
-                            WoodenCog.LOGGER.info("HIHIHAHA");
-                        }
+                        float recipeSpeed = woodencog$getRecipeSpeed();
 
                         thisInstance.processingTicks = Mth.clamp(Mth.log2((int)(512.0F / speed)) * Mth.ceil(recipeSpeed * 15.0F) + 1, 1, 512);
                         Optional<BasinBlockEntity> basin = ((BasinOperatingBlockEntityAccessor) this).invokeGetBasin();
@@ -139,10 +93,8 @@ public abstract class MixinMechanicalMixerBlockEntity {
                             }
                         }
                     } else {
-                        WoodenCog.LOGGER.info("processingTicks >= 0");
                         --thisInstance.processingTicks;
                         if (thisInstance.processingTicks == 0) {
-                            WoodenCog.LOGGER.info("processingTicks = 0");
                             ++thisInstance.runningTicks;
                             thisInstance.processingTicks = -1;
                             ((BasinOperatingBlockEntityAccessor) this).invokeApplyBasinRecipe();
@@ -158,5 +110,25 @@ public abstract class MixinMechanicalMixerBlockEntity {
 
         }
         ci.cancel();
+    }
+
+    @Unique
+    private float woodencog$getRecipeSpeed() {
+        float recipeSpeed = 1.0F;
+        Recipe<?> currentRecipe = ((BasinOperatingBlockEntityAccessor) this).getCurrentRecipe();
+
+        if (currentRecipe instanceof ProcessingRecipe<?> processingRecipe) {
+            int t = processingRecipe.getProcessingDuration();
+            if (t != 0) {
+                recipeSpeed = (float)t / 100.0F;
+            }
+        }
+        if (currentRecipe instanceof HeatedProcessingRecipe<?> processingRecipe){
+            int t = processingRecipe.getProcessingDuration();
+            if (t != 0) {
+                recipeSpeed = (float)t / 100.0F;
+            }
+        }
+        return recipeSpeed;
     }
 }
