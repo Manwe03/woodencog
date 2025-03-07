@@ -70,7 +70,7 @@ public class HeatedProcessingRecipeSerializer<T extends HeatedProcessingRecipe<?
 
     protected T readFromJson(ResourceLocation recipeId, JsonObject json) {
         try {
-            HeatedProcessingRecipeBuilder<T> builder = new HeatedProcessingRecipeBuilder(this.factory, recipeId);
+            HeatedProcessingRecipeBuilder<T> builder = new HeatedProcessingRecipeBuilder<>(this.factory, recipeId);
             NonNullList<HeatableIngredient> ingredients = NonNullList.create();
             NonNullList<FluidIngredient> fluidIngredients = NonNullList.create();
             NonNullList<HeatedProcessingOutput> results = NonNullList.create();

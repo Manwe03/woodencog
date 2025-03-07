@@ -8,7 +8,6 @@ import com.simibubi.create.content.processing.recipe.ProcessingRecipe;
 import com.simibubi.create.foundation.blockEntity.behaviour.fluid.SmartFluidTankBehaviour;
 import com.simibubi.create.foundation.utility.Couple;
 import com.simibubi.create.infrastructure.config.AllConfigs;
-import net.chauvedev.woodencog.WoodenCog;
 import net.chauvedev.woodencog.mixin.blockEnitites.accessors.BasinOperatingBlockEntityAccessor;
 import net.chauvedev.woodencog.recipes.heatedRecipes.AllHeatedRecipeTypes;
 import net.chauvedev.woodencog.recipes.heatedRecipes.HeatedProcessingRecipe;
@@ -16,7 +15,6 @@ import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.util.Mth;
 import net.minecraft.world.Container;
-import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.crafting.CraftingRecipe;
 import net.minecraft.world.item.crafting.Recipe;
 import net.minecraftforge.common.crafting.IShapedRecipe;
@@ -87,9 +85,9 @@ public abstract class MixinMechanicalMixerBlockEntity {
                         thisInstance.processingTicks = Mth.clamp(Mth.log2((int)(512.0F / speed)) * Mth.ceil(recipeSpeed * 15.0F) + 1, 1, 512);
                         Optional<BasinBlockEntity> basin = ((BasinOperatingBlockEntityAccessor) this).invokeGetBasin();
                         if (basin.isPresent()) {
-                            Couple<SmartFluidTankBehaviour> tanks = ((BasinBlockEntity)basin.get()).getTanks();
-                            if (!((SmartFluidTankBehaviour)tanks.getFirst()).isEmpty() || !((SmartFluidTankBehaviour)tanks.getSecond()).isEmpty()) {
-                                thisInstance.getLevel().playSound((Player)null, thisInstance.getBlockPos(), SoundEvents.BUBBLE_COLUMN_WHIRLPOOL_AMBIENT, SoundSource.BLOCKS, 0.75F, speed < 65.0F ? 0.75F : 1.5F);
+                            Couple<SmartFluidTankBehaviour> tanks = basin.get().getTanks();
+                            if (!tanks.getFirst().isEmpty() || !tanks.getSecond().isEmpty()) {
+                                thisInstance.getLevel().playSound(null, thisInstance.getBlockPos(), SoundEvents.BUBBLE_COLUMN_WHIRLPOOL_AMBIENT, SoundSource.BLOCKS, 0.75F, speed < 65.0F ? 0.75F : 1.5F);
                             }
                         }
                     } else {

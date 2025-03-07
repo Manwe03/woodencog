@@ -5,13 +5,10 @@
 
 package net.chauvedev.woodencog.mixin;
 
-import com.mojang.blaze3d.vertex.PoseStack;
-import com.mojang.math.Axis;
 import com.simibubi.create.compat.jei.category.animations.AnimatedBlazeBurner;
 import com.simibubi.create.compat.jei.category.animations.AnimatedKinetics;
-import net.dries007.tfc.common.blocks.TFCBlocks;
-import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
+import org.jetbrains.annotations.NotNull;
 import org.spongepowered.asm.mixin.Mixin;
 
 @Mixin(
@@ -20,7 +17,7 @@ import org.spongepowered.asm.mixin.Mixin;
 )
 public class MixinAnimatedBlazeBurner extends AnimatedKinetics {
     @Override
-    public void draw(GuiGraphics guiGraphics, int xOffset, int yOffset) {
+    public void draw(@NotNull GuiGraphics guiGraphics, int xOffset, int yOffset) {
         /* To remade for new flywheel 0.6.11 implementation
         PoseStack matrixStack = guiGraphics.pose();
         matrixStack.pushPose();

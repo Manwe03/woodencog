@@ -2,18 +2,14 @@ package net.chauvedev.woodencog.recipes.heatedRecipes;
 
 import com.google.gson.JsonObject;
 import com.simibubi.create.Create;
-import com.simibubi.create.content.kinetics.deployer.DeployerApplicationRecipe;
 import com.simibubi.create.content.processing.recipe.HeatCondition;
 import com.simibubi.create.content.processing.recipe.ProcessingOutput;
-import com.simibubi.create.content.processing.recipe.ProcessingRecipeBuilder;
 import com.simibubi.create.foundation.fluid.FluidIngredient;
 import com.simibubi.create.foundation.recipe.IRecipeTypeInfo;
 import net.chauvedev.woodencog.WoodenCog;
 import net.chauvedev.woodencog.config.WoodenCogCommonConfigs;
 import net.dries007.tfc.common.capabilities.heat.HeatCapability;
-import net.dries007.tfc.common.capabilities.heat.IHeat;
 import net.dries007.tfc.common.recipes.ingredients.HeatableIngredient;
-import net.dries007.tfc.common.recipes.outputs.CopyHeatModifier;
 import net.minecraft.core.NonNullList;
 import net.minecraft.core.RegistryAccess;
 import net.minecraft.network.FriendlyByteBuf;
@@ -24,14 +20,13 @@ import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.item.crafting.Recipe;
 import net.minecraft.world.item.crafting.RecipeSerializer;
 import net.minecraft.world.item.crafting.RecipeType;
-import net.minecraft.world.level.Level;
 import net.minecraftforge.fluids.FluidStack;
+import org.jetbrains.annotations.NotNull;
 import org.slf4j.Logger;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Supplier;
-import java.util.stream.Collectors;
 
 public abstract class HeatedProcessingRecipe<T extends Container> implements Recipe<T> {
     protected ResourceLocation id;
@@ -41,9 +36,9 @@ public abstract class HeatedProcessingRecipe<T extends Container> implements Rec
     protected NonNullList<FluidStack> fluidResults;
     protected int processingDuration;
     protected HeatCondition requiredHeat;
-    private RecipeType<?> type;
-    private RecipeSerializer<?> serializer;
-    private IRecipeTypeInfo typeInfo;
+    private final RecipeType<?> type;
+    private final RecipeSerializer<?> serializer;
+    private final IRecipeTypeInfo typeInfo;
     private Supplier<ItemStack> forcedResult = null;
 
     public HeatedProcessingRecipe(IRecipeTypeInfo typeInfo, HeatedProcessingRecipeBuilder.HeatedProcessingRecipeParams params) {
@@ -116,9 +111,9 @@ public abstract class HeatedProcessingRecipe<T extends Container> implements Rec
     /**
      * @implNote Do not use, Use -> getHeatedIngredients();
      */
-    public NonNullList<Ingredient> getIngredients() {
+    public @NotNull NonNullList<Ingredient> getIngredients() {
         WoodenCog.LOGGER.warn("Fetched [Ingredients] instead of [HeatableIngredients] for: " + this.id);
-        Thread.dumpStack();
+        //Thread.dumpStack();
         return NonNullList.create();
     }
     public NonNullList<HeatableIngredient> getHeatedIngredients(){
@@ -137,11 +132,6 @@ public abstract class HeatedProcessingRecipe<T extends Container> implements Rec
         return this.fluidResults;
     }
 
-    /*
-    public List<ItemStack> getRollableResultsAsItemStacks() {
-        return (List) this.getRollableResults().stream().map(ProcessingOutput::getStack).collect(Collectors.toList());
-    }*/
-
     public void enforceNextResult(Supplier<ItemStack> stack) {
         this.forcedResult = stack;
     }
@@ -151,10 +141,10 @@ public abstract class HeatedProcessingRecipe<T extends Container> implements Rec
     }
 
     public List<ItemStack> rollResults(List<HeatedProcessingOutput> rollableResults, float temp) {
-        List<ItemStack> results = new ArrayList();
+        List<ItemStack> results = new ArrayList<>();
         for(int i = 0; i < rollableResults.size(); ++i) {
             HeatedProcessingOutput output = rollableResults.get(i);
-            ItemStack stack = i == 0 && this.forcedResult != null ? (ItemStack)this.forcedResult.get() : output.rollOutput();
+            ItemStack stack = i == 0 && this.forcedResult != null ? this.forcedResult.get() : output.rollOutput();
             if (!stack.isEmpty()) {
                 if(WoodenCogCommonConfigs.HANDLE_TEMPERATURE.get()){
                     HeatCapability.setTemperature(stack,output.getTemperature());
@@ -177,7 +167,7 @@ public abstract class HeatedProcessingRecipe<T extends Container> implements Rec
         return this.requiredHeat;
     }
 
-    public ItemStack assemble(T inv, RegistryAccess registryAccess) {
+    public @NotNull ItemStack assemble(@NotNull T inv, @NotNull RegistryAccess registryAccess) {
         return this.getResultItem(registryAccess);
     }
 
@@ -185,27 +175,27 @@ public abstract class HeatedProcessingRecipe<T extends Container> implements Rec
         return true;
     }
 
-    public ItemStack getResultItem(RegistryAccess registryAccess) {
-        return this.getRollableResults().isEmpty() ? ItemStack.EMPTY : ((ProcessingOutput)this.getRollableResults().get(0)).getStack();
+    public @NotNull ItemStack getResultItem(@NotNull RegistryAccess registryAccess) {
+        return this.getRollableResults().isEmpty() ? ItemStack.EMPTY : this.getRollableResults().get(0).getStack();
     }
 
     public boolean isSpecial() {
         return true;
     }
 
-    public String getGroup() {
-        return "processing";
+    public @NotNull String getGroup() {
+        return "heated_processing";
     }
 
-    public ResourceLocation getId() {
+    public @NotNull ResourceLocation getId() {
         return this.id;
     }
 
-    public RecipeSerializer<?> getSerializer() {
+    public @NotNull RecipeSerializer<?> getSerializer() {
         return this.serializer;
     }
 
-    public RecipeType<?> getType() {
+    public @NotNull RecipeType<?> getType() {
         return this.type;
     }
 

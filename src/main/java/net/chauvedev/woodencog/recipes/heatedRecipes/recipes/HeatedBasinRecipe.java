@@ -14,8 +14,6 @@ import net.chauvedev.woodencog.recipes.heatedRecipes.AllHeatedRecipeTypes;
 import net.chauvedev.woodencog.recipes.heatedRecipes.HeatedProcessingRecipe;
 import net.chauvedev.woodencog.recipes.heatedRecipes.HeatedProcessingRecipeBuilder;
 import net.chauvedev.woodencog.utils.HeatHandlingUtil;
-import net.dries007.tfc.common.capabilities.heat.HeatCapability;
-import net.dries007.tfc.common.capabilities.heat.IHeat;
 import net.dries007.tfc.common.recipes.ingredients.HeatableIngredient;
 import net.minecraft.world.Container;
 import net.minecraft.world.inventory.CraftingContainer;

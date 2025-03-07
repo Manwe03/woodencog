@@ -11,7 +11,6 @@ import com.simibubi.create.foundation.utility.VecHelper;
 import net.chauvedev.woodencog.WoodenCog;
 import net.chauvedev.woodencog.recipes.heatedRecipes.AllHeatedRecipeTypes;
 import net.chauvedev.woodencog.recipes.heatedRecipes.recipes.HeatedPressingRecipe;
-import net.minecraft.Optionull;
 import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.Recipe;
@@ -20,17 +19,8 @@ import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.items.ItemHandlerHelper;
 import net.minecraftforge.items.wrapper.RecipeWrapper;
-import org.spongepowered.asm.mixin.Mixin;
-import org.spongepowered.asm.mixin.Overwrite;
-import org.spongepowered.asm.mixin.Shadow;
-import org.spongepowered.asm.mixin.injection.At;
-import org.spongepowered.asm.mixin.injection.Inject;
-import org.spongepowered.asm.mixin.injection.ModifyVariable;
-import org.spongepowered.asm.mixin.injection.Redirect;
-import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
+import org.spongepowered.asm.mixin.*;
 
-import java.io.Console;
-import java.util.Collection;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Optional;
@@ -38,6 +28,7 @@ import java.util.Optional;
 @Mixin(value = MechanicalPressBlockEntity.class, remap = false)
 public class MixinMechanicalPressBlockEntity {
 
+    @Final
     @Shadow private static RecipeWrapper pressingInv;
     @Shadow public PressingBehaviour pressingBehaviour;
 
@@ -45,6 +36,7 @@ public class MixinMechanicalPressBlockEntity {
      * @author Manwe
      * @implNote More general method, return pressing and heatedPressing recipes
      */
+    @Unique
     public Optional<?> getHeatedRecipe(ItemStack item) {
         Level level = ((BlockEntity) (Object) this).getLevel();
         if(level == null) {
@@ -63,11 +55,7 @@ public class MixinMechanicalPressBlockEntity {
             return heatedPressingRecipe;
         }
         //Find default create recipe
-        Optional<PressingRecipe> pressingRecipe = AllRecipeTypes.PRESSING.find(pressingInv, level);
-        if(pressingRecipe.isPresent()){
-            return pressingRecipe;
-        }
-        return Optional.empty();
+        return AllRecipeTypes.PRESSING.find(pressingInv, level);
     }
 
     /**
@@ -78,10 +66,10 @@ public class MixinMechanicalPressBlockEntity {
     @Overwrite
     public boolean tryProcessInWorld(ItemEntity itemEntity, boolean simulate) {
         Level level = ((BlockEntity) (Object) this).getLevel();
-
+        if(level == null) return false;
         ItemStack item = itemEntity.getItem();
         Optional<?> recipe = getHeatedRecipe(item);
-        if (!recipe.isPresent()) {
+        if (recipe.isEmpty()) {
             return false;
         } else if (simulate) {
             return true;
@@ -89,10 +77,10 @@ public class MixinMechanicalPressBlockEntity {
             ItemStack itemCreated = ItemStack.EMPTY;
             this.pressingBehaviour.particleItems.add(item);
             if (!((MechanicalPressBlockEntity)(Object)this).canProcessInBulk() && item.getCount() != 1) {
-                Iterator var6 = RecipeApplier.applyRecipeOn(level, ItemHandlerHelper.copyStackWithSize(item, 1), (Recipe) recipe.get()).iterator();
+                Iterator<ItemStack> var6 = RecipeApplier.applyRecipeOn(level, ItemHandlerHelper.copyStackWithSize(item, 1), (Recipe<?>) recipe.get()).iterator();
 
                 while(var6.hasNext()) {
-                    ItemStack result = (ItemStack)var6.next();
+                    ItemStack result = var6.next();
                     if (itemCreated.isEmpty()) {
                         itemCreated = result.copy();
                     }
@@ -105,7 +93,7 @@ public class MixinMechanicalPressBlockEntity {
 
                 item.shrink(1);
             } else {
-                RecipeApplier.applyRecipeOn(itemEntity, (Recipe)recipe.get());
+                RecipeApplier.applyRecipeOn(itemEntity, (Recipe<?>) recipe.get());
                 itemCreated = itemEntity.getItem().copy();
             }
 
@@ -127,19 +115,17 @@ public class MixinMechanicalPressBlockEntity {
         Level level = ((BlockEntity) (Object) this).getLevel();
         Optional<?> recipe = getHeatedRecipe(input.stack);
 
-        if (!recipe.isPresent()) {
+        if (recipe.isEmpty()) {
             return false;
         } else if (simulate) {
             return true;
         } else {
             this.pressingBehaviour.particleItems.add(input.stack);
-            List<ItemStack> outputs = RecipeApplier.applyRecipeOn(level, ((MechanicalPressBlockEntity)(Object)this).canProcessInBulk() ? input.stack : ItemHandlerHelper.copyStackWithSize(input.stack, 1), (Recipe)recipe.get());
-            Iterator var6 = outputs.iterator();
+            List<ItemStack> outputs = RecipeApplier.applyRecipeOn(level, ((MechanicalPressBlockEntity)(Object)this).canProcessInBulk() ? input.stack : ItemHandlerHelper.copyStackWithSize(input.stack, 1), (Recipe<?>)recipe.get());
 
-            while(var6.hasNext()) {
-                ItemStack created = (ItemStack)var6.next();
+            for (ItemStack created : outputs) {
                 if (!created.isEmpty()) {
-                    ((MechanicalPressBlockEntity)(Object)this).onItemPressed(created);
+                    ((MechanicalPressBlockEntity) (Object) this).onItemPressed(created);
                     break;
                 }
             }

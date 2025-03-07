@@ -9,6 +9,7 @@ import com.simibubi.create.Create;
 import com.simibubi.create.content.processing.recipe.ProcessingOutput;
 import com.simibubi.create.foundation.utility.Pair;
 import com.simibubi.create.foundation.utility.RegisteredObjects;
+import net.chauvedev.woodencog.WoodenCog;
 import net.chauvedev.woodencog.config.WoodenCogCommonConfigs;
 import net.minecraft.nbt.TagParser;
 import net.minecraft.network.FriendlyByteBuf;
@@ -60,9 +61,9 @@ public class HeatedProcessingOutput extends ProcessingOutput {
     @Override
     public JsonElement serialize() {
         JsonObject json = new JsonObject();
-        ResourceLocation resourceLocation = this.childCompatDatagenOutput == null ? RegisteredObjects.getKeyOrThrow(this.getStack().getItem()) : (ResourceLocation)this.childCompatDatagenOutput.getFirst();
+        ResourceLocation resourceLocation = this.childCompatDatagenOutput == null ? RegisteredObjects.getKeyOrThrow(this.getStack().getItem()) : this.childCompatDatagenOutput.getFirst();
         json.addProperty("item", resourceLocation.toString());
-        int count = this.childCompatDatagenOutput == null ? this.getStack().getCount() : (Integer)this.childCompatDatagenOutput.getSecond();
+        int count = this.childCompatDatagenOutput == null ? this.getStack().getCount() : this.childCompatDatagenOutput.getSecond();
         if (count != 1) {
             json.addProperty("count", count);
         }
@@ -97,7 +98,7 @@ public class HeatedProcessingOutput extends ProcessingOutput {
                     JsonElement element = json.get("nbt");
                     itemstack.setTag(TagParser.parseTag(element.isJsonObject() ? Create.GSON.toJson(element) : GsonHelper.convertToString(element, "nbt")));
                 } catch (CommandSyntaxException var7) {
-                    var7.printStackTrace();
+                    WoodenCog.LOGGER.error(var7.getStackTrace().toString());
                 }
             }
             int temperature = 0;

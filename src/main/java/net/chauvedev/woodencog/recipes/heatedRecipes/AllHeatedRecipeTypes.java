@@ -1,7 +1,6 @@
 package net.chauvedev.woodencog.recipes.heatedRecipes;
 
 import com.simibubi.create.AllTags;
-import com.simibubi.create.Create;
 import com.simibubi.create.foundation.recipe.IRecipeTypeInfo;
 import com.simibubi.create.foundation.utility.Lang;
 import net.chauvedev.woodencog.WoodenCog;
@@ -36,7 +35,7 @@ public enum AllHeatedRecipeTypes implements IRecipeTypeInfo {
     private final @Nullable RegistryObject<RecipeType<?>> typeObject;
     private final Supplier<RecipeType<?>> type;
 
-    private AllHeatedRecipeTypes(Supplier serializerSupplier, Supplier typeSupplier, boolean registerType) {
+    private AllHeatedRecipeTypes(Supplier serializerSupplier, Supplier<RecipeType<?>> typeSupplier, boolean registerType) {
         String name = Lang.asId(this.name());
         this.id = new ResourceLocation(WoodenCog.MOD_ID, name);
         this.serializerObject = Registers.SERIALIZER_REGISTER.register(name, serializerSupplier);

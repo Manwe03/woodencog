@@ -1,6 +1,5 @@
 package net.chauvedev.woodencog.recipes.heatedRecipes.recipes;
 
-import com.simibubi.create.AllRecipeTypes;
 import com.simibubi.create.Create;
 import com.simibubi.create.compat.jei.category.sequencedAssembly.SequencedAssemblySubCategory;
 import com.simibubi.create.content.processing.sequenced.IAssemblyRecipe;
@@ -17,6 +16,7 @@ import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.items.wrapper.RecipeWrapper;
 import net.minecraftforge.registries.ForgeRegistries;
+import org.jetbrains.annotations.NotNull;
 
 
 import java.util.List;
@@ -31,7 +31,7 @@ public class HeatedPressingRecipe extends HeatedProcessingRecipe<RecipeWrapper> 
     }
 
     @Override
-    public boolean matches(RecipeWrapper inv, Level worldIn) {
+    public boolean matches(RecipeWrapper inv, @NotNull Level worldIn) {
         if (inv.isEmpty())
             return false;
         return ingredients.get(0)

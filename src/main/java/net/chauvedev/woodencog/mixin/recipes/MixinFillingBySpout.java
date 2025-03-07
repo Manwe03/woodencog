@@ -33,7 +33,7 @@ public class MixinFillingBySpout {
 
     /**
      * @author ChauveDev
-     * @reason Some items from tfc store data as nbt and filling does not check nbt informations on recipe
+     * @reason Some items from tfc store data as nbt and filling does not check nbt information on recipe
      */
     @Overwrite()
     public static boolean canItemBeFilled(Level world, ItemStack stack) {
@@ -55,7 +55,7 @@ public class MixinFillingBySpout {
             }
 
 
-            return AllRecipeTypes.FILLING.find(WRAPPER, world).isPresent() ? true : GenericItemFilling.canItemBeFilled(world, stack);
+            return AllRecipeTypes.FILLING.find(WRAPPER, world).isPresent() || GenericItemFilling.canItemBeFilled(world, stack);
         }
     }
 
@@ -68,10 +68,10 @@ public class MixinFillingBySpout {
         FluidStack toFill = availableFluid.copy();
         toFill.setAmount(requiredAmount);
         WRAPPER.setItem(0, stack);
-        FillingRecipe fillingRecipe = (FillingRecipe) SequencedAssemblyRecipe.getRecipe(world, WRAPPER, AllRecipeTypes.FILLING.getType(), FillingRecipe.class, matchItemAndFluid(world, availableFluid)).filter((fr) -> {
+        FillingRecipe fillingRecipe = SequencedAssemblyRecipe.getRecipe(world, WRAPPER, AllRecipeTypes.FILLING.getType(), FillingRecipe.class, matchItemAndFluid(world, availableFluid)).filter((fr) -> {
             return fr.getRequiredFluid().test(toFill);
         }).orElseGet(() -> {
-            Iterator var2 = world.getRecipeManager().getRecipesFor(AllRecipeTypes.FILLING.getType(), WRAPPER, world).iterator();
+            Iterator<Recipe<RecipeWrapper>> var2 = world.getRecipeManager().getRecipesFor(AllRecipeTypes.FILLING.getType(), WRAPPER, world).iterator();
 
             FillingRecipe fr;
             FluidIngredient requiredFluid;
@@ -80,7 +80,7 @@ public class MixinFillingBySpout {
                     return null;
                 }
 
-                Recipe<RecipeWrapper> recipe = (Recipe)var2.next();
+                Recipe<RecipeWrapper> recipe = var2.next();
                 fr = (FillingRecipe)recipe;
                 requiredFluid = fr.getRequiredFluid();
             } while(!requiredFluid.test(toFill));
@@ -112,7 +112,7 @@ public class MixinFillingBySpout {
 
             availableFluid.shrink(requiredAmount);
             stack.shrink(1);
-            return results.isEmpty() ? ItemStack.EMPTY : (ItemStack)results.get(0);
+            return results.isEmpty() ? ItemStack.EMPTY : results.get(0);
         } else {
             return GenericItemFilling.fillItem(world, requiredAmount, stack, availableFluid);
         }
@@ -120,12 +120,10 @@ public class MixinFillingBySpout {
 
     /**
      * @author ChauveDev
-     * @reason i hate this class, this was needed as it's a static method and class cannot be extended (need cleaning)
+     * @reason I hate this class, this was needed as it's a static method and class cannot be extended (need cleaning)
      */
     @Overwrite()
     private static Predicate<FillingRecipe> matchItemAndFluid(Level world, FluidStack availableFluid) {
-        return (r) -> {
-            return r.matches(WRAPPER, world) && r.getRequiredFluid().test(availableFluid);
-        };
+        return (r) -> r.matches(WRAPPER, world) && r.getRequiredFluid().test(availableFluid);
     }
 }

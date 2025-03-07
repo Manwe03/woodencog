@@ -16,7 +16,12 @@ public class HeatHandlingUtil {
 
     private static List<Integer> getMaterialProperties(ItemStack itemStack){
         if(itemStack.hasTag()) {
-            for (String tag : itemStack.getTag().getAllKeys()){
+            CompoundTag compoundTag = itemStack.getTag();
+            if(compoundTag == null) {
+                WoodenCog.LOGGER.warn("Null CompoundTag -> fallback to default");
+                return List.of(2700,897);
+            }
+            for (String tag : compoundTag.getAllKeys()){
                 if(tag.startsWith(INGOT_PREFIX)){
                     String key = tag.substring(14);
                     return WoodenCogCommonConfigs.MATERIAL_PROPERTIES.get(key).get();

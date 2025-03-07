@@ -25,8 +25,6 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 @Mixin(value = FanProcessing.class, remap = false)
 public class MixinFanProcessing {
 
-
-
     private static ItemStack applyProcessingTCF(ItemStack inputStack, FanProcessingType type) {
         if (
                 !inputStack.getCapability(HeatCapability.CAPABILITY).isPresent()
@@ -106,7 +104,6 @@ public class MixinFanProcessing {
                 }
                 if(oldStack.is(newStack.getItem())) {
                     cir.setReturnValue(TransportedItemStackHandlerBehaviour.TransportedResult.doNothing());
-                    return;
                 } else {
                     TransportedItemStack newTransportedStack = transported.getSimilar();
                     newTransportedStack.stack = newStack;
@@ -115,8 +112,8 @@ public class MixinFanProcessing {
                                     newTransportedStack
                             )
                     );
-                    return;
                 }
+                return;
             }
             cir.cancel();
         }
