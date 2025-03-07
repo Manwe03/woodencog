@@ -75,7 +75,6 @@ public class HeatedProcessingOutput extends ProcessingOutput {
             json.addProperty("chance", this.getChance());
         }
 
-        //TODO make this optional
         if (WoodenCogCommonConfigs.HANDLE_TEMPERATURE.get()){
             json.addProperty("temperature", this.getTemperature());
             json.addProperty("copy_heat",this.getCopyHeat());
@@ -101,10 +100,18 @@ public class HeatedProcessingOutput extends ProcessingOutput {
                     var7.printStackTrace();
                 }
             }
-
-            int temperature = GsonHelper.getAsInt(json, "temperature");
-            boolean copyHeat = GsonHelper.getAsBoolean(json, "copy_heat");
-            int cooling = GsonHelper.getAsInt(json, "cooling");
+            int temperature = 0;
+            boolean copyHeat = false;
+            int cooling = 0;
+            try {
+                temperature = GsonHelper.getAsInt(json, "temperature");
+            }catch (JsonSyntaxException ignored){}
+            try {
+                copyHeat = GsonHelper.getAsBoolean(json, "copy_heat");
+            }catch (JsonSyntaxException ignored){}
+            try {
+                cooling = GsonHelper.getAsInt(json, "cooling");
+            }catch (JsonSyntaxException ignored){}
 
             return new HeatedProcessingOutput(itemstack, chance, temperature, copyHeat, cooling);
         }

@@ -38,7 +38,7 @@ public abstract class MixinMechanicalMixerBlockEntity {
      */
     @Overwrite
     protected <C extends Container> boolean matchStaticFilters(Recipe<C> r) {
-        WoodenCog.LOGGER.info("matchStaticFilters");
+        //WoodenCog.LOGGER.info("matchStaticFilters");
         return (woodencog$checkFilters(r) ||
                 (r.getType() == AllRecipeTypes.MIXING.getType() || r.getType() == AllHeatedRecipeTypes.HEATED_MIXING.getType()));
     }

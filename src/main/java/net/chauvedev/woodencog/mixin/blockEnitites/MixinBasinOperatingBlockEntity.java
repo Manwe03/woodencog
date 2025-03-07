@@ -46,12 +46,8 @@ public abstract class MixinBasinOperatingBlockEntity extends KineticBlockEntity 
         if (this.getBasin().map(BasinBlockEntity::isEmpty).orElse(true)) {
             return new ArrayList();
         } else {
-            System.out.println(this.getRecipeCacheKey());
             List<Recipe<?>> list = RecipeFinder.get(this.getRecipeCacheKey(), this.level, this::matchStaticFilters);
-            System.out.println("GETMATCHIN RECIPES");
-            System.out.println(list.size());
             list = list.stream().filter(this::matchBasinRecipe).sorted(this::woodencog$testFluids).collect(Collectors.toList());
-            System.out.println(list);
             return list;
         }
     }

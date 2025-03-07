@@ -13,6 +13,7 @@ import net.chauvedev.woodencog.config.WoodenCogCommonConfigs;
 import net.chauvedev.woodencog.recipes.heatedRecipes.AllHeatedRecipeTypes;
 import net.chauvedev.woodencog.recipes.heatedRecipes.HeatedProcessingRecipe;
 import net.chauvedev.woodencog.recipes.heatedRecipes.HeatedProcessingRecipeBuilder;
+import net.chauvedev.woodencog.utils.HeatHandlingUtil;
 import net.dries007.tfc.common.capabilities.heat.HeatCapability;
 import net.dries007.tfc.common.capabilities.heat.IHeat;
 import net.dries007.tfc.common.recipes.ingredients.HeatableIngredient;
@@ -52,7 +53,6 @@ public class HeatedBasinRecipe extends HeatedProcessingRecipe<Container> {
         return apply(basin, recipe, true);
     }
 
-    //TODO - add item temp input to this calls
     public static boolean apply(BasinBlockEntity basin, Recipe<?> recipe) {
         return apply(basin, recipe, false);
     }
@@ -138,20 +138,16 @@ public class HeatedBasinRecipe extends HeatedProcessingRecipe<Container> {
 
                 if (simulate) {
                     if (WoodenCogCommonConfigs.HANDLE_TEMPERATURE.get()) {
-
-                        float totalTemp = 0f;
                         int count = 0;
+                        List<ItemStack> extractedItems = new ArrayList<>();
                         for (int slot = 0; slot < availableItems.getSlots(); slot++) {
                             int extractedCount = extractedItemsFromSlot[slot];
                             if (extractedCount > 0) { //It's used in recipe
-                                ItemStack stack = availableItems.getStackInSlot(slot);
-                                float temp = stack.getCapability(HeatCapability.CAPABILITY).map(IHeat::getTemperature).orElse(0f);
-                                totalTemp += (temp*extractedCount); //get into account stacksize > 1
-                                count += extractedCount;
+                                extractedItems.add(availableItems.getStackInSlot(slot));
                             }
                         }
-                        float inputTemp = count > 0 ? totalTemp / count : 0f;
-                        recipeOutputItems.addAll(heatedRecipe.rollResults(inputTemp));
+                        float outputTemp = HeatHandlingUtil.computeThermalEquilibrium(extractedItems);
+                        recipeOutputItems.addAll(heatedRecipe.rollResults(outputTemp));
                     } else {
                         recipeOutputItems.addAll(heatedRecipe.rollResults(0));
                     }
