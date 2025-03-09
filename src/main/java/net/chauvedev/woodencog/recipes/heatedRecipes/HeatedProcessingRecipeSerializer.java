@@ -111,11 +111,11 @@ public class HeatedProcessingRecipeSerializer<T extends HeatedProcessingRecipe<?
             T recipe = builder.build();
             recipe.readAdditional(json);
 
-            WoodenCog.LOGGER.info("Get recipe form JSON "+ recipe.getId());
-            WoodenCog.LOGGER.info(recipe.toString());
+            //WoodenCog.LOGGER.info("Get recipe form JSON "+ recipe.getId());
+            //WoodenCog.LOGGER.info(recipe.toString());
             return recipe;
         } catch (Exception e){
-            WoodenCog.LOGGER.error("FromJson: "+e.getMessage());
+            //WoodenCog.LOGGER.error("FromJson: "+e.getMessage());
             return null;
         }
     }

@@ -7,6 +7,7 @@ import net.chauvedev.woodencog.WoodenCog;
 import net.chauvedev.woodencog.recipes.heatedRecipes.recipes.HeatedBasinRecipe;
 import net.chauvedev.woodencog.recipes.heatedRecipes.recipes.HeatedMixingRecipe;
 import net.chauvedev.woodencog.recipes.heatedRecipes.recipes.HeatedPressingRecipe;
+import net.minecraft.client.Minecraft;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.Container;
@@ -18,6 +19,7 @@ import net.minecraftforge.registries.ForgeRegistries;
 import net.minecraftforge.registries.RegistryObject;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.List;
 import java.util.Optional;
 import java.util.function.Predicate;
 import java.util.function.Supplier;
@@ -82,8 +84,22 @@ public enum AllHeatedRecipeTypes implements IRecipeTypeInfo {
     @SuppressWarnings("unchecked")
     @Override
     public <T extends RecipeType<?>> T getType() {
-        //WoodenCog.LOGGER.info("Find Recipe - Get Type "+this.type.get());
         return (T) type.get();
+    }
+
+
+    public <T extends HeatedProcessingRecipe<?>> RecipeType<T> getHeatedProccesignType() {
+        return (RecipeType<T>) type.get();
+    }
+
+    public <T extends HeatedProcessingRecipe<?>> List<T> getRecipes() {
+        Level level = Minecraft.getInstance().level;
+        if(level != null && level.isClientSide){
+            return level.getRecipeManager().getAllRecipesFor(this.getType()).stream()
+                .filter(recipe -> recipe instanceof HeatedProcessingRecipe<?>)  // Filtramos recetas específicas
+                .map(recipe -> (T) recipe).toList();
+        }
+        return List.of();
     }
 
     public <C extends Container, T extends Recipe<C>> Optional<T> find(C inv, Level world) {

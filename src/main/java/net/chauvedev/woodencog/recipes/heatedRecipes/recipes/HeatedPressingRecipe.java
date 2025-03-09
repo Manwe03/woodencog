@@ -27,7 +27,6 @@ public class HeatedPressingRecipe extends HeatedProcessingRecipe<RecipeWrapper> 
 
     public HeatedPressingRecipe(HeatedProcessingRecipeBuilder.HeatedProcessingRecipeParams params) {
         super(AllHeatedRecipeTypes.HEATED_PRESSING, params);
-        WoodenCog.LOGGER.info("HEATED PRESSING RECIPE");
     }
 
     @Override

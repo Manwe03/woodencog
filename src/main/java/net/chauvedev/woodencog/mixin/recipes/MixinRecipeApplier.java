@@ -31,7 +31,7 @@ public abstract class MixinRecipeApplier {
             at = @At("HEAD")
     )
     private static void applyRecipeOn(ItemEntity entity, Recipe<?> recipe, CallbackInfo ci) {
-        WoodenCog.LOGGER.info("APPLY RECIPE ON, entity");
+        //WoodenCog.LOGGER.info("APPLY RECIPE ON, entity");
     }
 
     /**
@@ -45,11 +45,7 @@ public abstract class MixinRecipeApplier {
     )
     private static void onApplyRecipeOnAtHead(Level level, ItemStack stackIn, Recipe<?> recipe, CallbackInfoReturnable<List<ItemStack>> cir) {
         List<ItemStack> stacks;
-
-        WoodenCog.LOGGER.info("APPLY RECIPE ON, level");
         if (recipe instanceof HeatedProcessingRecipe<?> pr) {
-            WoodenCog.LOGGER.info("INSTANCE OF HeatedProcessingRecipe");
-
             float inputTemp = 0;
             if(stackIn.getCapability(HeatCapability.CAPABILITY).isPresent()){
                 if(stackIn.getCapability(HeatCapability.CAPABILITY).resolve().isPresent()){

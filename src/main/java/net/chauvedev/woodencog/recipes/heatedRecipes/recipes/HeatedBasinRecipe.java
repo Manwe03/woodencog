@@ -56,7 +56,7 @@ public class HeatedBasinRecipe extends HeatedProcessingRecipe<Container> {
     }
 
     private static boolean apply(BasinBlockEntity basin, Recipe<?> recipe, boolean test) {
-        WoodenCog.LOGGER.info("Apply Heated Basin Recipe: "+ recipe.getId());
+        //WoodenCog.LOGGER.info("Apply Heated Basin Recipe: "+ recipe.getId());
         if(recipe instanceof HeatedBasinRecipe heatedRecipe){
             IItemHandler availableItems = basin.getCapability(ForgeCapabilities.ITEM_HANDLER).orElse(null);
             IFluidHandler availableFluids = basin.getCapability(ForgeCapabilities.FLUID_HANDLER).orElse(null);
@@ -66,7 +66,7 @@ public class HeatedBasinRecipe extends HeatedProcessingRecipe<Container> {
             try {
                 heat = BasinBlockEntity.getHeatLevelOf(basin.getLevel().getBlockState(basin.getBlockPos().below(1)));
             }catch (NullPointerException e){
-                WoodenCog.LOGGER.warn("Heat source erro: "+e.getMessage());
+                WoodenCog.LOGGER.warn("Heat source error: "+e.getMessage());
                 return false;
             }
 

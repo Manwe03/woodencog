@@ -1,0 +1,38 @@
+package net.chauvedev.woodencog.compat.jei;
+
+import com.simibubi.create.compat.jei.category.animations.AnimatedMixer;
+import mezz.jei.api.gui.ingredient.IRecipeSlotsView;
+import net.chauvedev.woodencog.compat.jei.AnimatedBlocks.AnimatedCharcoalForge;
+import net.chauvedev.woodencog.recipes.heatedRecipes.recipes.HeatedBasinRecipe;
+import net.minecraft.client.gui.GuiGraphics;
+
+/**
+ * Near copy of - credit to the Create team
+ * @see com.simibubi.create.compat.jei.category.MixingCategory
+ */
+public class HeatedMixingCategory extends HeatedBasinCategory {
+    private final AnimatedMixer mixer = new AnimatedMixer();
+    private final AnimatedCharcoalForge heater = new AnimatedCharcoalForge();
+    MixingType type;
+
+    enum MixingType {
+        MIXING, AUTO_SHAPELESS, AUTO_BREWING
+    }
+
+    public static HeatedMixingCategory standard(Info<HeatedBasinRecipe> info) {
+        return new HeatedMixingCategory(info);
+    }
+
+    protected HeatedMixingCategory(Info<HeatedBasinRecipe> info) {
+        super(info);
+        this.type = MixingType.MIXING;
+    }
+
+    @Override
+    public void draw(HeatedBasinRecipe recipe, IRecipeSlotsView recipeSlotsView, GuiGraphics guiGraphics, double mouseX, double mouseY) {
+        super.draw(recipe, recipeSlotsView, guiGraphics, mouseX, mouseY);
+
+        heater.draw(guiGraphics, getWidth() / 2 + 3, 55);
+        mixer.draw(guiGraphics, getWidth() / 2 + 3, 34);
+    }
+}
