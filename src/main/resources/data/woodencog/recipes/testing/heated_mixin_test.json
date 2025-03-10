@@ -8,7 +8,7 @@
     },
     {
       "ingredient": { "item": "minecraft:copper_ingot" },
-      "min_temp": 0,
+      "min_temp": 500,
       "max_temp": 1000
     }
   ],

@@ -1,5 +1,6 @@
 package net.chauvedev.woodencog.compat.jei;
 
+import com.jozufozu.flywheel.util.AnimationTickHolder;
 import com.simibubi.create.content.processing.burner.BlazeBurnerBlock;
 import com.simibubi.create.content.processing.recipe.HeatCondition;
 import com.simibubi.create.content.processing.recipe.ProcessingOutput;
@@ -9,25 +10,31 @@ import com.simibubi.create.foundation.utility.Lang;
 import com.simibubi.create.foundation.utility.Pair;
 import mezz.jei.api.forge.ForgeTypes;
 import mezz.jei.api.gui.builder.IRecipeLayoutBuilder;
+import mezz.jei.api.gui.ingredient.IRecipeSlotView;
 import mezz.jei.api.gui.ingredient.IRecipeSlotsView;
 import mezz.jei.api.recipe.IFocusGroup;
 import mezz.jei.api.recipe.RecipeIngredientRole;
 import net.chauvedev.woodencog.WoodenCog;
 import net.chauvedev.woodencog.mixin.HeatableIngredientAccessor;
+import net.chauvedev.woodencog.recipes.heatedRecipes.HeatedProcessingOutput;
 import net.chauvedev.woodencog.recipes.heatedRecipes.recipes.HeatedBasinRecipe;
 import net.chauvedev.woodencog.utils.HeatedItemHelper;
 import net.dries007.tfc.common.blocks.TFCBlocks;
 import net.dries007.tfc.common.capabilities.heat.HeatCapability;
+import net.dries007.tfc.common.capabilities.heat.IHeat;
 import net.dries007.tfc.common.recipes.ingredients.HeatableIngredient;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.world.item.ItemStack;
+import net.minecraftforge.common.util.LazyOptional;
 import net.minecraftforge.fluids.FluidStack;
 import org.apache.commons.lang3.mutable.MutableInt;
 
 import javax.annotation.ParametersAreNonnullByDefault;
+import java.security.DrbgParameters;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 /**
  * Near copy of - credit to the Create team
@@ -65,12 +72,6 @@ public abstract class HeatedBasinCategory extends WoodenCogRecipeCategory<Heated
                 .setBackground(getRenderedSlot(), -1, -1)
                 .addItemStacks(stacks);
             i++;
-
-            for (ItemStack stack : stacks) {
-                stack.getCapability(HeatCapability.CAPABILITY).ifPresent(cap ->
-                        WoodenCog.LOGGER.info("Después de JEI, el item {} tiene temperatura: {}", stack, cap.getTemperature())
-                );
-            }
         }
         for (FluidIngredient fluidIngredient : recipe.getFluidIngredients()) {
             builder
@@ -135,5 +136,57 @@ public abstract class HeatedBasinCategory extends WoodenCogRecipeCategory<Heated
         AllGuiTextures heatBar = noHeat ? AllGuiTextures.JEI_NO_HEAT_BAR : AllGuiTextures.JEI_HEAT_BAR;
         heatBar.render(guiGraphics, 4, 80);
         guiGraphics.drawString(Minecraft.getInstance().font, Lang.translateDirect(requiredHeat.getTranslationKey()), 9, 86, requiredHeat.getColor(), false);
+
+        drawTemperatureCapability(recipe, recipeSlotsView);
+    }
+
+    private static void drawTemperatureCapability(HeatedBasinRecipe recipe, IRecipeSlotsView recipeSlotsView) {
+        float time = AnimationTickHolder.getRenderTime()/2;
+        if(((int) time) % 50 == 0) {
+            setInputTemperatureCapability(recipe, recipeSlotsView,false);
+        } else if(((int) time) % 10 == 0) {
+            setInputTemperatureCapability(recipe, recipeSlotsView, true);
+        }
+        setOputputTemperatureCapability(recipe,recipeSlotsView);
+    }
+
+    private static void setInputTemperatureCapability(HeatedBasinRecipe recipe, IRecipeSlotsView recipeSlotsView, boolean setMax) {
+        for (IRecipeSlotView slotView : recipeSlotsView.getSlotViews()){
+            if(slotView.getDisplayedItemStack().isEmpty()) return;
+            ItemStack displayItemStack = slotView.getDisplayedItemStack().get();
+            for(HeatableIngredient heatableIngredient : recipe.getHeatedIngredients()){
+                ItemStack ingredientItemStack = heatableIngredient.getItems()[0];
+                if(displayItemStack.getItem().equals(ingredientItemStack.getItem())){
+                    int temp = setMax ? ((HeatableIngredientAccessor) heatableIngredient).getMaxTemp() : ((HeatableIngredientAccessor) heatableIngredient).getMinTemp();
+                    HeatCapability.setTemperature(displayItemStack,temp);
+                    break; //Found
+                }
+            }
+        }
+    }
+
+    private static void setOputputTemperatureCapability(HeatedBasinRecipe recipe, IRecipeSlotsView recipeSlotsView) {
+        for (IRecipeSlotView slotView : recipeSlotsView.getSlotViews()){
+            if(slotView.getDisplayedItemStack().isEmpty()) return; //Slot has no itemStack
+            ItemStack displayItemStack = slotView.getDisplayedItemStack().get();
+            for(HeatedProcessingOutput heatedProcessingOutput : recipe.getRollableResults()){
+                ItemStack outputItemStack = heatedProcessingOutput.getStack();
+                if(outputItemStack.getItem().equals(displayItemStack.getItem())){
+                    if(heatedProcessingOutput.getCopyHeat()){
+                        float time = AnimationTickHolder.getRenderTime();
+                        float maxTemp = 1000;
+                        Optional<IHeat> iheat = displayItemStack.getCapability(HeatCapability.CAPABILITY).resolve();
+                        if(iheat.isPresent()){
+                            maxTemp = iheat.get().getWeldingTemperature() + 200;
+                        }
+                        float temp = (float) (Math.sin(time / 10.0) * maxTemp) + 200;
+                        HeatCapability.setTemperature(displayItemStack,temp - heatedProcessingOutput.getCooling());
+                    }else {
+                        HeatCapability.setTemperature(displayItemStack,heatedProcessingOutput.getTemperature());
+                    }
+                    break; //Found
+                }
+            }
+        }
     }
 }

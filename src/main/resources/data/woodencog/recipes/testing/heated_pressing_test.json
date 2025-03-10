@@ -11,7 +11,7 @@
     {
       "item": "tfc:metal/ingot/bismuth_bronze",
       "temperature": 200,
-      "copy_heat": false,
+      "copy_heat": true,
       "cooling": 0
     }
   ]

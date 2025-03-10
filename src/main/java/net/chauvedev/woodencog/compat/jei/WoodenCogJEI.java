@@ -17,11 +17,15 @@ import net.chauvedev.woodencog.recipes.heatedRecipes.AllHeatedRecipeTypes;
 import net.chauvedev.woodencog.recipes.heatedRecipes.recipes.HeatedMixingRecipe;
 import net.chauvedev.woodencog.recipes.heatedRecipes.recipes.HeatedPressingRecipe;
 import net.chauvedev.woodencog.utils.CreateBlocksAccess;
+import net.chauvedev.woodencog.utils.CreateItemAccess;
+import net.dries007.tfc.common.blocks.TFCBlocks;
+import net.dries007.tfc.common.items.TFCItems;
 import net.minecraft.client.Minecraft;
 import net.minecraft.core.RegistryAccess;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.MinecartItem;
 import net.minecraft.world.item.crafting.*;
 
 import javax.annotation.Nonnull;
@@ -52,11 +56,23 @@ public class WoodenCogJEI implements IModPlugin {
                 new EmptyBackground(177,103),
                 new DoubleItemIcon(() -> new ItemStack(CreateBlocksAccess.MECHANICAL_MIXER.asItem()), () -> new ItemStack(CreateBlocksAccess.BASIN.asItem())),
                 AllHeatedRecipeTypes.HEATED_MIXING::getRecipes,
-                List.of(()-> CreateBlocksAccess.BASIN.asItem().getDefaultInstance())
+                List.of(()-> CreateBlocksAccess.MECHANICAL_MIXER.asItem().getDefaultInstance(),()-> CreateBlocksAccess.BASIN.asItem().getDefaultInstance(),()-> TFCBlocks.CHARCOAL_FORGE.get().asItem().getDefaultInstance())
         ));
         allCategories.add(mixing);
         registration.addRecipeCategories(mixing);
-        WoodenCog.LOGGER.info("Registered Mixing category "+ mixing.type.name());
+
+        HeatedPressingCategory pressing = new HeatedPressingCategory(new WoodenCogRecipeCategory.Info<>(
+                new mezz.jei.api.recipe.RecipeType<>(WoodenCog.asResource("heated_pressing"),HeatedPressingRecipe.class),
+                Component.translatable("category.woodencog.heated_pressing"),
+                new EmptyBackground(177,103),
+                new DoubleItemIcon(() -> new ItemStack(CreateBlocksAccess.MECHANICAL_PRESS.asItem()), ()-> new ItemStack(CreateItemAccess.IRON_PLATE)),
+                AllHeatedRecipeTypes.HEATED_PRESSING::getRecipes,
+                List.of(()-> CreateBlocksAccess.MECHANICAL_PRESS.asItem().getDefaultInstance(), ()-> CreateBlocksAccess.DEPOT.asItem().getDefaultInstance())
+        ));
+        allCategories.add(pressing);
+        registration.addRecipeCategories(pressing);
+
+
     }
 
     @Override
@@ -84,30 +100,6 @@ public class WoodenCogJEI implements IModPlugin {
         registration.addGhostIngredientHandler(LinkedControllerScreen.class, new GhostIngredientHandler());
         registration.addGhostIngredientHandler(ScheduleScreen.class, new GhostIngredientHandler());
     }
-
-    /*
-    @Override
-    public void registerIngredients(IModIngredientRegistration registration) {
-        //IModPlugin.super.registerIngredients(registration);
-        registration.register(HeatableIngredient.EMPTY.get, generateHeatedItems(), new HeatableIngredientHelper(), new HeatableItemRenderer());
-    }
-
-    public static List<ItemStack> generateHeatedItems() {
-        List<ItemStack> heatedItems = new ArrayList<>();
-
-        for (HeatedProcessingRecipe<?> recipe : AllHeatedRecipeTypes.HEATED_MIXING.getRecipes()) {
-            for (HeatableIngredient ingredient : recipe.getHeatedIngredients()) {
-                for (ItemStack stack : ingredient.getItems()) {
-                    ItemStack heatedStack = stack.copy();
-                    HeatCapability.setTemperature(heatedStack, ((HeatableIngredientAccessor) ingredient).getMinTemp());
-                    heatedItems.add(heatedStack);
-                }
-            }
-        }
-
-        return heatedItems;
-    }
-    */
 
     public static boolean doInputsMatch(Recipe<?> recipe1, Recipe<?> recipe2) {
         if(recipe1 instanceof HeatedPressingRecipe recipe1H && recipe2 instanceof HeatedPressingRecipe recipe2H){
