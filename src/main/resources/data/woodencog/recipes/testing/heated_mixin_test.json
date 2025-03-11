@@ -20,6 +20,6 @@
       "cooling": 0
     }
   ],
-  "heatRequirement": "heated",
+  "heatRequirement": 100,
   "processingTime": 400
 }

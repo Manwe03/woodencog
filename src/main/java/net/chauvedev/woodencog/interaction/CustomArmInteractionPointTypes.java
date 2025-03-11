@@ -7,6 +7,7 @@ import net.dries007.tfc.common.blocks.devices.CharcoalForgeBlock;
 import net.dries007.tfc.common.blocks.devices.CrucibleBlock;
 import net.minecraft.core.BlockPos;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
 
@@ -52,7 +53,25 @@ public class CustomArmInteractionPointTypes {
         }
 
         public ArmInteractionPoint createPoint(Level level, BlockPos pos, BlockState state) {
-            return new ArmInteractionPoint(this, level, pos, state);
+            return new CharcoalForgePoint(this, level, pos, state);
         }
+    }
+
+    public static class CharcoalForgePoint extends ArmInteractionPoint {
+        public CharcoalForgePoint(ArmInteractionPointType type, Level level, BlockPos pos, BlockState state) {
+            super(type, level, pos, state);
+        }
+
+        @Override
+        public ItemStack extract(int slot, int amount, boolean simulate) {
+            getHandler();
+            return super.extract(slot, amount, simulate);
+        }
+
+        @Override
+        public ItemStack insert(ItemStack stack, boolean simulate) {
+            return super.insert(stack, simulate);
+        }
+
     }
 }

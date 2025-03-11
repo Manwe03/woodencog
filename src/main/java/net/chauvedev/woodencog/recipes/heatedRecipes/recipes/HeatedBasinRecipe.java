@@ -1,14 +1,12 @@
 package net.chauvedev.woodencog.recipes.heatedRecipes.recipes;
 
 import com.simibubi.create.content.processing.basin.BasinBlockEntity;
-import com.simibubi.create.content.processing.burner.BlazeBurnerBlock;
 import com.simibubi.create.foundation.blockEntity.behaviour.filtering.FilteringBehaviour;
 import com.simibubi.create.foundation.blockEntity.behaviour.fluid.SmartFluidTankBehaviour;
 import com.simibubi.create.foundation.fluid.FluidIngredient;
 import com.simibubi.create.foundation.recipe.DummyCraftingContainer;
 import com.simibubi.create.foundation.recipe.IRecipeTypeInfo;
 import com.simibubi.create.foundation.utility.Iterate;
-import net.chauvedev.woodencog.WoodenCog;
 import net.chauvedev.woodencog.config.WoodenCogCommonConfigs;
 import net.chauvedev.woodencog.recipes.heatedRecipes.AllHeatedRecipeTypes;
 import net.chauvedev.woodencog.recipes.heatedRecipes.HeatedProcessingRecipe;
@@ -20,6 +18,7 @@ import net.minecraft.world.inventory.CraftingContainer;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.Recipe;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraftforge.common.capabilities.ForgeCapabilities;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.capability.IFluidHandler;
@@ -61,16 +60,14 @@ public class HeatedBasinRecipe extends HeatedProcessingRecipe<Container> {
             IItemHandler availableItems = basin.getCapability(ForgeCapabilities.ITEM_HANDLER).orElse(null);
             IFluidHandler availableFluids = basin.getCapability(ForgeCapabilities.FLUID_HANDLER).orElse(null);
 
-            //TODO - better tfc heat implementation
-            BlazeBurnerBlock.HeatLevel heat;
-            try {
-                heat = BasinBlockEntity.getHeatLevelOf(basin.getLevel().getBlockState(basin.getBlockPos().below(1)));
-            }catch (NullPointerException e){
-                WoodenCog.LOGGER.warn("Heat source error: "+e.getMessage());
-                return false;
+            try{
+                BlockEntity blockEntity = basin.getLevel().getBlockEntity(basin.getBlockPos().below(1));
+                if(!heatedRecipe.getRequiredHeat().testCharcoalForge(blockEntity)) return false; //Does not match required temperature
+            } catch (NullPointerException e){
+                return false; //Charcoal forge not found
             }
+            //WoodenCog.LOGGER.info("Has enough heat");
 
-            if (!heatedRecipe.getRequiredHeat().testBlazeBurner(heat)) return false; //Test if required heat is met
 
             List<ItemStack> recipeOutputItems = new ArrayList<>();
             List<FluidStack> recipeOutputFluids = new ArrayList<>();
@@ -90,7 +87,7 @@ public class HeatedBasinRecipe extends HeatedProcessingRecipe<Container> {
                     for (int slot = 0; slot < availableItems.getSlots(); slot++) {
                         if (simulate && availableItems.getStackInSlot(slot).getCount() <= extractedItemsFromSlot[slot]) continue;
                         ItemStack extracted = availableItems.extractItem(slot, 1, true);
-                        if (!ingredient.test(extracted)) continue;
+                        if (!ingredient.test(extracted)) continue; //test item and item temperature
                         if (!simulate) availableItems.extractItem(slot, 1, false);
                         extractedItemsFromSlot[slot]++;
                         continue Ingredients;

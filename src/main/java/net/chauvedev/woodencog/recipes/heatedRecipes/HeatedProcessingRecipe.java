@@ -2,8 +2,6 @@ package net.chauvedev.woodencog.recipes.heatedRecipes;
 
 import com.google.gson.JsonObject;
 import com.simibubi.create.Create;
-import com.simibubi.create.content.processing.recipe.HeatCondition;
-import com.simibubi.create.content.processing.recipe.ProcessingOutput;
 import com.simibubi.create.foundation.fluid.FluidIngredient;
 import com.simibubi.create.foundation.recipe.IRecipeTypeInfo;
 import net.chauvedev.woodencog.WoodenCog;
@@ -35,7 +33,7 @@ public abstract class HeatedProcessingRecipe<T extends Container> implements Rec
     protected NonNullList<FluidIngredient> fluidIngredients;
     protected NonNullList<FluidStack> fluidResults;
     protected int processingDuration;
-    protected HeatCondition requiredHeat;
+    protected WoodenCogHeatCondition requiredHeat;
     private final RecipeType<?> type;
     private final RecipeSerializer<?> serializer;
     private final IRecipeTypeInfo typeInfo;
@@ -92,7 +90,7 @@ public abstract class HeatedProcessingRecipe<T extends Container> implements Rec
             logger.warn(messageHeader + " specified a duration. Durations have no impact on this type of recipe.");
         }
 
-        if (this.requiredHeat != HeatCondition.NONE && !this.canRequireHeat()) {
+        if (this.requiredHeat.getTemperature() != 0 && !this.canRequireHeat()) {
             logger.warn(messageHeader + " specified a heat condition. Heat conditions have no impact on this type of recipe.");
         }
 
@@ -163,7 +161,7 @@ public abstract class HeatedProcessingRecipe<T extends Container> implements Rec
         return this.processingDuration;
     }
 
-    public HeatCondition getRequiredHeat() {
+    public WoodenCogHeatCondition getRequiredHeat() {
         return this.requiredHeat;
     }
 

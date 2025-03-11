@@ -1,12 +1,9 @@
 package net.chauvedev.woodencog.compat.jei;
 
 import com.jozufozu.flywheel.util.AnimationTickHolder;
-import com.simibubi.create.content.processing.burner.BlazeBurnerBlock;
-import com.simibubi.create.content.processing.recipe.HeatCondition;
 import com.simibubi.create.content.processing.recipe.ProcessingOutput;
 import com.simibubi.create.foundation.fluid.FluidIngredient;
 import com.simibubi.create.foundation.gui.AllGuiTextures;
-import com.simibubi.create.foundation.utility.Lang;
 import com.simibubi.create.foundation.utility.Pair;
 import mezz.jei.api.forge.ForgeTypes;
 import mezz.jei.api.gui.builder.IRecipeLayoutBuilder;
@@ -17,6 +14,7 @@ import mezz.jei.api.recipe.RecipeIngredientRole;
 import net.chauvedev.woodencog.WoodenCog;
 import net.chauvedev.woodencog.mixin.HeatableIngredientAccessor;
 import net.chauvedev.woodencog.recipes.heatedRecipes.HeatedProcessingOutput;
+import net.chauvedev.woodencog.recipes.heatedRecipes.WoodenCogHeatCondition;
 import net.chauvedev.woodencog.recipes.heatedRecipes.recipes.HeatedBasinRecipe;
 import net.chauvedev.woodencog.utils.HeatedItemHelper;
 import net.dries007.tfc.common.blocks.TFCBlocks;
@@ -26,12 +24,10 @@ import net.dries007.tfc.common.recipes.ingredients.HeatableIngredient;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.world.item.ItemStack;
-import net.minecraftforge.common.util.LazyOptional;
 import net.minecraftforge.fluids.FluidStack;
 import org.apache.commons.lang3.mutable.MutableInt;
 
 import javax.annotation.ParametersAreNonnullByDefault;
-import java.security.DrbgParameters;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -49,6 +45,7 @@ public abstract class HeatedBasinCategory extends WoodenCogRecipeCategory<Heated
 
     @Override
     public void setRecipe(IRecipeLayoutBuilder builder, HeatedBasinRecipe recipe, IFocusGroup iFocusGroup) {
+        WoodenCog.LOGGER.info("SET RECIPE FOR BASING RECIPES");
         List<Pair<HeatableIngredient, MutableInt>> condensedIngredients = HeatedItemHelper.condenseIngredients(recipe.getHeatedIngredients());
 
         int size = condensedIngredients.size() + recipe.getFluidIngredients().size();
@@ -109,22 +106,22 @@ public abstract class HeatedBasinCategory extends WoodenCogRecipeCategory<Heated
             i++;
         }
 
-        HeatCondition requiredHeat = recipe.getRequiredHeat();
-        if (!requiredHeat.testBlazeBurner(BlazeBurnerBlock.HeatLevel.NONE)) {
+        WoodenCogHeatCondition requiredHeat = recipe.getRequiredHeat();
+        if (requiredHeat.getTemperature() > 0) {
             builder.addSlot(RecipeIngredientRole.RENDER_ONLY, 134, 81)
                     .addItemStack(TFCBlocks.CHARCOAL_FORGE.get().asItem().getDefaultInstance());
-        }
+        }/*
         if (!requiredHeat.testBlazeBurner(BlazeBurnerBlock.HeatLevel.KINDLED)) {
             builder.addSlot(RecipeIngredientRole.CATALYST, 153, 81)
                     .addItemStack(TFCBlocks.BELLOWS.get().asItem().getDefaultInstance());
-        }
+        }*/
     }
 
     @Override
     public void draw(HeatedBasinRecipe recipe, IRecipeSlotsView recipeSlotsView, GuiGraphics guiGraphics, double mouseX, double mouseY) {
-        HeatCondition requiredHeat = recipe.getRequiredHeat();
+        WoodenCogHeatCondition requiredHeat = recipe.getRequiredHeat();
 
-        boolean noHeat = requiredHeat == HeatCondition.NONE;
+        boolean noHeat = !requiredHeat.hasTemp();
 
         int vRows = (1 + recipe.getFluidResults().size() + recipe.getRollableResults().size()) / 2;
 
@@ -135,7 +132,7 @@ public abstract class HeatedBasinCategory extends WoodenCogRecipeCategory<Heated
 
         AllGuiTextures heatBar = noHeat ? AllGuiTextures.JEI_NO_HEAT_BAR : AllGuiTextures.JEI_HEAT_BAR;
         heatBar.render(guiGraphics, 4, 80);
-        guiGraphics.drawString(Minecraft.getInstance().font, Lang.translateDirect(requiredHeat.getTranslationKey()), 9, 86, requiredHeat.getColor(), false);
+        guiGraphics.drawString(Minecraft.getInstance().font, requiredHeat.serialize(), 9, 86, requiredHeat.getColor(), false);
 
         drawTemperatureCapability(recipe, recipeSlotsView);
     }

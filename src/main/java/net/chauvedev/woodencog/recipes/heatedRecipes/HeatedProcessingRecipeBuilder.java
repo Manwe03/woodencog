@@ -90,7 +90,7 @@ public class HeatedProcessingRecipeBuilder<T extends HeatedProcessingRecipe<?>> 
         return this.duration(100);
     }
 
-    public HeatedProcessingRecipeBuilder<T> requiresHeat(HeatCondition condition) {
+    public HeatedProcessingRecipeBuilder<T> requiresHeat(WoodenCogHeatCondition condition) {
         this.params.requiredHeat = condition;
         return this;
     }
@@ -218,7 +218,7 @@ public class HeatedProcessingRecipeBuilder<T extends HeatedProcessingRecipe<?>> 
         protected NonNullList<FluidIngredient> fluidIngredients;
         protected NonNullList<FluidStack> fluidResults;
         protected int processingDuration;
-        protected HeatCondition requiredHeat; //TODO - better tfc implementation
+        protected WoodenCogHeatCondition requiredHeat;
         public boolean keepHeldItem;
 
         protected HeatedProcessingRecipeParams(ResourceLocation id) {
@@ -228,7 +228,7 @@ public class HeatedProcessingRecipeBuilder<T extends HeatedProcessingRecipe<?>> 
             this.fluidIngredients = NonNullList.create();
             this.fluidResults = NonNullList.create();
             this.processingDuration = 0;
-            this.requiredHeat = HeatCondition.NONE;
+            this.requiredHeat = new WoodenCogHeatCondition(0);
             this.keepHeldItem = false;
         }
     }

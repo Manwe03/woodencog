@@ -3,7 +3,7 @@ package net.chauvedev.woodencog.recipes.heatedRecipes;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
-import com.simibubi.create.content.processing.recipe.HeatCondition;
+import com.google.gson.JsonSyntaxException;
 import com.simibubi.create.foundation.fluid.FluidHelper;
 import com.simibubi.create.foundation.fluid.FluidIngredient;
 import net.chauvedev.woodencog.WoodenCog;
@@ -58,8 +58,8 @@ public class HeatedProcessingRecipeSerializer<T extends HeatedProcessingRecipe<?
             if (processingDuration > 0) {
                 json.addProperty("processingTime", processingDuration);
             }
-            HeatCondition requiredHeat = recipe.getRequiredHeat();
-            if (requiredHeat != HeatCondition.NONE) {
+            WoodenCogHeatCondition requiredHeat = recipe.getRequiredHeat();
+            if (requiredHeat.hasTemp()) {
                 json.addProperty("heatRequirement", requiredHeat.serialize());
             }
             recipe.writeAdditional(json);
@@ -105,7 +105,11 @@ public class HeatedProcessingRecipeSerializer<T extends HeatedProcessingRecipe<?
             }
 
             if (GsonHelper.isValidNode(json, "heatRequirement")) {
-                builder.requiresHeat(HeatCondition.deserialize(GsonHelper.getAsString(json, "heatRequirement")));
+                try {
+                    builder.requiresHeat(WoodenCogHeatCondition.deserialize(GsonHelper.getAsInt(json, "heatRequirement")));
+                }catch (JsonSyntaxException e){
+                    WoodenCog.LOGGER.error(e.getMessage());
+                }
             }
 
             T recipe = builder.build();
@@ -142,7 +146,7 @@ public class HeatedProcessingRecipeSerializer<T extends HeatedProcessingRecipe<?
             o.writeToPacket(buffer);
         });
         buffer.writeVarInt(recipe.getProcessingDuration());
-        buffer.writeVarInt(recipe.getRequiredHeat().ordinal());
+        buffer.writeVarInt(recipe.getRequiredHeat().getTemperature());
         recipe.writeAdditional(buffer);
     }
 
@@ -176,7 +180,10 @@ public class HeatedProcessingRecipeSerializer<T extends HeatedProcessingRecipe<?
             fluidResults.add(FluidStack.readFromPacket(buffer));
         }
 
-        T recipe = (new HeatedProcessingRecipeBuilder<>(this.factory, recipeId)).withItemIngredients(ingredients).withItemOutputs(results).withFluidIngredients(fluidIngredients).withFluidOutputs(fluidResults).duration(buffer.readVarInt()).requiresHeat(HeatCondition.values()[buffer.readVarInt()]).build();
+        T recipe = (new HeatedProcessingRecipeBuilder<>(this.factory, recipeId)).withItemIngredients(ingredients)
+                .withItemOutputs(results).withFluidIngredients(fluidIngredients)
+                .withFluidOutputs(fluidResults).duration(buffer.readVarInt())
+                .requiresHeat(WoodenCogHeatCondition.deserialize(buffer.readInt())).build();
         recipe.readAdditional(buffer);
         return recipe;
     }
