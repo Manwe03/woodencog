@@ -13,6 +13,7 @@
     "MixinCrucibleBlock",
     "MixinFanProcessing",
     "MixinNetheriteDivingHandler",
+    "SmartBlockEntityAccessor",
     "blockEnitites.MixinBasinOperatingBlockEntity",
     "blockEnitites.MixinMechanicalMixerBlockEntity",
     "blockEnitites.MixinMechanicalPressBlockEntity",

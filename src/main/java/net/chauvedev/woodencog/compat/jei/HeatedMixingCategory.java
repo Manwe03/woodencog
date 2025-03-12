@@ -12,7 +12,6 @@ import net.minecraft.client.gui.GuiGraphics;
  */
 public class HeatedMixingCategory extends HeatedBasinCategory {
     private final AnimatedMixer mixer = new AnimatedMixer();
-    private final AnimatedCharcoalForge heater = new AnimatedCharcoalForge();
     MixingType type;
 
     enum MixingType {
@@ -31,8 +30,6 @@ public class HeatedMixingCategory extends HeatedBasinCategory {
     @Override
     public void draw(HeatedBasinRecipe recipe, IRecipeSlotsView recipeSlotsView, GuiGraphics guiGraphics, double mouseX, double mouseY) {
         super.draw(recipe, recipeSlotsView, guiGraphics, mouseX, mouseY);
-
-        heater.draw(guiGraphics, getWidth() / 2 + 3, 55);
         mixer.draw(guiGraphics, getWidth() / 2 + 3, 34);
     }
 }

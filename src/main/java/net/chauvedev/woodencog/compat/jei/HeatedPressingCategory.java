@@ -72,11 +72,12 @@ public class HeatedPressingCategory extends WoodenCogRecipeCategory<HeatedPressi
             if(slotView.getDisplayedItemStack().isEmpty()) return;
             ItemStack displayItemStack = slotView.getDisplayedItemStack().get();
             HeatableIngredient heatableIngredient = recipe.getHeatedIngredients().get(0);
-            ItemStack ingredientItemStack = heatableIngredient.getItems()[0];
-            if(displayItemStack.getItem().equals(ingredientItemStack.getItem())){
-                int temp = setMax ? ((HeatableIngredientAccessor) heatableIngredient).getMaxTemp() : ((HeatableIngredientAccessor) heatableIngredient).getMinTemp();
-                HeatCapability.setTemperature(displayItemStack,temp);
-                return; //Found
+            for (ItemStack ingredientItemStack : heatableIngredient.getItems()) {
+                if(displayItemStack.getItem().equals(ingredientItemStack.getItem())){
+                    int temp = setMax ? ((HeatableIngredientAccessor) heatableIngredient).getMaxTemp() : ((HeatableIngredientAccessor) heatableIngredient).getMinTemp();
+                    HeatCapability.setTemperature(displayItemStack,temp);
+                    return; //Found
+                }
             }
         }
     }
