@@ -1,0 +1,16 @@
+{
+    "type": "create:mixing",
+    "ingredients": [
+        {
+            "fluid": "tfc:milk_vinegar",
+            "amount": 1
+        }
+    ],
+    "results": [
+        {
+            "fluid": "tfc:curdled_milk",
+            "amount": 1
+        }
+    ],
+    "processingTime": 800
+}

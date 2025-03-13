@@ -80,6 +80,7 @@ public abstract class MixinBasinOperatingBlockEntity extends KineticBlockEntity 
     )
     protected void applyBasinRecipe(CallbackInfo ci) {
         if (this.currentRecipe != null && this.currentRecipe instanceof HeatedBasinRecipe heatedBasinRecipe) {
+            WoodenCog.LOGGER.info("ApplyBasinRecipe");
             Optional<BasinBlockEntity> optionalBasin = this.getBasin();
             if (optionalBasin.isPresent()) {
                 BasinBlockEntity basin = optionalBasin.get();

@@ -1,0 +1,19 @@
+{
+    "type": "create:mixing",
+    "ingredients": [
+        {
+            "item": "tfc:small_prepared_hide"
+        },
+        {
+            "fluid": "tfc:tannin",
+            "amount": 300
+        }
+    ],
+    "results": [
+        {
+            "item": "minecraft:leather",
+            "count": 1
+        }
+    ],
+    "processingTime": 800
+}

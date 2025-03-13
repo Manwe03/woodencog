@@ -1,12 +1,14 @@
 import fs from "fs";
-import {mixing_path} from "./generators.js";
+import {heated_mixing_path} from "./generators.js";
 
-export const generateIngotsMelted = (name) => {
+export const generateIngotsMelted = (name,min_temp) => {
     let data = {
-        "type": "create:mixing",
+        "type": "woodencog:heated_mixing",
         "ingredients": [
             {
-                "item": `tfc:metal/ingot/${name}`
+              "ingredient": { "item": `tfc:metal/ingot/${name}` },
+              "min_temp": min_temp,
+              "max_temp": 3000
             }
         ],
         "results": [
@@ -16,7 +18,7 @@ export const generateIngotsMelted = (name) => {
                 "amount": 100
             }
         ],
-        "heatRequirement": "heated"
+        "heatRequirement": min_temp
     }
-    fs.writeFileSync(`${mixing_path}/ingot_to_liquid_${name}.json`, JSON.stringify(data, null, 4), 'utf8')
+    fs.writeFileSync(`${heated_mixing_path}/ingot_to_liquid_${name}.json`, JSON.stringify(data, null, 4), 'utf8')
 }

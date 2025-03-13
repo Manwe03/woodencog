@@ -1,0 +1,19 @@
+{
+    "type": "create:mixing",
+    "ingredients": [
+        {
+            "item": "tfc:food/barley_flour"
+        },
+        {
+            "fluid": "minecraft:water",
+            "amount": 500
+        }
+    ],
+    "results": [
+        {
+            "fluid": "tfc:beer",
+            "amount": 500
+        }
+    ],
+    "processingTime": 7200
+}

@@ -1,0 +1,20 @@
+{
+    "type": "woodencog:heated_mixing",
+    "ingredients": [
+        {
+            "ingredient": {
+                "item": "tfc:metal/ingot/pig_iron"
+            },
+            "min_temp": 1472,
+            "max_temp": 3000
+        }
+    ],
+    "results": [
+        {
+            "fluid": "tfc:metal/pig_iron",
+            "nbt": {},
+            "amount": 100
+        }
+    ],
+    "heatRequirement": 1472
+}

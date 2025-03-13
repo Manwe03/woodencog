@@ -1,0 +1,19 @@
+{
+    "type": "create:mixing",
+    "ingredients": [
+        {
+            "item": "tfc:food/rice_flour"
+        },
+        {
+            "fluid": "minecraft:water",
+            "amount": 500
+        }
+    ],
+    "results": [
+        {
+            "fluid": "tfc:sake",
+            "amount": 500
+        }
+    ],
+    "processingTime": 7200
+}

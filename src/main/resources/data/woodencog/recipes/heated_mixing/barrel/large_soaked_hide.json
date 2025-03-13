@@ -1,0 +1,19 @@
+{
+    "type": "create:mixing",
+    "ingredients": [
+        {
+            "item": "tfc:large_raw_hide"
+        },
+        {
+            "fluid": "tfc:limewater",
+            "amount": 500
+        }
+    ],
+    "results": [
+        {
+            "item": "tfc:large_soaked_hide",
+            "count": 1
+        }
+    ],
+    "processingTime": 800
+}

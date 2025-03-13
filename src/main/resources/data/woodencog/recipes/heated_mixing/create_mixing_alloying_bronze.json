@@ -1,0 +1,24 @@
+{
+    "type": "woodencog:heated_mixing",
+    "ingredients": [
+        {
+            "fluid": "tfc:metal/copper",
+            "nbt": {},
+            "amount": 90
+        },
+        {
+            "fluid": "tfc:metal/tin",
+            "nbt": {},
+            "amount": 10
+        }
+    ],
+    "results": [
+        {
+            "fluid": "tfc:metal/bronze",
+            "nbt": {},
+            "amount": 100
+        }
+    ],
+    "heatRequirement": 600,
+    "processingTime": 400
+}

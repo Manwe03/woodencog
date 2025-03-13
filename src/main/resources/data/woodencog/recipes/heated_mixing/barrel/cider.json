@@ -1,0 +1,19 @@
+{
+    "type": "create:mixing",
+    "ingredients": [
+        {
+            "tag": "tfc:foods/apples"
+        },
+        {
+            "fluid": "minecraft:water",
+            "amount": 500
+        }
+    ],
+    "results": [
+        {
+            "fluid": "tfc:cider",
+            "amount": 500
+        }
+    ],
+    "processingTime": 7200
+}

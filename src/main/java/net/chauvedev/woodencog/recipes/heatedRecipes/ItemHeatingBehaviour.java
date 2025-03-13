@@ -4,7 +4,10 @@ import com.simibubi.create.content.processing.basin.BasinInventory;
 import com.simibubi.create.foundation.blockEntity.SmartBlockEntity;
 import com.simibubi.create.foundation.blockEntity.behaviour.BehaviourType;
 import com.simibubi.create.foundation.blockEntity.behaviour.BlockEntityBehaviour;
-import net.chauvedev.woodencog.WoodenCog;
+import net.dries007.tfc.common.blockentities.CharcoalForgeBlockEntity;
+import net.dries007.tfc.common.capabilities.heat.HeatCapability;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.block.entity.BlockEntity;
 
 public class ItemHeatingBehaviour extends BlockEntityBehaviour {
     public static final BehaviourType<ItemHeatingBehaviour> TYPE = new BehaviourType();
@@ -13,6 +16,7 @@ public class ItemHeatingBehaviour extends BlockEntityBehaviour {
     public ItemHeatingBehaviour(SmartBlockEntity be, BasinInventory inventory) {
         super(be);
         this.inventory = inventory;
+        this.blockEntity.getBlockPos();
     }
 
     @Override
@@ -23,10 +27,18 @@ public class ItemHeatingBehaviour extends BlockEntityBehaviour {
     @Override
     public void tick() {
         super.tick();
-
-        if(inventory != null){ //TODO - heat items
-            WoodenCog.LOGGER.info(inventory.getItem(0).getItem().toString());
+        if(this.blockEntity.getLevel() == null) return;
+        BlockEntity bellowBlockEntity = this.blockEntity.getLevel().getBlockEntity(this.blockEntity.getBlockPos().below());
+        if( bellowBlockEntity instanceof CharcoalForgeBlockEntity charcoalForgeBlockEntity){
+            float targetTemp = charcoalForgeBlockEntity.getTemperature();
+            if(inventory != null){
+                for (int i = 0; i<inventory.getSlots(); i++){
+                    ItemStack itemStack = inventory.getItem(i);
+                    itemStack.getCapability(HeatCapability.CAPABILITY).resolve().ifPresent(heat -> {
+                        HeatCapability.addTemp(heat,targetTemp,2);
+                    });
+                }
+            }
         }
     }
-
 }

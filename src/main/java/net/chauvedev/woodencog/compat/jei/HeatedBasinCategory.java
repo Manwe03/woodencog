@@ -51,24 +51,20 @@ public abstract class HeatedBasinCategory extends WoodenCogRecipeCategory<Heated
 
     @Override
     public void setRecipe(IRecipeLayoutBuilder builder, HeatedBasinRecipe recipe, IFocusGroup iFocusGroup) {
-        WoodenCog.LOGGER.info("SET RECIPE FOR BASING RECIPES");
         List<Pair<HeatableIngredient, MutableInt>> condensedIngredients = HeatedItemHelper.condenseIngredients(recipe.getHeatedIngredients());
 
         int size = condensedIngredients.size() + recipe.getFluidIngredients().size();
-        int xOffset = size < 3 ? (3 - size) * 19 / 2 : 0;
+        int xOffset = size < 3 ? (3 - size) * 19 / 2 : 10;
         int i = 0;
 
         for (Pair<HeatableIngredient, MutableInt> pair : condensedIngredients) {
             List<ItemStack> stacks = new ArrayList<>();
             HeatableIngredient ingredient = pair.getFirst();
             int minTemp = ((HeatableIngredientAccessor) ingredient).getMinTemp();
-            WoodenCog.LOGGER.info("SetRecipe, temp: "+minTemp);
             for (ItemStack itemStack : pair.getFirst().getItems()) {
-                ItemStack copy = itemStack.copy();
-                HeatCapability.setTemperature(copy,minTemp);
-                //System.out.println(copy.getCapability(HeatCapability.CAPABILITY).resolve().get().getTemperature());
-                copy.setCount(pair.getSecond().getValue());
-                stacks.add(copy);
+                HeatCapability.setTemperature(itemStack,minTemp);
+                itemStack.setCount(pair.getSecond().getValue());
+                stacks.add(itemStack);
             }
 
             builder.addSlot(RecipeIngredientRole.INPUT, 17 + xOffset + (i % 3) * 19, 51 - (i / 3) * 19)
@@ -115,11 +111,7 @@ public abstract class HeatedBasinCategory extends WoodenCogRecipeCategory<Heated
         WoodenCogHeatCondition requiredHeat = recipe.getRequiredHeat();
         if (requiredHeat.getTemperature() > 0) {
             builder.addSlot(RecipeIngredientRole.RENDER_ONLY, 134, 81).addItemStack(TFCBlocks.CHARCOAL_FORGE.get().asItem().getDefaultInstance());
-        }/*
-        if (!requiredHeat.testBlazeBurner(BlazeBurnerBlock.HeatLevel.KINDLED)) {
-            builder.addSlot(RecipeIngredientRole.CATALYST, 153, 81)
-                    .addItemStack(TFCBlocks.BELLOWS.get().asItem().getDefaultInstance());
-        }*/
+        }
     }
 
     @Override
@@ -169,6 +161,14 @@ public abstract class HeatedBasinCategory extends WoodenCogRecipeCategory<Heated
                     if (displayItemStack.getItem().equals(ingredientItemStack.getItem())) {
                         int temp = setMax ? ((HeatableIngredientAccessor) heatableIngredient).getMaxTemp()
                                 : ((HeatableIngredientAccessor) heatableIngredient).getMinTemp();
+                        if(temp >= 3000){
+                            temp = ((HeatableIngredientAccessor) heatableIngredient).getMinTemp();
+                        }
+                        /*
+                        displayItemStack.getCapability(HeatCapability.CAPABILITY).resolve().ifPresent(heat -> {
+                            System.out.println(displayItemStack.getItem() + " " + heat.getWeldingTemperature());
+                        });
+                        */
                         HeatCapability.setTemperature(displayItemStack, temp);
                         break; // Found match, no need to check further for this slot
                     }

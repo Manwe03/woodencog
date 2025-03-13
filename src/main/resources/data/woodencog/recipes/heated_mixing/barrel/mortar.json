@@ -1,0 +1,19 @@
+{
+    "type": "create:mixing",
+    "ingredients": [
+        {
+            "tag": "minecraft:sand"
+        },
+        {
+            "fluid": "tfc:limewater",
+            "amount": 100
+        }
+    ],
+    "results": [
+        {
+            "item": "tfc:mortar",
+            "count": 16
+        }
+    ],
+    "processingTime": 800
+}

@@ -1,0 +1,19 @@
+{
+    "type": "create:mixing",
+    "ingredients": [
+        {
+            "tag": "tfc:foods/fruits"
+        },
+        {
+            "fluidTag": "tfc:alcohols",
+            "amount": 250
+        }
+    ],
+    "results": [
+        {
+            "fluid": "tfc:vinegar",
+            "amount": 250
+        }
+    ],
+    "processingTime": 800
+}

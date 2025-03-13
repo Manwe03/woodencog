@@ -1,0 +1,19 @@
+{
+    "type": "create:mixing",
+    "ingredients": [
+        {
+            "tag": "forge:string"
+        },
+        {
+            "fluid": "tfc:tallow",
+            "amount": 40
+        }
+    ],
+    "results": [
+        {
+            "item": "tfc:candle",
+            "count": 1
+        }
+    ],
+    "processingTime": 400
+}

@@ -1,0 +1,19 @@
+{
+    "type": "create:mixing",
+    "ingredients": [
+        {
+            "item": "tfc:dirty_jute_net"
+        },
+        {
+            "fluid": "minecraft:water",
+            "amount": 125
+        }
+    ],
+    "results": [
+        {
+            "item": "tfc:jute_net",
+            "count": 1
+        }
+    ],
+    "processingTime": 100
+}

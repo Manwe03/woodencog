@@ -1,0 +1,20 @@
+{
+    "type": "woodencog:heated_mixing",
+    "ingredients": [
+        {
+            "ingredient": {
+                "item": "tfc:metal/ingot/gold"
+            },
+            "min_temp": 1016,
+            "max_temp": 3000
+        }
+    ],
+    "results": [
+        {
+            "fluid": "tfc:metal/gold",
+            "nbt": {},
+            "amount": 100
+        }
+    ],
+    "heatRequirement": 1016
+}

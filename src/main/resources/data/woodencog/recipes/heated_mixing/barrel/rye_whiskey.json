@@ -1,0 +1,19 @@
+{
+    "type": "create:mixing",
+    "ingredients": [
+        {
+            "item": "tfc:food/rye_flour"
+        },
+        {
+            "fluid": "minecraft:water",
+            "amount": 500
+        }
+    ],
+    "results": [
+        {
+            "fluid": "tfc:rye_whiskey",
+            "amount": 500
+        }
+    ],
+    "processingTime": 7200
+}

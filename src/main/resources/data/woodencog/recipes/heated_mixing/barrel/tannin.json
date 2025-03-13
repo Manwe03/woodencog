@@ -1,0 +1,19 @@
+{
+    "type": "create:mixing",
+    "ingredients": [
+        {
+            "tag": "tfc:makes_tannin"
+        },
+        {
+            "fluid": "minecraft:water",
+            "amount": 1000
+        }
+    ],
+    "results": [
+        {
+            "fluid": "tfc:tannin",
+            "amount": 1000
+        }
+    ],
+    "processingTime": 800
+}

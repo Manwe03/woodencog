@@ -33,7 +33,7 @@ public class HeatedPressingCategory extends WoodenCogRecipeCategory<HeatedPressi
 
     @Override
     public void setRecipe(IRecipeLayoutBuilder builder, HeatedPressingRecipe recipe, IFocusGroup iFocusGroup) {
-        WoodenCog.LOGGER.info("SET RECIPE FOR PRESSING RECIPES");
+        //WoodenCog.LOGGER.info("SET RECIPE FOR PRESSING RECIPES");
         builder
                 .addSlot(RecipeIngredientRole.INPUT, 27, 51)
                 .setBackground(getRenderedSlot(), -1, -1)
@@ -75,6 +75,9 @@ public class HeatedPressingCategory extends WoodenCogRecipeCategory<HeatedPressi
             for (ItemStack ingredientItemStack : heatableIngredient.getItems()) {
                 if(displayItemStack.getItem().equals(ingredientItemStack.getItem())){
                     int temp = setMax ? ((HeatableIngredientAccessor) heatableIngredient).getMaxTemp() : ((HeatableIngredientAccessor) heatableIngredient).getMinTemp();
+                    if(temp >= 3000){
+                        temp = ((HeatableIngredientAccessor) heatableIngredient).getMinTemp();
+                    }
                     HeatCapability.setTemperature(displayItemStack,temp);
                     return; //Found
                 }

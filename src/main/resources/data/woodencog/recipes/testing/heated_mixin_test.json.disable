@@ -2,20 +2,24 @@
   "type": "woodencog:heated_mixing",
   "ingredients": [
     {
-      "min_temp": 300,
-      "item": "tfc:metal/ingot/black_bronze"
+      "ingredient": { "item": "minecraft:gold_ingot" },
+      "min_temp": 100,
+      "max_temp": 800
     },
     {
-      "min_temp": 100,
-      "item": "tfc:metal/ingot/bismuth_bronze"
+      "ingredient": { "item": "minecraft:copper_ingot" },
+      "min_temp": 500,
+      "max_temp": 800
     }
   ],
   "results": [
     {
       "item": "tfc:refined_iron_bloom",
-      "temperature": 400
+      "temperature": 400,
+      "copy_heat": true,
+      "cooling": 0
     }
   ],
-  "heatRequirement": "heated",
+  "heatRequirement": 0,
   "processingTime": 400
 }

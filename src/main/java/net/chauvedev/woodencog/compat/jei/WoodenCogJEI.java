@@ -14,6 +14,7 @@ import mezz.jei.api.registration.*;
 import mezz.jei.api.runtime.IIngredientManager;
 import net.chauvedev.woodencog.WoodenCog;
 import net.chauvedev.woodencog.recipes.heatedRecipes.AllHeatedRecipeTypes;
+import net.chauvedev.woodencog.recipes.heatedRecipes.recipes.HeatedCompactingRecipe;
 import net.chauvedev.woodencog.recipes.heatedRecipes.recipes.HeatedMixingRecipe;
 import net.chauvedev.woodencog.recipes.heatedRecipes.recipes.HeatedPressingRecipe;
 import net.chauvedev.woodencog.utils.CreateBlocksAccess;
@@ -71,6 +72,17 @@ public class WoodenCogJEI implements IModPlugin {
         ));
         allCategories.add(pressing);
         registration.addRecipeCategories(pressing);
+
+        HeatedCompactingCategory compacting = new HeatedCompactingCategory(new WoodenCogRecipeCategory.Info<>(
+                new mezz.jei.api.recipe.RecipeType<>(WoodenCog.asResource("heated_compacting"),HeatedCompactingRecipe.class),
+                Component.translatable("category.woodencog.heated_compacting"),
+                new EmptyBackground(177,103),
+                new DoubleItemIcon(() -> new ItemStack(CreateBlocksAccess.MECHANICAL_PRESS.asItem()), () -> new ItemStack(CreateBlocksAccess.BASIN.asItem())),
+                AllHeatedRecipeTypes.HEATED_COMPACTING::getRecipes,
+                List.of(()-> CreateBlocksAccess.MECHANICAL_PRESS.asItem().getDefaultInstance(),()-> CreateBlocksAccess.BASIN.asItem().getDefaultInstance(),()-> TFCBlocks.CHARCOAL_FORGE.get().asItem().getDefaultInstance())
+        ));
+        allCategories.add(compacting);
+        registration.addRecipeCategories(compacting);
 
 
     }

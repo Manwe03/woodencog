@@ -1,6 +1,5 @@
 package net.chauvedev.woodencog.recipes.heatedRecipes;
 
-import net.chauvedev.woodencog.WoodenCog;
 import net.dries007.tfc.common.blockentities.CharcoalForgeBlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntity;
 
@@ -19,7 +18,6 @@ public class WoodenCogHeatCondition {
      */
     public boolean testCharcoalForge(BlockEntity charcoalForge){
         if (charcoalForge instanceof CharcoalForgeBlockEntity) {
-            WoodenCog.LOGGER.info("Charcoal forge temperature: "+ ((CharcoalForgeBlockEntity) charcoalForge).getTemperature());
             return ((CharcoalForgeBlockEntity) charcoalForge).getTemperature() >= this.temperature;
         }
         return false;

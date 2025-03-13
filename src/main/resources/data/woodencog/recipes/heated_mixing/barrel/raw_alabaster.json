@@ -1,0 +1,19 @@
+{
+    "type": "create:mixing",
+    "ingredients": [
+        {
+            "item": "tfc:ore/gypsum"
+        },
+        {
+            "fluid": "tfc:limewater",
+            "amount": 100
+        }
+    ],
+    "results": [
+        {
+            "item": "tfc:alabaster/raw",
+            "count": 1
+        }
+    ],
+    "processingTime": 100
+}

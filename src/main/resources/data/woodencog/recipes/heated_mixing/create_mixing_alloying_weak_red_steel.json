@@ -1,0 +1,34 @@
+{
+    "type": "woodencog:heated_mixing",
+    "ingredients": [
+        {
+            "fluid": "tfc:metal/black_steel",
+            "nbt": {},
+            "amount": 50
+        },
+        {
+            "fluid": "tfc:metal/steel",
+            "nbt": {},
+            "amount": 20
+        },
+        {
+            "fluid": "tfc:metal/brass",
+            "nbt": {},
+            "amount": 15
+        },
+        {
+            "fluid": "tfc:metal/rose_gold",
+            "nbt": {},
+            "amount": 15
+        }
+    ],
+    "results": [
+        {
+            "fluid": "tfc:metal/weak_red_steel",
+            "nbt": {},
+            "amount": 100
+        }
+    ],
+    "heatRequirement": 600,
+    "processingTime": 400
+}

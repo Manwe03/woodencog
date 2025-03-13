@@ -1,0 +1,19 @@
+{
+    "type": "create:mixing",
+    "ingredients": [
+        {
+            "item": "tfc:food/sugarcane"
+        },
+        {
+            "fluid": "minecraft:water",
+            "amount": 600
+        }
+    ],
+    "results": [
+        {
+            "item": "minecraft:sugar",
+            "count": 1
+        }
+    ],
+    "processingTime": 800
+}

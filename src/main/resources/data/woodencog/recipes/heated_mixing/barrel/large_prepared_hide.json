@@ -1,0 +1,19 @@
+{
+    "type": "create:mixing",
+    "ingredients": [
+        {
+            "item": "tfc:large_scraped_hide"
+        },
+        {
+            "fluid": "minecraft:water",
+            "amount": 500
+        }
+    ],
+    "results": [
+        {
+            "item": "tfc:large_prepared_hide",
+            "count": 1
+        }
+    ],
+    "processingTime": 800
+}

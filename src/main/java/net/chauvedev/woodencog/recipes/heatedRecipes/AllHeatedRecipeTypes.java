@@ -5,6 +5,7 @@ import com.simibubi.create.foundation.recipe.IRecipeTypeInfo;
 import com.simibubi.create.foundation.utility.Lang;
 import net.chauvedev.woodencog.WoodenCog;
 import net.chauvedev.woodencog.recipes.heatedRecipes.recipes.HeatedBasinRecipe;
+import net.chauvedev.woodencog.recipes.heatedRecipes.recipes.HeatedCompactingRecipe;
 import net.chauvedev.woodencog.recipes.heatedRecipes.recipes.HeatedMixingRecipe;
 import net.chauvedev.woodencog.recipes.heatedRecipes.recipes.HeatedPressingRecipe;
 import net.minecraft.client.Minecraft;
@@ -27,6 +28,7 @@ import java.util.function.Supplier;
 public enum AllHeatedRecipeTypes implements IRecipeTypeInfo {
     HEATED_BASIN(HeatedBasinRecipe::new),
     HEATED_PRESSING(HeatedPressingRecipe::new),
+    HEATED_COMPACTING(HeatedCompactingRecipe::new),
     HEATED_MIXING(HeatedMixingRecipe::new);
 
     public static final Predicate<? super Recipe<?>> CAN_BE_AUTOMATED = (r) -> {

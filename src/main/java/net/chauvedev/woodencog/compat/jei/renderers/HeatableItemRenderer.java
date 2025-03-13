@@ -1,6 +1,7 @@
 package net.chauvedev.woodencog.compat.jei.renderers;
 
 import com.mojang.blaze3d.systems.RenderSystem;
+import mezz.jei.api.gui.builder.ITooltipBuilder;
 import mezz.jei.api.ingredients.IIngredientRenderer;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.Minecraft;
@@ -49,6 +50,11 @@ public class HeatableItemRenderer implements IIngredientRenderer<ItemStack> {
             list.add(crash.withStyle(ChatFormatting.RED));
             return list;
         }
+    }
+
+    @Override
+    public void getTooltip(ITooltipBuilder tooltip, ItemStack ingredient, TooltipFlag tooltipFlag) {
+        IIngredientRenderer.super.getTooltip(tooltip, ingredient, tooltipFlag);
     }
 
     @Override
