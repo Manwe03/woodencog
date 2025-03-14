@@ -126,115 +126,143 @@ export const moldables = [
 export const metals = [
     {
         name: "bismuth",
-        min_temp: 270 //216+21+21
+        welding: 216,
+        working: 162
     },
     {
         name: "bismuth_bronze",
-        min_temp: 788+78+78
+        welding: 788,
+        working: 591
     },
     {
         name: "black_bronze",
-        min_temp: 856+85+85
+        welding: 856,
+        working: 642
     },
     {
         name: "bronze",
-        min_temp: 760+76+76
+        welding: 760,
+        working: 570
     },
     {
         name: "brass",
-        min_temp: 744+74+74
+        welding: 744,
+        working: 558
     },
     {
         name: "copper",
-        min_temp: 864+85+85
+        welding: 864,
+        working: 648
     },
     {
         name: "gold",
-        min_temp: 848+84+84
+        welding: 848,
+        working: 636
     },
     {
         name: "nickel",
-        min_temp: 1162+116+116
+        welding: 1162,
+        working: 872
     },
     {
         name: "rose_gold",
-        min_temp: 768+76+76
+        welding: 768,
+        working: 576
     },
     {
         name: "silver",
-        min_temp: 769+76+76
+        welding: 769,
+        working: 577
     },
     {
         name: "tin",
-        min_temp: 184+18+18
+        welding: 184,
+        working: 138
     },
     {
         name: "zinc",
-        min_temp: 336+33+33
+        welding: 336,
+        working: 252
     },
     {
         name: "sterling_silver",
-        min_temp: 760+76+76
+        welding: 760,
+        working: 570
     },
     {
         name: "wrought_iron",
-        min_temp: 1228+122+122
+        welding: 1228,
+        working: 921
     },
     {
         name: "cast_iron",
-        min_temp: 1228+122+122
+        welding: 1228,
+        working: 921
     },
     {
         name: "pig_iron",
-        min_temp: 1228+122+122
+        welding: 1228,
+        working: 921
     },
     {
         name: "steel",
-        min_temp: 1232+123+123
+        welding: 1232,
+        working: 924
     },
     {
         name: "black_steel",
-        min_temp: 1188+118+118
+        welding: 1188,
+        working: 891
     },
     {
         name: "blue_steel",
-        min_temp: 1232+123+123
+        welding: 1232,
+        working: 924
     },
     {
         name: "red_steel",
-        min_temp: 1232+123+123
+        welding: 1232,
+        working: 924
     },
     {
         name: "weak_steel",
-        min_temp: 1232+123+123
+        welding: 1232,
+        working: 924
     },
     {
         name: "weak_blue_steel",
-        min_temp: 1232+123+123
+        welding: 1232,
+        working: 924
     },
     {
         name: "weak_red_steel",
-        min_temp: 1232+123+123
+        welding: 1232,
+        working: 924
     },
     {
         name: "high_carbon_steel",
-        min_temp: 1232+123+123
+        welding: 1232,
+        working: 924
     },
     {
         name: "high_carbon_black_steel",
-        min_temp: 1232+123+123
+        welding: 1232,
+        working: 924
     },
     {
         name: "high_carbon_blue_steel",
-        min_temp: 1232+123+123
+        welding: 1232,
+        working: 924
     },
     {
         name: "high_carbon_red_steel",
-        min_temp: 1232+123+123
+        welding: 1232,
+        working: 924
     },
     {
         name: "unknown",
-        min_temp: 320+32+32
+        welding: 320,
+        working: 240
     }
 ];
 

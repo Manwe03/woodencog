@@ -54,7 +54,7 @@ public abstract class HeatedBasinCategory extends WoodenCogRecipeCategory<Heated
         List<Pair<HeatableIngredient, MutableInt>> condensedIngredients = HeatedItemHelper.condenseIngredients(recipe.getHeatedIngredients());
 
         int size = condensedIngredients.size() + recipe.getFluidIngredients().size();
-        int xOffset = size < 3 ? (3 - size) * 19 / 2 : 10;
+        int xOffset = size < 3 ? (3 - size) * 19 / 2 : 9;
         int i = 0;
 
         for (Pair<HeatableIngredient, MutableInt> pair : condensedIngredients) {
@@ -164,11 +164,6 @@ public abstract class HeatedBasinCategory extends WoodenCogRecipeCategory<Heated
                         if(temp >= 3000){
                             temp = ((HeatableIngredientAccessor) heatableIngredient).getMinTemp();
                         }
-                        /*
-                        displayItemStack.getCapability(HeatCapability.CAPABILITY).resolve().ifPresent(heat -> {
-                            System.out.println(displayItemStack.getItem() + " " + heat.getWeldingTemperature());
-                        });
-                        */
                         HeatCapability.setTemperature(displayItemStack, temp);
                         break; // Found match, no need to check further for this slot
                     }

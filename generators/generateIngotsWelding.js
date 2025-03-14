@@ -1,18 +1,18 @@
 import fs from "fs";
 import {heated_compacting_path} from "./generators.js";
 
-export const generateIngotsWelding = (name,min_temp) => {
+export const generateIngotsWelding = (name,welding) => {
     let data = {
         "type": "woodencog:heated_compacting",
         "ingredients": [
             {
                 "ingredient": { "item": `tfc:metal/ingot/${name}` },
-                "min_temp": min_temp,
+                "min_temp": welding+welding*0.1,
                 "max_temp": 3000
             },
             {
                 "ingredient": { "item": `tfc:metal/ingot/${name}` },
-                "min_temp": min_temp,
+                "min_temp": welding+welding*0.1,
                 "max_temp": 3000
             },
             {
@@ -29,7 +29,7 @@ export const generateIngotsWelding = (name,min_temp) => {
               "cooling": 0
             }
         ],
-        "heatRequirement": min_temp
+        "heatRequirement": welding+welding*0.1
     }
-    fs.writeFileSync(`${heated_compacting_path}/ingot_to_liquid_${name}.json`, JSON.stringify(data, null, 4), 'utf8')
+    fs.writeFileSync(`${heated_compacting_path}/double_${name}.json`, JSON.stringify(data, null, 4), 'utf8')
 }

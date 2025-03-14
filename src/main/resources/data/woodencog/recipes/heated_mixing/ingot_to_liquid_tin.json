@@ -5,7 +5,7 @@
             "ingredient": {
                 "item": "tfc:metal/ingot/tin"
             },
-            "min_temp": 220,
+            "min_temp": 220.8,
             "max_temp": 3000
         }
     ],
@@ -16,5 +16,5 @@
             "amount": 100
         }
     ],
-    "heatRequirement": 220
+    "heatRequirement": 220.8
 }

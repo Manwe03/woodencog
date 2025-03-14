@@ -5,7 +5,7 @@
             "ingredient": {
                 "item": "tfc:metal/ingot/gold"
             },
-            "min_temp": 1016,
+            "min_temp": 1017.6,
             "max_temp": 3000
         }
     ],
@@ -16,5 +16,5 @@
             "amount": 100
         }
     ],
-    "heatRequirement": 1016
+    "heatRequirement": 1017.6
 }

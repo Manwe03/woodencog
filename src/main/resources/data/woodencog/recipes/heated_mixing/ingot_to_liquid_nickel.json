@@ -5,7 +5,7 @@
             "ingredient": {
                 "item": "tfc:metal/ingot/nickel"
             },
-            "min_temp": 1394,
+            "min_temp": 1394.4,
             "max_temp": 3000
         }
     ],
@@ -16,5 +16,5 @@
             "amount": 100
         }
     ],
-    "heatRequirement": 1394
+    "heatRequirement": 1394.4
 }

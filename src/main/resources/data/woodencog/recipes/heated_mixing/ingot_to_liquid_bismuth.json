@@ -5,7 +5,7 @@
             "ingredient": {
                 "item": "tfc:metal/ingot/bismuth"
             },
-            "min_temp": 270,
+            "min_temp": 259.2,
             "max_temp": 3000
         }
     ],
@@ -16,5 +16,5 @@
             "amount": 100
         }
     ],
-    "heatRequirement": 270
+    "heatRequirement": 259.2
 }

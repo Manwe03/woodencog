@@ -5,7 +5,7 @@
             "ingredient": {
                 "item": "tfc:metal/ingot/copper"
             },
-            "min_temp": 1034,
+            "min_temp": 1036.8,
             "max_temp": 3000
         }
     ],
@@ -16,5 +16,5 @@
             "amount": 100
         }
     ],
-    "heatRequirement": 1034
+    "heatRequirement": 1036.8
 }

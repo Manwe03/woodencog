@@ -5,7 +5,7 @@
             "ingredient": {
                 "item": "tfc:metal/ingot/black_steel"
             },
-            "min_temp": 1424,
+            "min_temp": 1425.6,
             "max_temp": 3000
         }
     ],
@@ -16,5 +16,5 @@
             "amount": 100
         }
     ],
-    "heatRequirement": 1424
+    "heatRequirement": 1425.6
 }

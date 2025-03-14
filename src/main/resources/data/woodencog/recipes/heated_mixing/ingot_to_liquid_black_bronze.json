@@ -5,7 +5,7 @@
             "ingredient": {
                 "item": "tfc:metal/ingot/black_bronze"
             },
-            "min_temp": 1026,
+            "min_temp": 1027.2,
             "max_temp": 3000
         }
     ],
@@ -16,5 +16,5 @@
             "amount": 100
         }
     ],
-    "heatRequirement": 1026
+    "heatRequirement": 1027.2
 }

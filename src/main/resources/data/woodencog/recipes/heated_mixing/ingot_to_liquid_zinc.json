@@ -5,7 +5,7 @@
             "ingredient": {
                 "item": "tfc:metal/ingot/zinc"
             },
-            "min_temp": 402,
+            "min_temp": 403.2,
             "max_temp": 3000
         }
     ],
@@ -16,5 +16,5 @@
             "amount": 100
         }
     ],
-    "heatRequirement": 402
+    "heatRequirement": 403.2
 }

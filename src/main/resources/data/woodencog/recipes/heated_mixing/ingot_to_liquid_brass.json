@@ -5,7 +5,7 @@
             "ingredient": {
                 "item": "tfc:metal/ingot/brass"
             },
-            "min_temp": 892,
+            "min_temp": 892.8,
             "max_temp": 3000
         }
     ],
@@ -16,5 +16,5 @@
             "amount": 100
         }
     ],
-    "heatRequirement": 892
+    "heatRequirement": 892.8
 }

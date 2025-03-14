@@ -5,7 +5,7 @@
             "ingredient": {
                 "item": "tfc:metal/ingot/rose_gold"
             },
-            "min_temp": 920,
+            "min_temp": 921.6,
             "max_temp": 3000
         }
     ],
@@ -16,5 +16,5 @@
             "amount": 100
         }
     ],
-    "heatRequirement": 920
+    "heatRequirement": 921.6
 }

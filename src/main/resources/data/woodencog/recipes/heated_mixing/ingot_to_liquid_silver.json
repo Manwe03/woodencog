@@ -5,7 +5,7 @@
             "ingredient": {
                 "item": "tfc:metal/ingot/silver"
             },
-            "min_temp": 921,
+            "min_temp": 922.8,
             "max_temp": 3000
         }
     ],
@@ -16,5 +16,5 @@
             "amount": 100
         }
     ],
-    "heatRequirement": 921
+    "heatRequirement": 922.8
 }

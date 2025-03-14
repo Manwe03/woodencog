@@ -5,7 +5,7 @@
             "ingredient": {
                 "item": "tfc:metal/ingot/cast_iron"
             },
-            "min_temp": 1472,
+            "min_temp": 1473.6,
             "max_temp": 3000
         }
     ],
@@ -16,5 +16,5 @@
             "amount": 100
         }
     ],
-    "heatRequirement": 1472
+    "heatRequirement": 1473.6
 }
