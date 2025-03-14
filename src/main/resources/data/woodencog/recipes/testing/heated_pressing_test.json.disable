@@ -2,7 +2,7 @@
   "type": "woodencog:heated_pressing",
   "ingredients": [
     {
-      "ingredient": { "item": "tfc:metal/ingot/black_bronze" },
+      "ingredient": { "tag": "#forge:ingots/black_bronze" },
       "min_temp": 200,
       "max_temp": 1000
     }

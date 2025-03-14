@@ -2,7 +2,7 @@
   "type": "woodencog:heated_mixing",
   "ingredients": [
     {
-      "ingredient": { "tag": "forge:ingots/gold" },
+      "ingredient": { "item": "minecraft:gold_ingot" },
       "min_temp": 100,
       "max_temp": 800
     },
@@ -15,8 +15,8 @@
   "results": [
     {
       "item": "tfc:refined_iron_bloom",
-      "temperature": 400,
-      "copy_heat": false,
+      "temperature": 0,
+      "copy_heat": true,
       "cooling": 0
     }
   ],
