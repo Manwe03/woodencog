@@ -22,7 +22,7 @@ currently it includes :
 
 I'm currently working on a partial (maybe entire) rewrite of the project to make it more compatible with JEI and other create addons
 - (WIP) Move js recipe generation to java
-
+- (WIP) Create 6.0 Update
 If you know any issue with other mods open an issue on this repo i'll look into it
 
 Pull requests are welcomed, but open an issue before, maybe I am working on it already.
