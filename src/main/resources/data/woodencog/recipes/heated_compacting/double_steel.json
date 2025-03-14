@@ -1,0 +1,35 @@
+{
+    "type": "woodencog:heated_compacting",
+    "ingredients": [
+        {
+            "ingredient": {
+                "item": "tfc:metal/ingot/steel"
+            },
+            "min_temp": 1355.2,
+            "max_temp": 3000
+        },
+        {
+            "ingredient": {
+                "item": "tfc:metal/ingot/steel"
+            },
+            "min_temp": 1355.2,
+            "max_temp": 3000
+        },
+        {
+            "ingredient": {
+                "item": "tfc:powder/flux"
+            },
+            "min_temp": 0,
+            "max_temp": 0
+        }
+    ],
+    "results": [
+        {
+            "item": "tfc:metal/double_ingot/steel",
+            "temperature": 0,
+            "copy_heat": true,
+            "cooling": 0
+        }
+    ],
+    "heatRequirement": 1355.2
+}

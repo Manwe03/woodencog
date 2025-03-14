@@ -1,0 +1,20 @@
+{
+    "type": "woodencog:heated_mixing",
+    "ingredients": [
+        {
+            "ingredient": {
+                "item": "tfc:metal/ingot/bismuth"
+            },
+            "min_temp": 259.2,
+            "max_temp": 3000
+        }
+    ],
+    "results": [
+        {
+            "fluid": "tfc:metal/bismuth",
+            "nbt": {},
+            "amount": 100
+        }
+    ],
+    "heatRequirement": 259.2
+}

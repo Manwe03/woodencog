@@ -1,11 +1,11 @@
-import {alloys} from "./data.mjs";
+import {heated_alloys} from "./data.mjs";
 import fs from "fs";
-import {mixing_path} from "./generators.js";
+import {heated_mixing_path} from "./generators.js";
 
 export const generateAlloying = () => {
-    alloys.forEach(alloy => {
+    heated_alloys.forEach(alloy => {
         const craft = {
-            "type": "create:mixing",
+            "type": "woodencog:heated_mixing",
             "ingredients": alloy.input,
             "results": [
                 {
@@ -14,10 +14,10 @@ export const generateAlloying = () => {
                     "amount": 100
                 }
             ],
-            "heatRequirement": alloy.type,
+            "heatRequirement": alloy.temp,
             "processingTime": 400
         }
 
-        fs.writeFileSync(`${mixing_path}/create_mixing_alloying_${alloy.name}.json`, JSON.stringify(craft, null, 4), 'utf8')
+        fs.writeFileSync(`${heated_mixing_path}/create_mixing_alloying_${alloy.name}.json`, JSON.stringify(craft, null, 4), 'utf8')
     });
 }

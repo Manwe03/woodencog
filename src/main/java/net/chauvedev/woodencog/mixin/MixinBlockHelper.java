@@ -19,7 +19,7 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
-@Mixin({BlockHelper.class})
+@Mixin(value = BlockHelper.class, remap = false)
 public class MixinBlockHelper {
     public MixinBlockHelper() {
     }
@@ -35,7 +35,7 @@ public class MixinBlockHelper {
         if (pState.getBlock() instanceof CharcoalPileBlock) {
             Iterator<ItemStack> drops = Block.getDrops(pState, pLevel, pPos, pBlockEntity, pEntity, pTool).iterator();
             int layerCount = pState.getValue(CharcoalPileBlock.LAYERS);
-            List<ItemStack> tempList = new ArrayList();
+            List<ItemStack> tempList = new ArrayList<>();
             ItemStack itemStack = drops.next();
             itemStack.setCount(layerCount);
             tempList.add(itemStack);

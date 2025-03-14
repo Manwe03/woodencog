@@ -7,6 +7,7 @@ import com.simibubi.create.content.processing.recipe.ProcessingOutput;
 import com.simibubi.create.content.processing.recipe.ProcessingRecipe;
 import com.simibubi.create.content.processing.recipe.ProcessingRecipeBuilder;
 import com.simibubi.create.content.processing.recipe.ProcessingRecipeSerializer;
+import net.chauvedev.woodencog.WoodenCog;
 import net.chauvedev.woodencog.recipes.advancedProcessingRecipe.baseRecipes.AdvancedRecipe;
 import net.dries007.tfc.common.recipes.outputs.ItemStackProvider;
 import net.minecraft.nbt.CompoundTag;
@@ -14,7 +15,10 @@ import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.common.crafting.conditions.ICondition;
+import org.jetbrains.annotations.NotNull;
+
 import java.util.ArrayList;
+import java.util.Objects;
 
 public class AdvancedRecipeSerializer<T extends ProcessingRecipe<?> > extends ProcessingRecipeSerializer<T> {
 
@@ -45,7 +49,12 @@ public class AdvancedRecipeSerializer<T extends ProcessingRecipe<?> > extends Pr
                 if (!stack.hasTag()) {
                     stack.setTag(new CompoundTag());
                 }
-                stack.getTag().putFloat("temperature", temperature);
+                CompoundTag compoundTag = stack.getTag();
+                if(compoundTag == null) {
+                    WoodenCog.LOGGER.error("CompoundTag == null");
+                    return;
+                }
+                compoundTag.putFloat("temperature", temperature);
             }
             itemStacks.add(stack);
         });
@@ -92,12 +101,12 @@ public class AdvancedRecipeSerializer<T extends ProcessingRecipe<?> > extends Pr
     }
 
     @Override
-    protected void writeToBuffer(FriendlyByteBuf buffer, T recipe) {
+    protected void writeToBuffer(@NotNull FriendlyByteBuf buffer, @NotNull T recipe) {
         getCreateSerializer().toNetwork(buffer,recipe);
     }
 
     @Override
-    protected T readFromBuffer(ResourceLocation recipeId, FriendlyByteBuf buffer) {
-        return getCreateSerializer().fromNetwork(recipeId, buffer);
+    protected @NotNull T readFromBuffer(@NotNull ResourceLocation recipeId, @NotNull FriendlyByteBuf buffer) {
+        return Objects.requireNonNull(getCreateSerializer().fromNetwork(recipeId, buffer));
     }
 }

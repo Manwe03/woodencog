@@ -1,0 +1,18 @@
+{
+  "type": "woodencog:heated_pressing",
+  "ingredients": [
+    {
+      "ingredient": { "tag": "#forge:ingots/black_bronze" },
+      "min_temp": 200,
+      "max_temp": 1000
+    }
+  ],
+  "results": [
+    {
+      "item": "tfc:metal/ingot/bismuth_bronze",
+      "temperature": 200,
+      "copy_heat": true,
+      "cooling": 0
+    }
+  ]
+}

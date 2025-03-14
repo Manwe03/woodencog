@@ -1,51 +1,63 @@
 export const nuggets = [
     {
         "name": "native_copper",
-        "result": "copper"
+        "result": "copper",
+        "min_temp": 864+87+87
     },
     {
         "name": "native_gold",
-        "result": "gold"
+        "result": "gold",
+        "min_temp": 848+84+84
     },
     {
         "name": "hematite",
-        "result": "cast_iron"
+        "result": "cast_iron",
+        "min_temp": 1228+122+122
     },
     {
         "name": "native_silver",
-        "result": "silver"
+        "result": "silver",
+        "min_temp": 769+79+79
     },
     {
         "name": "cassiterite",
-        "result": "tin"
+        "result": "tin",
+        "min_temp": 184+18+18
     },
     {
         "name": "bismuthinite",
-        "result": "bismuth"
+        "result": "bismuth",
+        "min_temp": 216+21+21
     },
     {
         "name": "garnierite",
-        "result": "nickel"
+        "result": "nickel",
+        "min_temp": 1162+116+116
     },
     {
         "name": "malachite",
-        "result": "copper"
+        "result": "copper",
+        "min_temp": 864+87+87
     },
     {
         "name": "magnetite",
-        "result": "cast_iron"
+        "result": "cast_iron",
+        "min_temp": 1228+122+122
     },
     {
         "name": "limonite",
-        "result": "cast_iron"
+        "result": "cast_iron",
+        "min_temp": 1228+122+122
     },
     {
         "name": "sphalerite",
-        "result": "zinc"
+        "result": "zinc",
+        "min_temp": 336+33+33
     },
     {
         "name": "tetrahedrite",
-        "result": "copper"
+        "result": "copper",
+        "min_temp": 864+86+86
     }
 ];
 
@@ -112,34 +124,146 @@ export const moldables = [
 ]
 
 export const metals = [
-    "bismuth",
-    "bismuth_bronze",
-    "black_bronze",
-    "bronze",
-    "brass",
-    "copper",
-    "gold",
-    "nickel",
-    "rose_gold",
-    "silver",
-    "tin",
-    "zinc",
-    "sterling_silver",
-    "wrought_iron",
-    "cast_iron",
-    "pig_iron",
-    "steel",
-    "black_steel",
-    "blue_steel",
-    "red_steel",
-    "weak_steel",
-    "weak_blue_steel",
-    "weak_red_steel",
-    "high_carbon_steel",
-    "high_carbon_black_steel",
-    "high_carbon_blue_steel",
-    "high_carbon_red_steel",
-    "unknown"
+    {
+        name: "bismuth",
+        welding: 216,
+        working: 162
+    },
+    {
+        name: "bismuth_bronze",
+        welding: 788,
+        working: 591
+    },
+    {
+        name: "black_bronze",
+        welding: 856,
+        working: 642
+    },
+    {
+        name: "bronze",
+        welding: 760,
+        working: 570
+    },
+    {
+        name: "brass",
+        welding: 744,
+        working: 558
+    },
+    {
+        name: "copper",
+        welding: 864,
+        working: 648
+    },
+    {
+        name: "gold",
+        welding: 848,
+        working: 636
+    },
+    {
+        name: "nickel",
+        welding: 1162,
+        working: 872
+    },
+    {
+        name: "rose_gold",
+        welding: 768,
+        working: 576
+    },
+    {
+        name: "silver",
+        welding: 769,
+        working: 577
+    },
+    {
+        name: "tin",
+        welding: 184,
+        working: 138
+    },
+    {
+        name: "zinc",
+        welding: 336,
+        working: 252
+    },
+    {
+        name: "sterling_silver",
+        welding: 760,
+        working: 570
+    },
+    {
+        name: "wrought_iron",
+        welding: 1228,
+        working: 921
+    },
+    {
+        name: "cast_iron",
+        welding: 1228,
+        working: 921
+    },
+    {
+        name: "pig_iron",
+        welding: 1228,
+        working: 921
+    },
+    {
+        name: "steel",
+        welding: 1232,
+        working: 924
+    },
+    {
+        name: "black_steel",
+        welding: 1188,
+        working: 891
+    },
+    {
+        name: "blue_steel",
+        welding: 1232,
+        working: 924
+    },
+    {
+        name: "red_steel",
+        welding: 1232,
+        working: 924
+    },
+    {
+        name: "weak_steel",
+        welding: 1232,
+        working: 924
+    },
+    {
+        name: "weak_blue_steel",
+        welding: 1232,
+        working: 924
+    },
+    {
+        name: "weak_red_steel",
+        welding: 1232,
+        working: 924
+    },
+    {
+        name: "high_carbon_steel",
+        welding: 1232,
+        working: 924
+    },
+    {
+        name: "high_carbon_black_steel",
+        welding: 1232,
+        working: 924
+    },
+    {
+        name: "high_carbon_blue_steel",
+        welding: 1232,
+        working: 924
+    },
+    {
+        name: "high_carbon_red_steel",
+        welding: 1232,
+        working: 924
+    },
+    {
+        name: "unknown",
+        welding: 320,
+        working: 240
+    }
 ];
 
 export const metal_temps = {
@@ -361,5 +485,196 @@ export const alloys = [
         ],
         result: "tfc:metal/weak_steel",
         type: "heated"
+    }
+]
+
+export const heated_alloys = [
+    {
+        name: "bismuth_bronze",
+        input: [
+            {
+                fluid: "tfc:metal/bismuth",
+                nbt: {},
+                amount: 20
+            },
+            {
+                fluid: "tfc:metal/zinc",
+                nbt: {},
+                amount: 30
+            },
+            {
+                fluid: "tfc:metal/copper",
+                nbt: {},
+                amount: 50,
+            }
+        ],
+        result: "tfc:metal/bismuth_bronze",
+        temp: 600
+    },
+    {
+        name: "black_bronze",
+        input: [
+            {
+                fluid: "tfc:metal/silver",
+                nbt: {},
+                amount: 25
+            },
+            {
+                fluid: "tfc:metal/gold",
+                nbt: {},
+                amount: 25
+            },
+            {
+                fluid: "tfc:metal/copper",
+                nbt: {},
+                amount: 50
+            }
+        ],
+        result: "tfc:metal/black_bronze",
+        temp: 600
+    },
+    {
+        name: "brass",
+        input: [
+            {
+                fluid: "tfc:metal/copper",
+                nbt: {},
+                amount: 90,
+            },
+            {
+                fluid: "tfc:metal/zinc",
+                nbt: {},
+                amount: 10,
+            }
+        ],
+        result: "tfc:metal/brass",
+        temp: 600
+    },
+    {
+        name: "bronze",
+        input: [
+            {
+                fluid: "tfc:metal/copper",
+                nbt: {},
+                amount: 90,
+            },
+            {
+                fluid: "tfc:metal/tin",
+                nbt: {},
+                amount: 10,
+            }
+        ],
+        result: "tfc:metal/bronze",
+        temp: 600
+    },
+    {
+        name: "rose_gold",
+        input: [
+            {
+                fluid: "tfc:metal/gold",
+                nbt: {},
+                amount: 70,
+            },
+            {
+                fluid: "tfc:metal/copper",
+                nbt: {},
+                amount: 30,
+            }
+        ],
+        result: "tfc:metal/rose_gold",
+        temp: 600
+    },
+    {
+        name: "sterling_silver",
+        input: [
+            {
+                fluid: "tfc:metal/silver",
+                nbt: {},
+                amount: 60,
+            },
+            {
+                fluid: "tfc:metal/copper",
+                nbt: {},
+                amount: 40,
+            }
+        ],
+        result: "tfc:metal/sterling_silver",
+        temp: 600
+    },
+    {
+        name: "weak_blue_steel",
+        input: [
+            {
+                fluid: "tfc:metal/black_steel",
+                nbt: {},
+                amount: 50,
+            },
+            {
+                fluid: "tfc:metal/steel",
+                nbt: {},
+                amount: 20,
+            },
+            {
+                fluid: "tfc:metal/bismuth_bronze",
+                nbt: {},
+                amount: 15,
+            },
+            {
+                fluid: "tfc:metal/sterling_silver",
+                nbt: {},
+                amount: 15,
+            }
+        ],
+        result: "tfc:metal/weak_blue_steel",
+        temp: 600
+    },
+    {
+        name: "weak_red_steel",
+        input: [
+            {
+                fluid: "tfc:metal/black_steel",
+                nbt: {},
+                amount: 50,
+            },
+            {
+                fluid: "tfc:metal/steel",
+                nbt: {},
+                amount: 20,
+            },
+            {
+                fluid: "tfc:metal/brass",
+                nbt: {},
+                amount: 15,
+            },
+            {
+                fluid: "tfc:metal/rose_gold",
+                nbt: {},
+                amount: 15,
+            }
+        ],
+        result: "tfc:metal/weak_red_steel",
+        temp: 600
+    },
+    {
+        name: "weak_steel",
+        input: [
+            {
+                fluid: "tfc:metal/steel",
+                nbt: {},
+                amount: 50,
+            },
+            {
+                fluid: "tfc:metal/nickel",
+                nbt: {},
+                amount: 25,
+            },
+            {
+                fluid: "tfc:metal/black_bronze",
+                nbt: {},
+                amount: 25,
+            },
+        ],
+        result: "tfc:metal/weak_steel",
+        temp: 600
     }
 ]

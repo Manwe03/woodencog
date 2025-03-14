@@ -17,7 +17,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import mezz.jei.api.gui.builder.IRecipeLayoutBuilder;
 import mezz.jei.api.gui.ingredient.IRecipeSlotsView;
 
-@Mixin({BasinCategory.class})
+@Mixin(value = BasinCategory.class, remap = false)
 public abstract class MixinBasinCategory {
     public MixinBasinCategory() {
     }

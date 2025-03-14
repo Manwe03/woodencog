@@ -1,0 +1,20 @@
+{
+  "type": "woodencog:heated_compacting",
+  "ingredients": [
+    {
+      "ingredient": { "item": "tfc:metal/ingot/black_bronze" },
+      "min_temp": 100,
+      "max_temp": 3000
+    }
+  ],
+  "results": [
+    {
+      "item": "tfc:metal/ingot/bismuth_bronze",
+      "temperature": 200,
+      "copy_heat": true,
+      "cooling": 0
+    }
+  ],
+  "heatRequirement": 100,
+  "processingTime": 100
+}

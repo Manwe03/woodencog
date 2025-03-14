@@ -1,0 +1,20 @@
+{
+    "type": "woodencog:heated_mixing",
+    "ingredients": [
+        {
+            "ingredient": {
+                "item": "tfc:ore/normal_cassiterite"
+            },
+            "min_temp": 220,
+            "max_temp": 3000
+        }
+    ],
+    "results": [
+        {
+            "fluid": "tfc:metal/tin",
+            "nbt": {},
+            "amount": 25
+        }
+    ],
+    "heatRequirement": 220
+}

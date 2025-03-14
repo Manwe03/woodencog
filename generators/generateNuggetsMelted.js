@@ -1,7 +1,7 @@
 import fs from "fs";
-import {mixing_path} from "./generators.js";
+import {heated_mixing_path} from "./generators.js";
 
-export const generateNuggetsMelted = (name, result) => {
+export const generateNuggetsMelted = (name, result, min_temp) => {
     [
         {type: 'small', quantity: 10},
         {type: 'poor', quantity: 15},
@@ -9,10 +9,12 @@ export const generateNuggetsMelted = (name, result) => {
         {type: 'rich', quantity: 35},
     ].forEach(type => {
         let data = {
-            "type": "create:mixing",
+            "type": "woodencog:heated_mixing",
             "ingredients": [
                 {
-                    "item": `tfc:ore/${type.type}_${name}`
+                  "ingredient": { "item": `tfc:ore/${type.type}_${name}` },
+                  "min_temp": min_temp,
+                  "max_temp": 3000
                 }
             ],
             "results": [
@@ -22,8 +24,8 @@ export const generateNuggetsMelted = (name, result) => {
                     "amount": type.quantity
                 }
             ],
-            "heatRequirement": "heated"
+            "heatRequirement": min_temp
         }
-        fs.writeFileSync(`${mixing_path}/nugget_${type.type}_to_liquid_${name}.json`, JSON.stringify(data, null, 4))
+        fs.writeFileSync(`${heated_mixing_path}/nugget_${type.type}_to_liquid_${name}.json`, JSON.stringify(data, null, 4))
     });
 }

@@ -2,6 +2,10 @@
   "sealed_on": "Sealed on",
   "barrel_crafting": "Crafting",
 
+  "category.woodencog.heated_mixing": "Heated Mixing",
+  "category.woodencog.heated_pressing": "Heated Pressing",
+  "category.woodencog.heated_compacting": "Heated Compacting",
+
   "woodencog.ponder.heat.header": "Heating items",
   "woodencog.ponder.heat.text_1": "An item capable of receiving heat will be heated by lava, the maximum temperature is 1700°.",
   "woodencog.ponder.heat.text_2": "It's the same with fire, but the temperature limit is 200°. Perfect for cooking !",

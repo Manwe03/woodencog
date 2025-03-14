@@ -1,0 +1,20 @@
+{
+    "type": "woodencog:heated_mixing",
+    "ingredients": [
+        {
+            "ingredient": {
+                "item": "tfc:ore/small_tetrahedrite"
+            },
+            "min_temp": 1036,
+            "max_temp": 3000
+        }
+    ],
+    "results": [
+        {
+            "fluid": "tfc:metal/copper",
+            "nbt": {},
+            "amount": 10
+        }
+    ],
+    "heatRequirement": 1036
+}
