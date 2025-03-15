@@ -2,7 +2,6 @@ package net.chauvedev.woodencog.compat.jei;
 
 import com.simibubi.create.compat.jei.category.animations.AnimatedMixer;
 import mezz.jei.api.gui.ingredient.IRecipeSlotsView;
-import net.chauvedev.woodencog.compat.jei.AnimatedBlocks.AnimatedCharcoalForge;
 import net.chauvedev.woodencog.recipes.heatedRecipes.recipes.HeatedBasinRecipe;
 import net.minecraft.client.gui.GuiGraphics;
 
@@ -15,11 +14,7 @@ public class HeatedMixingCategory extends HeatedBasinCategory {
     MixingType type;
 
     enum MixingType {
-        MIXING, AUTO_SHAPELESS, AUTO_BREWING
-    }
-
-    public static HeatedMixingCategory standard(Info<HeatedBasinRecipe> info) {
-        return new HeatedMixingCategory(info);
+        MIXING
     }
 
     protected HeatedMixingCategory(Info<HeatedBasinRecipe> info) {

@@ -6,6 +6,7 @@ import com.simibubi.create.foundation.blockEntity.behaviour.fluid.SmartFluidTank
 import com.simibubi.create.foundation.fluid.FluidIngredient;
 import com.simibubi.create.foundation.recipe.DummyCraftingContainer;
 import com.simibubi.create.foundation.recipe.IRecipeTypeInfo;
+import net.chauvedev.woodencog.WoodenCog;
 import net.chauvedev.woodencog.config.WoodenCogCommonConfigs;
 import net.chauvedev.woodencog.recipes.heatedRecipes.AllHeatedRecipeTypes;
 import net.chauvedev.woodencog.recipes.heatedRecipes.HeatedProcessingRecipe;
@@ -30,9 +31,12 @@ import java.util.*;
 public class HeatedBasinRecipe extends HeatedProcessingRecipe<Container> {
 
     public static boolean match(BasinBlockEntity basin, Recipe<?> recipe) {
+        WoodenCog.LOGGER.info("MATCH RECIPE");
         FilteringBehaviour filter = basin.getFilter();
-        if (filter == null)
+        if (filter == null){
+            WoodenCog.LOGGER.error("Filter is null");
             return false;
+        }
 
         boolean filterTest = filter.test(recipe.getResultItem(basin.getLevel().registryAccess()));
         if (recipe instanceof HeatedBasinRecipe basinRecipe) {
@@ -44,8 +48,10 @@ public class HeatedBasinRecipe extends HeatedProcessingRecipe<Container> {
                         .get(0));
         }
 
-        if (!filterTest)
+        if (!filterTest){
+            WoodenCog.LOGGER.info("Did not pass the filter");
             return false;
+        }
 
         return apply(basin, recipe, true);
     }
@@ -55,19 +61,23 @@ public class HeatedBasinRecipe extends HeatedProcessingRecipe<Container> {
     }
 
     private static boolean apply(BasinBlockEntity basin, Recipe<?> recipe, boolean test) {
-        //WoodenCog.LOGGER.info("Apply Heated Basin Recipe: "+ recipe.getId());
+        WoodenCog.LOGGER.info("Apply Heated Basin Recipe: "+ recipe.getId());
         if(recipe instanceof HeatedBasinRecipe heatedRecipe){
+            WoodenCog.LOGGER.info("Basin Recipe");
             IItemHandler availableItems = basin.getCapability(ForgeCapabilities.ITEM_HANDLER).orElse(null);
             IFluidHandler availableFluids = basin.getCapability(ForgeCapabilities.FLUID_HANDLER).orElse(null);
 
             try{
                 BlockEntity blockEntity = basin.getLevel().getBlockEntity(basin.getBlockPos().below(1));
-                if(!heatedRecipe.getRequiredHeat().testCharcoalForge(blockEntity)) return false; //Does not match required temperature
+                if(!heatedRecipe.getRequiredHeat().testCharcoalForge(blockEntity)) {
+                    WoodenCog.LOGGER.error("Charcoal forge does not match temperature requirements");
+                    return false; //Does not match required temperature
+                }
             } catch (NullPointerException e){
+                WoodenCog.LOGGER.error("Charcoal forge not found");
                 return false; //Charcoal forge not found
             }
             //WoodenCog.LOGGER.info("Has enough heat");
-
 
             List<ItemStack> recipeOutputItems = new ArrayList<>();
             List<FluidStack> recipeOutputFluids = new ArrayList<>();
@@ -77,7 +87,10 @@ public class HeatedBasinRecipe extends HeatedProcessingRecipe<Container> {
 
             for (boolean simulate : Iterate.trueAndFalse) {
 
-                if (!simulate && test) return true;
+                if (!simulate && test) {
+                    WoodenCog.LOGGER.info("Not simulation and testing");
+                    return true;
+                }
 
                 int[] extractedItemsFromSlot = new int[availableItems.getSlots()];
                 int[] extractedFluidsFromTank = new int[availableFluids.getTanks()];
@@ -85,15 +98,22 @@ public class HeatedBasinRecipe extends HeatedProcessingRecipe<Container> {
                 Ingredients:
                 for (HeatableIngredient ingredient : ingredients) {
                     for (int slot = 0; slot < availableItems.getSlots(); slot++) {
-                        if (simulate && availableItems.getStackInSlot(slot).getCount() <= extractedItemsFromSlot[slot]) continue;
+                        if (simulate && availableItems.getStackInSlot(slot).getCount() <= extractedItemsFromSlot[slot]) {
+                            continue;
+                        }
                         ItemStack extracted = availableItems.extractItem(slot, 1, true);
-                        if (!ingredient.test(extracted)) continue; //test item and item temperature
+                        if (!ingredient.test(extracted)) {
+                            WoodenCog.LOGGER.info(extracted.getItem() + " test fail");
+                            continue; //test item and item temperature
+                        }
+                        WoodenCog.LOGGER.info(extracted.getItem() + " test success");
                         if (!simulate) availableItems.extractItem(slot, 1, false);
                         extractedItemsFromSlot[slot]++;
                         continue Ingredients;
                     }
 
                     // something wasn't found
+                    WoodenCog.LOGGER.info("Some ingredient was not found");
                     return false;
                 }
 
@@ -121,6 +141,7 @@ public class HeatedBasinRecipe extends HeatedProcessingRecipe<Container> {
                     }
 
                     // something wasn't found
+                    WoodenCog.LOGGER.info("Some liquid ingredient was not found");
                     return false;
                 }
 
@@ -156,12 +177,15 @@ public class HeatedBasinRecipe extends HeatedProcessingRecipe<Container> {
                         if (!stack.isEmpty()) recipeOutputItems.add(stack);
                 }
 
-                if (!basin.acceptOutputs(recipeOutputItems, recipeOutputFluids, simulate))
+                if (!basin.acceptOutputs(recipeOutputItems, recipeOutputFluids, simulate)){
+                    WoodenCog.LOGGER.info("Basin cant accept outputs");
                     return false;
+                }
             }
-
+            WoodenCog.LOGGER.info("Returned true");
             return true;
         }
+        WoodenCog.LOGGER.info("Returned false");
         return false;
     }
 

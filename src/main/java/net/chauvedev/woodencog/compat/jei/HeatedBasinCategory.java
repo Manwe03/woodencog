@@ -9,6 +9,7 @@ import mezz.jei.api.gui.ingredient.IRecipeSlotView;
 import mezz.jei.api.gui.ingredient.IRecipeSlotsView;
 import mezz.jei.api.recipe.IFocusGroup;
 import mezz.jei.api.recipe.RecipeIngredientRole;
+import net.chauvedev.woodencog.WoodenCog;
 import net.chauvedev.woodencog.compat.jei.AnimatedBlocks.AnimatedCharcoalForge;
 import net.chauvedev.woodencog.mixin.HeatableIngredientAccessor;
 import net.chauvedev.woodencog.recipes.heatedRecipes.HeatedProcessingOutput;
@@ -60,9 +61,11 @@ public abstract class HeatedBasinCategory extends WoodenCogRecipeCategory<Heated
             HeatableIngredient ingredient = pair.getFirst();
             int minTemp = ((HeatableIngredientAccessor) ingredient).getMinTemp();
             for (ItemStack itemStack : pair.getFirst().getItems()) {
-                HeatCapability.setTemperature(itemStack,minTemp);
-                itemStack.setCount(pair.getSecond().getValue());
-                stacks.add(itemStack);
+                WoodenCog.LOGGER.info("Set temp for: "+ itemStack.getItem() + " at "+ minTemp);
+                ItemStack itemStack1 = itemStack.copy();
+                HeatCapability.setTemperature(itemStack1,minTemp);
+                itemStack1.setCount(pair.getSecond().getValue());
+                stacks.add(itemStack1);
             }
 
             builder.addSlot(RecipeIngredientRole.INPUT, 17 + xOffset + (i % 3) * 19, 51 - (i / 3) * 19)
@@ -142,12 +145,15 @@ public abstract class HeatedBasinCategory extends WoodenCogRecipeCategory<Heated
 
     private static void drawTemperatureCapability(HeatedBasinRecipe recipe, IRecipeSlotsView recipeSlotsView) {
         float time = AnimationTickHolder.getRenderTime()/2;
+        setInputTemperatureCapability(recipe,recipeSlotsView,false);
+        /*
         if(((int) time) % 50 == 0) {
             setInputTemperatureCapability(recipe, recipeSlotsView,false);
         } else if(((int) time) % 10 == 0) {
             setInputTemperatureCapability(recipe, recipeSlotsView, true);
         }
         setOputputTemperatureCapability(recipe,recipeSlotsView);
+         */
     }
 
     private static void setInputTemperatureCapability(HeatedBasinRecipe recipe, IRecipeSlotsView recipeSlotsView, boolean setMax) {
@@ -163,6 +169,9 @@ public abstract class HeatedBasinCategory extends WoodenCogRecipeCategory<Heated
                             temp = ((HeatableIngredientAccessor) heatableIngredient).getMinTemp();
                         }
                         HeatCapability.setTemperature(displayItemStack, temp);
+
+                        WoodenCog.LOGGER.info("Temp "+ displayItemStack.getItem() +" has been set to " + displayItemStack.getCapability(HeatCapability.CAPABILITY).resolve().get().getTemperature());
+
                         break; // Found match, no need to check further for this slot
                     }
                 }

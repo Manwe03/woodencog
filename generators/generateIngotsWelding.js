@@ -18,7 +18,7 @@ export const generateIngotsWelding = (name,welding) => {
             {
                 "ingredient": { "item": "tfc:powder/flux" },
                 "min_temp": 0,
-                "max_temp": 0
+                "max_temp": 3000
             }
         ],
         "results": [
