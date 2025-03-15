@@ -1,30 +1,28 @@
 package net.chauvedev.woodencog.compat.jei;
 
-import com.jozufozu.flywheel.util.AnimationTickHolder;
 import com.simibubi.create.content.processing.recipe.ProcessingOutput;
 import com.simibubi.create.foundation.fluid.FluidIngredient;
 import com.simibubi.create.foundation.gui.AllGuiTextures;
-import com.simibubi.create.foundation.utility.Pair;
 import mezz.jei.api.forge.ForgeTypes;
 import mezz.jei.api.gui.builder.IRecipeLayoutBuilder;
 import mezz.jei.api.gui.ingredient.IRecipeSlotView;
 import mezz.jei.api.gui.ingredient.IRecipeSlotsView;
 import mezz.jei.api.recipe.IFocusGroup;
 import mezz.jei.api.recipe.RecipeIngredientRole;
-import net.chauvedev.woodencog.WoodenCog;
 import net.chauvedev.woodencog.compat.jei.AnimatedBlocks.AnimatedCharcoalForge;
 import net.chauvedev.woodencog.mixin.HeatableIngredientAccessor;
 import net.chauvedev.woodencog.recipes.heatedRecipes.HeatedProcessingOutput;
 import net.chauvedev.woodencog.recipes.heatedRecipes.WoodenCogHeatCondition;
 import net.chauvedev.woodencog.recipes.heatedRecipes.recipes.HeatedBasinRecipe;
 import net.chauvedev.woodencog.utils.HeatedItemHelper;
+import net.createmod.catnip.animation.AnimationTickHolder;
+import net.createmod.catnip.data.Pair;
 import net.dries007.tfc.common.blocks.TFCBlocks;
 import net.dries007.tfc.common.capabilities.heat.Heat;
 import net.dries007.tfc.common.capabilities.heat.HeatCapability;
 import net.dries007.tfc.common.capabilities.heat.IHeat;
 import net.dries007.tfc.common.recipes.ingredients.HeatableIngredient;
 import net.dries007.tfc.util.Helpers;
-import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.ItemStack;
@@ -77,7 +75,7 @@ public abstract class HeatedBasinCategory extends WoodenCogRecipeCategory<Heated
                     .addSlot(RecipeIngredientRole.INPUT, 17 + xOffset + (i % 3) * 19, 51 - (i / 3) * 19)
                     .setBackground(getRenderedSlot(), -1, -1)
                     .addIngredients(ForgeTypes.FLUID_STACK, withImprovedVisibility(fluidIngredient.getMatchingFluidStacks()))
-                    .addTooltipCallback(addFluidTooltip(fluidIngredient.getRequiredAmount()));
+                    .addRichTooltipCallback(addFluidTooltip(fluidIngredient.getRequiredAmount()));
             i++;
         }
 
@@ -92,7 +90,7 @@ public abstract class HeatedBasinCategory extends WoodenCogRecipeCategory<Heated
                     .addSlot(RecipeIngredientRole.OUTPUT, xPosition, yPosition)
                     .setBackground(getRenderedSlot(result), -1, -1)
                     .addItemStack(result.getStack())
-                    .addTooltipCallback(addStochasticTooltip(result));
+                    .addRichTooltipCallback(addStochasticTooltip(result));
             i++;
         }
 
@@ -104,7 +102,7 @@ public abstract class HeatedBasinCategory extends WoodenCogRecipeCategory<Heated
                     .addSlot(RecipeIngredientRole.OUTPUT, xPosition, yPosition)
                     .setBackground(getRenderedSlot(), -1, -1)
                     .addIngredient(ForgeTypes.FLUID_STACK, withImprovedVisibility(fluidResult))
-                    .addTooltipCallback(addFluidTooltip(fluidResult.getAmount()));
+                    .addRichTooltipCallback(addFluidTooltip(fluidResult.getAmount()));
             i++;
         }
 

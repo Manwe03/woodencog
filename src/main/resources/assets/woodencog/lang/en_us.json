@@ -10,5 +10,6 @@
   "woodencog.ponder.heat.text_1": "An item capable of receiving heat will be heated by lava, the maximum temperature is 1700°.",
   "woodencog.ponder.heat.text_2": "It's the same with fire, but the temperature limit is 200°. Perfect for cooking !",
   "woodencog.ponder.cool.header": "Cooling items",
-  "woodencog.ponder.cool.text_1": "Heated item can be cooled down with water."
+  "woodencog.ponder.cool.text_1": "Heated item can be cooled down with water.",
+  "recipe.assembly.pressing": "Assembly Pressing"
 }

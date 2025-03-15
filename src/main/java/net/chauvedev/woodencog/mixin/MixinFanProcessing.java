@@ -40,13 +40,13 @@ public class MixinFanProcessing {
             HeatCapability.addTemp(cap, 1700);
         } else if (type.equals(AllFanProcessingTypes.SMOKING)) {
             HeatCapability.addTemp(cap, 200);
-        } else if (type.equals(AllFanProcessingTypes.NONE)) {
-            cap.setTemperature(cap.getTemperature() - 2F);
+        } else if (type.equals(AllFanProcessingTypes.SPLASHING)) {
+            cap.setTemperature(cap.getTemperature() - 5F);
             if(cap.getTemperature() <= 0F) {
                 cap.setTemperature(0F);
             }
-        } else if (type.equals(AllFanProcessingTypes.SPLASHING)) {
-            cap.setTemperature(cap.getTemperature() - 5F);
+        } else {
+            cap.setTemperature(cap.getTemperature() - 2F);
             if(cap.getTemperature() <= 0F) {
                 cap.setTemperature(0F);
             }

@@ -6,12 +6,12 @@ import com.simibubi.create.foundation.blockEntity.behaviour.fluid.SmartFluidTank
 import com.simibubi.create.foundation.fluid.FluidIngredient;
 import com.simibubi.create.foundation.recipe.DummyCraftingContainer;
 import com.simibubi.create.foundation.recipe.IRecipeTypeInfo;
-import com.simibubi.create.foundation.utility.Iterate;
 import net.chauvedev.woodencog.config.WoodenCogCommonConfigs;
 import net.chauvedev.woodencog.recipes.heatedRecipes.AllHeatedRecipeTypes;
 import net.chauvedev.woodencog.recipes.heatedRecipes.HeatedProcessingRecipe;
 import net.chauvedev.woodencog.recipes.heatedRecipes.HeatedProcessingRecipeBuilder;
 import net.chauvedev.woodencog.utils.HeatHandlingUtil;
+import net.createmod.catnip.data.Iterate;
 import net.dries007.tfc.common.recipes.ingredients.HeatableIngredient;
 import net.minecraft.world.Container;
 import net.minecraft.world.inventory.CraftingContainer;

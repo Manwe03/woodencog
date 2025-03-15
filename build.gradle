@@ -65,7 +65,7 @@ minecraft {
             workingDirectory project.file('run')
             arg '-mixin.config=tfc.mixins.json'
             arg '-mixin.config=create.mixins.json'
-            arg '-mixin.config=flywheel.mixins.json'
+            //arg '-mixin.config=flywheel.mixins.json'
             arg '-mixin.config=woodencog.mixins.json'
             property 'forge.logging.console.level', 'info'
             property 'mixin.env.remapRefMap', 'true'
@@ -158,11 +158,6 @@ sourceSets.main.resources { srcDir 'src/generated/resources' }
 
 repositories {
     maven {
-        // location of the maven for Registrate and Flywheel
-        name = 'tterrag maven'
-        url = 'https://maven.tterrag.com'
-    }
-    maven {
         // location of the maven that hosts JEI files since January 2023
         // location of the maven for Vazkii's mods
         name = "Jared's maven"
@@ -179,6 +174,9 @@ repositories {
             includeGroup "curse.maven"
         }
     }
+    maven { url = "https://maven.createmod.net" } // Create, Ponder, Flywheel
+    maven { url = "https://maven.tterrag.com" } // Registrate
+    maven { url = "https://raw.githubusercontent.com/Fuzss/modresources/main/maven/" } // ForgeConfigAPIPort
 }
 
 dependencies {
@@ -191,14 +189,21 @@ dependencies {
     compileOnly(fg.deobf("mezz.jei:jei-${minecraft_version}-common-api:${jei_version}"))
     runtimeOnly fg.deobf("mezz.jei:jei-${minecraft_version}-forge:${jei_version}")
 
+
     compileOnly fg.deobf("vazkii.patchouli:Patchouli:${minecraft_version}-${patchouli_version}:api")
     runtimeOnly fg.deobf("vazkii.patchouli:Patchouli:${minecraft_version}-${patchouli_version}")
 
-    implementation fg.deobf("com.jozufozu.flywheel:flywheel-forge-${minecraft_version}:${flywheel_version}")
-
-    implementation fg.deobf("curse.maven:create-328085:5689514")
+    /*CREATE https://wiki.createmod.net/developers/depend-on-create/forge-1.20.1*/
+    implementation(fg.deobf("com.simibubi.create:create-${minecraft_version}:${create_version}:slim") { transitive = false })
+    implementation(fg.deobf("net.createmod.ponder:Ponder-Forge-${minecraft_version}:${ponder_version}"))
+    compileOnly(fg.deobf("dev.engine-room.flywheel:flywheel-forge-api-${minecraft_version}:${flywheel_version}"))
+    runtimeOnly(fg.deobf("dev.engine-room.flywheel:flywheel-forge-${minecraft_version}:${flywheel_version}"))
+    implementation(fg.deobf("com.tterrag.registrate:Registrate:${registrate_version}"))
+    compileOnly(annotationProcessor("io.github.llamalad7:mixinextras-common:0.4.1"))
+    implementation("io.github.llamalad7:mixinextras-forge:0.4.1")
+    /*TerrafirmaCraft*/
     implementation fg.deobf("curse.maven:terrafirmacraft-302973:6103204")
-
+    /*Mixins*/
     annotationProcessor "org.spongepowered:mixin:${mixin_version}:processor"
 }
 

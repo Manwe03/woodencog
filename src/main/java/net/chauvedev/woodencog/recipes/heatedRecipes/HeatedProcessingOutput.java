@@ -7,10 +7,10 @@ import com.google.gson.JsonSyntaxException;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import com.simibubi.create.Create;
 import com.simibubi.create.content.processing.recipe.ProcessingOutput;
-import com.simibubi.create.foundation.utility.Pair;
-import com.simibubi.create.foundation.utility.RegisteredObjects;
 import net.chauvedev.woodencog.WoodenCog;
 import net.chauvedev.woodencog.config.WoodenCogCommonConfigs;
+import net.createmod.catnip.data.Pair;
+import net.createmod.catnip.platform.CatnipServices;
 import net.minecraft.nbt.TagParser;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.resources.ResourceLocation;
@@ -61,7 +61,7 @@ public class HeatedProcessingOutput extends ProcessingOutput {
     @Override
     public JsonElement serialize() {
         JsonObject json = new JsonObject();
-        ResourceLocation resourceLocation = this.childCompatDatagenOutput == null ? RegisteredObjects.getKeyOrThrow(this.getStack().getItem()) : this.childCompatDatagenOutput.getFirst();
+        ResourceLocation resourceLocation = this.childCompatDatagenOutput == null ? CatnipServices.REGISTRIES.getKeyOrThrow(this.getStack().getItem()) : this.childCompatDatagenOutput.getFirst();
         json.addProperty("item", resourceLocation.toString());
         int count = this.childCompatDatagenOutput == null ? this.getStack().getCount() : this.childCompatDatagenOutput.getSecond();
         if (count != 1) {

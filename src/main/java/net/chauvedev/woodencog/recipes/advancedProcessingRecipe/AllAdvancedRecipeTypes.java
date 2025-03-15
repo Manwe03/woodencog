@@ -5,7 +5,7 @@ import com.simibubi.create.content.fluids.transfer.FillingRecipe;
 import com.simibubi.create.content.kinetics.press.PressingRecipe;
 import com.simibubi.create.content.processing.recipe.ProcessingRecipe;
 import com.simibubi.create.content.processing.recipe.ProcessingRecipeBuilder;
-import com.simibubi.create.foundation.utility.Lang;
+import com.simibubi.create.foundation.utility.CreateLang;
 import net.chauvedev.woodencog.WoodenCog;
 import net.chauvedev.woodencog.recipes.advancedProcessingRecipe.baseRecipes.SetItemStackProvider;
 import net.minecraft.world.item.crafting.RecipeSerializer;
@@ -28,9 +28,8 @@ public enum AllAdvancedRecipeTypes {
 
 
     AllAdvancedRecipeTypes(AllRecipeTypes type,Supplier<AdvancedRecipeSerializer<?>> serializerSupplier){
-        String name = Lang.asId(this.name());
-        this.serializerObject = AllAdvancedRecipeTypes.Registers.SERIALIZER_REGISTER.register(name, serializerSupplier);
-        WoodenCog.LOGGER.info("register convert recipe "+WoodenCog.MOD_ID+":"+name+" to "+type.getId());
+        this.serializerObject = AllAdvancedRecipeTypes.Registers.SERIALIZER_REGISTER.register(this.name().toLowerCase(), serializerSupplier);
+        WoodenCog.LOGGER.info("register convert recipe "+WoodenCog.MOD_ID+":"+this.name()+" to "+type.getId());
 
     }
     AllAdvancedRecipeTypes(AllRecipeTypes type,ProcessingRecipeBuilder.ProcessingRecipeFactory processingFactory) {

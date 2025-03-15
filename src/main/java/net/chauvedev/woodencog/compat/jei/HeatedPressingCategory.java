@@ -1,6 +1,5 @@
 package net.chauvedev.woodencog.compat.jei;
 
-import com.jozufozu.flywheel.util.AnimationTickHolder;
 import com.simibubi.create.compat.jei.category.animations.AnimatedPress;
 import com.simibubi.create.content.processing.recipe.ProcessingOutput;
 import com.simibubi.create.foundation.gui.AllGuiTextures;
@@ -9,11 +8,10 @@ import mezz.jei.api.gui.ingredient.IRecipeSlotView;
 import mezz.jei.api.gui.ingredient.IRecipeSlotsView;
 import mezz.jei.api.recipe.IFocusGroup;
 import mezz.jei.api.recipe.RecipeIngredientRole;
-import net.chauvedev.woodencog.WoodenCog;
 import net.chauvedev.woodencog.mixin.HeatableIngredientAccessor;
 import net.chauvedev.woodencog.recipes.heatedRecipes.HeatedProcessingOutput;
-import net.chauvedev.woodencog.recipes.heatedRecipes.recipes.HeatedBasinRecipe;
 import net.chauvedev.woodencog.recipes.heatedRecipes.recipes.HeatedPressingRecipe;
+import net.createmod.catnip.animation.AnimationTickHolder;
 import net.dries007.tfc.common.capabilities.heat.HeatCapability;
 import net.dries007.tfc.common.capabilities.heat.IHeat;
 import net.dries007.tfc.common.recipes.ingredients.HeatableIngredient;
@@ -45,7 +43,7 @@ public class HeatedPressingCategory extends WoodenCogRecipeCategory<HeatedPressi
             builder.addSlot(RecipeIngredientRole.OUTPUT, 131 + 19 * i, 50)
                     .setBackground(getRenderedSlot(output), -1, -1)
                     .addItemStack(output.getStack())
-                    .addTooltipCallback(addStochasticTooltip(output));
+                    .addRichTooltipCallback(addStochasticTooltip(output));
             i++;
         }
     }

@@ -58,7 +58,7 @@ Woodencog is a compatibility mod for create and TFC. This mod allow the player t
 [[dependencies.woodencog]]
     modId="create"
     mandatory=true
-    versionRange="[0.5.1.f,)"
+    versionRange="[6.0.0,)"
     ordering="BEFORE"
     side="BOTH"
 

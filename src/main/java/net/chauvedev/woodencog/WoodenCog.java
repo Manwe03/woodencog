@@ -1,8 +1,15 @@
 package net.chauvedev.woodencog;
 
 import com.mojang.logging.LogUtils;
+import com.simibubi.create.AllContraptionTypes;
+import com.simibubi.create.Create;
+import com.simibubi.create.content.equipment.potatoCannon.AllPotatoProjectileBlockHitActions;
+import com.simibubi.create.content.equipment.potatoCannon.AllPotatoProjectileEntityHitActions;
+import com.simibubi.create.content.equipment.potatoCannon.AllPotatoProjectileRenderModes;
+import com.simibubi.create.content.kinetics.fan.processing.AllFanProcessingTypes;
+import com.simibubi.create.content.kinetics.mechanicalArm.AllArmInteractionPointTypes;
+import com.simibubi.create.content.logistics.item.filter.attribute.AllItemAttributeTypes;
 import com.simibubi.create.content.processing.sequenced.SequencedAssemblyItem;
-import com.simibubi.create.foundation.ponder.PonderRegistrationHelper;
 import net.chauvedev.woodencog.config.WoodenCogCommonConfigs;
 import net.chauvedev.woodencog.interaction.CustomArmInteractionPointTypes;
 import net.chauvedev.woodencog.recipes.advancedProcessingRecipe.AllAdvancedRecipeTypes;
@@ -23,6 +30,7 @@ import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 import net.minecraftforge.fml.loading.FMLEnvironment;
 import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ForgeRegistries;
+import net.minecraftforge.registries.RegisterEvent;
 import org.slf4j.Logger;
 
 @Mod(WoodenCog.MOD_ID)
@@ -31,7 +39,7 @@ public class WoodenCog
     public static final String MOD_ID = "woodencog";
     public static final Logger LOGGER = LogUtils.getLogger();
     private static final DeferredRegister<Item> ITEMS = DeferredRegister.create(ForgeRegistries.ITEMS, MOD_ID);
-    static final PonderRegistrationHelper PONDER_HELPER = new PonderRegistrationHelper(WoodenCog.MOD_ID);
+    //static final PonderRegistrationHelper PONDER_HELPER = new PonderRegistrationHelper(WoodenCog.MOD_ID);
 
     public WoodenCog()
     {
@@ -39,7 +47,6 @@ public class WoodenCog
         modEventBus.addListener(this::setup);
         MinecraftForge.EVENT_BUS.register(this);
         ITEMS.register(FMLJavaModLoadingContext.get().getModEventBus());
-        CustomArmInteractionPointTypes.registerAll();
 
         AllAdvancedRecipeTypes.register(modEventBus);
         //AllHeatedProcessingRecipes.register(modEventBus);
@@ -63,12 +70,18 @@ public class WoodenCog
             });
         });
 
+        modEventBus.addListener(WoodenCog::onRegister);
+
         ModLoadingContext.get().registerConfig(ModConfig.Type.COMMON, WoodenCogCommonConfigs.SPEC, "woodencog-common.toml");
     }
 
     private void setup(final FMLCommonSetupEvent event)
     {
 
+    }
+
+    public static void onRegister(final RegisterEvent event) {
+        CustomArmInteractionPointTypes.init();
     }
 
     @SubscribeEvent

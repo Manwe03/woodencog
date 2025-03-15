@@ -2,7 +2,6 @@ package net.chauvedev.woodencog.recipes.heatedRecipes;
 
 import com.simibubi.create.AllTags;
 import com.simibubi.create.foundation.recipe.IRecipeTypeInfo;
-import com.simibubi.create.foundation.utility.Lang;
 import net.chauvedev.woodencog.WoodenCog;
 import net.chauvedev.woodencog.recipes.heatedRecipes.recipes.HeatedBasinRecipe;
 import net.chauvedev.woodencog.recipes.heatedRecipes.recipes.HeatedCompactingRecipe;
@@ -40,7 +39,7 @@ public enum AllHeatedRecipeTypes implements IRecipeTypeInfo {
     private final Supplier<RecipeType<?>> type;
 
     private AllHeatedRecipeTypes(Supplier serializerSupplier, Supplier<RecipeType<?>> typeSupplier, boolean registerType) {
-        String name = Lang.asId(this.name());
+        String name = this.name().toLowerCase();
         this.id = new ResourceLocation(WoodenCog.MOD_ID, name);
         this.serializerObject = Registers.SERIALIZER_REGISTER.register(name, serializerSupplier);
         if (registerType) {
@@ -53,7 +52,7 @@ public enum AllHeatedRecipeTypes implements IRecipeTypeInfo {
     }
 
     private AllHeatedRecipeTypes(Supplier serializerSupplier) {
-        String name = Lang.asId(this.name());
+        String name = this.name().toLowerCase();
         this.id = new ResourceLocation(WoodenCog.MOD_ID, name);
         this.serializerObject = Registers.SERIALIZER_REGISTER.register(name, serializerSupplier);
         this.typeObject = Registers.TYPE_REGISTER.register(name, () -> {

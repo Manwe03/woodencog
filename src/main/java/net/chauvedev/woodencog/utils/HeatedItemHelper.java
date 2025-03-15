@@ -1,14 +1,12 @@
 package net.chauvedev.woodencog.utils;
 
-import com.simibubi.create.foundation.utility.Pair;
+import net.createmod.catnip.data.Pair;
 import net.dries007.tfc.common.recipes.ingredients.HeatableIngredient;
 import net.minecraft.core.NonNullList;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.crafting.Ingredient;
 import org.apache.commons.lang3.mutable.MutableInt;
 
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 
 public class HeatedItemHelper {

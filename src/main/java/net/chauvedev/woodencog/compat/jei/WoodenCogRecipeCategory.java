@@ -1,15 +1,13 @@
 package net.chauvedev.woodencog.compat.jei;
 
 import com.simibubi.create.AllFluids;
-import com.simibubi.create.compat.jei.category.CreateRecipeCategory;
 import com.simibubi.create.content.fluids.potion.PotionFluidHandler;
 import com.simibubi.create.content.processing.recipe.ProcessingOutput;
 import com.simibubi.create.foundation.gui.AllGuiTextures;
-import com.simibubi.create.foundation.utility.Components;
-import com.simibubi.create.foundation.utility.Lang;
+import com.simibubi.create.foundation.utility.CreateLang;
 import mezz.jei.api.forge.ForgeTypes;
 import mezz.jei.api.gui.drawable.IDrawable;
-import mezz.jei.api.gui.ingredient.IRecipeSlotTooltipCallback;
+import mezz.jei.api.gui.ingredient.IRecipeSlotRichTooltipCallback;
 import mezz.jei.api.recipe.RecipeType;
 import mezz.jei.api.recipe.category.IRecipeCategory;
 import mezz.jei.api.registration.IRecipeCatalystRegistration;
@@ -93,7 +91,7 @@ public abstract class WoodenCogRecipeCategory<T extends HeatedProcessingRecipe<?
 
     public static List<FluidStack> withImprovedVisibility(List<FluidStack> stacks) {
         return stacks.stream()
-                .map(CreateRecipeCategory::withImprovedVisibility)
+                .map(WoodenCogRecipeCategory::withImprovedVisibility)
                 .collect(Collectors.toList());
     }
 
@@ -104,7 +102,7 @@ public abstract class WoodenCogRecipeCategory<T extends HeatedProcessingRecipe<?
         return display;
     }
 
-    public static IRecipeSlotTooltipCallback addFluidTooltip(int mbAmount) {
+    public static IRecipeSlotRichTooltipCallback addFluidTooltip(int mbAmount) {
         return (view, tooltip) -> {
             Optional<FluidStack> displayed = view.getDisplayedIngredient(ForgeTypes.FLUID_STACK);
             if (displayed.isEmpty())
@@ -112,23 +110,23 @@ public abstract class WoodenCogRecipeCategory<T extends HeatedProcessingRecipe<?
 
             FluidStack fluidStack = displayed.get();
 
-            int amount = mbAmount == -1 ? fluidStack.getAmount() : mbAmount;
-            Component text = Components.literal(String.valueOf(amount)).append(Lang.translateDirect("generic.unit.millibuckets")).withStyle(ChatFormatting.GOLD);
-            if (tooltip.isEmpty())
-                tooltip.add(0, text);
-            else {
-                List<Component> siblings = tooltip.get(0).getSiblings();
-                siblings.add(Components.literal(" "));
-                siblings.add(text);
+            if (fluidStack.getFluid().isSame(AllFluids.POTION.get())) {
+                ArrayList<Component> potionTooltip = new ArrayList<>();
+                PotionFluidHandler.addPotionTooltip(fluidStack, potionTooltip, 1);
+                tooltip.addAll(potionTooltip.stream().toList());
             }
+
+            int amount = mbAmount == -1 ? fluidStack.getAmount() : mbAmount;
+            Component text = Component.literal(String.valueOf(amount)).append(CreateLang.translateDirect("generic.unit.millibuckets")).withStyle(ChatFormatting.GOLD);
+            tooltip.add(text);
         };
     }
 
-    public static IRecipeSlotTooltipCallback addStochasticTooltip(ProcessingOutput output) {
+    public static IRecipeSlotRichTooltipCallback addStochasticTooltip(ProcessingOutput output) {
         return (view, tooltip) -> {
             float chance = output.getChance();
             if (chance != 1)
-                tooltip.add(1, Lang.translateDirect("recipe.processing.chance", chance < 0.01 ? "<1" : (int) (chance * 100))
+                tooltip.add(CreateLang.translateDirect("recipe.processing.chance", chance < 0.01 ? "<1" : (int) (chance * 100))
                         .withStyle(ChatFormatting.GOLD));
         };
     }
@@ -137,12 +135,12 @@ public abstract class WoodenCogRecipeCategory<T extends HeatedProcessingRecipe<?
         return new IDrawable() {
             @Override
             public int getWidth() {
-                return texture.width;
+                return texture.getWidth();
             }
 
             @Override
             public int getHeight() {
-                return texture.height;
+                return texture.getHeight();
             }
 
             @Override
