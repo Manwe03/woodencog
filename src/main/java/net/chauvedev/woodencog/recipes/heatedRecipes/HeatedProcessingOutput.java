@@ -11,6 +11,7 @@ import net.chauvedev.woodencog.WoodenCog;
 import net.chauvedev.woodencog.config.WoodenCogCommonConfigs;
 import net.createmod.catnip.data.Pair;
 import net.createmod.catnip.platform.CatnipServices;
+import net.dries007.tfc.common.capabilities.heat.HeatCapability;
 import net.minecraft.nbt.TagParser;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.resources.ResourceLocation;
@@ -56,6 +57,18 @@ public class HeatedProcessingOutput extends ProcessingOutput {
     }
     public int getCooling(){
         return cooling;
+    }
+
+    /**
+     * Returns the itemStack with the applied capability
+     */
+    @Override
+    public ItemStack getStack() {
+        ItemStack itemStack = super.getStack();
+        if(!this.copyHeat){
+            HeatCapability.setTemperature(itemStack,this.temperature);
+        }
+        return itemStack;
     }
 
     @Override

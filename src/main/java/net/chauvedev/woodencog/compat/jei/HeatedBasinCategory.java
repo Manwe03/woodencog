@@ -1,5 +1,6 @@
 package net.chauvedev.woodencog.compat.jei;
 
+import com.mojang.blaze3d.systems.RenderSystem;
 import com.simibubi.create.content.processing.recipe.ProcessingOutput;
 import com.simibubi.create.foundation.fluid.FluidIngredient;
 import com.simibubi.create.foundation.gui.AllGuiTextures;
@@ -15,6 +16,7 @@ import net.chauvedev.woodencog.mixin.HeatableIngredientAccessor;
 import net.chauvedev.woodencog.recipes.heatedRecipes.HeatedProcessingOutput;
 import net.chauvedev.woodencog.recipes.heatedRecipes.WoodenCogHeatCondition;
 import net.chauvedev.woodencog.recipes.heatedRecipes.recipes.HeatedBasinRecipe;
+import net.chauvedev.woodencog.utils.Color;
 import net.chauvedev.woodencog.utils.HeatedItemHelper;
 import net.createmod.catnip.animation.AnimationTickHolder;
 import net.createmod.catnip.data.Pair;
@@ -27,6 +29,7 @@ import net.dries007.tfc.util.Helpers;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraftforge.fluids.FluidStack;
 import org.apache.commons.lang3.mutable.MutableInt;
 
@@ -61,11 +64,10 @@ public abstract class HeatedBasinCategory extends WoodenCogRecipeCategory<Heated
             HeatableIngredient ingredient = pair.getFirst();
             int minTemp = ((HeatableIngredientAccessor) ingredient).getMinTemp();
             for (ItemStack itemStack : pair.getFirst().getItems()) {
-                WoodenCog.LOGGER.info("Set temp for: "+ itemStack.getItem() + " at "+ minTemp);
-                ItemStack itemStack1 = itemStack.copy();
-                HeatCapability.setTemperature(itemStack1,minTemp);
-                itemStack1.setCount(pair.getSecond().getValue());
-                stacks.add(itemStack1);
+                //WoodenCog.LOGGER.info("Set temp for: "+ itemStack.getItem() + " at "+ minTemp);
+                HeatCapability.setTemperature(itemStack,minTemp);
+                itemStack.setCount(pair.getSecond().getValue());
+                stacks.add(itemStack);
             }
 
             builder.addSlot(RecipeIngredientRole.INPUT, 17 + xOffset + (i % 3) * 19, 51 - (i / 3) * 19)
@@ -73,6 +75,7 @@ public abstract class HeatedBasinCategory extends WoodenCogRecipeCategory<Heated
                 .addItemStacks(stacks);
             i++;
         }
+
         for (FluidIngredient fluidIngredient : recipe.getFluidIngredients()) {
             builder
                     .addSlot(RecipeIngredientRole.INPUT, 17 + xOffset + (i % 3) * 19, 51 - (i / 3) * 19)
@@ -85,7 +88,7 @@ public abstract class HeatedBasinCategory extends WoodenCogRecipeCategory<Heated
         size = recipe.getRollableResults().size() + recipe.getFluidResults().size();
         i = 0;
 
-        for (ProcessingOutput result : recipe.getRollableResults()) {
+        for (HeatedProcessingOutput result : recipe.getRollableResults()) {
             int xPosition = 142 - (size % 2 != 0 && i == size - 1 ? 0 : i % 2 == 0 ? 10 : -9);
             int yPosition = -19 * (i / 2) + 51;
 
@@ -140,67 +143,7 @@ public abstract class HeatedBasinCategory extends WoodenCogRecipeCategory<Heated
             guiGraphics.blit(FORGE_TEXTURE, 1, 60 - Math.min(51, guiTemp), 176, 0, 15, 5);
         }
 
-        drawTemperatureCapability(recipe, recipeSlotsView);
+        Color.drawCopyHeatBox(recipe, recipeSlotsView, guiGraphics);
     }
 
-    private static void drawTemperatureCapability(HeatedBasinRecipe recipe, IRecipeSlotsView recipeSlotsView) {
-        float time = AnimationTickHolder.getRenderTime()/2;
-        setInputTemperatureCapability(recipe,recipeSlotsView,false);
-        /*
-        if(((int) time) % 50 == 0) {
-            setInputTemperatureCapability(recipe, recipeSlotsView,false);
-        } else if(((int) time) % 10 == 0) {
-            setInputTemperatureCapability(recipe, recipeSlotsView, true);
-        }
-        setOputputTemperatureCapability(recipe,recipeSlotsView);
-         */
-    }
-
-    private static void setInputTemperatureCapability(HeatedBasinRecipe recipe, IRecipeSlotsView recipeSlotsView, boolean setMax) {
-        for (IRecipeSlotView slotView : recipeSlotsView.getSlotViews()){
-            if(slotView.getDisplayedItemStack().isEmpty()) return;
-            ItemStack displayItemStack = slotView.getDisplayedItemStack().get();
-            for (HeatableIngredient heatableIngredient : recipe.getHeatedIngredients()) {
-                for (ItemStack ingredientItemStack : heatableIngredient.getItems()) {
-                    if (displayItemStack.getItem().equals(ingredientItemStack.getItem())) {
-                        int temp = setMax ? ((HeatableIngredientAccessor) heatableIngredient).getMaxTemp()
-                                : ((HeatableIngredientAccessor) heatableIngredient).getMinTemp();
-                        if(temp >= 3000){
-                            temp = ((HeatableIngredientAccessor) heatableIngredient).getMinTemp();
-                        }
-                        HeatCapability.setTemperature(displayItemStack, temp);
-
-                        WoodenCog.LOGGER.info("Temp "+ displayItemStack.getItem() +" has been set to " + displayItemStack.getCapability(HeatCapability.CAPABILITY).resolve().get().getTemperature());
-
-                        break; // Found match, no need to check further for this slot
-                    }
-                }
-            }
-        }
-    }
-
-    private static void setOputputTemperatureCapability(HeatedBasinRecipe recipe, IRecipeSlotsView recipeSlotsView) {
-        for (IRecipeSlotView slotView : recipeSlotsView.getSlotViews()){
-            if(slotView.getDisplayedItemStack().isEmpty()) return; //Slot has no itemStack
-            ItemStack displayItemStack = slotView.getDisplayedItemStack().get();
-            for(HeatedProcessingOutput heatedProcessingOutput : recipe.getRollableResults()){
-                ItemStack outputItemStack = heatedProcessingOutput.getStack();
-                if(outputItemStack.getItem().equals(displayItemStack.getItem())){
-                    if(heatedProcessingOutput.getCopyHeat()){
-                        float time = AnimationTickHolder.getRenderTime();
-                        float maxTemp = 1000;
-                        Optional<IHeat> iheat = displayItemStack.getCapability(HeatCapability.CAPABILITY).resolve();
-                        if(iheat.isPresent()){
-                            maxTemp = iheat.get().getWeldingTemperature() + 200;
-                        }
-                        float temp = (float) (Math.sin(time / 10.0) * maxTemp) + 200;
-                        HeatCapability.setTemperature(displayItemStack,temp - heatedProcessingOutput.getCooling());
-                    }else {
-                        HeatCapability.setTemperature(displayItemStack,heatedProcessingOutput.getTemperature());
-                    }
-                    break; //Found
-                }
-            }
-        }
-    }
 }

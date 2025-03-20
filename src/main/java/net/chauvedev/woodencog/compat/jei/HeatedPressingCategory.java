@@ -11,6 +11,7 @@ import mezz.jei.api.recipe.RecipeIngredientRole;
 import net.chauvedev.woodencog.mixin.HeatableIngredientAccessor;
 import net.chauvedev.woodencog.recipes.heatedRecipes.HeatedProcessingOutput;
 import net.chauvedev.woodencog.recipes.heatedRecipes.recipes.HeatedPressingRecipe;
+import net.chauvedev.woodencog.utils.Color;
 import net.createmod.catnip.animation.AnimationTickHolder;
 import net.dries007.tfc.common.capabilities.heat.HeatCapability;
 import net.dries007.tfc.common.capabilities.heat.IHeat;
@@ -39,7 +40,7 @@ public class HeatedPressingCategory extends WoodenCogRecipeCategory<HeatedPressi
 
         List<HeatedProcessingOutput> results = recipe.getRollableResults();
         int i = 0;
-        for (ProcessingOutput output : results) {
+        for (HeatedProcessingOutput output : results) {
             builder.addSlot(RecipeIngredientRole.OUTPUT, 131 + 19 * i, 50)
                     .setBackground(getRenderedSlot(output), -1, -1)
                     .addItemStack(output.getStack())
@@ -56,55 +57,6 @@ public class HeatedPressingCategory extends WoodenCogRecipeCategory<HeatedPressi
 
         press.draw(guiGraphics, getWidth() / 2 - 17, 22);
 
-        float time = AnimationTickHolder.getRenderTime()/2;
-        if(((int) time) % 50 == 0) {
-            setInputTemperatureCapability(recipe, recipeSlotsView,false);
-        } else if(((int) time) % 10 == 0) {
-            setInputTemperatureCapability(recipe, recipeSlotsView, true);
-        }
-        setOputputTemperatureCapability(recipe,recipeSlotsView);
-    }
-
-    private static void setInputTemperatureCapability(HeatedPressingRecipe recipe, IRecipeSlotsView recipeSlotsView, boolean setMax) {
-        for (IRecipeSlotView slotView : recipeSlotsView.getSlotViews()){
-            if(slotView.getDisplayedItemStack().isEmpty()) return;
-            ItemStack displayItemStack = slotView.getDisplayedItemStack().get();
-            HeatableIngredient heatableIngredient = recipe.getHeatedIngredients().get(0);
-            for (ItemStack ingredientItemStack : heatableIngredient.getItems()) {
-                if(displayItemStack.getItem().equals(ingredientItemStack.getItem())){
-                    int temp = setMax ? ((HeatableIngredientAccessor) heatableIngredient).getMaxTemp() : ((HeatableIngredientAccessor) heatableIngredient).getMinTemp();
-                    if(temp >= 3000){
-                        temp = ((HeatableIngredientAccessor) heatableIngredient).getMinTemp();
-                    }
-                    HeatCapability.setTemperature(displayItemStack,temp);
-                    return; //Found
-                }
-            }
-        }
-    }
-
-    private static void setOputputTemperatureCapability(HeatedPressingRecipe recipe, IRecipeSlotsView recipeSlotsView) {
-        for (IRecipeSlotView slotView : recipeSlotsView.getSlotViews()){
-            if(slotView.getDisplayedItemStack().isEmpty()) return; //Slot has no itemStack
-            ItemStack displayItemStack = slotView.getDisplayedItemStack().get();
-            for(HeatedProcessingOutput heatedProcessingOutput : recipe.getRollableResults()){
-                ItemStack outputItemStack = heatedProcessingOutput.getStack();
-                if(outputItemStack.getItem().equals(displayItemStack.getItem())){
-                    if(heatedProcessingOutput.getCopyHeat()){
-                        float time = AnimationTickHolder.getRenderTime();
-                        float maxTemp = 1000;
-                        Optional<IHeat> iheat = displayItemStack.getCapability(HeatCapability.CAPABILITY).resolve();
-                        if(iheat.isPresent()){
-                            maxTemp = iheat.get().getWeldingTemperature() + 200;
-                        }
-                        float temp = (float) (Math.sin(time / 10.0) * maxTemp) + 200;
-                        HeatCapability.setTemperature(displayItemStack,temp - heatedProcessingOutput.getCooling());
-                    }else {
-                        HeatCapability.setTemperature(displayItemStack,heatedProcessingOutput.getTemperature());
-                    }
-                    break; //Found
-                }
-            }
-        }
+        Color.drawCopyHeatBox(recipe,recipeSlotsView,guiGraphics);
     }
 }

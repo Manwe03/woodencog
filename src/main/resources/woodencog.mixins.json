@@ -19,6 +19,8 @@
     "blockEnitites.MixinMechanicalPressBlockEntity",
     "blockEnitites.accessors.BasinOperatingBlockEntityAccessor",
     "jei.MixinAnimatedBlazeBurner",
+    "jei.MixinNormalizedTypedItemStack",
+    "jei.MixinTypedItemStack",
     "recipes.MixinFillingBySpout",
     "recipes.MixinRecipeApplier"
   ],
