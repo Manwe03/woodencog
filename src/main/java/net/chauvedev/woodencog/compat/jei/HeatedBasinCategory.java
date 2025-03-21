@@ -143,7 +143,7 @@ public abstract class HeatedBasinCategory extends WoodenCogRecipeCategory<Heated
             guiGraphics.blit(FORGE_TEXTURE, 1, 60 - Math.min(51, guiTemp), 176, 0, 15, 5);
         }
 
-        Color.drawCopyHeatBox(recipe, recipeSlotsView, guiGraphics);
+        Color.drawCopyHeatBoxBasin(recipe, recipeSlotsView, guiGraphics);
     }
 
 }

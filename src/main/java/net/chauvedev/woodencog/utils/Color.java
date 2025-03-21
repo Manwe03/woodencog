@@ -20,7 +20,34 @@ public class Color {
      * Client only
      * Draws the colored box around items outputs that copy input heat
      */
-    public static void drawCopyHeatBox(HeatedProcessingRecipe<?> recipe, IRecipeSlotsView recipeSlotsView, GuiGraphics guiGraphics) {
+    public static void drawCopyHeatBoxPress(HeatedProcessingRecipe<?> recipe, IRecipeSlotsView recipeSlotsView, GuiGraphics guiGraphics) {
+        float time = (AnimationTickHolder.getRenderTime()/100.0f) % 1.0f;
+        List<HeatedProcessingOutput> results = recipe.getRollableResults();
+        List<IRecipeSlotView> views = recipeSlotsView.getSlotViews(RecipeIngredientRole.OUTPUT);
+        guiGraphics.pose().pushPose();
+        guiGraphics.pose().translate(0, 0, 100);
+        int size = recipeSlotsView.getSlotViews(RecipeIngredientRole.OUTPUT).size();
+        int yPosition = 50;
+        for (int i = 0; i < size; i++) {
+            for (HeatedProcessingOutput output : results){ //find
+                Optional<ItemStack> viewItemStack = views.get(i).getDisplayedItemStack();
+                if(viewItemStack.isPresent() && output.getStack().getItem() == viewItemStack.get().getItem() && output.getCopyHeat()){
+                    int xPosition = 131 + 19 * i;
+                    guiGraphics.fill(xPosition, yPosition, xPosition + 16, yPosition + 1, Color.tempColorgradient(time));
+                    guiGraphics.fill(xPosition, yPosition + 15, xPosition + 16, yPosition + 16, Color.tempColorgradient(time));
+                    guiGraphics.fill(xPosition, yPosition, xPosition + 1, yPosition + 16, Color.tempColorgradient(time));
+                    guiGraphics.fill(xPosition + 15, yPosition, xPosition + 16, yPosition + 16, Color.tempColorgradient(time));
+                }
+            }
+        }
+        guiGraphics.pose().popPose();
+    }
+
+    /**
+     * Client only
+     * Draws the colored box around items outputs that copy input heat
+     */
+    public static void drawCopyHeatBoxBasin(HeatedProcessingRecipe<?> recipe, IRecipeSlotsView recipeSlotsView, GuiGraphics guiGraphics) {
         float time = (AnimationTickHolder.getRenderTime()/100.0f) % 1.0f;
         List<HeatedProcessingOutput> results = recipe.getRollableResults();
         List<IRecipeSlotView> views = recipeSlotsView.getSlotViews(RecipeIngredientRole.OUTPUT);

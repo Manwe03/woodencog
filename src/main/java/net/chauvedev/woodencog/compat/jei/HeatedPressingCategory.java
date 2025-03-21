@@ -57,6 +57,6 @@ public class HeatedPressingCategory extends WoodenCogRecipeCategory<HeatedPressi
 
         press.draw(guiGraphics, getWidth() / 2 - 17, 22);
 
-        Color.drawCopyHeatBox(recipe,recipeSlotsView,guiGraphics);
+        Color.drawCopyHeatBoxPress(recipe,recipeSlotsView,guiGraphics);
     }
 }
