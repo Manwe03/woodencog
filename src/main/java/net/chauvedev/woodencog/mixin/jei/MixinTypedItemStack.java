@@ -24,9 +24,6 @@ public class MixinTypedItemStack {
             at = @At("HEAD"),
             cancellable = true)
     private static void create(ItemStack ingredient, CallbackInfoReturnable<ITypedIngredient<ItemStack>> cir) {
-        ingredient.getCapability(HeatCapability.CAPABILITY).resolve().ifPresent(heat -> {
-            WoodenCog.LOGGER.info("Call to create TypedItemStack, " + ingredient.getItem() + " temp: " + heat.getTemperature());
-        });
         cir.setReturnValue(ingredient.getCount() == 1 ?
                 new HeatNormalizedTypedItemStack(ingredient) :
                 new HeatTypedItemStack(ingredient));

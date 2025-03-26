@@ -5,6 +5,7 @@ import com.simibubi.create.content.kinetics.belt.transport.TransportedItemStack;
 import com.simibubi.create.content.kinetics.fan.processing.AllFanProcessingTypes;
 import com.simibubi.create.content.kinetics.fan.processing.FanProcessing;
 import com.simibubi.create.content.kinetics.fan.processing.FanProcessingType;
+import net.chauvedev.woodencog.WoodenCog;
 import net.chauvedev.woodencog.config.WoodenCogCommonConfigs;
 import net.chauvedev.woodencog.utils.ModTags;
 import net.dries007.tfc.common.capabilities.food.FoodCapability;
@@ -93,8 +94,7 @@ public class MixinFanProcessing {
             return;
         }
 
-        if (hasHeat && WoodenCogCommonConfigs.HANDLE_TEMPERATURE.get())
-        {
+        if (hasHeat && WoodenCogCommonConfigs.HANDLE_TEMPERATURE.get()) {
             ItemStack oldStack = transported.stack;
             ItemStack newStack = MixinFanProcessing.applyProcessingTCF(transported.stack, type);
             if(newStack != null) {
@@ -104,17 +104,17 @@ public class MixinFanProcessing {
                 }
                 if(oldStack.is(newStack.getItem())) {
                     cir.setReturnValue(TransportedItemStackHandlerBehaviour.TransportedResult.doNothing());
-                } else {
-                    TransportedItemStack newTransportedStack = transported.getSimilar();
-                    newTransportedStack.stack = newStack;
-                    cir.setReturnValue(
-                            TransportedItemStackHandlerBehaviour.TransportedResult.convertTo(
-                                    newTransportedStack
-                            )
-                    );
+                    return;
                 }
-                return;
+                TransportedItemStack newTransportedStack = transported.getSimilar();
+                newTransportedStack.stack = newStack;
+                cir.setReturnValue(
+                        TransportedItemStackHandlerBehaviour.TransportedResult.convertTo(
+                                newTransportedStack
+                        )
+                );
             }
+            cir.setReturnValue(TransportedItemStackHandlerBehaviour.TransportedResult.removeItem());
             cir.cancel();
         }
     }
@@ -126,9 +126,7 @@ public class MixinFanProcessing {
             cancellable = true
     )
     private static void applyProcessing(ItemEntity entity, FanProcessingType type, CallbackInfoReturnable<Boolean> cir) {
-
         ItemStack inputStack = entity.getItem();
-
 
         boolean hasHeat = inputStack.getCapability(HeatCapability.CAPABILITY).isPresent();
         boolean isUnburnable = inputStack.is(ModTags.Items.UNBURNABLE);

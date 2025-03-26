@@ -31,7 +31,6 @@ import java.util.*;
 public class HeatedBasinRecipe extends HeatedProcessingRecipe<Container> {
 
     public static boolean match(BasinBlockEntity basin, Recipe<?> recipe) {
-        WoodenCog.LOGGER.info("MATCH RECIPE");
         FilteringBehaviour filter = basin.getFilter();
         if (filter == null){
             WoodenCog.LOGGER.error("Filter is null");
@@ -49,7 +48,6 @@ public class HeatedBasinRecipe extends HeatedProcessingRecipe<Container> {
         }
 
         if (!filterTest){
-            WoodenCog.LOGGER.info("Did not pass the filter");
             return false;
         }
 
@@ -61,9 +59,7 @@ public class HeatedBasinRecipe extends HeatedProcessingRecipe<Container> {
     }
 
     private static boolean apply(BasinBlockEntity basin, Recipe<?> recipe, boolean test) {
-        WoodenCog.LOGGER.info("Apply Heated Basin Recipe: "+ recipe.getId());
         if(recipe instanceof HeatedBasinRecipe heatedRecipe){
-            WoodenCog.LOGGER.info("Basin Recipe");
             IItemHandler availableItems = basin.getCapability(ForgeCapabilities.ITEM_HANDLER).orElse(null);
             IFluidHandler availableFluids = basin.getCapability(ForgeCapabilities.FLUID_HANDLER).orElse(null);
 
@@ -88,7 +84,6 @@ public class HeatedBasinRecipe extends HeatedProcessingRecipe<Container> {
             for (boolean simulate : Iterate.trueAndFalse) {
 
                 if (!simulate && test) {
-                    WoodenCog.LOGGER.info("Not simulation and testing");
                     return true;
                 }
 
@@ -103,17 +98,14 @@ public class HeatedBasinRecipe extends HeatedProcessingRecipe<Container> {
                         }
                         ItemStack extracted = availableItems.extractItem(slot, 1, true);
                         if (!ingredient.test(extracted)) {
-                            WoodenCog.LOGGER.info(extracted.getItem() + " test fail");
                             continue; //test item and item temperature
                         }
-                        WoodenCog.LOGGER.info(extracted.getItem() + " test success");
                         if (!simulate) availableItems.extractItem(slot, 1, false);
                         extractedItemsFromSlot[slot]++;
                         continue Ingredients;
                     }
 
                     // something wasn't found
-                    WoodenCog.LOGGER.info("Some ingredient was not found");
                     return false;
                 }
 
@@ -141,7 +133,6 @@ public class HeatedBasinRecipe extends HeatedProcessingRecipe<Container> {
                     }
 
                     // something wasn't found
-                    WoodenCog.LOGGER.info("Some liquid ingredient was not found");
                     return false;
                 }
 
@@ -178,14 +169,12 @@ public class HeatedBasinRecipe extends HeatedProcessingRecipe<Container> {
                 }
 
                 if (!basin.acceptOutputs(recipeOutputItems, recipeOutputFluids, simulate)){
-                    WoodenCog.LOGGER.info("Basin cant accept outputs");
+                    //WoodenCog.LOGGER.info("Basin cant accept outputs");
                     return false;
                 }
             }
-            WoodenCog.LOGGER.info("Returned true");
             return true;
         }
-        WoodenCog.LOGGER.info("Returned false");
         return false;
     }
 
