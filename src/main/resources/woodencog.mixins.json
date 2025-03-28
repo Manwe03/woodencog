@@ -11,6 +11,7 @@
     "MixinBlockHelper",
     "MixinCharcoalForgeBlock",
     "MixinCrucibleBlock",
+    "MixinDrinkable",
     "MixinFanProcessing",
     "MixinNetheriteDivingHandler",
     "SmartBlockEntityAccessor",
