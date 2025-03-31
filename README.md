@@ -13,14 +13,16 @@ This mod is still in early stages and probably need a lot refactoring but still 
 I'll soon update my generators (yeah the nodejs mess in generators dir) to generate all missing crafts in this mod.
 
 currently it includes :
-- recipes for alloying with mixer
-- custom basin to allow more fluids into it (4)
-- some fixes for create mod that where needed for liquid only crafts
-- some fixes on filters to allow tfc fluid usage (still need to check if it didn't broke anything else)
+- Mixer alloying recipes
+- Custom basin to allow more fluids into it (4)
+- Some fixes for create mod that where needed for liquid only crafts
+- Some fixes on filters to allow tfc fluid usage (still need to check if it didn't broke anything else)
+- TFC heating capability for pressing, mixing and compacting
+- TFC Jei compatibility for new versions
+- Some TFC crash fixes to work with create
 
 I'm currently working on a partial (maybe entire) rewrite of the project to make it more compatible with JEI and other create addons
-- (WIP) TFC heating capability for pressing, mixing and sequenced assembly recipes.
-- (WIP) JEI compatibility
+- (WIP) Sequenced assembly recipes.
 - (WIP) Move js recipe generation to java
 
 If you know any issue with other mods open an issue on this repo i'll look into it
