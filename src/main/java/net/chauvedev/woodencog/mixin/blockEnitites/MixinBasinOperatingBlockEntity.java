@@ -6,7 +6,6 @@ import com.simibubi.create.content.processing.basin.BasinOperatingBlockEntity;
 import com.simibubi.create.content.processing.basin.BasinRecipe;
 import com.simibubi.create.foundation.advancement.CreateAdvancement;
 import com.simibubi.create.foundation.recipe.RecipeFinder;
-import net.chauvedev.woodencog.WoodenCog;
 import net.chauvedev.woodencog.recipes.heatedRecipes.recipes.HeatedBasinRecipe;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.Container;
@@ -80,7 +79,6 @@ public abstract class MixinBasinOperatingBlockEntity extends KineticBlockEntity 
     )
     protected void applyBasinRecipe(CallbackInfo ci) {
         if (this.currentRecipe != null && this.currentRecipe instanceof HeatedBasinRecipe heatedBasinRecipe) {
-            WoodenCog.LOGGER.info("ApplyBasinRecipe");
             Optional<BasinBlockEntity> optionalBasin = this.getBasin();
             if (optionalBasin.isPresent()) {
                 BasinBlockEntity basin = optionalBasin.get();

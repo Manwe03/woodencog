@@ -131,7 +131,7 @@ public class HeatedProcessingRecipeSerializer<T extends HeatedProcessingRecipe<?
         NonNullList<FluidStack> fluidOutputs = recipe.fluidResults;
         buffer.writeVarInt(ingredients.size());
         ingredients.forEach((i) -> {
-            i.getSerializer().parse(buffer);
+            HeatableIngredient.Serializer.INSTANCE.write(buffer,i);
         });
         buffer.writeVarInt(fluidIngredients.size());
         fluidIngredients.forEach((i) -> {
