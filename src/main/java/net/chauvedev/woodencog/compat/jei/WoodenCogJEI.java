@@ -28,6 +28,8 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.MinecartItem;
 import net.minecraft.world.item.crafting.*;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 
 import javax.annotation.Nonnull;
 import javax.annotation.ParametersAreNonnullByDefault;
@@ -36,6 +38,7 @@ import java.util.*;
 @JeiPlugin
 @SuppressWarnings("unused")
 @ParametersAreNonnullByDefault
+@OnlyIn(Dist.CLIENT)
 public class WoodenCogJEI implements IModPlugin {
 
     private static final ResourceLocation ID = WoodenCog.asResource("jei_plugin");

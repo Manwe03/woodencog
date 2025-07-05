@@ -97,7 +97,7 @@ public enum AllHeatedRecipeTypes implements IRecipeTypeInfo {
         Level level = Minecraft.getInstance().level;
         if(level != null && level.isClientSide){
             return level.getRecipeManager().getAllRecipesFor(this.getType()).stream()
-                .filter(recipe -> recipe instanceof HeatedProcessingRecipe<?>)  // Filtramos recetas específicas
+                .filter(recipe -> recipe instanceof HeatedProcessingRecipe<?>)  // Filter specific recipes
                 .map(recipe -> (T) recipe).toList();
         }
         return List.of();
