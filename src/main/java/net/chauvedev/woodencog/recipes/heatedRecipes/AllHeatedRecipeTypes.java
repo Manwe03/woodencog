@@ -7,7 +7,6 @@ import net.chauvedev.woodencog.recipes.heatedRecipes.recipes.HeatedBasinRecipe;
 import net.chauvedev.woodencog.recipes.heatedRecipes.recipes.HeatedCompactingRecipe;
 import net.chauvedev.woodencog.recipes.heatedRecipes.recipes.HeatedMixingRecipe;
 import net.chauvedev.woodencog.recipes.heatedRecipes.recipes.HeatedPressingRecipe;
-import net.minecraft.client.Minecraft;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.Container;
@@ -19,7 +18,6 @@ import net.minecraftforge.registries.ForgeRegistries;
 import net.minecraftforge.registries.RegistryObject;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.List;
 import java.util.Optional;
 import java.util.function.Predicate;
 import java.util.function.Supplier;
@@ -66,7 +64,7 @@ public enum AllHeatedRecipeTypes implements IRecipeTypeInfo {
     }
 
     public static void register(IEventBus modEventBus) {
-        ShapedRecipe.setCraftingSize(9, 9);
+        //ShapedRecipe.setCraftingSize(9, 9);
         Registers.SERIALIZER_REGISTER.register(modEventBus);
         Registers.TYPE_REGISTER.register(modEventBus);
     }
@@ -91,16 +89,6 @@ public enum AllHeatedRecipeTypes implements IRecipeTypeInfo {
 
     public <T extends HeatedProcessingRecipe<?>> RecipeType<T> getHeatedProccesignType() {
         return (RecipeType<T>) type.get();
-    }
-
-    public <T extends HeatedProcessingRecipe<?>> List<T> getRecipes() {
-        Level level = Minecraft.getInstance().level;
-        if(level != null && level.isClientSide){
-            return level.getRecipeManager().getAllRecipesFor(this.getType()).stream()
-                .filter(recipe -> recipe instanceof HeatedProcessingRecipe<?>)  // Filter specific recipes
-                .map(recipe -> (T) recipe).toList();
-        }
-        return List.of();
     }
 
     public <C extends Container, T extends Recipe<C>> Optional<T> find(C inv, Level world) {
