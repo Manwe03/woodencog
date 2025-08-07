@@ -2,6 +2,7 @@ package net.chauvedev.woodencog.utils;
 
 import net.chauvedev.woodencog.WoodenCog;
 import net.chauvedev.woodencog.config.WoodenCogCommonConfigs;
+import net.chauvedev.woodencog.datagen.DataGenStaticData;
 import net.dries007.tfc.common.capabilities.heat.HeatCapability;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.tags.TagKey;
@@ -37,26 +38,21 @@ public class HeatHandlingUtil {
     private static final int INGOT_PREFIX_LENGTH = INGOT_PREFIX.length();
 
     private static float getMaterialDensityCapacity(ItemStack itemStack){
-        //System.out.println("getMaterialDensityCapacity");
         Stream<TagKey<Item>> stream = itemStack.getTags();
-
         for (TagKey<Item> tag : stream.toList()){
             String tagName = tag.location().toString();
-
             if(tagName.startsWith(INGOT_PREFIX)){
                 String key = tagName.substring(INGOT_PREFIX_LENGTH);
-                //System.out.println("Found tag: "+key);
+
+                DataGenStaticData.Metal metal = DataGenStaticData.METAL_REGISTRY.get(key);
+                if(metal != null) return metal.getDensity() * metal.getHeatCapacity();
+
                 ForgeConfigSpec.ConfigValue<List<Integer>> configValue = WoodenCogCommonConfigs.MATERIAL_PROPERTIES.get(key);
                 if(configValue == null) return DEFAULT_VALUE;
                 List<Integer> properties = configValue.get();
-                //System.out.println(properties.get(0));
-                //System.out.println(properties.get(1));
                 if(properties.size() != 2) {
-                    //WoodenCog.LOGGER.info("DEFAULT_VALUE");
                     return DEFAULT_VALUE;
                 }
-                //System.out.println("Density: "+properties.get(0));
-                //System.out.println("Capacity: "+properties.get(1));
                 return properties.get(0)*properties.get(1);
             }
         }

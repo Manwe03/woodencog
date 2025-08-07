@@ -37,7 +37,6 @@ public class WoodenCogCommonConfigs {
 
         BUILDER.pop();
 
-
         //TODO modloading-worker-0/WARN - was corrected form [] to []
         BUILDER.comment("Density [kg/m3] - HeatCapacity [J/(kg∙K)]").push("materials");
         addDensityConfig("allthemodium",20000,1500); //Not real
@@ -48,24 +47,15 @@ public class WoodenCogCommonConfigs {
         addDensityConfig("antimony",6697,210);
         addDensityConfig("beryllium",1848,1825);
         addDensityConfig("bisalloy_400",7850,466);
-        addDensityConfig("bismuth",9780,112);
-        addDensityConfig("bismuth_bronze",8885,335);
-        addDensityConfig("black_bronze",7717,435); //~~
-        addDensityConfig("black_steel",7850,466); //~~
         addDensityConfig("blasted_iron",7870,449); //~~
         addDensityConfig("blue_alloy",4000,300); //Not real
-        addDensityConfig("blue_steel",7850,466);
         addDensityConfig("borosilicate_glass",2230,830);
-        addDensityConfig("brass",8890,401);
-        addDensityConfig("bronze",7717,435);
-        addDensityConfig("cast_iron",7870,449);
         addDensityConfig("chrome",7140,450);
         addDensityConfig("chromium",7140,450);
         addDensityConfig("cobalt",8900,420);
         addDensityConfig("cobalt_brass",8900,420); //~~
         addDensityConfig("conductive_alloy",2900,600); //Not real
         addDensityConfig("constantan",8900,377);
-        addDensityConfig("copper",8800,385);
         addDensityConfig("copper_alloy",8800,385); //~~
         addDensityConfig("cupronickel",8900,385);
         addDensityConfig("damascus_steel",7850,466); //~~
@@ -85,15 +75,10 @@ public class WoodenCogCommonConfigs {
         addDensityConfig("fluorite",3180,867);
         addDensityConfig("gallium",5904,371);
         addDensityConfig("gallium_arsenide",5317,330);
-        addDensityConfig("gold",19300,129);
         addDensityConfig("graphene",1800,710); //??
         addDensityConfig("graphite",1600,710);
         addDensityConfig("hastelloy_c_276",8890,380); //~~
         addDensityConfig("hastelloy_x",8220,380); //~~
-        addDensityConfig("high_carbon_black_steel",7850,466); //~~
-        addDensityConfig("high_carbon_blue_steel",7850,466); //~~
-        addDensityConfig("high_carbon_red_steel",7850,466); //~~
-        addDensityConfig("high_carbon_steel",7850,466); //~~
         addDensityConfig("incoloy_ma_956",7250,460); //~~
         addDensityConfig("indium",7290,234);
         addDensityConfig("indium_gallium_phosphide",4810,430);//~~
@@ -110,7 +95,7 @@ public class WoodenCogCommonConfigs {
         addDensityConfig("molybdenum",10280,250);
         addDensityConfig("naquadah",32500,450); //Not real
         addDensityConfig("naquadah_alloy",32100,390); //Not real
-        addDensityConfig("nickel",8900,445 );
+        addDensityConfig("nickel",8900,445);
         addDensityConfig("niobium",8570,265);
         addDensityConfig("nitinol",6450,322);
         addDensityConfig("osmium",22587,130);
@@ -119,9 +104,7 @@ public class WoodenCogCommonConfigs {
         addDensityConfig("plutonium",19816,35);
         addDensityConfig("red_alloy",4000,300); //Not real
         addDensityConfig("silicon",2330,700);
-        addDensityConfig("silver",10500,232);
         addDensityConfig("stainless_steel",8000,466); //~~
-        addDensityConfig("steel",7850,466);
         addDensityConfig("tantalum",16650,140);
         addDensityConfig("tin",7400,228);
         addDensityConfig("titanium",4500,520);
@@ -130,7 +113,6 @@ public class WoodenCogCommonConfigs {
         addDensityConfig("uranium",19050,120);
         addDensityConfig("vibranium", 2566,1600); //Not real
         addDensityConfig("wrought_iron",7870,449);
-        addDensityConfig("zinc",7138,390);
         BUILDER.pop();
 
         SPEC = BUILDER.build();

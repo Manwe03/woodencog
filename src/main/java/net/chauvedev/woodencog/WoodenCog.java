@@ -1,16 +1,9 @@
 package net.chauvedev.woodencog;
 
 import com.mojang.logging.LogUtils;
-import com.simibubi.create.AllContraptionTypes;
-import com.simibubi.create.Create;
-import com.simibubi.create.content.equipment.potatoCannon.AllPotatoProjectileBlockHitActions;
-import com.simibubi.create.content.equipment.potatoCannon.AllPotatoProjectileEntityHitActions;
-import com.simibubi.create.content.equipment.potatoCannon.AllPotatoProjectileRenderModes;
-import com.simibubi.create.content.kinetics.fan.processing.AllFanProcessingTypes;
-import com.simibubi.create.content.kinetics.mechanicalArm.AllArmInteractionPointTypes;
-import com.simibubi.create.content.logistics.item.filter.attribute.AllItemAttributeTypes;
 import com.simibubi.create.content.processing.sequenced.SequencedAssemblyItem;
 import net.chauvedev.woodencog.config.WoodenCogCommonConfigs;
+import net.chauvedev.woodencog.datagen.DataGenerators;
 import net.chauvedev.woodencog.interaction.CustomArmInteractionPointTypes;
 import net.chauvedev.woodencog.recipes.advancedProcessingRecipe.AllAdvancedRecipeTypes;
 import net.chauvedev.woodencog.recipes.heatedRecipes.AllHeatedRecipeTypes;
@@ -71,6 +64,7 @@ public class WoodenCog
         });
 
         modEventBus.addListener(WoodenCog::onRegister);
+        modEventBus.addListener(DataGenerators::gatherData);
 
         ModLoadingContext.get().registerConfig(ModConfig.Type.COMMON, WoodenCogCommonConfigs.SPEC, "woodencog-common.toml");
     }
