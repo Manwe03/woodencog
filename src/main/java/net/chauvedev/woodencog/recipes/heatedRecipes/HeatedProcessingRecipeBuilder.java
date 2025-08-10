@@ -7,9 +7,11 @@ import com.simibubi.create.foundation.data.recipe.Mods;
 import com.simibubi.create.foundation.fluid.FluidHelper;
 import com.simibubi.create.foundation.fluid.FluidIngredient;
 import com.simibubi.create.foundation.recipe.IRecipeTypeInfo;
+import net.chauvedev.woodencog.WoodenCog;
 import net.createmod.catnip.data.Pair;
 import net.dries007.tfc.common.recipes.ingredients.HeatableIngredient;
 import net.minecraft.core.NonNullList;
+import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.data.recipes.FinishedRecipe;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.TagKey;
@@ -26,7 +28,10 @@ import net.minecraftforge.common.crafting.conditions.NotCondition;
 import net.minecraftforge.fluids.FluidStack;
 import org.jetbrains.annotations.NotNull;
 
+import java.io.FileWriter;
+import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.function.Consumer;
 
@@ -265,6 +270,13 @@ public class HeatedProcessingRecipeBuilder<T extends HeatedProcessingRecipe<?>> 
 
             this.id = new ResourceLocation(recipe.getId().getNamespace(),
                     typeId.getPath() + "/" + recipe.getId().getPath());
+
+            try (FileWriter fw = new FileWriter("client_fromNetwork.log", true)) {
+                fw.write("[DANGER][DANGER][DANGER] DataGenResult ID"+id);
+            } catch (IOException e) {
+                WoodenCog.LOGGER.error("Error writing client log", e);
+            }
+
             this.serializer = (HeatedProcessingRecipeSerializer<S>) recipe.getSerializer();
         }
 

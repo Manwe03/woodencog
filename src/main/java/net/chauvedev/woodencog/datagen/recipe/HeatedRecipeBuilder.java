@@ -105,7 +105,7 @@ public class HeatedRecipeBuilder {
 
         @Override
         public ResourceLocation getAdvancementId() {
-            return new ResourceLocation("");
+            return new ResourceLocation("woodencog:advancement1");
         }
     }
 

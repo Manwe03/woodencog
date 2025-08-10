@@ -19,9 +19,18 @@ import net.minecraft.util.GsonHelper;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.ItemLike;
 import net.minecraftforge.registries.ForgeRegistries;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.spongepowered.asm.mixin.Unique;
+
+import java.io.FileWriter;
+import java.io.IOException;
+import java.io.PrintWriter;
+import java.time.Instant;
 
 public class HeatedProcessingOutput extends ProcessingOutput {
 
+    private static final Logger log = LoggerFactory.getLogger(HeatedProcessingOutput.class);
     private Pair<ResourceLocation, Integer> childCompatDatagenOutput;
     private final int temperature;
     private final boolean copyHeat;
@@ -98,6 +107,8 @@ public class HeatedProcessingOutput extends ProcessingOutput {
     }
 
     public static HeatedProcessingOutput deserialize(JsonElement je) {
+        WoodenCog.LOGGER.info("deserialize");
+
         if (!je.isJsonObject()) {
             throw new JsonSyntaxException("ProcessingOutput must be a json object");
         } else {
@@ -105,7 +116,22 @@ public class HeatedProcessingOutput extends ProcessingOutput {
             String itemId = GsonHelper.getAsString(json, "item");
             int count = GsonHelper.getAsInt(json, "count", 1);
             float chance = GsonHelper.isValidNode(json, "chance") ? GsonHelper.getAsFloat(json, "chance") : 1.0F;
-            ItemStack itemstack = new ItemStack((ItemLike) ForgeRegistries.ITEMS.getValue(new ResourceLocation(itemId)), count);
+
+            WoodenCog.LOGGER.info("[WoodenCog] Create Resource Location from: " + itemId);
+            try {
+                ResourceLocation rl = new ResourceLocation(itemId);
+            } catch (Exception e) {
+                WoodenCog.LOGGER.error("[WoodenCog] Invalid Resource Location: " + itemId, e);
+            }
+
+            ItemLike item = ForgeRegistries.ITEMS.getValue(new ResourceLocation(itemId));
+            if (item == null) {
+                WoodenCog.LOGGER.error("[WoodenCog] Unknown item in registry: " + new ResourceLocation(itemId));
+                return null;
+            }
+
+            ItemStack itemstack = new ItemStack(item, count);
+
             if (GsonHelper.isValidNode(json, "nbt")) {
                 try {
                     JsonElement element = json.get("nbt");
@@ -133,13 +159,45 @@ public class HeatedProcessingOutput extends ProcessingOutput {
 
     @Override
     public void write(FriendlyByteBuf buf) {
-        super.write(buf);
+        /*
+        ItemStack stack = getStack();
+        ResourceLocation rl = ForgeRegistries.ITEMS.getKey(stack.getItem());
+
+        try (FileWriter fw = new FileWriter("server_stack_output.log", true)) {
+            fw.write("[SERVER] Writing stack: " + stack +
+                    " | RegistryName: " + rl +
+                    " | Count: " + stack.getCount() + "\n");
+        } catch (IOException e) {
+            WoodenCog.LOGGER.error("Error writing server log", e);
+        }*/
+
+        //super.write(buf);
+        buf.writeItem(getStack());
+        buf.writeFloat(getChance());
+
         buf.writeInt(getTemperature());
         buf.writeBoolean(getCopyHeat());
         buf.writeInt(getCooling());
     }
 
     public static HeatedProcessingOutput read(FriendlyByteBuf buf) {
-        return new HeatedProcessingOutput(buf.readItem(), buf.readFloat(),buf.readInt(),buf.readBoolean(),buf.readInt());
+
+        ItemStack stack = buf.readItem();
+        float chance = buf.readFloat();
+        int temperature = buf.readInt();
+        boolean copyHeat = buf.readBoolean();
+        int cooling = buf.readInt();
+
+        ResourceLocation rl = ForgeRegistries.ITEMS.getKey(stack.getItem());
+
+        try (FileWriter fw = new FileWriter("client_stack_input.log", true)) {
+            fw.write("[CLIENT] Reading stack: " + stack +
+                    " | RegistryName: " + rl +
+                    " | Count: " + stack.getCount() + "\n");
+        } catch (IOException e) {
+            WoodenCog.LOGGER.error("Error writing client log", e);
+        }
+
+        return new HeatedProcessingOutput(stack, chance, temperature, copyHeat, cooling);
     }
 }

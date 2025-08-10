@@ -151,6 +151,8 @@ public class HeatedProcessingRecipeSerializer<T extends HeatedProcessingRecipe<?
     }
 
     protected T readFromBuffer(ResourceLocation recipeId, FriendlyByteBuf buffer) {
+        System.out.println("[WoodenCog] Reading recipe from buffer: " + recipeId);
+
         NonNullList<HeatableIngredient> ingredients = NonNullList.create();
         NonNullList<FluidIngredient> fluidIngredients = NonNullList.create();
         NonNullList<HeatedProcessingOutput> results = NonNullList.create();
@@ -159,6 +161,7 @@ public class HeatedProcessingRecipeSerializer<T extends HeatedProcessingRecipe<?
 
         int i;
         for(i = 0; i < size; ++i) {
+            System.out.println("[WoodenCog] Reading ingredient " + i);
             ingredients.add(HeatableIngredient.Serializer.INSTANCE.parse(buffer));
         }
 
@@ -180,10 +183,13 @@ public class HeatedProcessingRecipeSerializer<T extends HeatedProcessingRecipe<?
             fluidResults.add(FluidStack.readFromPacket(buffer));
         }
 
+        int processingDuration = buffer.readVarInt();
+        int temperature = buffer.readVarInt();
+
         T recipe = (new HeatedProcessingRecipeBuilder<>(this.factory, recipeId)).withItemIngredients(ingredients)
                 .withItemOutputs(results).withFluidIngredients(fluidIngredients)
-                .withFluidOutputs(fluidResults).duration(buffer.readVarInt())
-                .requiresHeat(WoodenCogHeatCondition.deserialize(buffer.readInt())).build();
+                .withFluidOutputs(fluidResults).duration(processingDuration)
+                .requiresHeat(WoodenCogHeatCondition.deserialize(temperature)).build();
         recipe.readAdditional(buffer);
         return recipe;
     }

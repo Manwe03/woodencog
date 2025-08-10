@@ -10,10 +10,12 @@
     "MixinBasinCategory",
     "MixinBlockHelper",
     "MixinCharcoalForgeBlock",
+    "MixinClientBoundUpdateRecipesPacket",
     "MixinCrucibleBlock",
     "MixinDrinkable",
     "MixinFanProcessing",
     "MixinNetheriteDivingHandler",
+    "MixinResourceLocation",
     "SmartBlockEntityAccessor",
     "blockEnitites.MixinBasinOperatingBlockEntity",
     "blockEnitites.MixinMechanicalMixerBlockEntity",
@@ -23,6 +25,7 @@
     "jei.MixinNormalizedTypedItemStack",
     "jei.MixinTypedItemStack",
     "recipes.MixinFillingBySpout",
+    "recipes.MixinFriendlByteBuf",
     "recipes.MixinRecipeApplier"
   ],
   "client": [

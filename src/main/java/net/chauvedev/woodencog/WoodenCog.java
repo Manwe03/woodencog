@@ -79,11 +79,24 @@ public class WoodenCog
     }
 
     @SubscribeEvent
+    public void onClientSetup(final FMLClientSetupEvent event) {
+        /*
+        try {
+            PrintStream logOut = new PrintStream("woodencog-debug.log");
+            System.setOut(logOut);
+            System.setErr(logOut);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }*/
+    }
+
+    @SubscribeEvent
     public void onRegisterCommandEvent(RegisterCommandsEvent event) {
 
     }
 
     public static ResourceLocation asResource(String path) {
+        System.out.println("[DANGER] resourceLocation created: "+new ResourceLocation(WoodenCog.MOD_ID, path));
         return new ResourceLocation(WoodenCog.MOD_ID, path);
     }
 

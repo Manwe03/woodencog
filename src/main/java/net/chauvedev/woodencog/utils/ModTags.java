@@ -11,7 +11,7 @@ import net.minecraftforge.common.Tags;
 public class ModTags {
     public static class Blocks {
         private static TagKey<Block> tag(String name) {
-            return BlockTags.create(new ResourceLocation(WoodenCog.MOD_ID, name));
+            return BlockTags.create(WoodenCog.asResource(name));
         }
 
         private static TagKey<Block> forgeTag(String name) {
