@@ -28,34 +28,36 @@ public abstract class MixinBasinOperatingBlockEntity extends KineticBlockEntity 
         super(typeIn, pos, state);
     }
 
+    /**
+     * @author ChauveDev - yahvk
+     * @reason This function didn't take in account the fluid ingredients which is pretty bad in a basin
+     */
     @ModifyArg(method = "getMatchingRecipes",
-            at = @At(value = "INVOKE", target = "Ljava/util/stream/Stream;sorted(Ljava/util/Comparator;)Ljava/util/stream/Stream;"),
+            at = @At(value = "INVOKE", target = "Ljava/util/List;sort(Ljava/util/Comparator;)V"),
             index = 0)
     protected Comparator<? super Recipe<?>> getMatchingRecipes(Comparator<? super Recipe<?>> comparator) {
-        return this::woodencog$testFluids;
+        return this::woodencog$sort;
     }
 
-    //Add heated and normal test
     @Unique
-    private int woodencog$testFluids(Recipe<?> r1, Recipe<?> r2) {
-        int r1Size;
-        int r2Size;
+    private int woodencog$sort(Recipe<?> r1, Recipe<?> r2) {
+        return woodencog$countAllIngredients(r2) - woodencog$countAllIngredients(r1);
+    }
 
-        if (r1 instanceof BasinRecipe basinR1 && r2 instanceof BasinRecipe basinR2){
-            r1Size = (basinR1.getIngredients().size() + basinR1.getFluidIngredients().size());
-            r2Size = (basinR2.getIngredients().size() + basinR2.getFluidIngredients().size());
-            //WoodenCog.LOGGER.info("testFluids BasinRecipe ->"+(r2Size - r1Size));
-            return r2Size - r1Size;
-        }
-        if(r1 instanceof HeatedBasinRecipe basinR1 && r2 instanceof HeatedBasinRecipe basinR2){
-            r1Size = (basinR1.getHeatedIngredients().size() + basinR1.getFluidIngredients().size());
-            r2Size = (basinR2.getHeatedIngredients().size() + basinR2.getFluidIngredients().size());
-            //WoodenCog.LOGGER.info("testFluids HeatedBasinRecipe ->"+(r2Size - r1Size));
-            return r2Size - r1Size;
+    @Unique
+    private int woodencog$countAllIngredients(Recipe<?> r) {
+        if(r instanceof BasinRecipe recipe) {
+            return recipe.getIngredients().size() + recipe.getFluidIngredients().size();
+        } else if(r instanceof HeatedBasinRecipe recipe) {
+            return recipe.getIngredients().size() + recipe.getFluidIngredients().size();
         }
         return 0;
     }
 
+    /**
+     * @author Manwe - yahvk
+     * @implNote Add call to HeatedBasinRecipe.apply() if necessary, if not continue
+     */
     @Redirect(
             method = "applyBasinRecipe",
             at = @At(value = "INVOKE", target = "Lcom/simibubi/create/content/processing/basin/BasinRecipe;apply(Lcom/simibubi/create/content/processing/basin/BasinBlockEntity;Lnet/minecraft/world/item/crafting/Recipe;)Z")
@@ -68,10 +70,10 @@ public abstract class MixinBasinOperatingBlockEntity extends KineticBlockEntity 
         }
     }
 
-    @Shadow protected Recipe<?> currentRecipe;
-
-    @Shadow protected abstract boolean matchStaticFilters(Recipe<?> recipe);
-
+    /**
+     * @author Manwe - yahvk
+     * @reason Mange BasinRecipe.match and HeatedBasinRecipe.match calls
+     */
     @Inject(method = "matchBasinRecipe",
             at = @At(value = "INVOKE", target = "Lcom/simibubi/create/content/processing/basin/BasinRecipe;match(Lcom/simibubi/create/content/processing/basin/BasinBlockEntity;Lnet/minecraft/world/item/crafting/Recipe;)Z"),
             cancellable = true)
@@ -82,9 +84,6 @@ public abstract class MixinBasinOperatingBlockEntity extends KineticBlockEntity 
             cir.setReturnValue(HeatedBasinRecipe.match(basin.get(),recipe));
         }
     }
-
-    @Shadow()
-    protected abstract Object getRecipeCacheKey();
 
     @Shadow()
     protected abstract Optional<BasinBlockEntity> getBasin();

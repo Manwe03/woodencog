@@ -1,12 +1,10 @@
 package net.chauvedev.woodencog.mixin.blockEnitites;
 
-import com.simibubi.create.AllRecipeTypes;
+import com.llamalad7.mixinextras.injector.ModifyReturnValue;
 import com.simibubi.create.content.kinetics.mixer.MechanicalMixerBlockEntity;
-import com.simibubi.create.content.kinetics.press.MechanicalPressBlockEntity;
 import com.simibubi.create.content.processing.basin.BasinBlockEntity;
 import com.simibubi.create.content.processing.recipe.ProcessingRecipe;
 import com.simibubi.create.foundation.blockEntity.behaviour.fluid.SmartFluidTankBehaviour;
-import com.simibubi.create.infrastructure.config.AllConfigs;
 import net.chauvedev.woodencog.mixin.blockEnitites.accessors.BasinOperatingBlockEntityAccessor;
 import net.chauvedev.woodencog.recipes.heatedRecipes.AllHeatedRecipeTypes;
 import net.chauvedev.woodencog.recipes.heatedRecipes.HeatedProcessingRecipe;
@@ -15,11 +13,8 @@ import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.util.Mth;
 import net.minecraft.world.Container;
-import net.minecraft.world.item.crafting.CraftingRecipe;
 import net.minecraft.world.item.crafting.Recipe;
-import net.minecraftforge.common.crafting.IShapedRecipe;
 import org.spongepowered.asm.mixin.Mixin;
-import org.spongepowered.asm.mixin.Overwrite;
 import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
@@ -34,21 +29,9 @@ public abstract class MixinMechanicalMixerBlockEntity {
      * @author Manwe
      * @reason Also match for heatedMixing
      */
-    @Overwrite
-    protected <C extends Container> boolean matchStaticFilters(Recipe<C> r) {
-        //WoodenCog.LOGGER.info("matchStaticFilters");
-        return (woodencog$checkFilters(r) || (r.getType() == AllRecipeTypes.MIXING.getType() || r.getType() == AllHeatedRecipeTypes.HEATED_MIXING.getType()));
-    }
-
-    @Unique
-    private <C extends Container> boolean woodencog$checkFilters(Recipe<C> r){
-        if(r instanceof CraftingRecipe && !(r instanceof IShapedRecipe<?>) && AllConfigs.server().recipes.allowShapelessInMixer.get() && !MechanicalPressBlockEntity.canCompress(r)){
-            if(r instanceof HeatedProcessingRecipe<C> heatedProcessingRecipe){
-                return heatedProcessingRecipe.getHeatedIngredients().size() > 1 && !AllHeatedRecipeTypes.shouldIgnoreInAutomation(r);
-            }
-            return r.getIngredients().size() > 1 && !AllRecipeTypes.shouldIgnoreInAutomation(r);
-        }
-        return false;
+    @ModifyReturnValue(method = "matchStaticFilters", at = @At("RETURN"))
+    private <C extends Container> boolean matchStaticFilters(boolean original, Recipe<C> r) {
+        return original || r.getType() == AllHeatedRecipeTypes.HEATED_MIXING.getType();
     }
 
     /**

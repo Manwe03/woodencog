@@ -2,13 +2,11 @@ package net.chauvedev.woodencog.mixin.recipes;
 
 import com.simibubi.create.content.processing.recipe.ProcessingRecipe;
 import com.simibubi.create.foundation.recipe.RecipeApplier;
-import net.chauvedev.woodencog.WoodenCog;
 import net.chauvedev.woodencog.recipes.advancedProcessingRecipe.AllAdvancedRecipeTypes;
 import net.chauvedev.woodencog.recipes.advancedProcessingRecipe.baseRecipes.SetItemStackProvider;
 import net.chauvedev.woodencog.recipes.heatedRecipes.HeatedProcessingOutput;
 import net.chauvedev.woodencog.recipes.heatedRecipes.HeatedProcessingRecipe;
 import net.dries007.tfc.common.capabilities.heat.HeatCapability;
-import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.Recipe;
 import net.minecraft.world.level.Level;
@@ -16,7 +14,6 @@ import net.minecraftforge.items.ItemHandlerHelper;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
-import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 import org.spongepowered.asm.mixin.injection.callback.LocalCapture;
 
@@ -25,14 +22,6 @@ import java.util.List;
 
 @Mixin(value = RecipeApplier.class, remap = false)
 public abstract class MixinRecipeApplier {
-
-    @Inject(
-            method = "applyRecipeOn(Lnet/minecraft/world/entity/item/ItemEntity;Lnet/minecraft/world/item/crafting/Recipe;)V",
-            at = @At("HEAD")
-    )
-    private static void applyRecipeOn(ItemEntity entity, Recipe<?> recipe, CallbackInfo ci) {
-        //WoodenCog.LOGGER.info("APPLY RECIPE ON, entity");
-    }
 
     /**
      * @author Manwe
@@ -102,8 +91,6 @@ public abstract class MixinRecipeApplier {
                 cir.setReturnValue(newStacks);
                 cir.cancel();//cancel - if it is an advanced recipe this should be the only mixin that handles it, so we cancel.
             }
-
-            //List<ProcessingOutput> outputs = pr instanceof ManualApplicationRecipe mar ? mar.getRollableResults() : pr.getRollableResults();
         }
     }
 }
