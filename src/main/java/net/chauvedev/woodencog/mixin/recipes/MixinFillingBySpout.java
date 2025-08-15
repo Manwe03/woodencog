@@ -3,127 +3,74 @@ package net.chauvedev.woodencog.mixin.recipes;
 import com.simibubi.create.AllRecipeTypes;
 import com.simibubi.create.content.fluids.spout.FillingBySpout;
 import com.simibubi.create.content.fluids.transfer.FillingRecipe;
-import com.simibubi.create.content.fluids.transfer.GenericItemFilling;
-import com.simibubi.create.content.processing.sequenced.SequencedAssemblyRecipe;
-import com.simibubi.create.foundation.fluid.FluidIngredient;
 import net.chauvedev.woodencog.recipes.advancedProcessingRecipe.AllAdvancedRecipeTypes;
 import net.chauvedev.woodencog.recipes.advancedProcessingRecipe.baseRecipes.SetItemStackProvider;
 import net.dries007.tfc.common.capabilities.MoldLike;
 import net.dries007.tfc.util.Metal;
+import net.minecraft.world.Container;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.Recipe;
 import net.minecraft.world.level.Level;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.capability.IFluidHandler;
-import net.minecraftforge.items.wrapper.RecipeWrapper;
-import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
-import org.spongepowered.asm.mixin.Overwrite;
-import org.spongepowered.asm.mixin.Shadow;
+import org.spongepowered.asm.mixin.injection.At;
+import org.spongepowered.asm.mixin.injection.Redirect;
 
 import java.util.*;
-import java.util.function.Predicate;
 
 @Mixin(value = FillingBySpout.class, remap = false)
 public class MixinFillingBySpout {
-
-    @Final
-    @Shadow()
-    private static RecipeWrapper WRAPPER;
-
     /**
      * @author ChauveDev
      * @reason Some items from tfc store data as nbt and filling does not check nbt information on recipe
      */
-    @Overwrite()
-    public static boolean canItemBeFilled(Level world, ItemStack stack) {
-        WRAPPER.setItem(0, stack);
-        Optional<FillingRecipe> assemblyRecipe = SequencedAssemblyRecipe.getRecipe(world, WRAPPER, AllRecipeTypes.FILLING.getType(), FillingRecipe.class);
-        if (assemblyRecipe.isPresent()) {
-            return true;
-        } else {
+    @Redirect(
+            method = "canItemBeFilled",
+            at = @At(value = "INVOKE", target = "Lcom/simibubi/create/AllRecipeTypes;find(Lnet/minecraft/world/Container;Lnet/minecraft/world/level/Level;)Ljava/util/Optional;"))
+    private static <C extends Container, T extends Recipe<C>> Optional<T> canItemBeFilled(AllRecipeTypes instance, C inv, Level world, Level world2, ItemStack stack) {
+        if (instance.find(inv, world).isPresent()){
+            FillingRecipe recipe = (FillingRecipe) instance.find(inv, world).get();
 
-            if (AllRecipeTypes.FILLING.find(WRAPPER, world).isPresent()){
-
-                FillingRecipe recipe = (FillingRecipe) AllRecipeTypes.FILLING.find(WRAPPER, world).get();
-
-                boolean is_advanced_recipe = AllAdvancedRecipeTypes.CACHES.containsKey(recipe.getId().toString());
-                if(is_advanced_recipe) {
-                    return Objects.equals(recipe.getIngredients().get(0).getItems()[0].getTag(), stack.getTag())
-                            || stack.getTag() == null || stack.getTag().isEmpty();
-                }
+            boolean is_advanced_recipe = AllAdvancedRecipeTypes.CACHES.containsKey(recipe.getId().toString());
+            if(is_advanced_recipe && !(Objects.equals(recipe.getIngredients().get(0).getItems()[0].getTag(), stack.getTag())
+                    || stack.getTag() == null || stack.getTag().isEmpty())) {
+                return Optional.empty();
             }
-
-
-            return AllRecipeTypes.FILLING.find(WRAPPER, world).isPresent() || GenericItemFilling.canItemBeFilled(world, stack);
         }
+        return instance.find(inv, world);
     }
 
     /**
      * @author ChauveDev
-     * @reason  Allow advanced recipe on spout filling
+     * @reason Allow advanced recipe on spout filling
      */
-    @Overwrite()
-    public static ItemStack fillItem(Level world, int requiredAmount, ItemStack stack, FluidStack availableFluid) {
-        FluidStack toFill = availableFluid.copy();
-        toFill.setAmount(requiredAmount);
-        WRAPPER.setItem(0, stack);
-        FillingRecipe fillingRecipe = SequencedAssemblyRecipe.getRecipe(world, WRAPPER, AllRecipeTypes.FILLING.getType(), FillingRecipe.class, matchItemAndFluid(world, availableFluid)).filter((fr) -> {
-            return fr.getRequiredFluid().test(toFill);
-        }).orElseGet(() -> {
-            Iterator<Recipe<RecipeWrapper>> var2 = world.getRecipeManager().getRecipesFor(AllRecipeTypes.FILLING.getType(), WRAPPER, world).iterator();
+    @Redirect(method = "fillItem",
+            at = @At(value = "INVOKE", target = "Lcom/simibubi/create/content/fluids/transfer/FillingRecipe;rollResults()Ljava/util/List;"))
+    private static List<ItemStack> fillItem(FillingRecipe fillingRecipe, Level world, int requiredAmount, ItemStack stack, FluidStack availableFluid) {
+        List<ItemStack> results = fillingRecipe.rollResults();
 
-            FillingRecipe fr;
-            FluidIngredient requiredFluid;
-            do {
-                if (!var2.hasNext()) {
-                    return null;
+        boolean is_advanced_recipe = AllAdvancedRecipeTypes.CACHES.containsKey(fillingRecipe.getId().toString());
+        if(is_advanced_recipe) {
+            ArrayList<ItemStack> newStacks = new ArrayList<>();
+
+            FluidStack toFill = availableFluid.copy();
+            toFill.setAmount(requiredAmount);
+
+            SetItemStackProvider provider = AllAdvancedRecipeTypes.CACHES.get(fillingRecipe.getId().toString());
+            (results).forEach(o -> {
+                ItemStack baseItem = provider.onResultStackSingle(stack.copyWithCount(o.getCount()),o);
+                var mold = MoldLike.get(baseItem);
+                if (mold != null) {
+                    mold.fill(toFill, IFluidHandler.FluidAction.EXECUTE);
+                    var metal = Metal.get(mold.getFluidInTank(0).getFluid());
+                    if (metal != null) mold.setTemperature(metal.getMeltTemperature());
                 }
+                newStacks.add(baseItem);
+            });
 
-                Recipe<RecipeWrapper> recipe = var2.next();
-                fr = (FillingRecipe)recipe;
-                requiredFluid = fr.getRequiredFluid();
-            } while(!requiredFluid.test(toFill));
-
-            return fr;
-        });
-
-        if (fillingRecipe != null) {
-            List<ItemStack> results = fillingRecipe.rollResults();
-
-            boolean is_advanced_recipe = AllAdvancedRecipeTypes.CACHES.containsKey(fillingRecipe.getId().toString());
-            if(is_advanced_recipe) {
-                ArrayList<ItemStack> newStacks = new ArrayList<>();
-
-                SetItemStackProvider provider = AllAdvancedRecipeTypes.CACHES.get(fillingRecipe.getId().toString());
-                (results).forEach(o -> {
-                    ItemStack baseItem = provider.onResultStackSingle(stack.copyWithCount(o.getCount()),o);
-                    var mold = MoldLike.get(baseItem);
-                    if (mold != null) {
-                        mold.fill(toFill, IFluidHandler.FluidAction.EXECUTE);
-                        var metal = Metal.get(mold.getFluidInTank(0).getFluid());
-                        if (metal != null) mold.setTemperature(metal.getMeltTemperature());
-                    }
-                    newStacks.add(baseItem);
-                });
-
-                results = newStacks;
-            }
-
-            availableFluid.shrink(requiredAmount);
-            stack.shrink(1);
-            return results.isEmpty() ? ItemStack.EMPTY : results.get(0);
-        } else {
-            return GenericItemFilling.fillItem(world, requiredAmount, stack, availableFluid);
+            return newStacks;
         }
-    }
-
-    /**
-     * @author ChauveDev
-     * @reason I hate this class, this was needed as it's a static method and class cannot be extended (need cleaning)
-     */
-    @Overwrite()
-    private static Predicate<FillingRecipe> matchItemAndFluid(Level world, FluidStack availableFluid) {
-        return (r) -> r.matches(WRAPPER, world) && r.getRequiredFluid().test(availableFluid);
+        return results;
     }
 }

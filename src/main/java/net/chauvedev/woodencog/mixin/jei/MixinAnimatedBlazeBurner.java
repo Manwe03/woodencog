@@ -18,12 +18,11 @@ import org.spongepowered.asm.mixin.Overwrite;
 public class MixinAnimatedBlazeBurner {
 
     /**
-     * @author
-     * @reason
+     * @author Manwe
+     * @reason Change BlazeBurner for CharcoalForge in JEI
      */
     @Overwrite
     public void draw(GuiGraphics graphics, int xOffset, int yOffset) {
         new AnimatedCharcoalForge().draw(graphics,xOffset,yOffset);
     }
-
 }

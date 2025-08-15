@@ -1,5 +1,6 @@
 package net.chauvedev.woodencog.datagen.recipe;
 
+import net.chauvedev.woodencog.WoodenCog;
 import net.chauvedev.woodencog.datagen.DataGenStaticData;
 import net.chauvedev.woodencog.recipes.heatedRecipes.AllHeatedRecipeTypes;
 import net.dries007.tfc.util.Metal;
@@ -143,29 +144,29 @@ public class WoodencogRecipeProvider extends RecipeProvider {
                     .addItemIngredient(TFCIngotResourceLocation(metal.id()), metal.getMeltTemperature(),3000)
                     .addFluidResult(TFCMetalResourceLocation(metal.id()),100)
                     .heatRequirement(metal.getMeltTemperature())
-                    .save(consumer, AllHeatedRecipeTypes.HEATED_MIXING, new ResourceLocation("woodencog","heated_mixing/ingot_to_liquid_"+metal.id()));
+                    .save(consumer, AllHeatedRecipeTypes.HEATED_MIXING, WoodenCog.asResource("heated_mixing/ingot_to_liquid_"+metal.id()));
             //Sheet recipes
             new HeatedRecipeBuilder()
                     .addItemIngredient(TFCDoubleIngotResourceLocation(metal.id()), metal.getForginTemperature(),3000)
                     .addItemResult(TFCSheetIngotResourceLocation(metal.id()),1,0,0,true)
-                    .save(consumer, AllHeatedRecipeTypes.HEATED_PRESSING, new ResourceLocation("woodencog","heated_pressing/sheet_"+metal.id()));
+                    .save(consumer, AllHeatedRecipeTypes.HEATED_PRESSING, WoodenCog.asResource("heated_pressing/sheet_"+metal.id()));
             if(metal.hasDoubleIngot()){
                 new HeatedRecipeBuilder()
                         .addItemIngredient(TFCIngotResourceLocation(metal.id()), metal.getWeldingTemperature(),3000)
                         .addItemIngredient(TFCIngotResourceLocation(metal.id()), metal.getWeldingTemperature(),3000)
                         .addItemIngredient(new ResourceLocation("tfc","powder/flux"), 0,3000)
                         .addItemResult(TFCDoubleIngotResourceLocation(metal.id()),1,0,0,true)
-                        .save(consumer, AllHeatedRecipeTypes.HEATED_COMPACTING, new ResourceLocation("woodencog","heated_compacting/double_"+metal.id()));
+                        .save(consumer, AllHeatedRecipeTypes.HEATED_COMPACTING, WoodenCog.asResource("heated_compacting/double_"+metal.id()));
             }
         });
     }
 
     private static ResourceLocation alloyingRecipeResourceLocation(Metal.Default metalEnum) {
-        return new ResourceLocation("woodencog","heated_mixing/create_mixing_alloying_"+metalEnum.getSerializedName());
+        return WoodenCog.asResource("heated_mixing/create_mixing_alloying_"+metalEnum.getSerializedName());
     }
 
     private static ResourceLocation oreMeltingRecipeResourceLocation(String oreId) {
-        return new ResourceLocation("woodencog","heated_mixing/"+oreId+"_to_liquid");
+        return WoodenCog.asResource("heated_mixing/"+oreId+"_to_liquid");
     }
 
     private static ResourceLocation TFCMetalResourceLocation(Metal.Default metalEnum) {
