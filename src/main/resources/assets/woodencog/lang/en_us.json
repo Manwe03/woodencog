@@ -2,6 +2,8 @@
   "sealed_on": "Sealed on",
   "barrel_crafting": "Crafting",
 
+  "block.woodencog.ct_transformer": "Create - TFC Transformer",
+
   "category.woodencog.heated_mixing": "Heated Mixing",
   "category.woodencog.heated_pressing": "Heated Pressing",
   "category.woodencog.heated_compacting": "Heated Compacting",
