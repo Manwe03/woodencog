@@ -27,36 +27,40 @@ import java.util.EnumSet;
 
 public class CTTransformerBlockEntity extends SplitShaftBlockEntity implements RotatingBlockEntity {
 
-    TickableBlockEntity TFCbe;
+
     private final SourceNode node;
+    private boolean invalid = false;
     private final Direction facing;
-    private boolean invalid;
 
     public CTTransformerBlockEntity(BlockEntityType<?> type, BlockPos pos, BlockState state) {
         super(type, pos, state);
-        this.invalid = false;
-        this.facing = this.getBlockState().getValue(BlockStateProperties.FACING);
+        this.facing = state.getValue(BlockStateProperties.FACING);
 
+        // Creamos un nodo TFC para la red
         this.node = new SourceNode(pos, Node.ofAxis(facing.getAxis()), facing, 0.0F) {
+            @Override
             public String toString() {
                 return "CT_Transformer[pos=%s, axis=%s]".formatted(this.pos(), facing.getAxis());
             }
         };
     }
 
+    // --------------------
+    // Create integration
+    // --------------------
+    @Override
     public float getRotationSpeedModifier(Direction face) {
-        return this.hasSource() && face != this.getSourceFacing() && (Boolean) this.getBlockState().getValue(BlockStateProperties.POWERED) ? 0.0F : 1.0F;
+        return this.hasSource() && face != this.getSourceFacing() && getBlockState().getValue(BlockStateProperties.POWERED) ? 0.0F : 1.0F;
     }
 
     @Override
     public float calculateStressApplied() {
-        if(this.getBlockState().getValue(BlockStateProperties.POWERED)){
-            return 0.0F;
-        }
-        return WoodenCogCommonConfigs.CT_TRANSFORMER_IMPACT.get();
+        return getBlockState().getValue(BlockStateProperties.POWERED) ? 0.0F : WoodenCogCommonConfigs.CT_TRANSFORMER_IMPACT.get();
     }
 
-    //TFC
+    // --------------------
+    // TFC integration
+    // --------------------
     @Override
     public void markAsInvalidInNetwork() {
         this.invalid = true;
@@ -72,12 +76,9 @@ public class CTTransformerBlockEntity extends SplitShaftBlockEntity implements R
         return this.node;
     }
 
-    @Override
-    public void initialize() {
-        super.initialize();
-        //this.onLoadAdditional();
-    }
-
+    // --------------------
+    // Tick / Rotation logic
+    // --------------------
     @Override
     public void tick() {
         super.tick();
@@ -85,52 +86,81 @@ public class CTTransformerBlockEntity extends SplitShaftBlockEntity implements R
     }
 
     private void updateRotationNode() {
-        if(this.getBlockState().getValue(BlockStateProperties.POWERED)){
-            this.node.rotation().setSpeed(0);
-        }else {
-            this.node.rotation().setSpeed((float) (this.getSpeed() * (2 * Math.PI / 1200)));
+        if(invalid) return;
+        if(node.network() == -1L) return;
+
+        if (getBlockState().getValue(BlockStateProperties.POWERED)) {
+            node.rotation().setSpeed(0);
+        } else {
+            // Convertimos la velocidad de Create a rad/s para TFC
+            node.rotation().setSpeed((float) (getSpeed() * (2 * Math.PI / 1200)));
         }
+        node.rotation().tick();
 
-        this.node.rotation().tick();
-
-        if(!RotationNetworkManager.get(level).update(node)) {
+        /*
+        // Actualizamos la red y destruimos el bloque si algo falla
+        if (!RotationNetworkManager.get(level).update(node)) {
             level.destroyBlock(getBlockPos(), true);
-        }
+        }*/
+    }
+
+    // --------------------
+    // Carga / descarga
+    // --------------------
+    @Override
+    public void onLoad() {
+        super.onLoad();
+        performNetworkAction(NetworkAction.ADD_SOURCE);
     }
 
     @Override
     public void onChunkUnloaded() {
         super.onChunkUnloaded();
-        this.onUnloadAdditional();
-    }
-
-    public final void onLoad() {
-        super.onLoad();
-        this.onLoadAdditional();
-    }
-
-    protected void onLoadAdditional() {
-        this.performNetworkAction(NetworkAction.ADD_SOURCE);
-    }
-
-    protected void onUnloadAdditional() {
-        this.performNetworkAction(NetworkAction.REMOVE);
+        //unloadNode();
     }
 
     @Override
     public void destroy() {
         super.destroy();
-        System.out.println("BLOCK ENTITY DESTROYED " + this);
         unloadNode();
     }
 
-    protected void unloadNode(){
+    public void unloadNode() {
         if (invalid) return;
         invalid = true;
-        System.out.println("UNLOADED " + this);
-        RotationNetworkManager.get(level).remove(this.node);
-        this.performNetworkAction(NetworkAction.REMOVE);
 
-        RotationNetworkManager.get(level).update(this.node);
+        RotationNetworkManager manager = RotationNetworkManager.get(level);
+
+        manager.remove(node);
+        performNetworkAction(NetworkAction.REMOVE);
+        manager.update(node);
+        setChanged();
+    }
+
+    @Override
+    public ClientboundBlockEntityDataPacket getUpdatePacket() {
+        return super.getUpdatePacket();
+    }
+
+    @Override
+    public CompoundTag getUpdateTag() {
+        return super.getUpdateTag();
+    }
+
+    // --------------------
+    // Guardado / carga
+    // --------------------
+    @Override
+    protected void write(CompoundTag compound, boolean clientPacket) {
+        super.write(compound, clientPacket);
+        node.rotation().saveToTag(compound);
+        compound.putBoolean("invalid", invalid);
+    }
+
+    @Override
+    protected void read(CompoundTag compound, boolean clientPacket) {
+        super.read(compound, clientPacket);
+        node.rotation().loadFromTag(compound);
+        invalid = compound.getBoolean("invalid");
     }
 }

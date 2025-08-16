@@ -2,13 +2,17 @@ package net.chauvedev.woodencog.block;
 
 import com.simibubi.create.content.kinetics.base.DirectionalKineticBlock;
 import com.simibubi.create.foundation.block.IBE;
+import net.dries007.tfc.common.blockentities.rotation.RotatingBlockEntity;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.server.level.ServerLevel;
+import net.minecraft.util.RandomSource;
 import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.world.item.context.UseOnContext;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LevelReader;
 import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
@@ -64,5 +68,26 @@ public class CTTransformerBlock extends DirectionalKineticBlock implements IBE<C
     @Override
     public BlockEntityType<? extends CTTransformerBlockEntity> getBlockEntityType() {
         return (BlockEntityType) WoodencogBlockEntityTypes.CT_TRANSFORMER.get();
+    }
+
+    @Override
+    public void onRemove(BlockState pState, Level pLevel, BlockPos pPos, BlockState pNewState, boolean pIsMoving) {
+        super.onRemove(pState, pLevel, pPos, pNewState, pIsMoving);
+        if (!pState.is(pNewState.getBlock())) {
+            BlockEntity be = pLevel.getBlockEntity(pPos);
+            if (be instanceof CTTransformerBlockEntity transformer) {
+                transformer.unloadNode();
+            }
+        }
+    }
+
+    @Override
+    public void tick(BlockState pState, ServerLevel pLevel, BlockPos pPos, RandomSource pRandom) {
+        super.tick(pState, pLevel, pPos, pRandom);
+
+        BlockEntity var6 = pLevel.getBlockEntity(pPos);
+        if (var6 instanceof RotatingBlockEntity entity) {
+            entity.destroyIfInvalid(pLevel, pPos);
+        }
     }
 }
