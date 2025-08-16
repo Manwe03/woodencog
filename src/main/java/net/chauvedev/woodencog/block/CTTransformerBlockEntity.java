@@ -31,7 +31,6 @@ public class CTTransformerBlockEntity extends SplitShaftBlockEntity implements R
     private final SourceNode node;
     private final Direction facing;
     private boolean invalid;
-    private boolean enabled;
 
     public CTTransformerBlockEntity(BlockEntityType<?> type, BlockPos pos, BlockState state) {
         super(type, pos, state);
@@ -76,7 +75,7 @@ public class CTTransformerBlockEntity extends SplitShaftBlockEntity implements R
     @Override
     public void initialize() {
         super.initialize();
-        this.onLoadAdditional();
+        //this.onLoadAdditional();
     }
 
     @Override
@@ -95,39 +94,18 @@ public class CTTransformerBlockEntity extends SplitShaftBlockEntity implements R
         this.node.rotation().tick();
 
         if(!RotationNetworkManager.get(level).update(node)) {
-            unloadNode();
             level.destroyBlock(getBlockPos(), true);
         }
     }
 
-    //LOAD-UNLOAD
-
     @Override
-    public void onRemove(BlockState state, Level level, BlockPos pos, BlockState newState, boolean isMoving) {
-        if (!state.is(newState.getBlock())) {
-            if (level.getBlockEntity(pos) instanceof CTTransformerBlockEntity be) {
-                be.unloadNode();
-            }
-        }
-        super.onRemove(state, level, pos, newState, isMoving);
-    }
-
-    /*
-    @Override
-    public void invalidate() {
-        super.invalidate();
-        if (level != null && !level.isClientSide) {
-            this.onUnloadAdditional();
-        }
-    }*/
-
-    public final void onChunkUnloaded() {
+    public void onChunkUnloaded() {
         super.onChunkUnloaded();
         this.onUnloadAdditional();
     }
 
     public final void onLoad() {
-        this.requestModelDataUpdate();
+        super.onLoad();
         this.onLoadAdditional();
     }
 
@@ -136,12 +114,23 @@ public class CTTransformerBlockEntity extends SplitShaftBlockEntity implements R
     }
 
     protected void onUnloadAdditional() {
-        if (!invalid) unloadNode();
+        this.performNetworkAction(NetworkAction.REMOVE);
+    }
+
+    @Override
+    public void destroy() {
+        super.destroy();
+        System.out.println("BLOCK ENTITY DESTROYED " + this);
+        unloadNode();
     }
 
     protected void unloadNode(){
-        markAsInvalidInNetwork();
+        if (invalid) return;
+        invalid = true;
+        System.out.println("UNLOADED " + this);
         RotationNetworkManager.get(level).remove(this.node);
         this.performNetworkAction(NetworkAction.REMOVE);
+
+        RotationNetworkManager.get(level).update(this.node);
     }
 }
