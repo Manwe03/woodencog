@@ -1,6 +1,8 @@
 package net.chauvedev.woodencog.config;
 
 import net.minecraftforge.common.ForgeConfigSpec;
+import net.minecraftforge.fml.ModLoadingContext;
+import net.minecraftforge.fml.config.ModConfig;
 
 import java.util.Arrays;
 import java.util.HashMap;
@@ -13,28 +15,24 @@ public class WoodenCogCommonConfigs {
 
     public static final ForgeConfigSpec.ConfigValue<Boolean> HANDLE_TEMPERATURE;
     public static final ForgeConfigSpec.ConfigValue<Boolean> DEPLOYER_COPY_TEMPERATURE;
-    public static ForgeConfigSpec.ConfigValue<List<? extends String>> WEAR_BLACKLIST;
-    public static ForgeConfigSpec.ConfigValue<Integer> DEFAULT_DURABILITY;
-    public static ForgeConfigSpec.ConfigValue<Integer> DEFAULT_DAMAGE_CHANCE;
+    public static final ForgeConfigSpec.ConfigValue<Integer> CT_TRANSFORMER_IMPACT;
     public static final Map<String, ForgeConfigSpec.ConfigValue<List<Integer>>> MATERIAL_PROPERTIES = new HashMap<>();
 
     static {
         BUILDER.push("woodencog");
 
         BUILDER.push("temperature");
-        HANDLE_TEMPERATURE = BUILDER
+            HANDLE_TEMPERATURE = BUILDER
                 .comment("Should create handle temperature ?")
                 .define("handle_temperature", true);
-        BUILDER.pop();
 
-        BUILDER.push("temperature");
-        DEPLOYER_COPY_TEMPERATURE = BUILDER
+            DEPLOYER_COPY_TEMPERATURE = BUILDER
                 .comment("Should deploying copy input item temperature (ignored if handle temperature disabled)")
                 .define("deployer_copy_temperature",true);
         BUILDER.pop();
 
-        BUILDER.push("wearing");
-
+        BUILDER.push("stress").comment("Stress Impact");
+            CT_TRANSFORMER_IMPACT = BUILDER.define("ct_transformer_impact", 1);
         BUILDER.pop();
 
         //TODO modloading-worker-0/WARN - was corrected form [] to []
@@ -120,6 +118,10 @@ public class WoodenCogCommonConfigs {
 
     private static void addDensityConfig(String itemId, int density, int heatCapacity) {
         MATERIAL_PROPERTIES.put(itemId, BUILDER.define(itemId, Arrays.asList(density,heatCapacity)));
+    }
+
+    public static void register() {
+        ModLoadingContext.get().registerConfig(ModConfig.Type.COMMON, WoodenCogCommonConfigs.SPEC, "woodencog-common.toml");
     }
 }
 

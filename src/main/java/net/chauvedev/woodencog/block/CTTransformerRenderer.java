@@ -35,7 +35,6 @@ public class CTTransformerRenderer extends KineticBlockEntityRenderer<CTTransfor
         int lightBehind = LevelRenderer.getLightColor(blockEntity.getLevel(), blockEntity.getBlockPos().relative(direction.getOpposite()));
         standardKineticRotationTransform(shaftHalf, blockEntity, lightBehind).renderInto(ms, vb);
 
-        //creo que maneja la rotacion en base al angulo
         //kineticRotationTransform(fanInner, be, direction.getAxis(), angle, lightInFront).renderInto(ms, vb);
     }
 }

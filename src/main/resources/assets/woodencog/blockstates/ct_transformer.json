@@ -1,10 +1,17 @@
 {
   "variants": {
-    "axis=x,powered=false": { "model": "woodencog:block/ct_transformer", "x": 90, "y": 90 },
-    "axis=x,powered=true":  { "model": "woodencog:block/ct_transformer_powered", "x": 90, "y": 90 },
-    "axis=y,powered=false": { "model": "woodencog:block/ct_transformer" },
-    "axis=y,powered=true":  { "model": "woodencog:block/ct_transformer_powered" },
-    "axis=z,powered=false": { "model": "woodencog:block/ct_transformer", "x": 90, "y": 180 },
-    "axis=z,powered=true":  { "model": "woodencog:block/ct_transformer_powered", "x": 90, "y": 180 }
+    "facing=down,powered=false":  { "model": "woodencog:block/ct_transformer/block", "x": 180 },
+    "facing=up,powered=false":    { "model": "woodencog:block/ct_transformer/block" },
+    "facing=north,powered=false": { "model": "woodencog:block/ct_transformer/block", "x": 90 },
+    "facing=south,powered=false": { "model": "woodencog:block/ct_transformer/block", "x": 90, "y": 180 },
+    "facing=west,powered=false":  { "model": "woodencog:block/ct_transformer/block", "x": 90, "y": 270 },
+    "facing=east,powered=false":  { "model": "woodencog:block/ct_transformer/block", "x": 90, "y": 90 },
+
+    "facing=down,powered=true":  { "model": "woodencog:block/ct_transformer/block_powered", "x": 180 },
+    "facing=up,powered=true":    { "model": "woodencog:block/ct_transformer/block_powered" },
+    "facing=north,powered=true": { "model": "woodencog:block/ct_transformer/block_powered", "x": 90 },
+    "facing=south,powered=true": { "model": "woodencog:block/ct_transformer/block_powered", "x": 90, "y": 180 },
+    "facing=west,powered=true":  { "model": "woodencog:block/ct_transformer/block_powered", "x": 90, "y": 270 },
+    "facing=east,powered=true":  { "model": "woodencog:block/ct_transformer/block_powered", "x": 90, "y": 90 }
   }
 }
