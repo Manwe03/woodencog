@@ -2,7 +2,8 @@ package net.chauvedev.woodencog;
 
 import com.mojang.logging.LogUtils;
 import com.simibubi.create.foundation.data.CreateRegistrate;
-import net.chauvedev.woodencog.block.CTTransformerRenderer;
+import net.chauvedev.woodencog.block.generator.WoodenGeneratorRenderer;
+import net.chauvedev.woodencog.block.transformer.CTTransformerRenderer;
 import net.chauvedev.woodencog.block.WoodencogBlockEntityTypes;
 import net.chauvedev.woodencog.config.WoodenCogCommonConfigs;
 import net.chauvedev.woodencog.datagen.DataGenerators;
@@ -84,6 +85,7 @@ public class WoodenCog
     @SubscribeEvent
     public void onClientSetup(final FMLClientSetupEvent event) {
         BlockEntityRenderers.register(WoodencogBlockEntityTypes.CT_TRANSFORMER.get(), CTTransformerRenderer::new);
+        BlockEntityRenderers.register(WoodencogBlockEntityTypes.WOODEN_GENERATOR.get(), WoodenGeneratorRenderer::new);
     }
 
     @SubscribeEvent

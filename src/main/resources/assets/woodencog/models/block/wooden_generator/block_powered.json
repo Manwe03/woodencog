@@ -1,0 +1,7 @@
+{
+  "parent": "woodencog:block/wooden_generator/block",
+  "textures": {
+    "0": "woodencog:block/generator_on",
+    "particle" : "woodencog:block/generator_on"
+  }
+}

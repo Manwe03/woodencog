@@ -32,7 +32,7 @@ public class WoodenCogCommonConfigs {
         BUILDER.pop();
 
         BUILDER.push("stress").comment("Stress Impact");
-            CT_TRANSFORMER_IMPACT = BUILDER.define("ct_transformer_impact", 1);
+            CT_TRANSFORMER_IMPACT = BUILDER.define("ct_transformer_impact", 64);
         BUILDER.pop();
 
         //TODO modloading-worker-0/WARN - was corrected form [] to []

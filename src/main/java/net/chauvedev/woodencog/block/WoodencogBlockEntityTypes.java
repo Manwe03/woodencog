@@ -1,13 +1,15 @@
 package net.chauvedev.woodencog.block;
 
-import com.simibubi.create.AllBlocks;
-import com.simibubi.create.content.equipment.bell.HauntedBellBlockEntity;
-import com.simibubi.create.content.kinetics.transmission.ClutchBlockEntity;
-import com.simibubi.create.content.kinetics.transmission.SplitShaftRenderer;
+import com.simibubi.create.AllPartialModels;
+import com.simibubi.create.content.kinetics.base.OrientedRotatingVisual;
 import com.simibubi.create.content.kinetics.transmission.SplitShaftVisual;
 import com.simibubi.create.foundation.data.CreateRegistrate;
 import com.tterrag.registrate.util.entry.BlockEntityEntry;
 import net.chauvedev.woodencog.WoodenCog;
+import net.chauvedev.woodencog.block.generator.WoodenGeneratorBlockEntity;
+import net.chauvedev.woodencog.block.generator.WoodenGeneratorRenderer;
+import net.chauvedev.woodencog.block.transformer.CTTransformerBlockEntity;
+import net.chauvedev.woodencog.block.transformer.CTTransformerRenderer;
 
 public class WoodencogBlockEntityTypes {
 
@@ -24,4 +26,10 @@ public class WoodencogBlockEntityTypes {
         .renderer(() -> CTTransformerRenderer::new)
         .register();
 
+    public static final BlockEntityEntry<WoodenGeneratorBlockEntity> WOODEN_GENERATOR = REGISTRATE
+        .blockEntity("wooden_generator", WoodenGeneratorBlockEntity::new)
+        .visual(() -> OrientedRotatingVisual.of(AllPartialModels.SHAFT_HALF), false)
+        .validBlocks(WoodencogBlocks.WOODEN_GENERATOR::get)
+        .renderer(() -> WoodenGeneratorRenderer::new)
+        .register();
 }

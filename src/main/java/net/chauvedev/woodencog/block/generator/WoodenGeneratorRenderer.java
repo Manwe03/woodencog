@@ -1,4 +1,4 @@
-package net.chauvedev.woodencog.block;
+package net.chauvedev.woodencog.block.generator;
 
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
@@ -15,14 +15,14 @@ import net.minecraft.core.Direction;
 
 import static net.minecraft.world.level.block.state.properties.BlockStateProperties.FACING;
 
-public class CTTransformerRenderer extends KineticBlockEntityRenderer<CTTransformerBlockEntity> {
+public class WoodenGeneratorRenderer extends KineticBlockEntityRenderer<WoodenGeneratorBlockEntity> {
 
-    public CTTransformerRenderer(BlockEntityRendererProvider.Context context) {
+    public WoodenGeneratorRenderer(BlockEntityRendererProvider.Context context) {
         super(context);
     }
 
     @Override
-    protected void renderSafe(CTTransformerBlockEntity blockEntity, float partialTicks, PoseStack ms,
+    protected void renderSafe(WoodenGeneratorBlockEntity blockEntity, float partialTicks, PoseStack ms,
                               MultiBufferSource buffer, int light, int overlay) {
 
         Direction.Axis axis = ((IRotate) blockEntity.getBlockState().getBlock()).getRotationAxis(blockEntity.getBlockState());
