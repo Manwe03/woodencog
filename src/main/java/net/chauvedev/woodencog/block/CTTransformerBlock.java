@@ -72,13 +72,13 @@ public class CTTransformerBlock extends DirectionalKineticBlock implements IBE<C
 
     @Override
     public void onRemove(BlockState pState, Level pLevel, BlockPos pPos, BlockState pNewState, boolean pIsMoving) {
-        super.onRemove(pState, pLevel, pPos, pNewState, pIsMoving);
         if (!pState.is(pNewState.getBlock())) {
             BlockEntity be = pLevel.getBlockEntity(pPos);
             if (be instanceof CTTransformerBlockEntity transformer) {
                 transformer.unloadNode();
             }
         }
+        super.onRemove(pState, pLevel, pPos, pNewState, pIsMoving);
     }
 
     @Override

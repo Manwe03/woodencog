@@ -2,28 +2,16 @@ package net.chauvedev.woodencog.block;
 
 import com.simibubi.create.content.kinetics.transmission.SplitShaftBlockEntity;
 import net.chauvedev.woodencog.config.WoodenCogCommonConfigs;
-import net.dries007.tfc.common.blockentities.TickableBlockEntity;
 import net.dries007.tfc.common.blockentities.rotation.RotatingBlockEntity;
-import net.dries007.tfc.common.blocks.DirectionPropertyBlock;
-import net.dries007.tfc.util.Helpers;
 import net.dries007.tfc.util.rotation.*;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
-import net.minecraft.core.HolderGetter;
-import net.minecraft.core.registries.BuiltInRegistries;
-import net.minecraft.core.registries.Registries;
 import net.minecraft.nbt.CompoundTag;
-import net.minecraft.network.Connection;
 import net.minecraft.network.protocol.game.ClientboundBlockEntityDataPacket;
-import net.minecraft.server.level.ServerLevel;
-import net.minecraft.world.level.ChunkPos;
-import net.minecraft.world.level.Level;
-import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
-
-import java.util.EnumSet;
 
 public class CTTransformerBlockEntity extends SplitShaftBlockEntity implements RotatingBlockEntity {
 
@@ -119,23 +107,40 @@ public class CTTransformerBlockEntity extends SplitShaftBlockEntity implements R
         //unloadNode();
     }
 
+    /*
     @Override
     public void destroy() {
         super.destroy();
         unloadNode();
+    }*/
+
+    @Override
+    public void invalidate() {
+        super.invalidate();
+        //this.unloadNode();
     }
 
     public void unloadNode() {
         if (invalid) return;
         invalid = true;
 
-        RotationNetworkManager manager = RotationNetworkManager.get(level);
 
+        if (!level.isClientSide) {
+            this.performNetworkAction(NetworkAction.REMOVE);
+            this.setChanged();
+        } else {
+            this.node.rotation().setSpeed(0f);
+            this.node.rotation().tick();
+        }
+        /*
+        RotationNetworkManager manager = RotationNetworkManager.get(level);
         manager.remove(node);
         performNetworkAction(NetworkAction.REMOVE);
         manager.update(node);
-        setChanged();
+        setChanged();*/
     }
+
+
 
     @Override
     public ClientboundBlockEntityDataPacket getUpdatePacket() {
