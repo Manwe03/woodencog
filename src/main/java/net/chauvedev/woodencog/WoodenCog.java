@@ -1,6 +1,7 @@
 package net.chauvedev.woodencog;
 
 import com.mojang.logging.LogUtils;
+import com.simibubi.create.AllCreativeModeTabs;
 import com.simibubi.create.foundation.data.CreateRegistrate;
 import net.chauvedev.woodencog.block.generator.WoodenGeneratorRenderer;
 import net.chauvedev.woodencog.block.transformer.CTTransformerRenderer;
@@ -16,6 +17,7 @@ import net.minecraft.client.renderer.blockentity.BlockEntityRenderers;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.common.MinecraftForge;
+import net.minecraftforge.event.BuildCreativeModeTabContentsEvent;
 import net.minecraftforge.event.RegisterCommandsEvent;
 import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
@@ -67,19 +69,26 @@ public class WoodenCog
 
         modEventBus.addListener(WoodenCog::onRegister);
         modEventBus.addListener(DataGenerators::gatherData);
+        modEventBus.addListener(this::addCreative);
     }
 
     public static CreateRegistrate registrate() {
         return REGISTRATE;
     }
 
-    private void setup(final FMLCommonSetupEvent event)
-    {
+    private void setup(final FMLCommonSetupEvent event) {
 
     }
 
     public static void onRegister(final RegisterEvent event) {
         CustomArmInteractionPointTypes.init();
+    }
+
+    private void addCreative(BuildCreativeModeTabContentsEvent event){
+        if(event.getTabKey() == AllCreativeModeTabs.BASE_CREATIVE_TAB.getKey()){
+            event.accept(WoodencogBlocks.CT_TRANSFORMER.get());
+            event.accept(WoodencogBlocks.WOODEN_GENERATOR.get());
+        }
     }
 
     @SubscribeEvent
