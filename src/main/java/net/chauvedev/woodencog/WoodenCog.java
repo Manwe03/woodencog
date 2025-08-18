@@ -1,38 +1,30 @@
 package net.chauvedev.woodencog;
 
 import com.mojang.logging.LogUtils;
-import com.simibubi.create.content.processing.sequenced.SequencedAssemblyItem;
+import com.simibubi.create.AllCreativeModeTabs;
 import com.simibubi.create.foundation.data.CreateRegistrate;
-import net.chauvedev.woodencog.block.CTTransformerRenderer;
+import net.chauvedev.woodencog.block.generator.WoodenGeneratorRenderer;
+import net.chauvedev.woodencog.block.transformer.CTTransformerRenderer;
 import net.chauvedev.woodencog.block.WoodencogBlockEntityTypes;
 import net.chauvedev.woodencog.config.WoodenCogCommonConfigs;
-import net.chauvedev.woodencog.config.WoodenCogConfigs;
 import net.chauvedev.woodencog.datagen.DataGenerators;
 import net.chauvedev.woodencog.interaction.CustomArmInteractionPointTypes;
 import net.chauvedev.woodencog.item.WoodencogItems;
 import net.chauvedev.woodencog.recipes.advancedProcessingRecipe.AllAdvancedRecipeTypes;
 import net.chauvedev.woodencog.recipes.heatedRecipes.AllHeatedRecipeTypes;
 import net.chauvedev.woodencog.block.WoodencogBlocks;
-import net.dries007.tfc.common.items.TFCItems;
-import net.minecraft.client.renderer.ItemBlockRenderTypes;
-import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.blockentity.BlockEntityRenderers;
-import net.minecraft.client.renderer.entity.layers.RenderLayer;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.world.item.Item;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.common.MinecraftForge;
+import net.minecraftforge.event.BuildCreativeModeTabContentsEvent;
 import net.minecraftforge.event.RegisterCommandsEvent;
 import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
-import net.minecraftforge.fml.ModLoadingContext;
 import net.minecraftforge.fml.common.Mod;
-import net.minecraftforge.fml.config.ModConfig;
 import net.minecraftforge.fml.event.lifecycle.*;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 import net.minecraftforge.fml.loading.FMLEnvironment;
-import net.minecraftforge.registries.DeferredRegister;
-import net.minecraftforge.registries.ForgeRegistries;
 import net.minecraftforge.registries.RegisterEvent;
 import org.slf4j.Logger;
 
@@ -52,7 +44,7 @@ public class WoodenCog
         MinecraftForge.EVENT_BUS.register(this);
         REGISTRATE.registerEventListeners(modEventBus);
 
-        WoodenCogConfigs.registerConfigs();
+        WoodenCogCommonConfigs.register();
 
         WoodencogItems.register(modEventBus);
         WoodencogBlocks.register();
@@ -77,14 +69,14 @@ public class WoodenCog
 
         modEventBus.addListener(WoodenCog::onRegister);
         modEventBus.addListener(DataGenerators::gatherData);
+        modEventBus.addListener(this::addCreative);
     }
 
     public static CreateRegistrate registrate() {
         return REGISTRATE;
     }
 
-    private void setup(final FMLCommonSetupEvent event)
-    {
+    private void setup(final FMLCommonSetupEvent event) {
 
     }
 
@@ -92,9 +84,17 @@ public class WoodenCog
         CustomArmInteractionPointTypes.init();
     }
 
+    private void addCreative(BuildCreativeModeTabContentsEvent event){
+        if(event.getTabKey() == AllCreativeModeTabs.BASE_CREATIVE_TAB.getKey()){
+            event.accept(WoodencogBlocks.CT_TRANSFORMER.get());
+            event.accept(WoodencogBlocks.WOODEN_GENERATOR.get());
+        }
+    }
+
     @SubscribeEvent
     public void onClientSetup(final FMLClientSetupEvent event) {
         BlockEntityRenderers.register(WoodencogBlockEntityTypes.CT_TRANSFORMER.get(), CTTransformerRenderer::new);
+        BlockEntityRenderers.register(WoodencogBlockEntityTypes.WOODEN_GENERATOR.get(), WoodenGeneratorRenderer::new);
     }
 
     @SubscribeEvent

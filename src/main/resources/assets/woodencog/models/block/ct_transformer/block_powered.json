@@ -1,0 +1,7 @@
+{
+  "parent": "woodencog:block/ct_transformer/block",
+  "textures": {
+    "0": "woodencog:block/transformer_on",
+    "particle" : "woodencog:block/transformer_on"
+  }
+}

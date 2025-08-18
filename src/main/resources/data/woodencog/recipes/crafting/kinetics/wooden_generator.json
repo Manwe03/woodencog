@@ -1,0 +1,18 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "ingredients": [
+    {
+      "item": "create:clutch"
+    },
+    {
+      "tag": "minecraft:logs"
+    },
+    {
+      "item": "create:cogwheel"
+    }
+  ],
+  "result": {
+    "item": "woodencog:wooden_generator",
+    "count": 1
+  }
+}
