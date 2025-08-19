@@ -3,16 +3,33 @@
   "barrel_crafting": "Crafting",
 
   "block.woodencog.ct_transformer": "Wooden Transformer",
+  "block.woodencog.ct_transformer.tooltip.summary": "Wooden Transformers are a new TFC rotation source. Convert form Create to TFC rotation. Rotation speed is matched from input to output.",
+
   "block.woodencog.wooden_generator": "Wooden Generator",
 
   "category.woodencog.heated_mixing": "Heated Mixing",
   "category.woodencog.heated_pressing": "Heated Pressing",
   "category.woodencog.heated_compacting": "Heated Compacting",
 
+  "woodencog.ponder.wooden_generator.water_wheel.header" : "Generating rotation from TFC sources",
+  "woodencog.ponder.wooden_generator.water_wheel.text_1" : "The Generator needs to be placed besides a TFC rotation source",
+  "woodencog.ponder.wooden_generator.water_wheel.text_2" : "SU are generated according to the source rotation speed",
+  "woodencog.ponder.wooden_generator.water_wheel.text_3" : "1,024 SU",
+
+  "woodencog.ponder.wooden_generator.windmill.header" : "Other sources",
+  "woodencog.ponder.wooden_generator.windmill.text_1" : "4,096 SU",
+
+  "woodencog.ponder.wooden_generator.windmill_rustic.header" : "Other sources",
+  "woodencog.ponder.wooden_generator.windmill_rustic.text_1" : "The Rustic Windmill generates double the SU",
+
+  "woodencog.ponder.wooden_transformer.header" : "Transforming rotation",
+  "woodencog.ponder.wooden_transformer.text_1" : "aaaa",
+
   "woodencog.ponder.heat.header": "Heating items",
   "woodencog.ponder.heat.text_1": "An item capable of receiving heat will be heated by lava, the maximum temperature is 1700°.",
   "woodencog.ponder.heat.text_2": "It's the same with fire, but the temperature limit is 200°. Perfect for cooking !",
   "woodencog.ponder.cool.header": "Cooling items",
   "woodencog.ponder.cool.text_1": "Heated item can be cooled down with water.",
+
   "recipe.assembly.pressing": "Assembly Pressing"
 }

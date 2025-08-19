@@ -1,11 +1,15 @@
 package net.chauvedev.woodencog.block;
 
 import com.simibubi.create.foundation.data.*;
+import com.simibubi.create.foundation.item.ItemDescription;
+import com.simibubi.create.foundation.item.TooltipModifier;
 import com.tterrag.registrate.util.entry.BlockEntry;
 import net.chauvedev.woodencog.WoodenCog;
 import net.chauvedev.woodencog.block.generator.WoodenGeneratorBlock;
 import net.chauvedev.woodencog.block.transformer.CTTransformerBlock;
+import net.createmod.catnip.lang.FontHelper;
 import net.minecraft.client.renderer.RenderType;
+import net.minecraft.core.registries.Registries;
 import net.minecraft.world.level.material.MapColor;
 
 public class WoodencogBlocks {
@@ -19,6 +23,10 @@ public class WoodencogBlocks {
             .addLayer(() -> RenderType::cutoutMipped) //Not sure
             .item()
             .transform(ModelGen.customItemModel())
+            .onRegisterAfter(Registries.ITEM, item -> {
+                ItemDescription.useKey(item, "block.woodencog.ct_transformer");
+                TooltipModifier.REGISTRY.register(item.asItem(), new ItemDescription.Modifier(item.asItem(), FontHelper.Palette.STANDARD_CREATE));
+            })
             .register();
 
     public static final BlockEntry<WoodenGeneratorBlock> WOODEN_GENERATOR = REGISTRATE.block("wooden_generator", WoodenGeneratorBlock::new)

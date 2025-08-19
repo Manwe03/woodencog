@@ -10,9 +10,11 @@ import net.chauvedev.woodencog.config.WoodenCogCommonConfigs;
 import net.chauvedev.woodencog.datagen.DataGenerators;
 import net.chauvedev.woodencog.interaction.CustomArmInteractionPointTypes;
 import net.chauvedev.woodencog.item.WoodencogItems;
+import net.chauvedev.woodencog.ponder.WoodenCogPonderPlugin;
 import net.chauvedev.woodencog.recipes.advancedProcessingRecipe.AllAdvancedRecipeTypes;
 import net.chauvedev.woodencog.recipes.heatedRecipes.AllHeatedRecipeTypes;
 import net.chauvedev.woodencog.block.WoodencogBlocks;
+import net.createmod.ponder.foundation.PonderIndex;
 import net.minecraft.client.renderer.blockentity.BlockEntityRenderers;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraftforge.api.distmarker.Dist;
@@ -35,12 +37,12 @@ public class WoodenCog
     public static final Logger LOGGER = LogUtils.getLogger();
     private static final CreateRegistrate REGISTRATE = CreateRegistrate.create(WoodenCog.MOD_ID);
     //private static final DeferredRegister<Item> ITEMS = DeferredRegister.create(ForgeRegistries.ITEMS, MOD_ID);
-    //static final PonderRegistrationHelper PONDER_HELPER = new PonderRegistrationHelper(WoodenCog.MOD_ID);
 
     public WoodenCog()
     {
         IEventBus modEventBus = FMLJavaModLoadingContext.get().getModEventBus();
         modEventBus.addListener(this::setup);
+        modEventBus.addListener(this::onClientSetup);
         MinecraftForge.EVENT_BUS.register(this);
         REGISTRATE.registerEventListeners(modEventBus);
 
@@ -53,7 +55,11 @@ public class WoodenCog
         AllAdvancedRecipeTypes.register(modEventBus);
         AllHeatedRecipeTypes.register(modEventBus);
 
-        if(FMLEnvironment.dist == Dist.CLIENT) {/*PONDER_HELPER.forComponents(FIRECLAY_CRUCIBLE_ITEM).addStoryBoard("heating/heat", Heating::heating).addStoryBoard("heating/cool", Heating::cooling);*/}
+        if(FMLEnvironment.dist == Dist.CLIENT) {
+            /*PONDER_HELPER.forComponents(FIRECLAY_CRUCIBLE_ITEM).addStoryBoard("heating/heat", Heating::heating).addStoryBoard("heating/cool", Heating::cooling);*/
+
+        }
+
         /*
         TFCItems.METAL_ITEMS.forEach((aDefault, itemTypeRegistryObjectMap) -> {
             itemTypeRegistryObjectMap.forEach((itemType, itemRegistryObject) -> {
@@ -91,10 +97,11 @@ public class WoodenCog
         }
     }
 
-    @SubscribeEvent
     public void onClientSetup(final FMLClientSetupEvent event) {
         BlockEntityRenderers.register(WoodencogBlockEntityTypes.CT_TRANSFORMER.get(), CTTransformerRenderer::new);
         BlockEntityRenderers.register(WoodencogBlockEntityTypes.WOODEN_GENERATOR.get(), WoodenGeneratorRenderer::new);
+
+        PonderIndex.addPlugin(new WoodenCogPonderPlugin());
     }
 
     @SubscribeEvent
