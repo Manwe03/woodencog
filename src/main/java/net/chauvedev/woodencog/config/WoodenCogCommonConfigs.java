@@ -15,6 +15,13 @@ public class WoodenCogCommonConfigs {
 
     public static final ForgeConfigSpec.ConfigValue<Boolean> HANDLE_TEMPERATURE;
     public static final ForgeConfigSpec.ConfigValue<Boolean> DEPLOYER_COPY_TEMPERATURE;
+
+    public static final ForgeConfigSpec.ConfigValue<Float> BLAZE_BURNER_NONE;
+    public static final ForgeConfigSpec.ConfigValue<Float> BLAZE_BURNER_SMOULDERING;
+    public static final ForgeConfigSpec.ConfigValue<Float> BLAZE_BURNER_FADING;
+    public static final ForgeConfigSpec.ConfigValue<Float> BLAZE_BURNER_KINDLED;
+    public static final ForgeConfigSpec.ConfigValue<Float> BLAZE_BURNER_SEETHING;
+
     public static final ForgeConfigSpec.ConfigValue<Integer> CT_TRANSFORMER_IMPACT;
     public static final Map<String, ForgeConfigSpec.ConfigValue<List<Integer>>> MATERIAL_PROPERTIES = new HashMap<>();
 
@@ -29,6 +36,15 @@ public class WoodenCogCommonConfigs {
             DEPLOYER_COPY_TEMPERATURE = BUILDER
                 .comment("Should deploying copy input item temperature (ignored if handle temperature disabled)")
                 .define("deployer_copy_temperature",true);
+
+            BUILDER.comment("Blaze Burner Temperature");
+
+            BLAZE_BURNER_NONE = BUILDER.define("blaze_burner_none", 0.0f);
+            BLAZE_BURNER_SMOULDERING = BUILDER.define("blaze_burner_smouldering", 80.0f);
+            BLAZE_BURNER_FADING = BUILDER.define("blaze_burner_fading", 580.0f);
+            BLAZE_BURNER_KINDLED = BUILDER.define("blaze_burner_kindled", 930.0f);
+            BLAZE_BURNER_SEETHING = BUILDER.define("blaze_burner_seething", 1600.0f);
+
         BUILDER.pop();
 
         BUILDER.push("stress").comment("Stress Impact");

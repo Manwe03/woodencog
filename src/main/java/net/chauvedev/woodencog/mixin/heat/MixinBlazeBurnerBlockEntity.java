@@ -1,8 +1,8 @@
 package net.chauvedev.woodencog.mixin.heat;
 
-import com.simibubi.create.api.behaviour.interaction.ConductorBlockInteractionBehavior;
 import com.simibubi.create.content.processing.burner.BlazeBurnerBlock;
 import com.simibubi.create.content.processing.burner.BlazeBurnerBlockEntity;
+import net.chauvedev.woodencog.config.WoodenCogCommonConfigs;
 import net.chauvedev.woodencog.mixin.blockEnitites.accessors.BlockEntityAccessor;
 import net.chauvedev.woodencog.utils.BlazeBurnerBlockentityExtended;
 import net.dries007.tfc.common.capabilities.heat.HeatCapability;
@@ -25,13 +25,13 @@ public abstract class MixinBlazeBurnerBlockEntity implements BlazeBurnerBlockent
     @Unique
     public float getTemperature(){
         float temp = switch (getHeatLevel()) {
-            case NONE -> 0.F;
-            case SMOULDERING -> 80.0F;
-            case FADING -> 580.0F;
-            case KINDLED -> 930.0F;
-            case SEETHING -> 1600.0F;
+            case NONE -> WoodenCogCommonConfigs.BLAZE_BURNER_NONE.get();
+            case SMOULDERING -> WoodenCogCommonConfigs.BLAZE_BURNER_SMOULDERING.get();
+            case FADING -> WoodenCogCommonConfigs.BLAZE_BURNER_FADING.get();
+            case KINDLED -> WoodenCogCommonConfigs.BLAZE_BURNER_KINDLED.get();
+            case SEETHING -> WoodenCogCommonConfigs.BLAZE_BURNER_SEETHING.get();
         };
-        if(isCreative) temp = 1600.0F;
+        if(isCreative) temp = WoodenCogCommonConfigs.BLAZE_BURNER_SEETHING.get();
         return temp;
     }
 
