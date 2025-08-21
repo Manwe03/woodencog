@@ -11,6 +11,7 @@ import net.chauvedev.woodencog.config.WoodenCogCommonConfigs;
 import net.chauvedev.woodencog.recipes.heatedRecipes.AllHeatedRecipeTypes;
 import net.chauvedev.woodencog.recipes.heatedRecipes.HeatedProcessingRecipe;
 import net.chauvedev.woodencog.recipes.heatedRecipes.HeatedProcessingRecipeBuilder;
+import net.chauvedev.woodencog.utils.BasinBlockEntityExtended;
 import net.chauvedev.woodencog.utils.HeatHandlingUtil;
 import net.createmod.catnip.data.Iterate;
 import net.dries007.tfc.common.recipes.ingredients.HeatableIngredient;
@@ -64,8 +65,8 @@ public class HeatedBasinRecipe extends HeatedProcessingRecipe<Container> {
             IFluidHandler availableFluids = basin.getCapability(ForgeCapabilities.FLUID_HANDLER).orElse(null);
 
             try{
-                BlockEntity blockEntity = basin.getLevel().getBlockEntity(basin.getBlockPos().below());
-                if(!heatedRecipe.getRequiredHeat().testSourceHeat(blockEntity)) {
+                float temp = ((BasinBlockEntityExtended) basin).getHeatSourceTemperature();
+                if(!heatedRecipe.getRequiredHeat().testSourceTemp(temp)) {
                     return false; //Does not match required temperature
                 }
             } catch (NullPointerException e){

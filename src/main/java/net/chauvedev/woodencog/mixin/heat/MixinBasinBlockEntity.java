@@ -5,14 +5,24 @@ import com.simibubi.create.content.processing.burner.BlazeBurnerBlock;
 import com.simibubi.create.foundation.blockEntity.behaviour.BehaviourType;
 import com.simibubi.create.foundation.blockEntity.behaviour.BlockEntityBehaviour;
 import com.simibubi.create.foundation.blockEntity.behaviour.fluid.SmartFluidTankBehaviour;
+import com.simibubi.create.foundation.utility.CreateLang;
 import net.chauvedev.woodencog.mixin.SmartBlockEntityAccessor;
+import net.chauvedev.woodencog.mixin.blockEnitites.accessors.BlockEntityAccessor;
 import net.chauvedev.woodencog.recipes.heatedRecipes.ItemHeatingBehaviour;
+import net.chauvedev.woodencog.utils.BasinBlockEntityExtended;
+import net.chauvedev.woodencog.utils.BlazeBurnerBlockentityExtended;
+import net.dries007.tfc.common.blockentities.CharcoalForgeBlockEntity;
 import net.dries007.tfc.common.blocks.devices.CharcoalForgeBlock;
+import net.dries007.tfc.common.capabilities.heat.Heat;
+import net.minecraft.ChatFormatting;
 import net.minecraft.core.BlockPos;
+import net.minecraft.network.chat.Component;
+import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
+import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
@@ -22,12 +32,23 @@ import java.util.List;
 import java.util.Map;
 
 @Mixin(value = BasinBlockEntity.class, remap = false)
-public abstract class MixinBasinBlockEntity {
+public abstract class MixinBasinBlockEntity implements BasinBlockEntityExtended {
 
     @Shadow public SmartFluidTankBehaviour inputTank;
     @Shadow private boolean contentsChanged;
 
     public MixinBasinBlockEntity() {}
+
+    @Unique
+    public float getHeatSourceTemperature(){
+        BlockEntity source = ((BlockEntityAccessor) this).getLevel().getBlockEntity(((BlockEntityAccessor) this).getBlockPos().below());
+        if (source instanceof CharcoalForgeBlockEntity charcoalForgeBlockEntity) {
+            return charcoalForgeBlockEntity.getTemperature();
+        } else if(source instanceof BlazeBurnerBlockentityExtended blazeBurnerBlockEntity){
+            return blazeBurnerBlockEntity.getTemperature();
+        }
+        return 0.0f;
+    }
 
     /**
      * @author Manwe
@@ -69,5 +90,24 @@ public abstract class MixinBasinBlockEntity {
             }
         }
 
+    }
+
+    @Inject(
+            method = "addToGoggleTooltip",
+            at = @At("TAIL")
+    )
+    public void addToGoggleTooltip(List<Component> tooltip, boolean isPlayerSneaking, CallbackInfoReturnable<Boolean> cir){
+        float temp = getHeatSourceTemperature();
+        if(temp <= 0) return;
+        ChatFormatting color = ChatFormatting.GRAY;
+        Component displayName = Component.literal("");
+        for(Heat heat :Heat.values()){
+            if(temp > heat.getMin() && temp <= heat.getMax()){
+                color = heat.getColor();
+                displayName = heat.getDisplayName();
+                break;
+            }
+        }
+        CreateLang.text("").add(Component.literal(temp+" ºC ")).style(color).add(displayName).forGoggles(tooltip, 0);
     }
 }

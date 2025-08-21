@@ -21,15 +21,10 @@ public class WoodenCogHeatCondition {
     }
 
     /**
-     * Test the charcoal forge meets the temperature of this heat condition
+     * Test if heat source meets the temperature requirements of this heat condition
      */
-    public boolean testSourceHeat(BlockEntity source){
-        if (source instanceof CharcoalForgeBlockEntity charcoalForgeBlockEntity) {
-            return charcoalForgeBlockEntity.getTemperature() >= this.temperature;
-        } else if(source instanceof BlazeBurnerBlockentityExtended blazeBurnerBlockEntity){
-            return blazeBurnerBlockEntity.getTemperature() >= this.temperature;
-        }
-        return false;
+    public boolean testSourceTemp(float sourceTemp){
+        return sourceTemp >= this.temperature;
     }
 
     public String serialize(){
