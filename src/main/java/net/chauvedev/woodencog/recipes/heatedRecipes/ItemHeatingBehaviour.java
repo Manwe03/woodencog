@@ -1,9 +1,11 @@
 package net.chauvedev.woodencog.recipes.heatedRecipes;
 
 import com.simibubi.create.content.processing.basin.BasinInventory;
+import com.simibubi.create.content.processing.burner.BlazeBurnerBlockEntity;
 import com.simibubi.create.foundation.blockEntity.SmartBlockEntity;
 import com.simibubi.create.foundation.blockEntity.behaviour.BehaviourType;
 import com.simibubi.create.foundation.blockEntity.behaviour.BlockEntityBehaviour;
+import net.chauvedev.woodencog.utils.BlazeBurnerBlockentityExtended;
 import net.dries007.tfc.common.blockentities.CharcoalForgeBlockEntity;
 import net.dries007.tfc.common.capabilities.heat.HeatCapability;
 import net.minecraft.world.item.ItemStack;
@@ -24,20 +26,30 @@ public class ItemHeatingBehaviour extends BlockEntityBehaviour {
         return TYPE;
     }
 
+    /**
+     * Heat items inside inventory with CharcoalForge an BlazeBurners
+     */
     @Override
     public void tick() {
         super.tick();
         if(this.blockEntity.getLevel() == null) return;
         BlockEntity bellowBlockEntity = this.blockEntity.getLevel().getBlockEntity(this.blockEntity.getBlockPos().below());
-        if( bellowBlockEntity instanceof CharcoalForgeBlockEntity charcoalForgeBlockEntity){
+        if(bellowBlockEntity instanceof CharcoalForgeBlockEntity charcoalForgeBlockEntity){
             float targetTemp = charcoalForgeBlockEntity.getTemperature();
-            if(inventory != null){
-                for (int i = 0; i<inventory.getSlots(); i++){
-                    ItemStack itemStack = inventory.getItem(i);
-                    itemStack.getCapability(HeatCapability.CAPABILITY).resolve().ifPresent(heat -> {
-                        HeatCapability.addTemp(heat,targetTemp,2);
-                    });
-                }
+            heatInventory(targetTemp);
+        } else if(bellowBlockEntity instanceof BlazeBurnerBlockEntity blazeBurnerBlockEntity){
+            float targetTemp = ((BlazeBurnerBlockentityExtended) blazeBurnerBlockEntity).getTemperature();
+            heatInventory(targetTemp);
+        }
+    }
+
+    private void heatInventory(float targetTemp) {
+        if(inventory != null){
+            for (int i = 0; i<inventory.getSlots(); i++){
+                ItemStack itemStack = inventory.getItem(i);
+                itemStack.getCapability(HeatCapability.CAPABILITY).resolve().ifPresent(heat -> {
+                    HeatCapability.addTemp(heat,targetTemp,2);
+                });
             }
         }
     }

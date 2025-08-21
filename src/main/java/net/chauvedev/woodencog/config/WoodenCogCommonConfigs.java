@@ -35,7 +35,6 @@ public class WoodenCogCommonConfigs {
             CT_TRANSFORMER_IMPACT = BUILDER.define("ct_transformer_impact", 64);
         BUILDER.pop();
 
-        //TODO modloading-worker-0/WARN - was corrected form [] to []
         BUILDER.comment("Density [kg/m3] - HeatCapacity [J/(kg∙K)]").push("materials");
         addDensityConfig("allthemodium",20000,1500); //Not real
         addDensityConfig("aluminium",2700,897);

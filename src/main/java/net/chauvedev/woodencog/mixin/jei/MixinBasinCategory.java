@@ -1,4 +1,4 @@
-package net.chauvedev.woodencog.mixin;
+package net.chauvedev.woodencog.mixin.jei;
 
 import com.simibubi.create.compat.jei.category.BasinCategory;
 import com.simibubi.create.content.processing.basin.BasinRecipe;

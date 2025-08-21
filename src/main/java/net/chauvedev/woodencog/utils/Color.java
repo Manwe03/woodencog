@@ -16,6 +16,19 @@ import java.util.Optional;
 
 public class Color {
 
+    public static int modify(int color, float factor, int sum) {
+        int a = (color >> 24) & 0xFF;
+        int r = (color >> 16) & 0xFF;
+        int g = (color >> 8) & 0xFF;
+        int b = color & 0xFF;
+
+        r = (int) Math.min((r * factor)+sum, 255);
+        g = (int) Math.min((g * factor)+sum, 255);
+        b = (int) Math.min((b * factor)+sum, 255);
+
+        return (a << 24) | (r << 16) | (g << 8) | b;
+    }
+
     /**
      * Client only
      * Draws the colored box around items outputs that copy input heat
