@@ -64,14 +64,12 @@ public class HeatedBasinRecipe extends HeatedProcessingRecipe<Container> {
             IFluidHandler availableFluids = basin.getCapability(ForgeCapabilities.FLUID_HANDLER).orElse(null);
 
             try{
-                BlockEntity blockEntity = basin.getLevel().getBlockEntity(basin.getBlockPos().below(1));
-                if(!heatedRecipe.getRequiredHeat().testCharcoalForge(blockEntity)) {
-                    WoodenCog.LOGGER.error("Charcoal forge does not match temperature requirements");
+                BlockEntity blockEntity = basin.getLevel().getBlockEntity(basin.getBlockPos().below());
+                if(!heatedRecipe.getRequiredHeat().testSourceHeat(blockEntity)) {
                     return false; //Does not match required temperature
                 }
             } catch (NullPointerException e){
-                WoodenCog.LOGGER.error("Charcoal forge not found");
-                return false; //Charcoal forge not found
+                return false; //BE not found
             }
             //WoodenCog.LOGGER.info("Has enough heat");
 

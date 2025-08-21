@@ -37,8 +37,8 @@ public class ItemHeatingBehaviour extends BlockEntityBehaviour {
         if(bellowBlockEntity instanceof CharcoalForgeBlockEntity charcoalForgeBlockEntity){
             float targetTemp = charcoalForgeBlockEntity.getTemperature();
             heatInventory(targetTemp);
-        } else if(bellowBlockEntity instanceof BlazeBurnerBlockEntity blazeBurnerBlockEntity){
-            float targetTemp = ((BlazeBurnerBlockentityExtended) blazeBurnerBlockEntity).getTemperature();
+        } else if(bellowBlockEntity instanceof BlazeBurnerBlockentityExtended blazeBurnerBlockEntity){
+            float targetTemp = blazeBurnerBlockEntity.getTemperature();
             heatInventory(targetTemp);
         }
     }

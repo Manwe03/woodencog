@@ -1,7 +1,14 @@
 package net.chauvedev.woodencog.recipes.heatedRecipes;
 
+import com.simibubi.create.content.processing.burner.BlazeBurnerBlockEntity;
+import net.chauvedev.woodencog.utils.BlazeBurnerBlockentityExtended;
 import net.dries007.tfc.common.blockentities.CharcoalForgeBlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntity;
+
+import java.util.function.BiFunction;
+import java.util.function.Consumer;
+import java.util.function.Predicate;
+import java.util.function.Supplier;
 
 public class WoodenCogHeatCondition {
 
@@ -16,9 +23,11 @@ public class WoodenCogHeatCondition {
     /**
      * Test the charcoal forge meets the temperature of this heat condition
      */
-    public boolean testCharcoalForge(BlockEntity charcoalForge){
-        if (charcoalForge instanceof CharcoalForgeBlockEntity) {
-            return ((CharcoalForgeBlockEntity) charcoalForge).getTemperature() >= this.temperature;
+    public boolean testSourceHeat(BlockEntity source){
+        if (source instanceof CharcoalForgeBlockEntity charcoalForgeBlockEntity) {
+            return charcoalForgeBlockEntity.getTemperature() >= this.temperature;
+        } else if(source instanceof BlazeBurnerBlockentityExtended blazeBurnerBlockEntity){
+            return blazeBurnerBlockEntity.getTemperature() >= this.temperature;
         }
         return false;
     }
