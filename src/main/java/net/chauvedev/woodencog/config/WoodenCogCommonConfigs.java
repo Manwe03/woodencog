@@ -22,6 +22,8 @@ public class WoodenCogCommonConfigs {
     public static final ForgeConfigSpec.ConfigValue<Float> BLAZE_BURNER_KINDLED;
     public static final ForgeConfigSpec.ConfigValue<Float> BLAZE_BURNER_SEETHING;
 
+    public static final ForgeConfigSpec.ConfigValue<Boolean> NETHERITE_RESKIN;
+
     public static final ForgeConfigSpec.ConfigValue<Integer> CT_TRANSFORMER_IMPACT;
     public static final Map<String, ForgeConfigSpec.ConfigValue<List<Integer>>> MATERIAL_PROPERTIES = new HashMap<>();
 
@@ -50,6 +52,8 @@ public class WoodenCogCommonConfigs {
         BUILDER.push("stress").comment("Stress Impact");
             CT_TRANSFORMER_IMPACT = BUILDER.define("ct_transformer_impact", 64);
         BUILDER.pop();
+
+        NETHERITE_RESKIN = BUILDER.comment("Change netherite divingGear to look like red steel armor. (wearing netherite pants disables re-skin)").define("netherite_reskin", true);
 
         BUILDER.comment("Density [kg/m3] - HeatCapacity [J/(kg∙K)]").push("materials");
         addDensityConfig("allthemodium",20000,1500); //Not real
