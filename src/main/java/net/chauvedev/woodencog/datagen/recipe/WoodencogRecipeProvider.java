@@ -1,20 +1,34 @@
 package net.chauvedev.woodencog.datagen.recipe;
 
+import com.simibubi.create.api.data.recipe.ProcessingRecipeGen;
+import com.simibubi.create.foundation.data.recipe.*;
 import net.chauvedev.woodencog.WoodenCog;
 import net.chauvedev.woodencog.datagen.DataGenStaticData;
 import net.chauvedev.woodencog.recipes.heatedRecipes.AllHeatedRecipeTypes;
+import net.dries007.tfc.common.fluids.TFCFluids;
 import net.dries007.tfc.util.Metal;
+import net.minecraft.data.CachedOutput;
+import net.minecraft.data.DataGenerator;
+import net.minecraft.data.DataProvider;
 import net.minecraft.data.PackOutput;
 import net.minecraft.data.recipes.FinishedRecipe;
 import net.minecraft.data.recipes.RecipeProvider;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.item.DyeColor;
+import net.minecraft.world.item.Items;
+import net.minecraft.world.level.material.Fluids;
+import net.minecraftforge.common.Tags;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.concurrent.CompletableFuture;
 import java.util.function.Consumer;
 
 public class WoodencogRecipeProvider extends RecipeProvider {
 
-    public WoodencogRecipeProvider(PackOutput pOutput) {
+    public WoodencogRecipeProvider(DataGenerator generator, PackOutput pOutput) {
         super(pOutput);
+        registerAllProcessing(generator,pOutput);
     }
 
     @Override
@@ -161,8 +175,12 @@ public class WoodencogRecipeProvider extends RecipeProvider {
         });
     }
 
+    private static ResourceLocation dyeRecipeResourceLocation(DyeColor dyeColor) {
+        return WoodenCog.asResource("heated_mixing/dyeing_"+dyeColor.getSerializedName());
+    }
+
     private static ResourceLocation alloyingRecipeResourceLocation(Metal.Default metalEnum) {
-        return WoodenCog.asResource("heated_mixing/create_mixing_alloying_"+metalEnum.getSerializedName());
+        return WoodenCog.asResource("heated_mixing/alloying_"+metalEnum.getSerializedName());
     }
 
     private static ResourceLocation oreMeltingRecipeResourceLocation(String oreId) {
@@ -193,4 +211,28 @@ public class WoodencogRecipeProvider extends RecipeProvider {
         return new ResourceLocation("tfc","ore/"+oreId);
     }
 
+    static final List<ProcessingRecipeGen> GENERATORS = new ArrayList<>();
+
+    //Create processing recipes
+    public static void registerAllProcessing(DataGenerator gen, PackOutput output) {
+
+        GENERATORS.add(new WoodenCogCompactingRecipeGen(output));
+        GENERATORS.add(new WoodenCogCrushingRecipeGen(output));
+        GENERATORS.add(new WoodenCogMixingRecipeGen(output));
+
+        gen.addProvider(true, new DataProvider() {
+
+            @Override
+            public String getName() {
+                return "Create's Processing Recipes";
+            }
+
+            @Override
+            public CompletableFuture<?> run(CachedOutput dc) {
+                return CompletableFuture.allOf(GENERATORS.stream()
+                        .map(gen -> gen.run(dc))
+                        .toArray(CompletableFuture[]::new));
+            }
+        });
+    }
 }

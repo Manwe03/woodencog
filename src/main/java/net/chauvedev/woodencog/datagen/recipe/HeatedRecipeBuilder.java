@@ -22,6 +22,11 @@ public class HeatedRecipeBuilder {
         return this;
     }
 
+    public HeatedRecipeBuilder addItemIngredient(ResourceLocation item) {
+        ingredients.add(new ItemIngredient(item));
+        return this;
+    }
+
     public HeatedRecipeBuilder addFluidIngredient(ResourceLocation fluid, int amount) {
         ingredients.add(new FluidIngredient(fluid, amount));
         return this;
@@ -172,14 +177,20 @@ public class HeatedRecipeBuilder {
             this.maxTemp = maxTemp;
         }
 
+        public ItemIngredient(ResourceLocation ingredient) {
+            this.ingredient = ingredient;
+            this.minTemp = 0;
+            this.maxTemp = 0;
+        }
+
         @Override
         public JsonObject toJson() {
             JsonObject obj = new JsonObject();
             JsonObject item = new JsonObject();
             item.addProperty("item", ingredient.toString());
             obj.add("ingredient", item);
-            obj.addProperty("min_temp", minTemp);
-            obj.addProperty("max_temp", maxTemp);
+            if(minTemp > 0) obj.addProperty("min_temp", minTemp);
+            if(maxTemp > 0) obj.addProperty("max_temp", maxTemp);
             return obj;
         }
     }

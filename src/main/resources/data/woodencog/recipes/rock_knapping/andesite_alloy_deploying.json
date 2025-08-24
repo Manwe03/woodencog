@@ -2,7 +2,7 @@
   "type": "create:deploying",
   "ingredients": [
     {
-      "tag": "tfc:igneous_extrusive_rock"
+      "tag": "forge:rocks/andesite"
     },
     {
       "tag": "tfc:chisels"

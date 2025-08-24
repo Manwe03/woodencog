@@ -1,0 +1,17 @@
+{
+  "type": "create:deploying",
+  "ingredients": [
+    {
+      "item": "tfc:ore/pyrite"
+    },
+    {
+      "item": "tfc:sandpaper"
+    }
+  ],
+  "keepHeldItem": true,
+  "results": [
+    {
+      "item": "tfc:gem/pyrite"
+    }
+  ]
+}

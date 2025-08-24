@@ -17,7 +17,7 @@ public class DataGenerators {
         CompletableFuture<HolderLookup.Provider> lookupProvider = event.getLookupProvider();
         ExistingFileHelper existingFileHelper = event.getExistingFileHelper();
 
-        generator.addProvider(event.includeServer(), new WoodencogRecipeProvider(output));
+        generator.addProvider(event.includeServer(), new WoodencogRecipeProvider(generator, output));
 
     }
 }

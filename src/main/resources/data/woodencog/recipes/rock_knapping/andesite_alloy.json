@@ -10,6 +10,6 @@
     "item": "create:andesite_alloy"
   },
   "ingredient": {
-    "tag": "tfc:igneous_extrusive_rock"
+    "tag": "forge:rocks/andesite"
   }
 }
