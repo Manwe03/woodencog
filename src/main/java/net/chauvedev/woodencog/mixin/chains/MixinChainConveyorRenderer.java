@@ -43,14 +43,16 @@ public abstract class MixinChainConveyorRenderer {
     private static final Map<Item, Integer> CHAIN_ITEM_TO_METAL_COLOR = new HashMap<>(); //Metal cache
 
     @Unique
-    private static int woodencog$getMetalColorFromChain(Item item) {
+    private static int woodencog$getMetalColorFromChain(ItemLike itemLike) {
+        if(itemLike == null) return 0xFF252c3d;
+        Item item = (Item) itemLike;
         Integer metalColor = CHAIN_ITEM_TO_METAL_COLOR.get(item); //Cached color
         if(metalColor != null) return metalColor;
 
         for (var entry : TFCBlocks.METALS.entrySet()) {
             var byType = entry.getValue();
             var maybeChain = byType.get(Metal.BlockType.CHAIN);
-            if (maybeChain != null && maybeChain.get().asItem() == item) {
+            if (maybeChain != null && maybeChain.isPresent() && maybeChain.get().asItem() == item) {
                 int color = entry.getKey().getColor();
                 CHAIN_ITEM_TO_METAL_COLOR.put(item,color); //Metal color
                 return color;
@@ -80,7 +82,7 @@ public abstract class MixinChainConveyorRenderer {
         Map<BlockPos, ItemLike> chainMap = ((ChainConveyorBlockEntityExtended)be).getConnectionsChain();
         ItemLike chainItem = chainMap.get(blockPos);
 
-        int chainColor = woodencog$getMetalColorFromChain(chainItem.asItem());
+        int chainColor = woodencog$getMetalColorFromChain(chainItem);
 
         woodencog$renderChain(ms,buffer,animation, stats.chainLength(), light1, light2, far, Color.modify(chainColor,1.5f,10));
     }
