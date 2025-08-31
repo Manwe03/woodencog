@@ -5,7 +5,6 @@ import com.simibubi.create.content.kinetics.belt.transport.TransportedItemStack;
 import com.simibubi.create.content.kinetics.fan.processing.AllFanProcessingTypes;
 import com.simibubi.create.content.kinetics.fan.processing.FanProcessing;
 import com.simibubi.create.content.kinetics.fan.processing.FanProcessingType;
-import net.chauvedev.woodencog.WoodenCog;
 import net.chauvedev.woodencog.config.WoodenCogCommonConfigs;
 import net.chauvedev.woodencog.utils.ModTags;
 import net.dries007.tfc.common.capabilities.food.FoodCapability;
@@ -56,13 +55,12 @@ public class MixinFanProcessing {
         HeatingRecipe recipe = HeatingRecipe.getRecipe(inputStack);
 
         if (recipe!=null){
-            if ((double)itemTemp > 1.1 * (double)recipe.getTemperature()) {
+            if ((double) itemTemp > 1.1 * (double) recipe.getTemperature()) {
                 if (recipe.assemble(new ItemStackInventory(inputStack), null).isEmpty()){
                     return null;
                 }
             }
-            if (recipe.isValidTemperature(cap.getTemperature()))
-            {
+            if (recipe.isValidTemperature(cap.getTemperature())) {
                 ItemStack output = recipe.assemble(new ItemStackInventory(inputStack), null);
                 FluidStack fluidStack = recipe.assembleFluid(new ItemStackInventory(inputStack));
                 if(!fluidStack.isEmpty()) {
@@ -108,14 +106,10 @@ public class MixinFanProcessing {
                 }
                 TransportedItemStack newTransportedStack = transported.getSimilar();
                 newTransportedStack.stack = newStack;
-                cir.setReturnValue(
-                        TransportedItemStackHandlerBehaviour.TransportedResult.convertTo(
-                                newTransportedStack
-                        )
-                );
+                cir.setReturnValue(TransportedItemStackHandlerBehaviour.TransportedResult.convertTo(newTransportedStack));
+                return;
             }
             cir.setReturnValue(TransportedItemStackHandlerBehaviour.TransportedResult.removeItem());
-            cir.cancel();
         }
     }
 
@@ -139,7 +133,7 @@ public class MixinFanProcessing {
         {
             ItemStack result = MixinFanProcessing.applyProcessingTCF(inputStack,type);
 
-            if (result==null){
+            if (result == null){
                 entity.kill();
             }else{
                 entity.setItem(result);
