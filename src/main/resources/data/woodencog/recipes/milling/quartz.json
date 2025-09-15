@@ -1,0 +1,16 @@
+{
+  "type": "create:milling",
+  "ingredients": [
+    {
+      "item": "tfc:rock/raw/quartzite"
+    }
+  ],
+  "results": [
+    {
+      "item": "minecraft:quartz",
+      "count": 1,
+      "chance": 0.05
+    }
+  ],
+  "processingTime": 50
+}

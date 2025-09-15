@@ -10,6 +10,6 @@
     "item": "create:andesite_alloy"
   },
   "ingredient": {
-    "tag": "forge:rocks/andesite"
+    "tag": "woodencog:rocks/andesite"
   }
 }

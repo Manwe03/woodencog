@@ -10,6 +10,7 @@ import net.minecraft.data.PackOutput;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.Blocks;
 import net.minecraftforge.registries.ForgeRegistries;
 
 public class WoodenCogCompactingRecipeGen extends CompactingRecipeGen {
@@ -17,6 +18,7 @@ public class WoodenCogCompactingRecipeGen extends CompactingRecipeGen {
         super(output, WoodenCog.MOD_ID);
 
         TFCBlocks.ROCK_BLOCKS.keySet().forEach(this::createCompactingRawRock);
+        createCompactingVanillaRock();
     }
 
     private GeneratedRecipe createCompactingRawRock(Rock rock) {
@@ -29,6 +31,53 @@ public class WoodenCogCompactingRecipeGen extends CompactingRecipeGen {
             .require(looseRock)
             .requiresHeat(HeatCondition.HEATED)
             .output(rawRock, 1));
+    }
+
+    private void createCompactingVanillaRock() {
+        Item looseRock1 = getLooseRock(Rock.BASALT);
+        create("vanilla_basalt_from_loose_rock", b ->
+            b.require(looseRock1)
+            .require(looseRock1)
+            .require(looseRock1)
+            .require(looseRock1)
+            .requiresHeat(HeatCondition.SUPERHEATED)
+            .output(Blocks.BASALT, 1));
+
+        Item looseRock2 = getLooseRock(Rock.SLATE);
+        create("vanilla_slate_from_loose_rock", b ->
+            b.require(looseRock2)
+            .require(looseRock2)
+            .require(looseRock2)
+            .require(looseRock2)
+            .requiresHeat(HeatCondition.SUPERHEATED)
+            .output(Blocks.DEEPSLATE, 1));
+        /*
+        Item looseRock3 = getLooseRock(Rock.DIORITE);
+        create("vanilla_diorite_from_loose_rock", b ->
+            b.require(looseRock3)
+            .require(looseRock3)
+            .require(looseRock3)
+            .require(looseRock3)
+            .requiresHeat(HeatCondition.SUPERHEATED)
+            .output(Blocks.DIORITE, 1));
+        */
+        Item looseRock4 = getLooseRock(Rock.ANDESITE);
+        create("vanilla_andesite_from_loose_rock", b ->
+            b.require(looseRock4)
+            .require(looseRock4)
+            .require(looseRock4)
+            .require(looseRock4)
+            .requiresHeat(HeatCondition.SUPERHEATED)
+            .output(Blocks.ANDESITE, 1));
+
+        Item looseRock5 = getLooseRock(Rock.GRANITE);
+        create("vanilla_granite_from_loose_rock", b ->
+            b.require(looseRock5)
+            .require(looseRock5)
+            .require(looseRock5)
+            .require(looseRock5)
+            .requiresHeat(HeatCondition.SUPERHEATED)
+            .output(Blocks.GRANITE, 1));
     }
 
     private Block getBlock(Rock rock, Rock.BlockType type) {
