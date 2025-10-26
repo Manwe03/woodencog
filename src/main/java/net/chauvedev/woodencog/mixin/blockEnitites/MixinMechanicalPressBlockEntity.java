@@ -29,7 +29,7 @@ public abstract class MixinMechanicalPressBlockEntity {
      */
     @Inject( method = "matchStaticFilters", at = @At("RETURN"), cancellable = true)
     protected <C extends Container> void matchStaticFilters(Recipe<C> recipe, CallbackInfoReturnable<Boolean> cir) {
-        cir.setReturnValue(cir.getReturnValue() || recipe.getType() == AllHeatedRecipeTypes.HEATED_COMPACTING.getType());
+        if(!cir.getReturnValue() && recipe.getType() == AllHeatedRecipeTypes.HEATED_COMPACTING.getType()) cir.setReturnValue(true);
     }
 
     /**

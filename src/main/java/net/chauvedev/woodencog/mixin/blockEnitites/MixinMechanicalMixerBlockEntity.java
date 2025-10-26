@@ -1,6 +1,5 @@
 package net.chauvedev.woodencog.mixin.blockEnitites;
 
-import com.llamalad7.mixinextras.injector.ModifyReturnValue;
 import com.simibubi.create.content.kinetics.mixer.MechanicalMixerBlockEntity;
 import com.simibubi.create.content.processing.basin.BasinBlockEntity;
 import com.simibubi.create.content.processing.recipe.ProcessingRecipe;
@@ -19,6 +18,7 @@ import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
+import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 import java.util.Optional;
 
@@ -29,9 +29,9 @@ public abstract class MixinMechanicalMixerBlockEntity {
      * @author Manwe
      * @reason Also match for heatedMixing
      */
-    @ModifyReturnValue(method = "matchStaticFilters", at = @At("RETURN"))
-    private <C extends Container> boolean matchStaticFilters(boolean original, Recipe<C> r) {
-        return original || r.getType() == AllHeatedRecipeTypes.HEATED_MIXING.getType();
+    @Inject( method = "matchStaticFilters", at = @At("RETURN"), cancellable = true)
+    private <C extends Container> void matchStaticFilters(Recipe<C> recipe, CallbackInfoReturnable<Boolean> cir) {
+        if(!cir.getReturnValue() && recipe.getType() == AllHeatedRecipeTypes.HEATED_MIXING.getType()) cir.setReturnValue(true);
     }
 
     /**
