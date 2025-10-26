@@ -6,12 +6,12 @@ import com.simibubi.create.foundation.blockEntity.behaviour.fluid.SmartFluidTank
 import com.simibubi.create.foundation.fluid.FluidIngredient;
 import com.simibubi.create.foundation.recipe.DummyCraftingContainer;
 import com.simibubi.create.foundation.recipe.IRecipeTypeInfo;
-import net.chauvedev.woodencog.WoodenCog;
 import net.chauvedev.woodencog.config.WoodenCogCommonConfigs;
 import net.chauvedev.woodencog.recipes.heatedRecipes.AllHeatedRecipeTypes;
 import net.chauvedev.woodencog.recipes.heatedRecipes.HeatedProcessingRecipe;
 import net.chauvedev.woodencog.recipes.heatedRecipes.HeatedProcessingRecipeBuilder;
 import net.chauvedev.woodencog.utils.BasinBlockEntityExtended;
+import net.chauvedev.woodencog.utils.CogUtil;
 import net.chauvedev.woodencog.utils.HeatHandlingUtil;
 import net.createmod.catnip.data.Iterate;
 import net.dries007.tfc.common.recipes.ingredients.HeatableIngredient;
@@ -20,7 +20,6 @@ import net.minecraft.world.inventory.CraftingContainer;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.Recipe;
 import net.minecraft.world.level.Level;
-import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraftforge.common.capabilities.ForgeCapabilities;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.capability.IFluidHandler;
@@ -33,10 +32,9 @@ public class HeatedBasinRecipe extends HeatedProcessingRecipe<Container> {
 
     public static boolean match(BasinBlockEntity basin, Recipe<?> recipe) {
         FilteringBehaviour filter = basin.getFilter();
-        if (filter == null){
-            WoodenCog.LOGGER.error("Filter is null");
-            return false;
-        }
+
+        if(CogUtil.logConditional(basin.getLevel() == null, HeatedBasinRecipe.class,"basin level is null")) return false;
+        if(CogUtil.logConditional(filter == null, HeatedBasinRecipe.class,"filter is null")) return false;
 
         boolean filterTest = filter.test(recipe.getResultItem(basin.getLevel().registryAccess()));
         if (recipe instanceof HeatedBasinRecipe basinRecipe) {

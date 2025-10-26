@@ -1,15 +1,5 @@
 package net.chauvedev.woodencog.recipes.heatedRecipes;
 
-import com.simibubi.create.content.processing.burner.BlazeBurnerBlockEntity;
-import net.chauvedev.woodencog.utils.BlazeBurnerBlockentityExtended;
-import net.dries007.tfc.common.blockentities.CharcoalForgeBlockEntity;
-import net.minecraft.world.level.block.entity.BlockEntity;
-
-import java.util.function.BiFunction;
-import java.util.function.Consumer;
-import java.util.function.Predicate;
-import java.util.function.Supplier;
-
 public class WoodenCogHeatCondition {
 
     private final int color;

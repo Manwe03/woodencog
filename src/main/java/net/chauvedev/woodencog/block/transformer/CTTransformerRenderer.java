@@ -3,7 +3,6 @@ package net.chauvedev.woodencog.block.transformer;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import com.simibubi.create.AllPartialModels;
-import com.simibubi.create.content.kinetics.base.IRotate;
 import com.simibubi.create.content.kinetics.base.KineticBlockEntityRenderer;
 import net.createmod.catnip.render.CachedBuffers;
 import net.createmod.catnip.render.SuperByteBuffer;
@@ -25,16 +24,13 @@ public class CTTransformerRenderer extends KineticBlockEntityRenderer<CTTransfor
     protected void renderSafe(CTTransformerBlockEntity blockEntity, float partialTicks, PoseStack ms,
                               MultiBufferSource buffer, int light, int overlay) {
 
-        Direction.Axis axis = ((IRotate) blockEntity.getBlockState().getBlock()).getRotationAxis(blockEntity.getBlockState());
-
         Direction direction = blockEntity.getBlockState().getValue(FACING);
         VertexConsumer vb = buffer.getBuffer(RenderType.cutoutMipped());
 
         SuperByteBuffer shaftHalf = CachedBuffers.partialFacing(AllPartialModels.SHAFT_HALF, blockEntity.getBlockState(), direction.getOpposite());
 
-        int lightBehind = LevelRenderer.getLightColor(blockEntity.getLevel(), blockEntity.getBlockPos().relative(direction.getOpposite()));
+        int lightBehind = 0;
+        if(blockEntity.getLevel() != null) LevelRenderer.getLightColor(blockEntity.getLevel(), blockEntity.getBlockPos().relative(direction.getOpposite()));
         standardKineticRotationTransform(shaftHalf, blockEntity, lightBehind).renderInto(ms, vb);
-
-        //kineticRotationTransform(fanInner, be, direction.getAxis(), angle, lightInFront).renderInto(ms, vb);
     }
 }

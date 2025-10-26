@@ -28,15 +28,13 @@ public enum AllHeatedRecipeTypes implements IRecipeTypeInfo {
     HEATED_COMPACTING(HeatedCompactingRecipe::new),
     HEATED_MIXING(HeatedMixingRecipe::new);
 
-    public static final Predicate<? super Recipe<?>> CAN_BE_AUTOMATED = (r) -> {
-        return !r.getId().getPath().endsWith("_manual_only");
-    };
+    public static final Predicate<? super Recipe<?>> CAN_BE_AUTOMATED = (r) -> !r.getId().getPath().endsWith("_manual_only");
     private final ResourceLocation id;
     private final RegistryObject<RecipeSerializer<?>> serializerObject;
     private final @Nullable RegistryObject<RecipeType<?>> typeObject;
     private final Supplier<RecipeType<?>> type;
 
-    private AllHeatedRecipeTypes(Supplier serializerSupplier, Supplier<RecipeType<?>> typeSupplier, boolean registerType) {
+    AllHeatedRecipeTypes(Supplier serializerSupplier, Supplier<RecipeType<?>> typeSupplier, boolean registerType) {
         String name = this.name().toLowerCase();
         this.id = WoodenCog.asResource(name);
         this.serializerObject = Registers.SERIALIZER_REGISTER.register(name, serializerSupplier);
@@ -49,17 +47,15 @@ public enum AllHeatedRecipeTypes implements IRecipeTypeInfo {
         }
     }
 
-    private AllHeatedRecipeTypes(Supplier serializerSupplier) {
+    AllHeatedRecipeTypes(Supplier serializerSupplier) {
         String name = this.name().toLowerCase();
         this.id = WoodenCog.asResource(name);
         this.serializerObject = Registers.SERIALIZER_REGISTER.register(name, serializerSupplier);
-        this.typeObject = Registers.TYPE_REGISTER.register(name, () -> {
-            return RecipeType.simple(this.id);
-        });
+        this.typeObject = Registers.TYPE_REGISTER.register(name, () -> RecipeType.simple(this.id));
         this.type = this.typeObject;
     }
 
-    private AllHeatedRecipeTypes(HeatedProcessingRecipeBuilder.HeatedProcessingRecipeFactory processingFactory) {
+    AllHeatedRecipeTypes(HeatedProcessingRecipeBuilder.HeatedProcessingRecipeFactory processingFactory) {
         this(() -> new HeatedProcessingRecipeSerializer<>(processingFactory));
     }
 

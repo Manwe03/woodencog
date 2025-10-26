@@ -21,12 +21,10 @@ import net.minecraft.world.level.ItemLike;
 import net.minecraftforge.registries.ForgeRegistries;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.spongepowered.asm.mixin.Unique;
 
 import java.io.FileWriter;
 import java.io.IOException;
-import java.io.PrintWriter;
-import java.time.Instant;
+import java.util.Arrays;
 
 public class HeatedProcessingOutput extends ProcessingOutput {
 
@@ -119,14 +117,14 @@ public class HeatedProcessingOutput extends ProcessingOutput {
 
             WoodenCog.LOGGER.info("[WoodenCog] Create Resource Location from: " + itemId);
             try {
-                ResourceLocation rl = new ResourceLocation(itemId);
+                ResourceLocation rl = ResourceLocation.tryParse(itemId);
             } catch (Exception e) {
                 WoodenCog.LOGGER.error("[WoodenCog] Invalid Resource Location: " + itemId, e);
             }
 
-            ItemLike item = ForgeRegistries.ITEMS.getValue(new ResourceLocation(itemId));
+            ItemLike item = ForgeRegistries.ITEMS.getValue(ResourceLocation.tryParse(itemId));
             if (item == null) {
-                WoodenCog.LOGGER.error("[WoodenCog] Unknown item in registry: " + new ResourceLocation(itemId));
+                WoodenCog.LOGGER.error("[WoodenCog] Unknown item in registry: " + ResourceLocation.tryParse(itemId));
                 return null;
             }
 
@@ -137,7 +135,7 @@ public class HeatedProcessingOutput extends ProcessingOutput {
                     JsonElement element = json.get("nbt");
                     itemstack.setTag(TagParser.parseTag(element.isJsonObject() ? Create.GSON.toJson(element) : GsonHelper.convertToString(element, "nbt")));
                 } catch (CommandSyntaxException var7) {
-                    WoodenCog.LOGGER.error(var7.getStackTrace().toString());
+                    WoodenCog.LOGGER.error(Arrays.toString(var7.getStackTrace()));
                 }
             }
             int temperature = 0;

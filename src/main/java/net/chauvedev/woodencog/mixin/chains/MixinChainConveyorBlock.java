@@ -1,5 +1,6 @@
 package net.chauvedev.woodencog.mixin.chains;
 
+import com.llamalad7.mixinextras.sugar.Local;
 import com.simibubi.create.content.kinetics.chainConveyor.ChainConveyorBlock;
 import com.simibubi.create.content.kinetics.chainConveyor.ChainConveyorBlockEntity;
 import net.chauvedev.woodencog.utils.ChainConveyorBlockEntityExtended;
@@ -25,14 +26,11 @@ public abstract class MixinChainConveyorBlock {
             at = @At(
                     value = "INVOKE",
                     target = "Lnet/minecraft/world/entity/player/Inventory;placeItemBackInInventory(Lnet/minecraft/world/item/ItemStack;)V"
-            ),
-            locals = LocalCapture.CAPTURE_FAILHARD
+            )
     )
     private static void afterPlaceItemBackInInventory(
-        Player player, ChainConveyorBlockEntity be, CallbackInfo ci, Iterator var2, BlockPos targetPos, int chainCost) {
-
+            Player player, ChainConveyorBlockEntity be, CallbackInfo ci, @Local BlockPos targetPos, @Local int chainCost) {
         ItemLike chain = ((ChainConveyorBlockEntityExtended) be).getConnectionsChain().get(targetPos);
-
         if (chain != null) player.getInventory().placeItemBackInInventory(new ItemStack(chain, Math.min(chainCost, 64)));
     }
 

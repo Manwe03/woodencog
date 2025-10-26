@@ -18,6 +18,7 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraftforge.fluids.FluidStack;
 import org.spongepowered.asm.mixin.Mixin;
+import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
@@ -25,6 +26,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 @Mixin(value = FanProcessing.class, remap = false)
 public class MixinFanProcessing {
 
+    @Unique
     private static ItemStack applyProcessingTCF(ItemStack inputStack, FanProcessingType type) {
         if (
                 !inputStack.getCapability(HeatCapability.CAPABILITY).isPresent()
@@ -85,7 +87,8 @@ public class MixinFanProcessing {
     )
     private static void applyProcessing(TransportedItemStack transported, Level world, FanProcessingType type,CallbackInfoReturnable<TransportedItemStackHandlerBehaviour.TransportedResult> cir) {
         boolean hasHeat = transported.stack.getCapability(HeatCapability.CAPABILITY).isPresent();
-        boolean isUnburnable = transported.stack.is(ModTags.Items.UNBURNABLE);
+
+        boolean isUnburnable = ModTags.Items.UNBURNABLE != null && transported.stack.is(ModTags.Items.UNBURNABLE);
 
         if(isUnburnable) {
             cir.setReturnValue(TransportedItemStackHandlerBehaviour.TransportedResult.doNothing());
@@ -123,7 +126,8 @@ public class MixinFanProcessing {
         ItemStack inputStack = entity.getItem();
 
         boolean hasHeat = inputStack.getCapability(HeatCapability.CAPABILITY).isPresent();
-        boolean isUnburnable = inputStack.is(ModTags.Items.UNBURNABLE);
+
+        boolean isUnburnable = ModTags.Items.UNBURNABLE != null && inputStack.is(ModTags.Items.UNBURNABLE);
 
         if(isUnburnable) {
             cir.cancel();

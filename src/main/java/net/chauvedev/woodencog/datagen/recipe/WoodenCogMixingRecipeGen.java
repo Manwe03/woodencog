@@ -3,25 +3,17 @@ package net.chauvedev.woodencog.datagen.recipe;
 import com.simibubi.create.api.data.recipe.MixingRecipeGen;
 import com.simibubi.create.content.processing.recipe.HeatCondition;
 import net.chauvedev.woodencog.WoodenCog;
-import net.chauvedev.woodencog.datagen.WoodenCogTags;
-import net.dries007.tfc.TerraFirmaCraft;
-import net.dries007.tfc.common.TFCTags;
+import net.chauvedev.woodencog.utils.ModTags;
 import net.dries007.tfc.common.blocks.TFCBlocks;
 import net.dries007.tfc.common.fluids.SimpleFluid;
 import net.dries007.tfc.common.fluids.TFCFluids;
 import net.dries007.tfc.common.items.Powder;
 import net.dries007.tfc.common.items.TFCItems;
-import net.dries007.tfc.util.Helpers;
-import net.minecraft.core.registries.Registries;
 import net.minecraft.data.PackOutput;
-import net.minecraft.resources.ResourceLocation;
-import net.minecraft.tags.TagKey;
 import net.minecraft.world.item.DyeColor;
 import net.minecraft.world.item.Item;
-import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.material.Fluid;
 import net.minecraft.world.level.material.Fluids;
-import net.minecraftforge.common.Tags;
 
 public class WoodenCogMixingRecipeGen extends MixingRecipeGen {
     public WoodenCogMixingRecipeGen(PackOutput output) {
@@ -54,19 +46,19 @@ public class WoodenCogMixingRecipeGen extends MixingRecipeGen {
 
     LYE_RAW_ALABASTER = create("lye_raw_alabaster", b ->
             b.require(getSimpleFluid(SimpleFluid.LYE), 25)
-            .require(WoodenCogTags.COLORED_RAW_ALABASTER)
+            .require(ModTags.Items.COLORED_RAW_ALABASTER)
             .output(TFCBlocks.PLAIN_ALABASTER.get())
             .duration(600)),
 
     LYE_ALABASTER_BRICKS = create("lye_alabaster_bricks", b ->
             b.require(getSimpleFluid(SimpleFluid.LYE), 25)
-            .require(WoodenCogTags.COLORED_BRICKS_ALABASTER)
+            .require(ModTags.Items.COLORED_BRICKS_ALABASTER)
             .output(TFCBlocks.PLAIN_ALABASTER_BRICKS.get())
             .duration(600)),
 
     LYE_POLISHED_ALABASTER = create("lye_polished_alabaster", b ->
             b.require(getSimpleFluid(SimpleFluid.LYE), 25)
-            .require(WoodenCogTags.COLORED_POLISHED_ALABASTER)
+            .require(ModTags.Items.COLORED_POLISHED_ALABASTER)
             .output(TFCBlocks.PLAIN_POLISHED_ALABASTER.get())
             .duration(600));
 

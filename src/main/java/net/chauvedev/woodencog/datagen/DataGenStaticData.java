@@ -52,29 +52,15 @@ public class DataGenStaticData {
     public static Ore SPHALERITE = new Ore("sphalerite",420,"zinc");
     public static Ore TETRAHEDRITE = new Ore("tetrahedrite",1080,"copper");
 
-    public static class Ore {
-        private final String oreId;
-        private final int meltTemperature;
-        private final String metalId;
+    public record Ore(String oreId, int meltTemperature, String metalId) {
+            public Ore(String oreId, int meltTemperature, String metalId) {
+                this.oreId = oreId;
+                this.meltTemperature = meltTemperature;
+                this.metalId = metalId;
 
-        public Ore(String oreId, int meltTemperature, String metalId) {
-            this.oreId = oreId;
-            this.meltTemperature = meltTemperature;
-            this.metalId = metalId;
-
-            ORE_REGISTRY.add(this);
+                ORE_REGISTRY.add(this);
+            }
         }
-
-        public String getOreId() {
-            return oreId;
-        }
-        public int getMeltTemperature() {
-            return meltTemperature;
-        }
-        public String getMetalId() {
-            return metalId;
-        }
-    }
 
     public static class Metal {
         private final String name;

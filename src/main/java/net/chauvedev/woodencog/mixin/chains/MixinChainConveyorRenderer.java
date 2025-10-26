@@ -38,8 +38,10 @@ import java.util.Map;
 @Mixin(value = ChainConveyorRenderer.class, remap = false)
 public abstract class MixinChainConveyorRenderer {
 
+    @Unique
     private static final ResourceLocation CHAIN_BW_LOCATION = WoodenCog.asResource("textures/block/chain_bw.png");
 
+    @Unique
     private static final Map<Item, Integer> CHAIN_ITEM_TO_METAL_COLOR = new HashMap<>(); //Metal cache
 
     @Unique
@@ -116,9 +118,10 @@ public abstract class MixinChainConveyorRenderer {
         ms.popPose();
     }
 
+    @Unique
     private static void woodencog$renderPart(PoseStack pPoseStack, VertexConsumer pConsumer, float pMaxY, float pX0, float pZ0,
-                                   float pX1, float pZ1, float pX2, float pZ2, float pX3, float pZ3, float pMinU, float pMaxU, float pMinV,
-                                   float pMaxV, int light1, int light2, boolean far, int chainColor) {
+                                             float pX1, float pZ1, float pX2, float pZ2, float pX3, float pZ3, float pMinU, float pMaxU, float pMinV,
+                                             float pMaxV, int light1, int light2, boolean far, int chainColor) {
         PoseStack.Pose posestack$pose = pPoseStack.last();
         Matrix4f matrix4f = posestack$pose.pose();
         Matrix3f matrix3f = posestack$pose.normal();
@@ -134,17 +137,19 @@ public abstract class MixinChainConveyorRenderer {
                 light1, light2, chainColor);
     }
 
+    @Unique
     private static void woodencog$renderQuad(Matrix4f pPose, Matrix3f pNormal, VertexConsumer pConsumer, float pMinY, float pMaxY,
-                                   float pMinX, float pMinZ, float pMaxX, float pMaxZ, float pMinU, float pMaxU, float pMinV, float pMaxV,
-                                   int light1, int light2, int chainColor) {
+                                             float pMinX, float pMinZ, float pMaxX, float pMaxZ, float pMinU, float pMaxU, float pMinV, float pMaxV,
+                                             int light1, int light2, int chainColor) {
         woodencog$addVertex(pPose, pNormal, pConsumer, pMaxY, pMinX, pMinZ, pMaxU, pMinV, light2, chainColor);
         woodencog$addVertex(pPose, pNormal, pConsumer, pMinY, pMinX, pMinZ, pMaxU, pMaxV, light1, chainColor);
         woodencog$addVertex(pPose, pNormal, pConsumer, pMinY, pMaxX, pMaxZ, pMinU, pMaxV, light1, chainColor);
         woodencog$addVertex(pPose, pNormal, pConsumer, pMaxY, pMaxX, pMaxZ, pMinU, pMinV, light2, chainColor);
     }
 
+    @Unique
     private static void woodencog$addVertex(Matrix4f pPose, Matrix3f pNormal, VertexConsumer pConsumer, float pY, float pX,
-                                  float pZ, float pU, float pV, int light, int chainColor) {
+                                            float pZ, float pU, float pV, int light, int chainColor) {
         pConsumer.vertex(pPose, pX, pY, pZ)
                 .color(chainColor)
                 .uv(pU, pV)

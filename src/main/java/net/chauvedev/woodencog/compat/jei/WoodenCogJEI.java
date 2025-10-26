@@ -18,6 +18,7 @@ import net.chauvedev.woodencog.recipes.heatedRecipes.HeatedProcessingRecipe;
 import net.chauvedev.woodencog.recipes.heatedRecipes.recipes.HeatedCompactingRecipe;
 import net.chauvedev.woodencog.recipes.heatedRecipes.recipes.HeatedMixingRecipe;
 import net.chauvedev.woodencog.recipes.heatedRecipes.recipes.HeatedPressingRecipe;
+import net.chauvedev.woodencog.utils.CogUtil;
 import net.chauvedev.woodencog.utils.CreateBlocksAccess;
 import net.chauvedev.woodencog.utils.CreateItemAccess;
 import net.minecraft.client.Minecraft;
@@ -109,9 +110,10 @@ public class WoodenCogJEI implements IModPlugin {
     private <C extends Container, T extends HeatedProcessingRecipe<C>> Supplier<List<T>> getRecipes(RecipeType<T> type){
         Level level = Minecraft.getInstance().level;
         if(level != null && level.isClientSide){
-            return () -> level.getRecipeManager().getAllRecipesFor(type).stream()
-                    .filter(recipe -> recipe instanceof HeatedProcessingRecipe<?>)  // Filter specific recipes
-                    .map(recipe -> (T) recipe).toList();
+            return () -> // Filter specific recipes
+                    level.getRecipeManager().getAllRecipesFor(type).stream()
+                            .filter(recipe -> recipe instanceof HeatedProcessingRecipe<?>) //filter
+                            .toList();
         }
         return List::of;
     }
@@ -148,6 +150,8 @@ public class WoodenCogJEI implements IModPlugin {
     }
 
     public static boolean doOutputsMatch(Recipe<?> recipe1, Recipe<?> recipe2) {
+        if (CogUtil.logConditional(Minecraft.getInstance().level == null, WoodenCogJEI.class,"minecraft.level is null")) return false;
+
         RegistryAccess registryAccess = Minecraft.getInstance().level.registryAccess();
         return ItemHelper.sameItem(recipe1.getResultItem(registryAccess), recipe2.getResultItem(registryAccess));
     }

@@ -3,6 +3,7 @@ package net.chauvedev.woodencog.mixin.chains;
 import com.simibubi.create.content.kinetics.chainConveyor.ChainConveyorBlockEntity;
 import com.simibubi.create.content.kinetics.chainConveyor.ChainConveyorConnectionPacket;
 import net.chauvedev.woodencog.utils.ChainConveyorBlockEntityExtended;
+import net.chauvedev.woodencog.utils.CogUtil;
 import net.minecraft.core.BlockPos;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.item.ItemStack;
@@ -27,6 +28,8 @@ public class MixinChainConveyorConnectionPacket {
         )
     )
     private void beforeClbeAddConnectionTo(ServerPlayer player, ChainConveyorBlockEntity be, CallbackInfo ci) {
+        if(CogUtil.logConditional(be.getLevel() == null,this.getClass(),"block entity level is null")) return;
+
         if(!(be.getLevel().getBlockEntity(targetPos) instanceof ChainConveyorBlockEntity clbe)) return; //FAIL
         ((ChainConveyorBlockEntityExtended) clbe).addConnectionToWithChain(be.getBlockPos(), chain.getItem());
     }

@@ -17,7 +17,6 @@ import net.chauvedev.woodencog.block.WoodencogBlocks;
 import net.createmod.ponder.foundation.PonderIndex;
 import net.minecraft.client.renderer.blockentity.BlockEntityRenderers;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.BuildCreativeModeTabContentsEvent;
 import net.minecraftforge.event.RegisterCommandsEvent;
@@ -26,7 +25,6 @@ import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.event.lifecycle.*;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
-import net.minecraftforge.fml.loading.FMLEnvironment;
 import net.minecraftforge.registries.RegisterEvent;
 import org.slf4j.Logger;
 
@@ -55,10 +53,9 @@ public class WoodenCog
         AllAdvancedRecipeTypes.register(modEventBus);
         AllHeatedRecipeTypes.register(modEventBus);
 
-        if(FMLEnvironment.dist == Dist.CLIENT) {
+        //if(FMLEnvironment.dist == Dist.CLIENT) {
             /*PONDER_HELPER.forComponents(FIRECLAY_CRUCIBLE_ITEM).addStoryBoard("heating/heat", Heating::heating).addStoryBoard("heating/cool", Heating::cooling);*/
-
-        }
+        //}
 
         /*
         TFCItems.METAL_ITEMS.forEach((aDefault, itemTypeRegistryObjectMap) -> {
@@ -110,8 +107,8 @@ public class WoodenCog
     }
 
     public static ResourceLocation asResource(String path) {
-        System.out.println("[DANGER] resourceLocation created: "+new ResourceLocation(WoodenCog.MOD_ID, path));
-        return new ResourceLocation(WoodenCog.MOD_ID, path);
+        WoodenCog.LOGGER.info("ResourceLocation created: "+ ResourceLocation.tryBuild(WoodenCog.MOD_ID, path));
+        return ResourceLocation.tryBuild(WoodenCog.MOD_ID, path);
     }
 
 }

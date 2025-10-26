@@ -1,4 +1,4 @@
-package net.chauvedev.woodencog.compat.jei.AnimatedBlocks;
+package net.chauvedev.woodencog.compat.jei.animatedBlocks;
 
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.math.Axis;
@@ -23,7 +23,7 @@ public class AnimatedCharcoalForge extends AnimatedKinetics {
         int scale = 23;
         this.blockElement(TFCBlocks.CHARCOAL_FORGE.get().defaultBlockState())
                 .atLocal(0.0, 1.65, 0.0)
-                .scale((double) scale)
+                .scale(scale)
                 .render(graphics);
 
         matrixStack.popPose();

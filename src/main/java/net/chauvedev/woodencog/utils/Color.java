@@ -5,10 +5,8 @@ import mezz.jei.api.gui.ingredient.IRecipeSlotsView;
 import mezz.jei.api.recipe.RecipeIngredientRole;
 import net.chauvedev.woodencog.recipes.heatedRecipes.HeatedProcessingOutput;
 import net.chauvedev.woodencog.recipes.heatedRecipes.HeatedProcessingRecipe;
-import net.chauvedev.woodencog.recipes.heatedRecipes.recipes.HeatedBasinRecipe;
 import net.createmod.catnip.animation.AnimationTickHolder;
 import net.minecraft.client.gui.GuiGraphics;
-import net.minecraft.world.Container;
 import net.minecraft.world.item.ItemStack;
 
 import java.util.List;
@@ -103,7 +101,7 @@ public class Color {
         WHITE(0xFFFFFFFF);
 
         private final int color;
-        private TextColors(int color) {
+        TextColors(int color) {
             this.color = color;
         }
         public int getColor() {
@@ -141,8 +139,6 @@ public class Color {
 
     /**
      * Linear interpolation
-     * @param startColor
-     * @param endColor
      */
     private static int lerpColor(int startColor, int endColor, float t) {
         int a1 = (startColor >> 24) & 0xFF;

@@ -1,6 +1,5 @@
 package net.chauvedev.woodencog.compat.jei;
 
-import com.simibubi.create.compat.jei.category.animations.AnimatedMixer;
 import com.simibubi.create.compat.jei.category.animations.AnimatedPress;
 import mezz.jei.api.gui.ingredient.IRecipeSlotsView;
 import net.chauvedev.woodencog.WoodenCog;

@@ -2,6 +2,7 @@ package net.chauvedev.woodencog.block.generator;
 
 import com.simibubi.create.content.kinetics.base.GeneratingKineticBlockEntity;
 import net.chauvedev.woodencog.block.WoodencogBlocks;
+import net.chauvedev.woodencog.utils.CogUtil;
 import net.chauvedev.woodencog.utils.RotationUtil;
 import net.dries007.tfc.common.blockentities.rotation.RotatingBlockEntity;
 import net.dries007.tfc.common.blockentities.rotation.WindmillBlockEntity;
@@ -35,6 +36,8 @@ public class WoodenGeneratorBlockEntity extends GeneratingKineticBlockEntity {
     public void lazyTick() {
         super.lazyTick();
 
+        if(CogUtil.logConditional(level == null,this.getClass(),"level is null, can not lazyTick GeneratorBlockEntity")) return;
+
         Direction back = facing.getOpposite();
         BlockPos targetPos = worldPosition.relative(back);
         BlockPos oppositeGenerator = worldPosition.relative(back,2);
@@ -50,9 +53,11 @@ public class WoodenGeneratorBlockEntity extends GeneratingKineticBlockEntity {
             if(rotatingBlock instanceof WindmillBlockEntity windmill){
                 IItemHandler inventory = Helpers.getCapability(windmill, Capabilities.ITEM);
                 int rusticWindmillCount = 0;
-                for(int i = 0; i < inventory.getSlots(); i++){
-                    ItemStack stack = inventory.getStackInSlot(i);
-                    if(stack.getItem() == TFCItems.RUSTIC_WINDMILL_BLADE.get()) rusticWindmillCount++;
+                if(inventory != null){
+                    for(int i = 0; i < inventory.getSlots(); i++){
+                        ItemStack stack = inventory.getStackInSlot(i);
+                        if(stack.getItem() == TFCItems.RUSTIC_WINDMILL_BLADE.get()) rusticWindmillCount++;
+                    }
                 }
                 this.stressMultiplyer = rusticWindmillCount == 5 ? 8 : 4;
             } else {

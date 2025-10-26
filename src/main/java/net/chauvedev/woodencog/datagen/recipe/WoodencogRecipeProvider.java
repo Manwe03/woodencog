@@ -1,11 +1,9 @@
 package net.chauvedev.woodencog.datagen.recipe;
 
 import com.simibubi.create.api.data.recipe.ProcessingRecipeGen;
-import com.simibubi.create.foundation.data.recipe.*;
 import net.chauvedev.woodencog.WoodenCog;
 import net.chauvedev.woodencog.datagen.DataGenStaticData;
 import net.chauvedev.woodencog.recipes.heatedRecipes.AllHeatedRecipeTypes;
-import net.dries007.tfc.common.fluids.TFCFluids;
 import net.dries007.tfc.util.Metal;
 import net.minecraft.data.CachedOutput;
 import net.minecraft.data.DataGenerator;
@@ -15,9 +13,6 @@ import net.minecraft.data.recipes.FinishedRecipe;
 import net.minecraft.data.recipes.RecipeProvider;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.DyeColor;
-import net.minecraft.world.item.Items;
-import net.minecraft.world.level.material.Fluids;
-import net.minecraftforge.common.Tags;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -125,28 +120,28 @@ public class WoodencogRecipeProvider extends RecipeProvider {
         //Ore melting recipes
         DataGenStaticData.ORE_REGISTRY.forEach(ore -> {
             new HeatedRecipeBuilder()
-                   .addItemIngredient(TFCOreResourceLocation("poor_"+ore.getOreId()),ore.getMeltTemperature(),3000)
-                   .addFluidResult(TFCMetalResourceLocation(ore.getMetalId()),15)
-                   .heatRequirement(ore.getMeltTemperature())
-                   .save(consumer, AllHeatedRecipeTypes.HEATED_MIXING, oreMeltingRecipeResourceLocation("poor_"+ore.getOreId()));
+                   .addItemIngredient(TFCOreResourceLocation("poor_"+ore.oreId()),ore.meltTemperature(),3000)
+                   .addFluidResult(TFCMetalResourceLocation(ore.metalId()),15)
+                   .heatRequirement(ore.meltTemperature())
+                   .save(consumer, AllHeatedRecipeTypes.HEATED_MIXING, oreMeltingRecipeResourceLocation("poor_"+ore.oreId()));
 
             new HeatedRecipeBuilder()
-                    .addItemIngredient(TFCOreResourceLocation("normal_"+ore.getOreId()),ore.getMeltTemperature(),3000)
-                    .addFluidResult(TFCMetalResourceLocation(ore.getMetalId()),25)
-                    .heatRequirement(ore.getMeltTemperature())
-                    .save(consumer, AllHeatedRecipeTypes.HEATED_MIXING, oreMeltingRecipeResourceLocation("normal_"+ore.getOreId()));
+                    .addItemIngredient(TFCOreResourceLocation("normal_"+ore.oreId()),ore.meltTemperature(),3000)
+                    .addFluidResult(TFCMetalResourceLocation(ore.metalId()),25)
+                    .heatRequirement(ore.meltTemperature())
+                    .save(consumer, AllHeatedRecipeTypes.HEATED_MIXING, oreMeltingRecipeResourceLocation("normal_"+ore.oreId()));
 
             new HeatedRecipeBuilder()
-                    .addItemIngredient(TFCOreResourceLocation("rich_"+ore.getOreId()),ore.getMeltTemperature(),3000)
-                    .addFluidResult(TFCMetalResourceLocation(ore.getMetalId()),35)
-                    .heatRequirement(ore.getMeltTemperature())
-                    .save(consumer, AllHeatedRecipeTypes.HEATED_MIXING, oreMeltingRecipeResourceLocation("rich_"+ore.getOreId()));
+                    .addItemIngredient(TFCOreResourceLocation("rich_"+ore.oreId()),ore.meltTemperature(),3000)
+                    .addFluidResult(TFCMetalResourceLocation(ore.metalId()),35)
+                    .heatRequirement(ore.meltTemperature())
+                    .save(consumer, AllHeatedRecipeTypes.HEATED_MIXING, oreMeltingRecipeResourceLocation("rich_"+ore.oreId()));
 
             new HeatedRecipeBuilder()
-                    .addItemIngredient(TFCOreResourceLocation("small_"+ore.getOreId()),ore.getMeltTemperature(),3000)
-                    .addFluidResult(TFCMetalResourceLocation(ore.getMetalId()),10)
-                    .heatRequirement(ore.getMeltTemperature())
-                    .save(consumer, AllHeatedRecipeTypes.HEATED_MIXING, oreMeltingRecipeResourceLocation("small_"+ore.getOreId()));
+                    .addItemIngredient(TFCOreResourceLocation("small_"+ore.oreId()),ore.meltTemperature(),3000)
+                    .addFluidResult(TFCMetalResourceLocation(ore.metalId()),10)
+                    .heatRequirement(ore.meltTemperature())
+                    .save(consumer, AllHeatedRecipeTypes.HEATED_MIXING, oreMeltingRecipeResourceLocation("small_"+ore.oreId()));
 
         });
     }
@@ -168,7 +163,7 @@ public class WoodencogRecipeProvider extends RecipeProvider {
                 new HeatedRecipeBuilder()
                         .addItemIngredient(TFCIngotResourceLocation(metal.id()), metal.getWeldingTemperature(),3000)
                         .addItemIngredient(TFCIngotResourceLocation(metal.id()), metal.getWeldingTemperature(),3000)
-                        .addItemIngredient(new ResourceLocation("tfc","powder/flux"), 0,3000)
+                        .addItemIngredient(ResourceLocation.tryBuild("tfc","powder/flux"), 0,3000)
                         .addItemResult(TFCDoubleIngotResourceLocation(metal.id()),1,0,0,true)
                         .save(consumer, AllHeatedRecipeTypes.HEATED_COMPACTING, WoodenCog.asResource("heated_compacting/double_"+metal.id()));
             }
@@ -188,27 +183,27 @@ public class WoodencogRecipeProvider extends RecipeProvider {
     }
 
     private static ResourceLocation TFCMetalResourceLocation(Metal.Default metalEnum) {
-        return new ResourceLocation("tfc","metal/"+metalEnum.getSerializedName());
+        return ResourceLocation.tryBuild("tfc","metal/"+metalEnum.getSerializedName());
     }
 
     private static ResourceLocation TFCMetalResourceLocation(String metalId) {
-        return new ResourceLocation("tfc","metal/"+metalId);
+        return ResourceLocation.tryBuild("tfc","metal/"+metalId);
     }
 
     private static ResourceLocation TFCIngotResourceLocation(String metalId) {
-        return new ResourceLocation("tfc","metal/ingot/"+metalId);
+        return ResourceLocation.tryBuild("tfc","metal/ingot/"+metalId);
     }
 
     private static ResourceLocation TFCDoubleIngotResourceLocation(String metalId) {
-        return new ResourceLocation("tfc","metal/double_ingot/"+metalId);
+        return ResourceLocation.tryBuild("tfc","metal/double_ingot/"+metalId);
     }
 
     private static ResourceLocation TFCSheetIngotResourceLocation(String metalId) {
-        return new ResourceLocation("tfc","metal/sheet/"+metalId);
+        return ResourceLocation.tryBuild("tfc","metal/sheet/"+metalId);
     }
 
     private static ResourceLocation TFCOreResourceLocation(String oreId) {
-        return new ResourceLocation("tfc","ore/"+oreId);
+        return ResourceLocation.tryBuild("tfc","ore/"+oreId);
     }
 
     static final List<ProcessingRecipeGen> GENERATORS = new ArrayList<>();

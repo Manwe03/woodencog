@@ -5,7 +5,6 @@ import com.simibubi.create.content.fluids.transfer.FillingRecipe;
 import com.simibubi.create.content.kinetics.press.PressingRecipe;
 import com.simibubi.create.content.processing.recipe.ProcessingRecipe;
 import com.simibubi.create.content.processing.recipe.ProcessingRecipeBuilder;
-import com.simibubi.create.foundation.utility.CreateLang;
 import net.chauvedev.woodencog.WoodenCog;
 import net.chauvedev.woodencog.recipes.advancedProcessingRecipe.baseRecipes.SetItemStackProvider;
 import net.minecraft.world.item.crafting.RecipeSerializer;
@@ -40,7 +39,7 @@ public enum AllAdvancedRecipeTypes {
     }
 
     public static <T extends ProcessingRecipe<?>> void registerRecipe(ProcessingRecipe tAdvancedRecipeSerializer,SetItemStackProvider provider) {
-        WoodenCog.LOGGER.info("[advancerecipe] registerRecipe for "+tAdvancedRecipeSerializer.getId().toString());
+        WoodenCog.LOGGER.info("[advancerecipe] registerRecipe for "+tAdvancedRecipeSerializer.getId());
         if (CACHES.containsKey(tAdvancedRecipeSerializer.getId().toString())){
             CACHES.replace(tAdvancedRecipeSerializer.getId().toString(),provider);
         }else{

@@ -85,7 +85,7 @@ public class WoodenCogCompactingRecipeGen extends CompactingRecipeGen {
     }
 
     private Item getLooseRock(Rock rock) {
-        return ForgeRegistries.ITEMS.getValue(new ResourceLocation(TerraFirmaCraft.MOD_ID,"rock/loose/"+rock.getSerializedName()));
+        return ForgeRegistries.ITEMS.getValue(ResourceLocation.tryBuild(TerraFirmaCraft.MOD_ID,"rock/loose/"+rock.getSerializedName()));
     }
 
 }

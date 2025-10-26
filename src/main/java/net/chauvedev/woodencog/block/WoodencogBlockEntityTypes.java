@@ -22,14 +22,14 @@ public class WoodencogBlockEntityTypes {
     public static final BlockEntityEntry<CTTransformerBlockEntity> CT_TRANSFORMER = REGISTRATE
         .blockEntity("ct_transformer", CTTransformerBlockEntity::new)
         .visual(() -> SplitShaftVisual::new, false)
-        .validBlocks(WoodencogBlocks.CT_TRANSFORMER::get)
+        .validBlocks(WoodencogBlocks.CT_TRANSFORMER)
         .renderer(() -> CTTransformerRenderer::new)
         .register();
 
     public static final BlockEntityEntry<WoodenGeneratorBlockEntity> WOODEN_GENERATOR = REGISTRATE
         .blockEntity("wooden_generator", WoodenGeneratorBlockEntity::new)
         .visual(() -> OrientedRotatingVisual.of(AllPartialModels.SHAFT_HALF), false)
-        .validBlocks(WoodencogBlocks.WOODEN_GENERATOR::get)
+        .validBlocks(WoodencogBlocks.WOODEN_GENERATOR)
         .renderer(() -> WoodenGeneratorRenderer::new)
         .register();
 }

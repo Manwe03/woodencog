@@ -1,26 +1,17 @@
 package net.chauvedev.woodencog.compat.jei;
 
 import com.simibubi.create.compat.jei.category.animations.AnimatedPress;
-import com.simibubi.create.content.processing.recipe.ProcessingOutput;
 import com.simibubi.create.foundation.gui.AllGuiTextures;
 import mezz.jei.api.gui.builder.IRecipeLayoutBuilder;
-import mezz.jei.api.gui.ingredient.IRecipeSlotView;
 import mezz.jei.api.gui.ingredient.IRecipeSlotsView;
 import mezz.jei.api.recipe.IFocusGroup;
 import mezz.jei.api.recipe.RecipeIngredientRole;
-import net.chauvedev.woodencog.mixin.HeatableIngredientAccessor;
 import net.chauvedev.woodencog.recipes.heatedRecipes.HeatedProcessingOutput;
 import net.chauvedev.woodencog.recipes.heatedRecipes.recipes.HeatedPressingRecipe;
 import net.chauvedev.woodencog.utils.Color;
-import net.createmod.catnip.animation.AnimationTickHolder;
-import net.dries007.tfc.common.capabilities.heat.HeatCapability;
-import net.dries007.tfc.common.capabilities.heat.IHeat;
-import net.dries007.tfc.common.recipes.ingredients.HeatableIngredient;
 import net.minecraft.client.gui.GuiGraphics;
-import net.minecraft.world.item.ItemStack;
 
 import java.util.List;
-import java.util.Optional;
 
 public class HeatedPressingCategory extends WoodenCogRecipeCategory<HeatedPressingRecipe> {
 

@@ -12,7 +12,7 @@
     "MixinDrinkable",
     "MixinFanProcessing",
     "MixinNetheriteDivingHandler",
-    "SmartBlockEntityAccessor",
+    "blockEnitites.accessors.SmartBlockEntityAccessor",
     "armor.MixinBacktankItemLayered",
     "armor.MixinBaseArmorItem",
     "blockEnitites.MixinBasinOperatingBlockEntity",

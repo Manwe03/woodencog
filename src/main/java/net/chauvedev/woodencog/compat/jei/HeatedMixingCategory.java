@@ -11,7 +11,7 @@ import net.minecraft.client.gui.GuiGraphics;
  */
 public class HeatedMixingCategory extends HeatedBasinCategory {
     private final AnimatedMixer mixer = new AnimatedMixer();
-    MixingType type;
+    final MixingType type;
 
     enum MixingType {
         MIXING

@@ -66,7 +66,7 @@ public class CTTransformerBlock extends DirectionalKineticBlock implements IBE<C
 
     @Override
     public BlockEntityType<? extends CTTransformerBlockEntity> getBlockEntityType() {
-        return (BlockEntityType) WoodencogBlockEntityTypes.CT_TRANSFORMER.get();
+        return WoodencogBlockEntityTypes.CT_TRANSFORMER.get();
     }
 
     @Override

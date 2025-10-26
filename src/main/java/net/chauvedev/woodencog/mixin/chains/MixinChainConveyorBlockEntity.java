@@ -3,6 +3,7 @@ package net.chauvedev.woodencog.mixin.chains;
 import com.simibubi.create.content.kinetics.chainConveyor.ChainConveyorBlockEntity;
 import net.chauvedev.woodencog.mixin.blockEnitites.accessors.BlockEntityAccessor;
 import net.chauvedev.woodencog.utils.ChainConveyorBlockEntityExtended;
+import net.chauvedev.woodencog.utils.CogUtil;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
@@ -37,12 +38,13 @@ public abstract class MixinChainConveyorBlockEntity implements ChainConveyorBloc
     @Shadow public abstract boolean forPointsAlongChains(BlockPos connection, int positions, Consumer<Vec3> callback);
 
     @Unique
-    public Map<BlockPos, ItemLike> connectionsChain = new HashMap<>();
+    public final Map<BlockPos, ItemLike> connectionsChain = new HashMap<>();
 
     public Map<BlockPos, ItemLike> getConnectionsChain(){
         return connectionsChain;
     }
 
+    @Unique
     private static final ThreadLocal<ItemLike> CURRENT_CHAIN = new ThreadLocal<>();
 
     //Chain Destroyed
@@ -66,6 +68,7 @@ public abstract class MixinChainConveyorBlockEntity implements ChainConveyorBloc
         Block.popResource(pLevel, pPos, new ItemStack(replacement, pStack.getCount()));
     }
 
+    //Chain Destroyed
     @Redirect(
         method = "chainDestroyed",
         at = @At(
@@ -74,10 +77,12 @@ public abstract class MixinChainConveyorBlockEntity implements ChainConveyorBloc
     )
     private boolean redirectLambdaChain(ChainConveyorBlockEntity instance, BlockPos target, int chainCount, Consumer<Vec3> vec3Consumer) {
         Level level = instance.getLevel();
+
+        if (CogUtil.logConditional(level == null, this.getClass(),"level is null")) return false;
+
         ItemLike replacement = CURRENT_CHAIN.get() != null ? CURRENT_CHAIN.get() : Items.CHAIN;
         return forPointsAlongChains(target,chainCount, vec -> level.addFreshEntity(new ItemEntity(level, vec.x, vec.y, vec.z, new ItemStack(replacement))));
     }
-    //Chain Destroyed
 
     //Add Connection
     public void addConnectionToWithChain(BlockPos target, ItemLike chain) {
@@ -102,7 +107,8 @@ public abstract class MixinChainConveyorBlockEntity implements ChainConveyorBloc
         for (Map.Entry<BlockPos, ItemLike> entry : connectionsChain.entrySet()) {
             CompoundTag entryTag = new CompoundTag();
             entryTag.put("Pos", NbtUtils.writeBlockPos(entry.getKey()));
-            entryTag.putString("Item", ForgeRegistries.ITEMS.getKey(entry.getValue().asItem()).toString());
+            ResourceLocation itemRS = ForgeRegistries.ITEMS.getKey(entry.getValue().asItem());
+            if(itemRS != null) entryTag.putString("Item", itemRS.toString());
             list.add(entryTag);
         }
         compound.put("ChainConnections", list);
@@ -115,7 +121,7 @@ public abstract class MixinChainConveyorBlockEntity implements ChainConveyorBloc
         for (int i = 0; i < list.size(); i++) {
             CompoundTag entryTag = list.getCompound(i);
             BlockPos pos = NbtUtils.readBlockPos(entryTag.getCompound("Pos"));
-            Item item = ForgeRegistries.ITEMS.getValue(new ResourceLocation(entryTag.getString("Item")));
+            Item item = ForgeRegistries.ITEMS.getValue(ResourceLocation.tryParse(entryTag.getString("Item")));
             if (item != null) connectionsChain.put(pos, item);
         }
     }

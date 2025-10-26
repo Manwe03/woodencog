@@ -6,7 +6,7 @@ import com.simibubi.create.foundation.blockEntity.behaviour.BehaviourType;
 import com.simibubi.create.foundation.blockEntity.behaviour.BlockEntityBehaviour;
 import com.simibubi.create.foundation.blockEntity.behaviour.fluid.SmartFluidTankBehaviour;
 import com.simibubi.create.foundation.utility.CreateLang;
-import net.chauvedev.woodencog.mixin.SmartBlockEntityAccessor;
+import net.chauvedev.woodencog.mixin.blockEnitites.accessors.SmartBlockEntityAccessor;
 import net.chauvedev.woodencog.mixin.blockEnitites.accessors.BlockEntityAccessor;
 import net.chauvedev.woodencog.recipes.heatedRecipes.ItemHeatingBehaviour;
 import net.chauvedev.woodencog.utils.BasinBlockEntityExtended;

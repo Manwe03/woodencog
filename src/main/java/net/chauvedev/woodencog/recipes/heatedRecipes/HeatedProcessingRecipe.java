@@ -27,13 +27,13 @@ import java.util.List;
 import java.util.function.Supplier;
 
 public abstract class HeatedProcessingRecipe<T extends Container> implements Recipe<T> {
-    protected ResourceLocation id;
-    protected NonNullList<HeatableIngredient> ingredients;
-    protected NonNullList<HeatedProcessingOutput> results;
-    protected NonNullList<FluidIngredient> fluidIngredients;
-    protected NonNullList<FluidStack> fluidResults;
-    protected int processingDuration;
-    protected WoodenCogHeatCondition requiredHeat;
+    protected final ResourceLocation id;
+    protected final NonNullList<HeatableIngredient> ingredients;
+    protected final NonNullList<HeatedProcessingOutput> results;
+    protected final NonNullList<FluidIngredient> fluidIngredients;
+    protected final NonNullList<FluidStack> fluidResults;
+    protected final int processingDuration;
+    protected final WoodenCogHeatCondition requiredHeat;
     private final RecipeType<?> type;
     private final RecipeSerializer<?> serializer;
     private final IRecipeTypeInfo typeInfo;

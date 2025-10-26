@@ -72,7 +72,7 @@ public abstract class MixinBasinOperatingBlockEntity extends KineticBlockEntity 
 
     /**
      * @author Manwe - yahvk
-     * @reason Mange BasinRecipe.match and HeatedBasinRecipe.match calls
+     * @reason Manage BasinRecipe.match() and HeatedBasinRecipe.match() calls
      */
     @Inject(method = "matchBasinRecipe",
             at = @At(value = "INVOKE", target = "Lcom/simibubi/create/content/processing/basin/BasinRecipe;match(Lcom/simibubi/create/content/processing/basin/BasinBlockEntity;Lnet/minecraft/world/item/crafting/Recipe;)Z"),

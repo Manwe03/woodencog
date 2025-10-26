@@ -11,7 +11,6 @@ import net.chauvedev.woodencog.WoodenCog;
 import net.createmod.catnip.data.Pair;
 import net.dries007.tfc.common.recipes.ingredients.HeatableIngredient;
 import net.minecraft.core.NonNullList;
-import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.data.recipes.FinishedRecipe;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.TagKey;
@@ -31,14 +30,13 @@ import org.jetbrains.annotations.NotNull;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.function.Consumer;
 
 public class HeatedProcessingRecipeBuilder<T extends HeatedProcessingRecipe<?>>  {
-    protected HeatedProcessingRecipeFactory<T> factory;
-    protected HeatedProcessingRecipeParams params;
-    protected List<ICondition> recipeConditions;
+    protected final HeatedProcessingRecipeFactory<T> factory;
+    protected final HeatedProcessingRecipeParams params;
+    protected final List<ICondition> recipeConditions;
 
     public HeatedProcessingRecipeBuilder(HeatedProcessingRecipeFactory<T> factory, ResourceLocation recipeId) {
         this.params = new HeatedProcessingRecipeParams(recipeId);
@@ -171,7 +169,7 @@ public class HeatedProcessingRecipeBuilder<T extends HeatedProcessingRecipe<?>> 
     }
 
     public HeatedProcessingRecipeBuilder<T> output(Mods mod, String id, HeatedIngridientParams params) {
-        return this.output(1.0F, (ResourceLocation) mod.asResource(id), 1, params);
+        return this.output(1.0F, mod.asResource(id), 1, params);
     }
 
     public HeatedProcessingRecipeBuilder<T> output(float chance, ResourceLocation registryName, int amount, HeatedIngridientParams params) {
@@ -217,7 +215,7 @@ public class HeatedProcessingRecipeBuilder<T extends HeatedProcessingRecipe<?>> 
     }
 
     public static class HeatedProcessingRecipeParams {
-        protected ResourceLocation id;
+        protected final ResourceLocation id;
         protected NonNullList<HeatableIngredient> ingredients;
         protected NonNullList<HeatedProcessingOutput> results;
         protected NonNullList<FluidIngredient> fluidIngredients;
@@ -255,7 +253,7 @@ public class HeatedProcessingRecipeBuilder<T extends HeatedProcessingRecipe<?>> 
 
         private final List<ICondition> recipeConditions;
         private final HeatedProcessingRecipeSerializer<S> serializer;
-        private ResourceLocation id;
+        private final ResourceLocation id;
         private final S recipe;
 
         @SuppressWarnings("unchecked")
@@ -268,14 +266,7 @@ public class HeatedProcessingRecipeBuilder<T extends HeatedProcessingRecipe<?>> 
             if (!(recipeType.getSerializer() instanceof HeatedProcessingRecipeSerializer))
                 throw new IllegalStateException("Cannot datagen HeatedProcessingRecipe of type: " + typeId);
 
-            this.id = new ResourceLocation(recipe.getId().getNamespace(),
-                    typeId.getPath() + "/" + recipe.getId().getPath());
-
-            try (FileWriter fw = new FileWriter("client_fromNetwork.log", true)) {
-                fw.write("[DANGER][DANGER][DANGER] DataGenResult ID"+id);
-            } catch (IOException e) {
-                WoodenCog.LOGGER.error("Error writing client log", e);
-            }
+            this.id = ResourceLocation.tryBuild(recipe.getId().getNamespace(), typeId.getPath() + "/" + recipe.getId().getPath());
 
             this.serializer = (HeatedProcessingRecipeSerializer<S>) recipe.getSerializer();
         }

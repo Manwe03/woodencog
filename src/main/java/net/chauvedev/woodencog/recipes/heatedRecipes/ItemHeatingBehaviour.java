@@ -9,8 +9,8 @@ import net.dries007.tfc.common.capabilities.heat.HeatCapability;
 import net.minecraft.world.item.ItemStack;
 
 public class ItemHeatingBehaviour extends BlockEntityBehaviour {
-    public static final BehaviourType<ItemHeatingBehaviour> TYPE = new BehaviourType();
-    BasinInventory inventory;
+    public static final BehaviourType<ItemHeatingBehaviour> TYPE = new BehaviourType<>();
+    final BasinInventory inventory;
 
     public ItemHeatingBehaviour(SmartBlockEntity be, BasinInventory inventory) {
         super(be);
@@ -33,9 +33,9 @@ public class ItemHeatingBehaviour extends BlockEntityBehaviour {
 
         if(this.blockEntity instanceof BasinBlockEntityExtended basinBlockEntity){
             heatInventory(basinBlockEntity.getHeatSourceTemperature());
-        } else {
+        } //else {
             //Add if other BE implements this Behaviour
-        }
+        //}
     }
 
     private void heatInventory(float targetTemp) {

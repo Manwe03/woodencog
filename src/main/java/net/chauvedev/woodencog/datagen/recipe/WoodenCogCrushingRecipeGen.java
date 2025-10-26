@@ -1,7 +1,6 @@
 package net.chauvedev.woodencog.datagen.recipe;
 
 import com.simibubi.create.api.data.recipe.CrushingRecipeGen;
-import com.simibubi.create.content.processing.recipe.HeatCondition;
 import net.chauvedev.woodencog.WoodenCog;
 import net.dries007.tfc.common.blocks.TFCBlocks;
 import net.dries007.tfc.common.blocks.rock.Ore;

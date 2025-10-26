@@ -4,13 +4,13 @@ Forked from [woodencog](https://github.com/Sparks-and-Rotation/woodencog)
 ## INFO
 this mod is a compatibility mod for tfc and create.
 
-Some of it's code came from [SeriousCreeper](https://www.youtube.com/@SeriousCreeper)
-go check him out his videos are pretty cool. Also here's the original [mod](https://www.curseforge.com/minecraft/mc-mods/tfc-create)
+Some of its code came from [SeriousCreeper](https://www.youtube.com/@SeriousCreeper)
+go check him out his videos are pretty cool. Also, here's the original [mod](https://www.curseforge.com/minecraft/mc-mods/tfc-create)
 
 Some of the code also came from the [Tinker's construct](https://github.com/SlimeKnights/TinkersConstruct) mod (the small crucible) I updated it to my needs.
 
 This mod is still in early stages and probably need a lot refactoring but still can be used.
-I'll soon update my generators (yeah the nodejs mess in generators dir) to generate all missing crafts in this mod.
+I'll soon update my generators (yeah the Node.js mess in generators dir) to generate all missing crafts in this mod.
 
 currently it includes :
 - Mixer alloying recipes
@@ -25,6 +25,6 @@ I'm currently working on a partial (maybe entire) rewrite of the project to make
 - (WIP) Sequenced assembly recipes.
 - (WIP) Move js recipe generation to java
 
-If you know any issue with other mods open an issue on this repo i'll look into it
+If you know any issue with other mods open an issue on this repo I'll look into it
 
 Pull requests are welcomed, but open an issue before, maybe I am working on it already.

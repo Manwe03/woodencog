@@ -6,7 +6,7 @@
 package net.chauvedev.woodencog.mixin.jei;
 
 import com.simibubi.create.compat.jei.category.animations.AnimatedBlazeBurner;
-import net.chauvedev.woodencog.compat.jei.AnimatedBlocks.AnimatedCharcoalForge;
+import net.chauvedev.woodencog.compat.jei.animatedBlocks.AnimatedCharcoalForge;
 import net.minecraft.client.gui.GuiGraphics;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Overwrite;

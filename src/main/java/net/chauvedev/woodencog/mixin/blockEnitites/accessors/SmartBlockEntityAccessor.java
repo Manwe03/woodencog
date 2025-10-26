@@ -1,4 +1,4 @@
-package net.chauvedev.woodencog.mixin;
+package net.chauvedev.woodencog.mixin.blockEnitites.accessors;
 
 import com.simibubi.create.foundation.blockEntity.SmartBlockEntity;
 import com.simibubi.create.foundation.blockEntity.behaviour.BehaviourType;

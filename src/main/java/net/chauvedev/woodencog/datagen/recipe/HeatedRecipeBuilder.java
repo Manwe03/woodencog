@@ -2,6 +2,7 @@ package net.chauvedev.woodencog.datagen.recipe;
 
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
+import net.chauvedev.woodencog.WoodenCog;
 import net.chauvedev.woodencog.recipes.heatedRecipes.AllHeatedRecipeTypes;
 import net.minecraft.data.recipes.FinishedRecipe;
 import net.minecraft.resources.ResourceLocation;
@@ -110,7 +111,7 @@ public class HeatedRecipeBuilder {
 
         @Override
         public ResourceLocation getAdvancementId() {
-            return new ResourceLocation("woodencog:advancement1");
+            return WoodenCog.asResource("advancement1");
         }
     }
 
