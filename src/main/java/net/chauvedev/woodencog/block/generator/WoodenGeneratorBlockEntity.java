@@ -2,6 +2,7 @@ package net.chauvedev.woodencog.block.generator;
 
 import com.simibubi.create.content.kinetics.base.GeneratingKineticBlockEntity;
 import net.chauvedev.woodencog.block.WoodencogBlocks;
+import net.chauvedev.woodencog.config.WoodenCogCommonConfigs;
 import net.chauvedev.woodencog.utils.CogUtil;
 import net.chauvedev.woodencog.utils.RotationUtil;
 import net.dries007.tfc.common.blockentities.rotation.RotatingBlockEntity;
@@ -59,7 +60,7 @@ public class WoodenGeneratorBlockEntity extends GeneratingKineticBlockEntity {
                         if(stack.getItem() == TFCItems.RUSTIC_WINDMILL_BLADE.get()) rusticWindmillCount++;
                     }
                 }
-                this.stressMultiplyer = rusticWindmillCount == 5 ? 8 : 4;
+                this.stressMultiplyer = rusticWindmillCount == 5 ? WoodenCogCommonConfigs.WOODEN_GENERATOR_WIND_FACTOR.get() : (int) Math.ceil(WoodenCogCommonConfigs.WOODEN_GENERATOR_WIND_FACTOR.get()/2.0);
             } else {
                 this.stressMultiplyer = 1;
             }
@@ -69,8 +70,12 @@ public class WoodenGeneratorBlockEntity extends GeneratingKineticBlockEntity {
 
         updateGeneratedRotation();
 
-        int discreteSpeed = (int) Math.ceil(Math.abs(this.speed))/4;
-        this.generatedCapacity = discreteSpeed * 64 * stressMultiplyer;
+        int discreteSpeed = remapSpeedValue(this.speed,0,WoodenCogCommonConfigs.WOODEN_GENERATOR_SPEED_FACTOR.get());
+        this.generatedCapacity = discreteSpeed * WoodenCogCommonConfigs.WOODEN_GENERATOR_BASE_SU.get() * stressMultiplyer;
+    }
+
+    private int remapSpeedValue(double value, double min, double max){
+        return (int) Math.ceil((Math.abs(value)/64.0) * (max-min) + min);
     }
 
     @Override

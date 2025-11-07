@@ -8,6 +8,7 @@ import net.chauvedev.woodencog.block.transformer.CTTransformerRenderer;
 import net.chauvedev.woodencog.block.WoodencogBlockEntityTypes;
 import net.chauvedev.woodencog.config.WoodenCogCommonConfigs;
 import net.chauvedev.woodencog.datagen.DataGenerators;
+import net.chauvedev.woodencog.datapack.DataPackRegistries;
 import net.chauvedev.woodencog.interaction.CustomArmInteractionPointTypes;
 import net.chauvedev.woodencog.item.WoodencogItems;
 import net.chauvedev.woodencog.ponder.WoodenCogPonderPlugin;
@@ -19,9 +20,7 @@ import net.minecraft.client.renderer.blockentity.BlockEntityRenderers;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.BuildCreativeModeTabContentsEvent;
-import net.minecraftforge.event.RegisterCommandsEvent;
 import net.minecraftforge.eventbus.api.IEventBus;
-import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.event.lifecycle.*;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
@@ -72,6 +71,7 @@ public class WoodenCog
 
         modEventBus.addListener(WoodenCog::onRegister);
         modEventBus.addListener(DataGenerators::gatherData);
+        modEventBus.addListener(DataPackRegistries::register);
         modEventBus.addListener(this::addCreative);
     }
 
@@ -99,11 +99,6 @@ public class WoodenCog
         BlockEntityRenderers.register(WoodencogBlockEntityTypes.WOODEN_GENERATOR.get(), WoodenGeneratorRenderer::new);
 
         PonderIndex.addPlugin(new WoodenCogPonderPlugin());
-    }
-
-    @SubscribeEvent
-    public void onRegisterCommandEvent(RegisterCommandsEvent event) {
-
     }
 
     public static ResourceLocation asResource(String path) {

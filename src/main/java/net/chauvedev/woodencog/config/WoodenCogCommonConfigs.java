@@ -25,6 +25,9 @@ public class WoodenCogCommonConfigs {
     public static final ForgeConfigSpec.ConfigValue<Boolean> NETHERITE_RESKIN;
 
     public static final ForgeConfigSpec.ConfigValue<Integer> CT_TRANSFORMER_IMPACT;
+    public static final ForgeConfigSpec.ConfigValue<Integer> WOODEN_GENERATOR_BASE_SU;
+    public static final ForgeConfigSpec.ConfigValue<Integer> WOODEN_GENERATOR_WIND_FACTOR;
+    public static final ForgeConfigSpec.ConfigValue<Integer> WOODEN_GENERATOR_SPEED_FACTOR;
     public static final Map<String, ForgeConfigSpec.ConfigValue<List<Integer>>> MATERIAL_PROPERTIES = new HashMap<>();
 
     static {
@@ -49,8 +52,13 @@ public class WoodenCogCommonConfigs {
 
         BUILDER.pop();
 
-        BUILDER.push("stress").comment("Stress Impact");
+        BUILDER.push("stress");
+            BUILDER.comment("Stress impact of the transformer");
             CT_TRANSFORMER_IMPACT = BUILDER.define("ct_transformer_impact", 64);
+            BUILDER.comment("Stress generation factors, this values are multiplied");
+            WOODEN_GENERATOR_BASE_SU = BUILDER.define("wooden_generator_base_su", 64);
+            WOODEN_GENERATOR_WIND_FACTOR = BUILDER.define("wooden_generator_wind_factor", 4);
+            WOODEN_GENERATOR_SPEED_FACTOR = BUILDER.define("wooden_generator_speed_factor", 16);
         BUILDER.pop();
 
         NETHERITE_RESKIN = BUILDER.comment("Change netherite divingGear to look like red steel armor. (wearing netherite pants disables re-skin)").define("netherite_reskin", true);

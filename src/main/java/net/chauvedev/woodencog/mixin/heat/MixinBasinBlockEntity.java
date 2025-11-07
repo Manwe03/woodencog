@@ -6,6 +6,7 @@ import com.simibubi.create.foundation.blockEntity.behaviour.BehaviourType;
 import com.simibubi.create.foundation.blockEntity.behaviour.BlockEntityBehaviour;
 import com.simibubi.create.foundation.blockEntity.behaviour.fluid.SmartFluidTankBehaviour;
 import com.simibubi.create.foundation.utility.CreateLang;
+import net.chauvedev.woodencog.datapack.DataPackRegistries;
 import net.chauvedev.woodencog.mixin.blockEnitites.accessors.SmartBlockEntityAccessor;
 import net.chauvedev.woodencog.mixin.blockEnitites.accessors.BlockEntityAccessor;
 import net.chauvedev.woodencog.recipes.heatedRecipes.ItemHeatingBehaviour;
@@ -16,7 +17,12 @@ import net.dries007.tfc.common.blocks.devices.CharcoalForgeBlock;
 import net.dries007.tfc.common.capabilities.heat.Heat;
 import net.minecraft.ChatFormatting;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.RegistryAccess;
+import net.minecraft.core.registries.Registries;
 import net.minecraft.network.chat.Component;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
@@ -41,13 +47,23 @@ public abstract class MixinBasinBlockEntity implements BasinBlockEntityExtended 
 
     @Unique
     public float getHeatSourceTemperature(){
-        BlockEntity source = ((BlockEntityAccessor) this).getLevel().getBlockEntity(((BlockEntityAccessor) this).getBlockPos().below());
+        Level level = ((BlockEntityAccessor) this).getLevel();
+        //BlockEntities
+        BlockEntity source = level.getBlockEntity(((BlockEntityAccessor) this).getBlockPos().below());
         if (source instanceof CharcoalForgeBlockEntity charcoalForgeBlockEntity) {
             return charcoalForgeBlockEntity.getTemperature();
         } else if(source instanceof BlazeBurnerBlockentityExtended blazeBurnerBlockEntity){
             return blazeBurnerBlockEntity.getTemperature();
         }
-        return 0.0f;
+
+        //Blocks
+        Block sourceBlock = level.getBlockState(((BlockEntityAccessor) this).getBlockPos().below()).getBlock();
+        RegistryAccess registry = level.registryAccess();
+        Map<ResourceLocation, Integer> temperatureData = registry.registryOrThrow(DataPackRegistries.TEMPERATURE_KEY).get(DataPackRegistries.BLOCK_TEMPERATURE_LOCATION);
+        ResourceLocation id = registry.registryOrThrow(Registries.BLOCK).getKey(sourceBlock);
+        if(temperatureData == null) return 0.0f;
+        Integer temp = temperatureData.get(id);
+        return temp == null ? 0.0f : temp;
     }
 
     /**

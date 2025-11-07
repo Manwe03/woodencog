@@ -1,0 +1,14 @@
+{
+  "minecraft:lava": 200,
+  "minecraft:fire": 100,
+  "minecraft:campfire": 100,
+  "minecraft:soul_campfire": 150,
+  "minecraft:magma_block": 150,
+  "tfc:rock/magma/granite": 150,
+  "tfc:rock/magma/diorite": 150,
+  "tfc:rock/magma/gabbro": 150,
+  "tfc:rock/magma/rhyolite": 150,
+  "tfc:rock/magma/basalt": 150,
+  "tfc:rock/magma/andesite": 150,
+  "tfc:rock/magma/dacite": 150
+}
