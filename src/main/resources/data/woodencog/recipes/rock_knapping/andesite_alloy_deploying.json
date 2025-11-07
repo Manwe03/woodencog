@@ -2,7 +2,7 @@
   "type": "create:deploying",
   "ingredients": [
     {
-      "tag": "forge:rocks/andesite"
+      "tag": "woodencog:rocks/andesite"
     },
     {
       "tag": "tfc:chisels"
