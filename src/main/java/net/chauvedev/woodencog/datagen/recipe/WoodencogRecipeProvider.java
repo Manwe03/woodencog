@@ -4,6 +4,7 @@ import com.simibubi.create.api.data.recipe.ProcessingRecipeGen;
 import net.chauvedev.woodencog.WoodenCog;
 import net.chauvedev.woodencog.datagen.DataGenStaticData;
 import net.chauvedev.woodencog.recipes.heatedRecipes.AllHeatedRecipeTypes;
+import net.dries007.tfc.common.capabilities.heat.Heat;
 import net.dries007.tfc.util.Metal;
 import net.minecraft.data.CachedOutput;
 import net.minecraft.data.DataGenerator;
@@ -31,6 +32,7 @@ public class WoodencogRecipeProvider extends RecipeProvider {
         alloyingRecipes(consumer);
         oreMeltingRecipes(consumer);
         metalRecipes(consumer);
+        ironBloom(consumer);
     }
 
     private void alloyingRecipes(Consumer<FinishedRecipe> consumer){
@@ -168,6 +170,18 @@ public class WoodencogRecipeProvider extends RecipeProvider {
                         .save(consumer, AllHeatedRecipeTypes.HEATED_COMPACTING, WoodenCog.asResource("heated_compacting/double_"+metal.id()));
             }
         });
+    }
+
+    private void ironBloom(Consumer<FinishedRecipe> consumer){
+        new HeatedRecipeBuilder()
+                .addItemIngredient(ResourceLocation.tryBuild("tfc","raw_iron_bloom"), Heat.ORANGE.getMin(),3000)
+                .addItemResult(ResourceLocation.tryBuild("tfc","refined_iron_bloom"),1,0,0,true)
+                .save(consumer, AllHeatedRecipeTypes.HEATED_PRESSING, WoodenCog.asResource("heated_pressing/refined_iron_bloom"));
+
+        new HeatedRecipeBuilder()
+                .addItemIngredient(ResourceLocation.tryBuild("tfc","refined_iron_bloom"), Heat.ORANGE.getMin(),3000)
+                .addItemResult(TFCIngotResourceLocation("wrought_iron"),1,0,0,true)
+                .save(consumer, AllHeatedRecipeTypes.HEATED_PRESSING, WoodenCog.asResource("heated_pressing/wrought_iron"));
     }
 
     private static ResourceLocation dyeRecipeResourceLocation(DyeColor dyeColor) {
