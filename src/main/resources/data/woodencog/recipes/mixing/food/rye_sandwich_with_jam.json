@@ -1,0 +1,55 @@
+{
+  "type": "woodencog:heated_mixing",
+  "ingredients": [
+    {
+      "ingredient": {
+        "item": "tfc:food/rye_bread"
+      }
+    },
+    {
+      "ingredient": {
+        "item": "tfc:food/rye_bread"
+      }
+    },
+    {
+      "ingredient": {
+        "tag": "tfc:foods/usable_in_jam_sandwich"
+      }
+    },
+    {
+      "ingredient": {
+        "tag": "tfc:foods/usable_in_jam_sandwich"
+      }
+    },
+    {
+      "ingredient": {
+        "tag":"tfc:foods/preserves"
+      }
+    }
+  ],
+  "results": [
+    {
+      "item": "tfc:food/rye_bread_jam_sandwich",
+      "count": 1,
+      "food_data": {
+        "hunger":4,
+        "water":0.5,
+        "saturation":1,
+        "decay_modifier":4.5
+      },
+      "portions": [
+        {
+          "nutrient_modifier": 0.5,
+          "water_modifier": 0.5,
+          "saturation_modifier": 0.5
+        },
+        {
+          "nutrient_modifier": 0.8,
+          "water_modifier": 0.8,
+          "saturation_modifier": 0.8
+        }
+      ]
+    }
+  ],
+  "processingTime": 100
+}

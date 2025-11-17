@@ -83,7 +83,7 @@ public class HeatedProcessingRecipeSerializer<T extends HeatedProcessingRecipe<?
                 if (FluidIngredient.isFluidIngredient(je)) {
                     fluidIngredients.add(FluidIngredient.deserialize(je));
                 } else {
-                    ingredients.add(HeatableIngredient.Serializer.INSTANCE.parse((JsonObject) je));
+                    ingredients.add((HeatableIngredient) HeatableIngredient.Serializer.INSTANCE.parse((JsonObject) je));
                 }
             }
 

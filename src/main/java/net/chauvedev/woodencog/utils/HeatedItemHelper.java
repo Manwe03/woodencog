@@ -11,10 +11,10 @@ import java.util.List;
 
 public class HeatedItemHelper {
 
-    public static List<Pair<HeatableIngredient, MutableInt>> condenseIngredients(NonNullList<HeatableIngredient> recipeIngredients) {
-        List<Pair<HeatableIngredient, MutableInt>> actualIngredients = new ArrayList<>();
-        Ingredients: for (HeatableIngredient igd : recipeIngredients) {
-            for (Pair<HeatableIngredient, MutableInt> pair : actualIngredients) {
+    public static <T extends HeatableIngredient> List<Pair<T, MutableInt>> condenseIngredients(NonNullList<T> recipeIngredients) {
+        List<Pair<T, MutableInt>> actualIngredients = new ArrayList<>();
+        Ingredients: for (T igd : recipeIngredients) {
+            for (Pair<T, MutableInt> pair : actualIngredients) {
                 ItemStack[] stacks1 = pair.getFirst().getItems();
                 ItemStack[] stacks2 = igd.getItems();
                 if (stacks1.length != stacks2.length)

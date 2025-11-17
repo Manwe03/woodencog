@@ -1,30 +1,29 @@
 package net.chauvedev.woodencog.recipes.heatedRecipes;
 
-import com.google.gson.JsonElement;
-import com.google.gson.JsonObject;
-import com.google.gson.JsonParser;
-import com.google.gson.JsonSyntaxException;
+import com.google.gson.*;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import com.simibubi.create.Create;
 import com.simibubi.create.content.processing.recipe.ProcessingOutput;
 import net.chauvedev.woodencog.WoodenCog;
 import net.chauvedev.woodencog.config.WoodenCogCommonConfigs;
+import net.chauvedev.woodencog.utils.CogUtil;
 import net.createmod.catnip.data.Pair;
 import net.createmod.catnip.platform.CatnipServices;
+import net.dries007.tfc.common.capabilities.food.*;
 import net.dries007.tfc.common.capabilities.heat.HeatCapability;
+import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.nbt.TagParser;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.GsonHelper;
+import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.ItemLike;
 import net.minecraftforge.registries.ForgeRegistries;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.io.FileWriter;
-import java.io.IOException;
-import java.util.Arrays;
+import java.util.*;
 
 public class HeatedProcessingOutput extends ProcessingOutput {
 
@@ -33,19 +32,31 @@ public class HeatedProcessingOutput extends ProcessingOutput {
     private final int temperature;
     private final boolean copyHeat;
     private final int cooling;
+    private final FoodData baseFoodData;
+    private List<WoodenCogFoodPortion> portions;
+
+    private float dynamicOutputTemp;
+    private List<ItemStack> dynamicUsedFoodItems;
 
     public HeatedProcessingOutput(ItemStack stack, float chance, int temperature, boolean copyHeat, int cooling) {
+        this(stack, chance,temperature,copyHeat,cooling,null,null);
+    }
+
+    public HeatedProcessingOutput(ItemStack stack, float chance, FoodData baseFoodData, List<WoodenCogFoodPortion> portions) {
+        this(stack, chance,0,false,0, baseFoodData, portions);
+    }
+
+    public HeatedProcessingOutput(ItemStack stack, float chance, int temperature, boolean copyHeat, int cooling, FoodData baseFoodData, List<WoodenCogFoodPortion> portions) {
         super(stack, chance);
         this.temperature = temperature;
         this.copyHeat = copyHeat;
         this.cooling = cooling;
+        this.baseFoodData = baseFoodData;
+        this.portions = portions;
     }
 
     public HeatedProcessingOutput(ItemStack stack, float chance, HeatedProcessingRecipeBuilder.HeatedIngridientParams params) {
-        super(stack, chance);
-        this.temperature = params.temperature;
-        this.copyHeat = params.copyHeat;
-        this.cooling = params.cooling;
+        this(stack, chance, params.temperature, params.copyHeat, params.cooling);
     }
 
     public HeatedProcessingOutput(Pair<ResourceLocation, Integer> item, float chance, HeatedProcessingRecipeBuilder.HeatedIngridientParams params) {
@@ -54,6 +65,7 @@ public class HeatedProcessingOutput extends ProcessingOutput {
         this.temperature = params.temperature;
         this.copyHeat = params.copyHeat;
         this.cooling = params.cooling;
+        this.baseFoodData = null;
     }
 
     public int getTemperature() {
@@ -64,6 +76,20 @@ public class HeatedProcessingOutput extends ProcessingOutput {
     }
     public int getCooling(){
         return cooling;
+    }
+    public FoodData getFoodData() { return baseFoodData; }
+
+    /**
+     * This method has a side effect should be called before rollOutput()
+     * @param temp
+     */
+    public void setDynamicOutputTemp(float temp){
+        this.dynamicOutputTemp = temp;
+    }
+
+    public void setDynamicUsedFoodItems(List<ItemStack> usedFoodItems){
+        this.dynamicUsedFoodItems = usedFoodItems;
+        //Collections.reverse(dynamicUsedFoodItems);
     }
 
     /**
@@ -76,6 +102,79 @@ public class HeatedProcessingOutput extends ProcessingOutput {
             HeatCapability.setTemperature(itemStack,this.temperature);
         }
         return itemStack;
+    }
+
+    @Override
+    public ItemStack rollOutput() {
+        ItemStack outputStack = super.rollOutput();
+        if(WoodenCogCommonConfigs.HANDLE_TEMPERATURE.get()){
+            HeatCapability.setTemperature(outputStack,this.getTemperature());
+            if(this.getCopyHeat()) { //If copy input item heat - cooling
+                HeatCapability.setTemperature(outputStack, this.dynamicOutputTemp - this.getCooling());
+            }
+        }
+        if(hasFoodData()){
+            IFood inputFood = FoodCapability.get(outputStack);
+            this.setFoodData(inputFood);
+        }
+        return outputStack;
+    }
+
+    private void setFoodData(IFood inputFood){
+        if (inputFood instanceof FoodHandler.Dynamic handler) {
+            float water = baseFoodData.water();
+            float saturation = baseFoodData.saturation();
+            float[] nutrition = Arrays.copyOf(baseFoodData.nutrients(), Nutrient.VALUES.length);
+
+            //Sort list to be able to stack results
+            dynamicUsedFoodItems.sort(Comparator.comparing(ItemStack::getCount).thenComparing((itemx) -> {
+                return BuiltInRegistries.ITEM.getKey(itemx.getItem());
+            }));
+
+            if(portions != null) {
+                int portionIndex = -1;
+                Item lastItem = null;
+                for (ItemStack usedItem : dynamicUsedFoodItems) {
+
+                    if(!usedItem.is(lastItem)){
+                        lastItem = usedItem.getItem();
+                        portionIndex++;
+                    }
+
+                    WoodenCogFoodPortion portion = CogUtil.getOrDefault(portions,portionIndex,WoodenCogFoodPortion.empty());
+
+                    FoodData food = FoodCapability.get(usedItem).getData();
+
+                    for (Nutrient nutrient : Nutrient.VALUES) {
+                        nutrition[nutrient.ordinal()] += food.nutrient(nutrient) * portion.nutrientModifier * usedItem.getCount();
+                    }
+                    water += food.water() * portion.waterModifier * (float) usedItem.getCount();
+                    saturation += food.saturation() * portion.saturationModifier * (float) usedItem.getCount();
+                }
+            }
+
+            FoodData newFoodData = FoodData.create(this.baseFoodData.hunger(), water, saturation, nutrition, this.baseFoodData.decayModifier());
+
+            handler.setFood(newFoodData);
+            handler.setIngredients(dynamicUsedFoodItems);
+            handler.setCreationDate(FoodCapability.getRoundedCreationDate());
+        }
+    }
+
+    private static void logFoodData(FoodData foodData){
+        WoodenCog.LOGGER.info(
+            "\nHunger "+foodData.hunger() +
+            "\nWater "+foodData.water() +
+            "\nSaturation "+foodData.saturation() +
+            "\nNutrients"+ Arrays.toString(foodData.nutrients()) +
+            "\nDecay"+foodData.decayModifier());
+    }
+
+    private static void logPortions(WoodenCogFoodPortion portion){
+        WoodenCog.LOGGER.info(
+                "\nNutrient Modifier "+portion.nutrientModifier +
+                "\nWater Modifier"+portion.waterModifier +
+                "\nSaturation Modifier"+portion.saturationModifier);
     }
 
     @Override
@@ -100,6 +199,15 @@ public class HeatedProcessingOutput extends ProcessingOutput {
             json.addProperty("temperature", this.getTemperature());
             json.addProperty("copy_heat",this.getCopyHeat());
             json.addProperty("cooling",this.getCooling());
+        }
+
+        if(this.hasFoodData()){
+            json.add("food_data", CogUtil.foodDataNbtToJson(this.baseFoodData.write()));
+            JsonArray portionsArray = new JsonArray();
+            for (WoodenCogFoodPortion portion : portions){
+                portionsArray.add(portion.write());
+            }
+            json.add("portions",portionsArray);
         }
         return json;
     }
@@ -151,23 +259,18 @@ public class HeatedProcessingOutput extends ProcessingOutput {
                 cooling = GsonHelper.getAsInt(json, "cooling");
             }catch (JsonSyntaxException ignored){}
 
+            try {
+                FoodData baseFoodData = FoodData.read(GsonHelper.getAsJsonObject(json,"food_data"));
+                List<WoodenCogFoodPortion> portions = WoodenCogFoodPortion.readArray(GsonHelper.getAsJsonArray(json,"portions"));
+                return new HeatedProcessingOutput(itemstack, chance, temperature, copyHeat, cooling, baseFoodData, portions);
+            } catch (JsonSyntaxException ignored){}
+
             return new HeatedProcessingOutput(itemstack, chance, temperature, copyHeat, cooling);
         }
     }
 
     @Override
     public void write(FriendlyByteBuf buf) {
-        /*
-        ItemStack stack = getStack();
-        ResourceLocation rl = ForgeRegistries.ITEMS.getKey(stack.getItem());
-
-        try (FileWriter fw = new FileWriter("server_stack_output.log", true)) {
-            fw.write("[SERVER] Writing stack: " + stack +
-                    " | RegistryName: " + rl +
-                    " | Count: " + stack.getCount() + "\n");
-        } catch (IOException e) {
-            WoodenCog.LOGGER.error("Error writing server log", e);
-        }*/
 
         //super.write(buf);
         buf.writeItem(getStack());
@@ -176,6 +279,14 @@ public class HeatedProcessingOutput extends ProcessingOutput {
         buf.writeInt(getTemperature());
         buf.writeBoolean(getCopyHeat());
         buf.writeInt(getCooling());
+
+        if(hasFoodData()) {
+            getFoodData().encode(buf);
+            buf.writeInt(portions.size());
+            for(WoodenCogFoodPortion portion : portions){
+                portion.encode(buf);
+            }
+        }
     }
 
     public static HeatedProcessingOutput read(FriendlyByteBuf buf) {
@@ -186,16 +297,26 @@ public class HeatedProcessingOutput extends ProcessingOutput {
         boolean copyHeat = buf.readBoolean();
         int cooling = buf.readInt();
 
-        ResourceLocation rl = ForgeRegistries.ITEMS.getKey(stack.getItem());
+        //ResourceLocation rl = ForgeRegistries.ITEMS.getKey(stack.getItem());
 
-        try (FileWriter fw = new FileWriter("client_stack_input.log", true)) {
-            fw.write("[CLIENT] Reading stack: " + stack +
-                    " | RegistryName: " + rl +
-                    " | Count: " + stack.getCount() + "\n");
-        } catch (IOException e) {
-            WoodenCog.LOGGER.error("Error writing client log", e);
-        }
+        //try (FileWriter fw = new FileWriter("client_stack_input.log", true)) {
+        //    fw.write("[CLIENT] Reading stack: " + stack +
+        //            " | RegistryName: " + rl +
+        //            " | Count: " + stack.getCount() + "\n");
+        //} catch (IOException e) {
+        //    WoodenCog.LOGGER.error("Error writing client log", e);
+        //}
+
+        try{
+            FoodData baseFoodData = FoodData.decode(buf);
+            List<WoodenCogFoodPortion> portions = WoodenCogFoodPortion.decodeArray(buf);
+            return new HeatedProcessingOutput(stack, chance, temperature, copyHeat, cooling, baseFoodData, portions);
+        } catch (Exception ignored){}
 
         return new HeatedProcessingOutput(stack, chance, temperature, copyHeat, cooling);
+    }
+
+    public boolean hasFoodData(){
+        return baseFoodData != null;
     }
 }

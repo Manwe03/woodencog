@@ -45,6 +45,10 @@ public abstract class MixinBasinBlockEntity implements BasinBlockEntityExtended 
 
     public MixinBasinBlockEntity() {}
 
+    /**
+     * Called on heated recipes and passive item heating on basins
+     * @return temperature of the block below
+     */
     @Unique
     public float getHeatSourceTemperature(){
         Level level = ((BlockEntityAccessor) this).getLevel();

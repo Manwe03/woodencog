@@ -1,4 +1,4 @@
-package net.chauvedev.woodencog.mixin;
+package net.chauvedev.woodencog.mixin.recipes;
 
 import net.dries007.tfc.common.recipes.ingredients.HeatableIngredient;
 import org.spongepowered.asm.mixin.Mixin;

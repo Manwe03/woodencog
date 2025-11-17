@@ -6,6 +6,7 @@ import com.simibubi.create.foundation.fluid.FluidIngredient;
 import com.simibubi.create.foundation.recipe.IRecipeTypeInfo;
 import net.chauvedev.woodencog.WoodenCog;
 import net.chauvedev.woodencog.config.WoodenCogCommonConfigs;
+import net.chauvedev.woodencog.utils.HeatHandlingUtil;
 import net.dries007.tfc.common.capabilities.heat.HeatCapability;
 import net.dries007.tfc.common.recipes.ingredients.HeatableIngredient;
 import net.minecraft.core.NonNullList;
@@ -103,7 +104,6 @@ public abstract class HeatedProcessingRecipe<T extends Container> implements Rec
         if (outputCount > this.getMaxFluidOutputCount()) {
             logger.warn(messageHeader + " has more fluid outputs (" + outputCount + ") than supported (" + this.getMaxFluidOutputCount() + ").");
         }
-
     }
 
     /**
@@ -134,26 +134,30 @@ public abstract class HeatedProcessingRecipe<T extends Container> implements Rec
         this.forcedResult = stack;
     }
 
-    public List<ItemStack> rollResults(float temp) {
-        return this.rollResults(this.getRollableResults(),temp);
+    public List<ItemStack> rollResults(List<ItemStack> usedItems) {
+        return this.rollResults(this.getRollableResults(), usedItems);
     }
 
     public List<ItemStack> rollResults(List<HeatedProcessingOutput> rollableResults, float temp) {
         List<ItemStack> results = new ArrayList<>();
         for(int i = 0; i < rollableResults.size(); ++i) {
             HeatedProcessingOutput output = rollableResults.get(i);
+            output.setDynamicOutputTemp(temp);
             ItemStack stack = i == 0 && this.forcedResult != null ? this.forcedResult.get() : output.rollOutput();
-            if (!stack.isEmpty()) {
-                if(WoodenCogCommonConfigs.HANDLE_TEMPERATURE.get()){
-                    HeatCapability.setTemperature(stack,output.getTemperature());
-                    if(output.getCopyHeat()) { //If copy input item heat - cooling
-                        HeatCapability.setTemperature(stack, temp - output.getCooling());
-                    }
-                }
-                results.add(stack);
-            }
+            results.add(stack);
         }
+        return results;
+    }
 
+    public List<ItemStack> rollResults(List<HeatedProcessingOutput> rollableResults, List<ItemStack> usedItems) {
+        List<ItemStack> results = new ArrayList<>();
+        for(int i = 0; i < rollableResults.size(); ++i) {
+            HeatedProcessingOutput output = rollableResults.get(i);
+            output.setDynamicOutputTemp(HeatHandlingUtil.computeThermalEquilibrium(usedItems));
+            output.setDynamicUsedFoodItems(usedItems);
+            ItemStack stack = i == 0 && this.forcedResult != null ? this.forcedResult.get() : output.rollOutput();
+            results.add(stack);
+        }
         return results;
     }
 

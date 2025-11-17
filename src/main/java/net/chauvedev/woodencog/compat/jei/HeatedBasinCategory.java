@@ -8,7 +8,7 @@ import mezz.jei.api.gui.ingredient.IRecipeSlotsView;
 import mezz.jei.api.recipe.IFocusGroup;
 import mezz.jei.api.recipe.RecipeIngredientRole;
 import net.chauvedev.woodencog.compat.jei.animatedBlocks.AnimatedCharcoalForge;
-import net.chauvedev.woodencog.mixin.HeatableIngredientAccessor;
+import net.chauvedev.woodencog.mixin.recipes.HeatableIngredientAccessor;
 import net.chauvedev.woodencog.recipes.heatedRecipes.HeatedProcessingOutput;
 import net.chauvedev.woodencog.recipes.heatedRecipes.WoodenCogHeatCondition;
 import net.chauvedev.woodencog.recipes.heatedRecipes.recipes.HeatedBasinRecipe;
@@ -55,9 +55,11 @@ public abstract class HeatedBasinCategory extends WoodenCogRecipeCategory<Heated
             List<ItemStack> stacks = new ArrayList<>();
             HeatableIngredient ingredient = pair.getFirst();
             int minTemp = ((HeatableIngredientAccessor) ingredient).getMinTemp();
-            for (ItemStack itemStack : pair.getFirst().getItems()) {
+
+            for (ItemStack inmutable : pair.getFirst().getItems()) {
                 //WoodenCog.LOGGER.info("Set temp for: "+ itemStack.getItem() + " at "+ minTemp);
-                HeatCapability.setTemperature(itemStack,minTemp);
+                ItemStack itemStack = inmutable.copy();
+                if(minTemp > 0) HeatCapability.setTemperature(itemStack,minTemp);
                 itemStack.setCount(pair.getSecond().getValue());
                 stacks.add(itemStack);
             }

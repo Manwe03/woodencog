@@ -94,7 +94,9 @@ public class HeatedBasinRecipe extends HeatedProcessingRecipe<Container> {
                             continue;
                         }
                         ItemStack extracted = availableItems.extractItem(slot, 1, true);
-                        if (!ingredient.test(extracted)) {
+                        System.out.println("["+extracted.getItem()+":"+ingredient.toJson().getAsJsonObject("ingredient")+"] test: "+ingredient.test(extracted));
+                        //System.out.println(Arrays.toString(ingredient.getItems()));
+                        if (!(ingredient.test(extracted))) {
                             continue; //test item and item temperature
                         }
                         if (!simulate) availableItems.extractItem(slot, 1, false);
@@ -145,15 +147,19 @@ public class HeatedBasinRecipe extends HeatedProcessingRecipe<Container> {
                         int count = 0;
                         List<ItemStack> extractedItems = new ArrayList<>();
                         for (int slot = 0; slot < availableItems.getSlots(); slot++) {
-                            int extractedCount = extractedItemsFromSlot[slot];
-                            if (extractedCount > 0) { //It's used in recipe
-                                extractedItems.add(availableItems.getStackInSlot(slot));
+                            int amountUsed = extractedItemsFromSlot[slot];
+                            if (amountUsed > 0) {
+                                ItemStack original = availableItems.getStackInSlot(slot);
+                                ItemStack used = new ItemStack(original.getItem(), amountUsed);
+                                if (original.hasTag()) {
+                                    used.setTag(original.getTag().copy());
+                                }
+                                extractedItems.add(used);
                             }
                         }
-                        float outputTemp = HeatHandlingUtil.computeThermalEquilibrium(extractedItems);
-                        recipeOutputItems.addAll(heatedRecipe.rollResults(outputTemp));
+                        recipeOutputItems.addAll(heatedRecipe.rollResults(extractedItems));
                     } else {
-                        recipeOutputItems.addAll(heatedRecipe.rollResults(0));
+                        recipeOutputItems.addAll(heatedRecipe.rollResults(null));
                     }
 
 
