@@ -10,6 +10,7 @@ import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.common.ForgeConfigSpec;
 
+import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Stream;
 
@@ -90,6 +91,9 @@ public class HeatHandlingUtil {
      * @return thermal equilibrium temperature
      */
     public static float computeThermalEquilibrium(List<ItemStack> itemStacks){
+        System.out.println("computeThermalEquilibrium");
+        System.out.println(Arrays.toString(itemStacks.toArray()));
+
         float sumTop = 0;
         float sumBot = 0;
         for (ItemStack itemStack : itemStacks){
@@ -100,8 +104,11 @@ public class HeatHandlingUtil {
             float mult = getMaterialDensityCapacity(itemStack);
             sumTop += mult*temp1;
             sumBot += mult;
+
+            System.out.println("temp:"+temp1+" mult:"+mult+ " sumTop:"+sumTop+" sumBot:"+sumBot);
         }
         if(sumBot == 0) return 0;
+        System.out.println("temp: "+sumTop/sumBot);
         return sumTop/sumBot; //ThermalEquilibrium
     }
 }

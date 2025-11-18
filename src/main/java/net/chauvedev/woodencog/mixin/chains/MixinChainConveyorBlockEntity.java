@@ -97,7 +97,6 @@ public abstract class MixinChainConveyorBlockEntity implements ChainConveyorBloc
     public void removeConnectionTo(BlockPos target, CallbackInfoReturnable<Boolean> cir) {
         BlockPos localTarget = target.subtract(((BlockEntityAccessor)this).getWorldPosition());
         connectionsChain.remove(localTarget);
-        System.out.println(((BlockEntityAccessor)this).getWorldPosition() + "Remove chain "+localTarget);
     }
     //Remove Connection
 

@@ -159,7 +159,6 @@ public class HeatedProcessingRecipeSerializer<T extends HeatedProcessingRecipe<?
 
         int i;
         for(i = 0; i < size; ++i) {
-            System.out.println("[WoodenCog] Reading ingredient " + i);
             ingredients.add(HeatableIngredient.Serializer.INSTANCE.parse(buffer));
         }
 

@@ -94,8 +94,6 @@ public class HeatedBasinRecipe extends HeatedProcessingRecipe<Container> {
                             continue;
                         }
                         ItemStack extracted = availableItems.extractItem(slot, 1, true);
-                        System.out.println("["+extracted.getItem()+":"+ingredient.toJson().getAsJsonObject("ingredient")+"] test: "+ingredient.test(extracted));
-                        //System.out.println(Arrays.toString(ingredient.getItems()));
                         if (!(ingredient.test(extracted))) {
                             continue; //test item and item temperature
                         }

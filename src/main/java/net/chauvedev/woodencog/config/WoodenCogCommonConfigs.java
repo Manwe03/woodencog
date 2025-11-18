@@ -28,6 +28,7 @@ public class WoodenCogCommonConfigs {
     public static final ForgeConfigSpec.ConfigValue<Integer> WOODEN_GENERATOR_BASE_SU;
     public static final ForgeConfigSpec.ConfigValue<Integer> WOODEN_GENERATOR_WIND_FACTOR;
     public static final ForgeConfigSpec.ConfigValue<Integer> WOODEN_GENERATOR_SPEED_FACTOR;
+
     public static final Map<String, ForgeConfigSpec.ConfigValue<List<Integer>>> MATERIAL_PROPERTIES = new HashMap<>();
 
     static {

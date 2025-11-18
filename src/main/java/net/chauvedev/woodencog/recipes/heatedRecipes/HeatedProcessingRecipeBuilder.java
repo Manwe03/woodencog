@@ -113,7 +113,7 @@ public class HeatedProcessingRecipeBuilder<T extends HeatedProcessingRecipe<?>> 
         return this.require((HeatableIngredient) Ingredient.of(new ItemLike[]{item}));
     }
 
-    public HeatedProcessingRecipeBuilder<T> require(HeatableIngredient ingredient) {
+    public <I extends HeatableIngredient> HeatedProcessingRecipeBuilder<T> require(I ingredient) {
         this.params.ingredients.add(ingredient);
         return this;
     }
@@ -213,9 +213,9 @@ public class HeatedProcessingRecipeBuilder<T extends HeatedProcessingRecipe<?>> 
         T create(HeatedProcessingRecipeParams var1);
     }
 
-    public static class HeatedProcessingRecipeParams {
+    public static class HeatedProcessingRecipeParams<I extends HeatableIngredient> {
         protected final ResourceLocation id;
-        protected NonNullList<HeatableIngredient> ingredients;
+        protected NonNullList<I> ingredients;
         protected NonNullList<HeatedProcessingOutput> results;
         protected NonNullList<FluidIngredient> fluidIngredients;
         protected NonNullList<FluidStack> fluidResults;

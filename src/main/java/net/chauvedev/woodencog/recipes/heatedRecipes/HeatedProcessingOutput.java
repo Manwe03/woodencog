@@ -7,6 +7,7 @@ import com.simibubi.create.content.processing.recipe.ProcessingOutput;
 import net.chauvedev.woodencog.WoodenCog;
 import net.chauvedev.woodencog.config.WoodenCogCommonConfigs;
 import net.chauvedev.woodencog.utils.CogUtil;
+import net.chauvedev.woodencog.utils.ModTags;
 import net.createmod.catnip.data.Pair;
 import net.createmod.catnip.platform.CatnipServices;
 import net.dries007.tfc.common.capabilities.food.*;
@@ -127,21 +128,16 @@ public class HeatedProcessingOutput extends ProcessingOutput {
             float[] nutrition = Arrays.copyOf(baseFoodData.nutrients(), Nutrient.VALUES.length);
 
             //Sort list to be able to stack results
-            dynamicUsedFoodItems.sort(Comparator.comparing(ItemStack::getCount).thenComparing((itemx) -> {
-                return BuiltInRegistries.ITEM.getKey(itemx.getItem());
-            }));
+            dynamicUsedFoodItems.sort(Comparator.comparing(ItemStack::getCount)
+                    .thenComparing((itemx) -> BuiltInRegistries.ITEM.getKey(itemx.getItem())));
 
             if(portions != null) {
-                int portionIndex = -1;
-                Item lastItem = null;
                 for (ItemStack usedItem : dynamicUsedFoodItems) {
 
-                    if(!usedItem.is(lastItem)){
-                        lastItem = usedItem.getItem();
-                        portionIndex++;
+                    WoodenCogFoodPortion portion = CogUtil.getOrDefault(portions,1, WoodenCogFoodPortion.empty());
+                    if (usedItem.copy().is(ModTags.Compat.BREADS)) {
+                        portion = CogUtil.getOrDefault(portions,0, WoodenCogFoodPortion.empty());
                     }
-
-                    WoodenCogFoodPortion portion = CogUtil.getOrDefault(portions,portionIndex,WoodenCogFoodPortion.empty());
 
                     FoodData food = FoodCapability.get(usedItem).getData();
 
@@ -213,7 +209,6 @@ public class HeatedProcessingOutput extends ProcessingOutput {
     }
 
     public static HeatedProcessingOutput deserialize(JsonElement je) {
-        WoodenCog.LOGGER.info("deserialize");
 
         if (!je.isJsonObject()) {
             throw new JsonSyntaxException("ProcessingOutput must be a json object");
@@ -296,16 +291,6 @@ public class HeatedProcessingOutput extends ProcessingOutput {
         int temperature = buf.readInt();
         boolean copyHeat = buf.readBoolean();
         int cooling = buf.readInt();
-
-        //ResourceLocation rl = ForgeRegistries.ITEMS.getKey(stack.getItem());
-
-        //try (FileWriter fw = new FileWriter("client_stack_input.log", true)) {
-        //    fw.write("[CLIENT] Reading stack: " + stack +
-        //            " | RegistryName: " + rl +
-        //            " | Count: " + stack.getCount() + "\n");
-        //} catch (IOException e) {
-        //    WoodenCog.LOGGER.error("Error writing client log", e);
-        //}
 
         try{
             FoodData baseFoodData = FoodData.decode(buf);

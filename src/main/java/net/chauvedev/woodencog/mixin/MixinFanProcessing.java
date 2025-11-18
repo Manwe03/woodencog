@@ -6,6 +6,7 @@ import com.simibubi.create.content.kinetics.fan.processing.AllFanProcessingTypes
 import com.simibubi.create.content.kinetics.fan.processing.FanProcessing;
 import com.simibubi.create.content.kinetics.fan.processing.FanProcessingType;
 import net.chauvedev.woodencog.config.WoodenCogCommonConfigs;
+import net.chauvedev.woodencog.datapack.DataPackRegistries;
 import net.chauvedev.woodencog.utils.ModTags;
 import net.dries007.tfc.common.capabilities.food.FoodCapability;
 import net.dries007.tfc.common.capabilities.food.FoodTraits;
@@ -21,13 +22,14 @@ import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
+import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 @Mixin(value = FanProcessing.class, remap = false)
 public class MixinFanProcessing {
 
     @Unique
-    private static ItemStack applyProcessingTCF(ItemStack inputStack, FanProcessingType type) {
+    private static ItemStack applyProcessingTCF(ItemStack inputStack, FanProcessingType type, Level world) {
         if (
                 !inputStack.getCapability(HeatCapability.CAPABILITY).isPresent()
                 || type.equals(AllFanProcessingTypes.HAUNTING)
@@ -39,9 +41,13 @@ public class MixinFanProcessing {
 
         float itemTemp = cap.getTemperature();
         if(type.equals(AllFanProcessingTypes.BLASTING)) {
-            HeatCapability.addTemp(cap, 1700);
+            if(!DataPackRegistries.isInTempBlacklist(inputStack,world.registryAccess())) {
+                HeatCapability.addTemp(cap, 1700);
+            }
         } else if (type.equals(AllFanProcessingTypes.SMOKING)) {
-            HeatCapability.addTemp(cap, 200);
+            if(!DataPackRegistries.isInTempBlacklist(inputStack,world.registryAccess())) {
+                HeatCapability.addTemp(cap, 200);
+            }
         } else if (type.equals(AllFanProcessingTypes.SPLASHING)) {
             cap.setTemperature(cap.getTemperature() - 5F);
             if(cap.getTemperature() <= 0F) {
@@ -97,7 +103,7 @@ public class MixinFanProcessing {
 
         if (hasHeat && WoodenCogCommonConfigs.HANDLE_TEMPERATURE.get()) {
             ItemStack oldStack = transported.stack;
-            ItemStack newStack = MixinFanProcessing.applyProcessingTCF(transported.stack, type);
+            ItemStack newStack = MixinFanProcessing.applyProcessingTCF(transported.stack, type, world);
             if(newStack != null) {
                 if(newStack.isEmpty()) {
                     cir.setReturnValue(TransportedItemStackHandlerBehaviour.TransportedResult.removeItem());
@@ -133,9 +139,8 @@ public class MixinFanProcessing {
             cir.cancel();
         }
 
-        if (hasHeat && WoodenCogCommonConfigs.HANDLE_TEMPERATURE.get())
-        {
-            ItemStack result = MixinFanProcessing.applyProcessingTCF(inputStack,type);
+        if (hasHeat && WoodenCogCommonConfigs.HANDLE_TEMPERATURE.get()) {
+            ItemStack result = MixinFanProcessing.applyProcessingTCF(inputStack, type, entity.level());
 
             if (result == null){
                 entity.kill();

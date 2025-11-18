@@ -30,8 +30,8 @@
     "jei.MixinBasinCategory",
     "jei.MixinNormalizedTypedItemStack",
     "jei.MixinTypedItemStack",
+    "recipes.DelegateIngredientAccessor",
     "recipes.HeatableIngredientAccessor",
-    "recipes.MixinDelegateIngredient",
     "recipes.MixinFillingBySpout",
     "recipes.MixinHeatableIngredient",
     "recipes.MixinRecipeApplier"
