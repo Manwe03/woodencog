@@ -90,7 +90,6 @@ public class HeatedProcessingOutput extends ProcessingOutput {
 
     public void setDynamicUsedFoodItems(List<ItemStack> usedFoodItems){
         this.dynamicUsedFoodItems = usedFoodItems;
-        //Collections.reverse(dynamicUsedFoodItems);
     }
 
     /**

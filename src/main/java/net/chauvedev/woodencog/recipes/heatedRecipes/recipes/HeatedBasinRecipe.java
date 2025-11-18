@@ -147,12 +147,7 @@ public class HeatedBasinRecipe extends HeatedProcessingRecipe<Container> {
                         for (int slot = 0; slot < availableItems.getSlots(); slot++) {
                             int amountUsed = extractedItemsFromSlot[slot];
                             if (amountUsed > 0) {
-                                ItemStack original = availableItems.getStackInSlot(slot);
-                                ItemStack used = new ItemStack(original.getItem(), amountUsed);
-                                if (original.hasTag()) {
-                                    used.setTag(original.getTag().copy());
-                                }
-                                extractedItems.add(used);
+                                extractedItems.add(availableItems.getStackInSlot(slot));
                             }
                         }
                         recipeOutputItems.addAll(heatedRecipe.rollResults(extractedItems));
