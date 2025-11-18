@@ -30,7 +30,7 @@
   "results": [
     {
       "item": "tfc:food/barley_bread_sandwich",
-      "count": 1,
+      "count": 2,
       "food_data": {
         "hunger":4,
         "water":0.5,

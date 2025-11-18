@@ -12,7 +12,6 @@ import net.chauvedev.woodencog.recipes.heatedRecipes.HeatedProcessingRecipe;
 import net.chauvedev.woodencog.recipes.heatedRecipes.HeatedProcessingRecipeBuilder;
 import net.chauvedev.woodencog.utils.BasinBlockEntityExtended;
 import net.chauvedev.woodencog.utils.CogUtil;
-import net.chauvedev.woodencog.utils.HeatHandlingUtil;
 import net.createmod.catnip.data.Iterate;
 import net.dries007.tfc.common.recipes.ingredients.HeatableIngredient;
 import net.minecraft.world.Container;
@@ -142,7 +141,6 @@ public class HeatedBasinRecipe extends HeatedProcessingRecipe<Container> {
 
                 if (simulate) {
                     if (WoodenCogCommonConfigs.HANDLE_TEMPERATURE.get()) {
-                        int count = 0;
                         List<ItemStack> extractedItems = new ArrayList<>();
                         for (int slot = 0; slot < availableItems.getSlots(); slot++) {
                             int amountUsed = extractedItemsFromSlot[slot];

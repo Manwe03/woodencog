@@ -210,7 +210,7 @@ public class HeatedProcessingRecipeBuilder<T extends HeatedProcessingRecipe<?>> 
 
     @FunctionalInterface
     public interface HeatedProcessingRecipeFactory<T extends HeatedProcessingRecipe<?>> {
-        T create(HeatedProcessingRecipeParams var1);
+        T create(HeatedProcessingRecipeParams<?> var1);
     }
 
     public static class HeatedProcessingRecipeParams<I extends HeatableIngredient> {

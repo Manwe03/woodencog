@@ -1,0 +1,20 @@
+{
+  "type": "create:deploying",
+  "ingredients": [
+    {
+      "item": "tfc:food/maize"
+    },
+    {
+      "tag": "tfc:knives"
+    }
+  ],
+  "keepHeldItem": true,
+  "results": [
+    {
+      "item": "tfc:food/maize_grain"
+    },
+    {
+      "item": "tfc:straw"
+    }
+  ]
+}

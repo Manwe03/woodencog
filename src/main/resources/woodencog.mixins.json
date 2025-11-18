@@ -18,6 +18,7 @@
     "blockEnitites.MixinMechanicalPressBlockEntity",
     "blockEnitites.accessors.BasinOperatingBlockEntityAccessor",
     "blockEnitites.accessors.BlockEntityAccessor",
+    "blockEnitites.accessors.InventoryBlockEntityAccessor",
     "blockEnitites.accessors.SmartBlockEntityAccessor",
     "chains.MixinChainConveyorBlock",
     "chains.MixinChainConveyorBlockEntity",

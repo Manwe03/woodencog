@@ -6,6 +6,8 @@ import com.simibubi.create.content.kinetics.mechanicalArm.ArmInteractionPointTyp
 import net.chauvedev.woodencog.WoodenCog;
 import net.dries007.tfc.common.blocks.devices.CharcoalForgeBlock;
 import net.dries007.tfc.common.blocks.devices.CrucibleBlock;
+import net.dries007.tfc.common.blocks.devices.FirepitBlock;
+import net.dries007.tfc.common.capabilities.PartialItemHandler;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Registry;
 import net.minecraft.world.item.ItemStack;
@@ -17,6 +19,7 @@ public class CustomArmInteractionPointTypes {
     static {
         register("crucible", new CrucibleType());
         register("charcoal_forge", new CharcoalForgeType());
+        register("fire_pit", new FirePitType());
     }
 
     private static <T extends ArmInteractionPointType> void register(String name, T type) {
@@ -62,6 +65,35 @@ public class CustomArmInteractionPointTypes {
         @Override
         public ItemStack insert(ItemStack stack, boolean simulate) {
             return super.insert(stack, simulate);
+        }
+
+    }
+
+    public static class FirePitType extends ArmInteractionPointType {
+        @Override
+        public boolean canCreatePoint(Level level, BlockPos pos, BlockState state) {
+            return state.getBlock() instanceof FirepitBlock;
+        }
+        @Override
+        public ArmInteractionPoint createPoint(Level level, BlockPos pos, BlockState state) {
+            return new FirePitPoint(this, level, pos, state);
+        }
+    }
+
+    public static class FirePitPoint extends ArmInteractionPoint {
+        public FirePitPoint(ArmInteractionPointType type, Level level, BlockPos pos, BlockState state) {
+            super(type, level, pos, state);
+        }
+
+        @Override
+        public ItemStack extract(int slot, int amount, boolean simulate) {
+            return super.extract(slot, amount, simulate);
+        }
+
+        @Override
+        public ItemStack insert(ItemStack stack, boolean simulate) {
+            PartialItemHandler handler = (PartialItemHandler) this.getHandler();
+            return handler.insert(3).insertItem(3, stack, simulate);
         }
 
     }
