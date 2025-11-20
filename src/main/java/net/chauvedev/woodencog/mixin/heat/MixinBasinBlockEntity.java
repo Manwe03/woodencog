@@ -12,6 +12,7 @@ import net.chauvedev.woodencog.mixin.blockEnitites.accessors.BlockEntityAccessor
 import net.chauvedev.woodencog.recipes.heatedRecipes.ItemHeatingBehaviour;
 import net.chauvedev.woodencog.utils.BasinBlockEntityExtended;
 import net.chauvedev.woodencog.utils.BlazeBurnerBlockentityExtended;
+import net.dries007.tfc.common.blockentities.AbstractFirepitBlockEntity;
 import net.dries007.tfc.common.blockentities.CharcoalForgeBlockEntity;
 import net.dries007.tfc.common.blocks.devices.CharcoalForgeBlock;
 import net.dries007.tfc.common.capabilities.heat.Heat;
@@ -58,6 +59,8 @@ public abstract class MixinBasinBlockEntity implements BasinBlockEntityExtended 
             return charcoalForgeBlockEntity.getTemperature();
         } else if(source instanceof BlazeBurnerBlockentityExtended blazeBurnerBlockEntity){
             return blazeBurnerBlockEntity.getTemperature();
+        } else if (source instanceof AbstractFirepitBlockEntity<?> firepitBlockEntityl) {
+            return firepitBlockEntityl.getTemperature() / 2.0f;
         }
 
         //Blocks

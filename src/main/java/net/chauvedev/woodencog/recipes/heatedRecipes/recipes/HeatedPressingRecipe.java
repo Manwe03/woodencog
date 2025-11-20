@@ -24,7 +24,7 @@ import java.util.function.Supplier;
 
 public class HeatedPressingRecipe extends HeatedProcessingRecipe<RecipeWrapper> implements IAssemblyRecipe {
 
-    public HeatedPressingRecipe(HeatedProcessingRecipeBuilder.HeatedProcessingRecipeParams<HeatableIngredient> params) {
+    public HeatedPressingRecipe(HeatedProcessingRecipeBuilder.HeatedProcessingRecipeParams params) {
         super(AllHeatedRecipeTypes.HEATED_PRESSING, params);
     }
 

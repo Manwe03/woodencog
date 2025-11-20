@@ -24,6 +24,7 @@ import net.dries007.tfc.util.Helpers;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraftforge.fluids.FluidStack;
 import org.apache.commons.lang3.mutable.MutableInt;
 
@@ -47,7 +48,7 @@ public abstract class HeatedBasinCategory extends WoodenCogRecipeCategory<Heated
 
     @Override
     public void setRecipe(IRecipeLayoutBuilder builder, HeatedBasinRecipe recipe, IFocusGroup iFocusGroup) {
-        List<Pair<HeatableIngredient, MutableInt>> condensedIngredients = HeatedItemHelper.condenseIngredients(recipe.getHeatedIngredients());
+        List<Pair<Ingredient, MutableInt>> condensedIngredients = HeatedItemHelper.condenseIngredients(recipe.getHeatedIngredients());
 
         System.out.println("CONDENSED INGREDIENTS "+Arrays.toString(condensedIngredients.toArray()));
 
@@ -55,12 +56,15 @@ public abstract class HeatedBasinCategory extends WoodenCogRecipeCategory<Heated
         int xOffset = size < 3 ? (3 - size) * 19 / 2 : 9;
         int i = 0;
 
-        for (Pair<HeatableIngredient, MutableInt> pair : condensedIngredients) {
+        for (Pair<Ingredient, MutableInt> pair : condensedIngredients) {
             List<ItemStack> stacks = new ArrayList<>();
-            HeatableIngredient ingredient = pair.getFirst();
-            int minTemp = ((HeatableIngredientAccessor) ingredient).getMinTemp();
+            Ingredient ingredient = pair.getFirst();
+            int minTemp = 0;
+            if(ingredient instanceof HeatableIngredient heatableIngredient){
+                minTemp = ((HeatableIngredientAccessor) heatableIngredient).getMinTemp();
+            }
 
-            for (ItemStack inmutable : pair.getFirst().getItems()) {
+            for (ItemStack inmutable : ingredient.getItems()) {
                 ItemStack itemStack = inmutable.copy();
                 if(minTemp > 0) HeatCapability.setTemperature(itemStack,minTemp);
                 itemStack.setCount(pair.getSecond().getValue());

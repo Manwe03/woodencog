@@ -5,7 +5,7 @@ import net.chauvedev.woodencog.recipes.heatedRecipes.HeatedProcessingRecipeBuild
 import net.dries007.tfc.common.recipes.ingredients.HeatableIngredient;
 
 public class HeatedCompactingRecipe extends HeatedBasinRecipe{
-    public HeatedCompactingRecipe(HeatedProcessingRecipeBuilder.HeatedProcessingRecipeParams<HeatableIngredient> params) {
+    public HeatedCompactingRecipe(HeatedProcessingRecipeBuilder.HeatedProcessingRecipeParams params) {
         super(AllHeatedRecipeTypes.HEATED_COMPACTING, params);
     }
 }

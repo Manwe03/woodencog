@@ -27,7 +27,7 @@ import java.util.function.Supplier;
 
 public abstract class HeatedProcessingRecipe<T extends Container> implements Recipe<T> {
     protected final ResourceLocation id;
-    protected final NonNullList<HeatableIngredient> ingredients;
+    protected final NonNullList<Ingredient> ingredients;
     protected final NonNullList<HeatedProcessingOutput> results;
     protected final NonNullList<FluidIngredient> fluidIngredients;
     protected final NonNullList<FluidStack> fluidResults;
@@ -112,7 +112,7 @@ public abstract class HeatedProcessingRecipe<T extends Container> implements Rec
         //Thread.dumpStack();
         return NonNullList.create();
     }
-    public NonNullList<HeatableIngredient> getHeatedIngredients(){
+    public NonNullList<Ingredient> getHeatedIngredients(){
         return this.ingredients;
     }
 

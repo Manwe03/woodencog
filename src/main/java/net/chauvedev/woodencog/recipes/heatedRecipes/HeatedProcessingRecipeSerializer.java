@@ -13,6 +13,7 @@ import net.minecraft.core.NonNullList;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.GsonHelper;
+import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.item.crafting.RecipeSerializer;
 import net.minecraftforge.fluids.FluidStack;
 
@@ -71,7 +72,7 @@ public class HeatedProcessingRecipeSerializer<T extends HeatedProcessingRecipe<?
     protected T readFromJson(ResourceLocation recipeId, JsonObject json) {
         try {
             HeatedProcessingRecipeBuilder<T> builder = new HeatedProcessingRecipeBuilder<>(this.factory, recipeId);
-            NonNullList<HeatableIngredient> ingredients = NonNullList.create();
+            NonNullList<Ingredient> ingredients = NonNullList.create();
             NonNullList<FluidIngredient> fluidIngredients = NonNullList.create();
             NonNullList<HeatedProcessingOutput> results = NonNullList.create();
             NonNullList<FluidStack> fluidResults = NonNullList.create();
@@ -83,7 +84,8 @@ public class HeatedProcessingRecipeSerializer<T extends HeatedProcessingRecipe<?
                 if (FluidIngredient.isFluidIngredient(je)) {
                     fluidIngredients.add(FluidIngredient.deserialize(je));
                 } else {
-                    ingredients.add((HeatableIngredient) HeatableIngredient.Serializer.INSTANCE.parse((JsonObject) je));
+                    ingredients.addAll(WoodenCogIngredientSerializer.parse((JsonObject) je));
+                    //ingredients.add(HeatableIngredient.Serializer.INSTANCE.parse((JsonObject) je));
                 }
             }
 
@@ -123,13 +125,14 @@ public class HeatedProcessingRecipeSerializer<T extends HeatedProcessingRecipe<?
     }
 
     protected void writeToBuffer(FriendlyByteBuf buffer, T recipe) {
-        NonNullList<HeatableIngredient> ingredients = recipe.ingredients;
+        NonNullList<Ingredient> ingredients = recipe.ingredients;
         NonNullList<FluidIngredient> fluidIngredients = recipe.fluidIngredients;
         NonNullList<HeatedProcessingOutput> outputs = recipe.results;
         NonNullList<FluidStack> fluidOutputs = recipe.fluidResults;
         buffer.writeVarInt(ingredients.size());
         ingredients.forEach((i) -> {
-            HeatableIngredient.Serializer.INSTANCE.write(buffer,i);
+            WoodenCogIngredientSerializer.write(buffer,i);
+            //HeatableIngredient.Serializer.INSTANCE.write(buffer,i);
         });
         buffer.writeVarInt(fluidIngredients.size());
         fluidIngredients.forEach((i) -> {
@@ -151,7 +154,7 @@ public class HeatedProcessingRecipeSerializer<T extends HeatedProcessingRecipe<?
     protected T readFromBuffer(ResourceLocation recipeId, FriendlyByteBuf buffer) {
         System.out.println("[WoodenCog] Reading recipe from buffer: " + recipeId);
 
-        NonNullList<HeatableIngredient> ingredients = NonNullList.create();
+        NonNullList<Ingredient> ingredients = NonNullList.create();
         NonNullList<FluidIngredient> fluidIngredients = NonNullList.create();
         NonNullList<HeatedProcessingOutput> results = NonNullList.create();
         NonNullList<FluidStack> fluidResults = NonNullList.create();
@@ -159,7 +162,8 @@ public class HeatedProcessingRecipeSerializer<T extends HeatedProcessingRecipe<?
 
         int i;
         for(i = 0; i < size; ++i) {
-            ingredients.add(HeatableIngredient.Serializer.INSTANCE.parse(buffer));
+            ingredients.add(WoodenCogIngredientSerializer.parse(buffer));
+            //ingredients.add(HeatableIngredient.Serializer.INSTANCE.parse(buffer));
         }
 
         size = buffer.readVarInt();

@@ -17,6 +17,7 @@ import net.dries007.tfc.common.recipes.ingredients.HeatableIngredient;
 import net.minecraft.world.Container;
 import net.minecraft.world.inventory.CraftingContainer;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.item.crafting.Recipe;
 import net.minecraft.world.level.Level;
 import net.minecraftforge.common.capabilities.ForgeCapabilities;
@@ -74,7 +75,7 @@ public class HeatedBasinRecipe extends HeatedProcessingRecipe<Container> {
             List<ItemStack> recipeOutputItems = new ArrayList<>();
             List<FluidStack> recipeOutputFluids = new ArrayList<>();
 
-            List<HeatableIngredient> ingredients = new LinkedList<>(heatedRecipe.getHeatedIngredients());
+            List<Ingredient> ingredients = new ArrayList<>(heatedRecipe.getHeatedIngredients());
             List<FluidIngredient> fluidIngredients = heatedRecipe.getFluidIngredients();
 
             for (boolean simulate : Iterate.trueAndFalse) {
@@ -87,7 +88,7 @@ public class HeatedBasinRecipe extends HeatedProcessingRecipe<Container> {
                 int[] extractedFluidsFromTank = new int[availableFluids.getTanks()];
 
                 Ingredients:
-                for (HeatableIngredient ingredient : ingredients) {
+                for (Ingredient ingredient : ingredients) {
                     for (int slot = 0; slot < availableItems.getSlots(); slot++) {
                         if (simulate && availableItems.getStackInSlot(slot).getCount() <= extractedItemsFromSlot[slot]) {
                             continue;

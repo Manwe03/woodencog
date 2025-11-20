@@ -47,7 +47,7 @@ public class HeatedProcessingRecipeBuilder<T extends HeatedProcessingRecipe<?>> 
         return this.withItemIngredients(NonNullList.of((HeatableIngredient) Ingredient.EMPTY, ingredients));
     }
 
-    public HeatedProcessingRecipeBuilder<T> withItemIngredients(NonNullList<HeatableIngredient> ingredients) {
+    public HeatedProcessingRecipeBuilder<T> withItemIngredients(NonNullList<Ingredient> ingredients) {
         this.params.ingredients = ingredients;
         return this;
     }
@@ -210,12 +210,12 @@ public class HeatedProcessingRecipeBuilder<T extends HeatedProcessingRecipe<?>> 
 
     @FunctionalInterface
     public interface HeatedProcessingRecipeFactory<T extends HeatedProcessingRecipe<?>> {
-        T create(HeatedProcessingRecipeParams<?> var1);
+        T create(HeatedProcessingRecipeParams var1);
     }
 
-    public static class HeatedProcessingRecipeParams<I extends HeatableIngredient> {
+    public static class HeatedProcessingRecipeParams {
         protected final ResourceLocation id;
-        protected NonNullList<I> ingredients;
+        protected NonNullList<Ingredient> ingredients;
         protected NonNullList<HeatedProcessingOutput> results;
         protected NonNullList<FluidIngredient> fluidIngredients;
         protected NonNullList<FluidStack> fluidResults;

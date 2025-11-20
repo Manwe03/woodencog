@@ -52,7 +52,7 @@ public enum AllHeatedRecipeTypes implements IRecipeTypeInfo {
         this.type = this.typeObject;
     }
 
-    AllHeatedRecipeTypes(HeatedProcessingRecipeBuilder.HeatedProcessingRecipeFactory processingFactory) {
+    AllHeatedRecipeTypes(HeatedProcessingRecipeBuilder.HeatedProcessingRecipeFactory<HeatedProcessingRecipe<?>> processingFactory) {
         this(() -> new HeatedProcessingRecipeSerializer<>(processingFactory));
     }
 
