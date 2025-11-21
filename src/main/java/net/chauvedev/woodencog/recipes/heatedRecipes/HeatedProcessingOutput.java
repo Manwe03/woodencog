@@ -10,8 +10,11 @@ import net.chauvedev.woodencog.utils.CogUtil;
 import net.chauvedev.woodencog.utils.ModTags;
 import net.createmod.catnip.data.Pair;
 import net.createmod.catnip.platform.CatnipServices;
+import net.dries007.tfc.common.TFCTags;
 import net.dries007.tfc.common.capabilities.food.*;
 import net.dries007.tfc.common.capabilities.heat.HeatCapability;
+import net.dries007.tfc.common.items.TFCItems;
+import net.dries007.tfc.common.recipes.SoupPotRecipe;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.nbt.TagParser;
 import net.minecraft.network.FriendlyByteBuf;
@@ -21,10 +24,13 @@ import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.ItemLike;
 import net.minecraftforge.registries.ForgeRegistries;
+import net.minecraftforge.registries.RegistryObject;
+import org.jetbrains.annotations.Nullable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.util.*;
+import java.util.function.Supplier;
 
 public class HeatedProcessingOutput extends ProcessingOutput {
 
@@ -39,8 +45,13 @@ public class HeatedProcessingOutput extends ProcessingOutput {
     private float dynamicOutputTemp;
     private List<ItemStack> dynamicUsedFoodItems;
 
+    public static final int SOUP_HUNGER_VALUE = 4;
+    public static final float SOUP_DECAY_MODIFIER = 3.5F;
+    public static final float SALAD_DECAY_MODIFIER = 4.0F;
+
+
     public HeatedProcessingOutput(ItemStack stack, float chance, int temperature, boolean copyHeat, int cooling) {
-        this(stack, chance,temperature,copyHeat,cooling,null,null);
+        this(stack, chance, temperature,copyHeat,cooling,null,null);
     }
 
     public HeatedProcessingOutput(ItemStack stack, float chance, FoodData baseFoodData, List<WoodenCogFoodPortion> portions) {
@@ -113,22 +124,101 @@ public class HeatedProcessingOutput extends ProcessingOutput {
                 HeatCapability.setTemperature(outputStack, this.dynamicOutputTemp - this.getCooling());
             }
         }
-        if(hasFoodData()){
-            IFood inputFood = FoodCapability.get(outputStack);
-            this.setFoodData(inputFood);
+        if(hasFoodData()){ // Is a food item
+            //Sort list to be able to stack results
+            this.dynamicUsedFoodItems.sort(Comparator.comparing(ItemStack::getCount)
+                    .thenComparing((itemx) -> BuiltInRegistries.ITEM.getKey(itemx.getItem())));
+
+            ItemStack updateOutputStack = this.updateSaladOrSoupItem(outputStack); //Change salad or soup item from food data
+            if(updateOutputStack != null){
+                outputStack = updateOutputStack;
+            } else { //If null item is not a bowl and set default food data
+                this.setFoodData(outputStack);
+            }
+
         }
         return outputStack;
     }
 
-    private void setFoodData(IFood inputFood){
+    private ItemStack updateSaladOrSoupItem(ItemStack outputStack){
+        if(outputStack.is(TFCItems.SALADS.get(Nutrient.FRUIT).get())){
+            return this.getBowlItem(TFCItems.SALADS);
+        }
+        else if(outputStack.is(TFCItems.SOUPS.get(Nutrient.FRUIT).get())){
+            return this.getBowlItem(TFCItems.SOUPS);
+        }
+        return null;
+    }
+
+    private ItemStack getBowlItem(Map<Nutrient, RegistryObject<Item>> map){
+        int ingredientCount = 0;
+        float water = 20, saturation = 2;
+        float[] nutrition = new float[Nutrient.TOTAL];
+        ItemStack soupStack = ItemStack.EMPTY;
+
+        // ingredientes recibidos
+        final List<ItemStack> itemIngredients = new ArrayList<>();
+
+        for (ItemStack stack : dynamicUsedFoodItems) {
+            final @Nullable IFood food = FoodCapability.get(stack);
+            if (food != null) {
+                itemIngredients.add(stack);
+                if (food.isRotten()) {
+                    ingredientCount = 0;
+                    break;
+                }
+                final FoodData data = food.getData();
+                water += data.water();
+                saturation += data.saturation();
+                for (Nutrient nutrient : Nutrient.VALUES) {
+                    nutrition[nutrient.ordinal()] += data.nutrient(nutrient);
+                }
+                ingredientCount++;
+            }
+        }
+
+        if (ingredientCount > 0) {
+            float multiplier = 1 - (0.05f * ingredientCount);
+            water *= multiplier;
+            saturation *= multiplier;
+
+            Nutrient maxNutrient = Nutrient.GRAIN;
+            float maxNutrientValue = 0;
+
+            for (Nutrient nutrient : Nutrient.VALUES) {
+                final int idx = nutrient.ordinal();
+                nutrition[idx] *= multiplier;
+
+                if (nutrition[idx] > maxNutrientValue) {
+                    maxNutrientValue = nutrition[idx];
+                    maxNutrient = nutrient;
+                }
+            }
+
+            FoodData data = FoodData.create(SOUP_HUNGER_VALUE, water, saturation, nutrition, SOUP_DECAY_MODIFIER);
+
+            int servings = (int)(ingredientCount / 2f) + 1;
+            long created = FoodCapability.getRoundedCreationDate();
+
+            soupStack = new ItemStack(map.get(maxNutrient).get(), servings);
+
+            final @Nullable IFood food = FoodCapability.get(soupStack);
+            if (food instanceof DynamicBowlHandler handler) {
+                handler.setCreationDate(created);
+                handler.setIngredients(itemIngredients);
+                handler.setFood(data);
+            }
+        }
+
+        return soupStack;
+    }
+
+    private void setFoodData(ItemStack outputStack){
+        IFood inputFood = FoodCapability.get(outputStack);
         if (inputFood instanceof FoodHandler.Dynamic handler) {
             float water = baseFoodData.water();
             float saturation = baseFoodData.saturation();
             float[] nutrition = Arrays.copyOf(baseFoodData.nutrients(), Nutrient.VALUES.length);
-
-            //Sort list to be able to stack results
-            dynamicUsedFoodItems.sort(Comparator.comparing(ItemStack::getCount)
-                    .thenComparing((itemx) -> BuiltInRegistries.ITEM.getKey(itemx.getItem())));
 
             if(portions != null) {
                 for (ItemStack usedItem : dynamicUsedFoodItems) {

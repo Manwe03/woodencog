@@ -2,7 +2,16 @@ package net.chauvedev.woodencog.utils;
 
 import com.google.gson.JsonObject;
 import net.chauvedev.woodencog.WoodenCog;
+import net.dries007.tfc.common.capabilities.food.DynamicBowlHandler;
+import net.dries007.tfc.common.capabilities.food.FoodCapability;
+import net.dries007.tfc.common.capabilities.food.FoodData;
+import net.dries007.tfc.common.capabilities.food.IFood;
+import net.dries007.tfc.common.items.TFCItems;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.ItemLike;
+import net.minecraftforge.registries.RegistryObject;
 import org.jetbrains.annotations.Contract;
 
 import java.util.List;
@@ -52,5 +61,27 @@ public class CogUtil {
         json.addProperty("dairy", nbt.getFloat("dairy"));
 
         return json;
+    }
+
+    public static float max(float[] a){
+        float max = Float.NEGATIVE_INFINITY;
+        for (float f : a) {
+            if (f > max) {
+                max = f;
+            }
+        }
+        return max;
+    }
+
+    public static int maxIndex(float[] a){
+        float max = 0;
+        int max_i = 0;
+        for (int i = 0; i<a.length; i++) {
+            if (a[i] > max) {
+                max = a[i];
+                max_i = i;
+            }
+        }
+        return max_i;
     }
 }
