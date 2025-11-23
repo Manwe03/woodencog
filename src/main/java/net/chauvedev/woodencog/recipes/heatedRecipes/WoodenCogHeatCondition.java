@@ -17,11 +17,11 @@ public class WoodenCogHeatCondition {
         return sourceTemp >= this.temperature;
     }
 
-    public String serialize(){
-        return this.temperature + "";
+    public int serialize(){
+        return this.temperature;
     }
 
-    public static WoodenCogHeatCondition deserialize(int temperature){
+    public static WoodenCogHeatCondition of(int temperature){
         return new WoodenCogHeatCondition(temperature);
     }
 

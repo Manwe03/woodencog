@@ -7,7 +7,8 @@ import com.google.gson.JsonSyntaxException;
 import com.simibubi.create.foundation.fluid.FluidHelper;
 import com.simibubi.create.foundation.fluid.FluidIngredient;
 import net.chauvedev.woodencog.WoodenCog;
-import net.dries007.tfc.common.recipes.ingredients.HeatableIngredient;
+import net.chauvedev.woodencog.recipes.heatedRecipes.input.HeatedIngredient;
+import net.chauvedev.woodencog.recipes.heatedRecipes.output.DynamicProcessingOutput;
 import net.minecraft.MethodsReturnNonnullByDefault;
 import net.minecraft.core.NonNullList;
 import net.minecraft.network.FriendlyByteBuf;
@@ -15,6 +16,7 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.GsonHelper;
 import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.item.crafting.RecipeSerializer;
+import net.minecraftforge.common.crafting.CraftingHelper;
 import net.minecraftforge.fluids.FluidStack;
 
 import javax.annotation.ParametersAreNonnullByDefault;
@@ -71,33 +73,37 @@ public class HeatedProcessingRecipeSerializer<T extends HeatedProcessingRecipe<?
 
     protected T readFromJson(ResourceLocation recipeId, JsonObject json) {
         try {
-            HeatedProcessingRecipeBuilder<T> builder = new HeatedProcessingRecipeBuilder<>(this.factory, recipeId);
+            HeatedProcessingRecipeBuilder<T> builder = new HeatedProcessingRecipeBuilder<>(this.factory);
             NonNullList<Ingredient> ingredients = NonNullList.create();
             NonNullList<FluidIngredient> fluidIngredients = NonNullList.create();
-            NonNullList<HeatedProcessingOutput> results = NonNullList.create();
+            NonNullList<DynamicProcessingOutput<?>> results = NonNullList.create();
             NonNullList<FluidStack> fluidResults = NonNullList.create();
-            Iterator<JsonElement> var8 = GsonHelper.getAsJsonArray(json, "ingredients").iterator();
+            Iterator<JsonElement> element = GsonHelper.getAsJsonArray(json, "ingredients").iterator();
 
-            JsonElement je;
-            while(var8.hasNext()) {
-                je = var8.next();
-                if (FluidIngredient.isFluidIngredient(je)) {
-                    fluidIngredients.add(FluidIngredient.deserialize(je));
+
+            while(element.hasNext()) {
+                JsonElement jsonInput = element.next();
+                if (FluidIngredient.isFluidIngredient(jsonInput)) {
+                    fluidIngredients.add(FluidIngredient.deserialize(jsonInput));
                 } else {
-                    ingredients.addAll(WoodenCogIngredientSerializer.parse((JsonObject) je));
-                    //ingredients.add(HeatableIngredient.Serializer.INSTANCE.parse((JsonObject) je));
+                    try {
+                        ingredients.add(CraftingHelper.getIngredient(jsonInput,true));
+                    } catch (Exception e){
+                        System.out.println("Exception thrown in WoodenCogIngredientSerializer.parse");
+                        throw e;
+                    }
                 }
             }
 
-            var8 = GsonHelper.getAsJsonArray(json, "results").iterator();
+            element = GsonHelper.getAsJsonArray(json, "results").iterator();
 
-            while(var8.hasNext()) {
-                je = var8.next();
-                JsonObject jsonObject = je.getAsJsonObject();
+            while(element.hasNext()) {
+                JsonElement jsonOutput = element.next();
+                JsonObject jsonObject = jsonOutput.getAsJsonObject();
                 if (GsonHelper.isValidNode(jsonObject, "fluid")) {
                     fluidResults.add(FluidHelper.deserializeFluidStack(jsonObject));
                 } else {
-                    results.add(HeatedProcessingOutput.deserialize(je));
+                    results.add(DynamicProcessingOutput.deserialize(jsonOutput));
                 }
             }
 
@@ -108,13 +114,13 @@ public class HeatedProcessingRecipeSerializer<T extends HeatedProcessingRecipe<?
 
             if (GsonHelper.isValidNode(json, "heatRequirement")) {
                 try {
-                    builder.requiresHeat(WoodenCogHeatCondition.deserialize(GsonHelper.getAsInt(json, "heatRequirement")));
+                    builder.requiresHeat(WoodenCogHeatCondition.of(GsonHelper.getAsInt(json, "heatRequirement")));
                 }catch (JsonSyntaxException e){
                     WoodenCog.LOGGER.error(e.getMessage());
                 }
             }
 
-            T recipe = builder.build();
+            T recipe = builder.build(recipeId);
             recipe.readAdditional(json);
 
             return recipe;
@@ -127,12 +133,11 @@ public class HeatedProcessingRecipeSerializer<T extends HeatedProcessingRecipe<?
     protected void writeToBuffer(FriendlyByteBuf buffer, T recipe) {
         NonNullList<Ingredient> ingredients = recipe.ingredients;
         NonNullList<FluidIngredient> fluidIngredients = recipe.fluidIngredients;
-        NonNullList<HeatedProcessingOutput> outputs = recipe.results;
+        NonNullList<DynamicProcessingOutput<?>> outputs = recipe.results;
         NonNullList<FluidStack> fluidOutputs = recipe.fluidResults;
         buffer.writeVarInt(ingredients.size());
         ingredients.forEach((i) -> {
-            WoodenCogIngredientSerializer.write(buffer,i);
-            //HeatableIngredient.Serializer.INSTANCE.write(buffer,i);
+            i.toNetwork(buffer);
         });
         buffer.writeVarInt(fluidIngredients.size());
         fluidIngredients.forEach((i) -> {
@@ -156,14 +161,13 @@ public class HeatedProcessingRecipeSerializer<T extends HeatedProcessingRecipe<?
 
         NonNullList<Ingredient> ingredients = NonNullList.create();
         NonNullList<FluidIngredient> fluidIngredients = NonNullList.create();
-        NonNullList<HeatedProcessingOutput> results = NonNullList.create();
+        NonNullList<DynamicProcessingOutput<?>> results = NonNullList.create();
         NonNullList<FluidStack> fluidResults = NonNullList.create();
         int size = buffer.readVarInt();
 
         int i;
         for(i = 0; i < size; ++i) {
-            ingredients.add(WoodenCogIngredientSerializer.parse(buffer));
-            //ingredients.add(HeatableIngredient.Serializer.INSTANCE.parse(buffer));
+            ingredients.add(Ingredient.fromNetwork(buffer));
         }
 
         size = buffer.readVarInt();
@@ -175,7 +179,7 @@ public class HeatedProcessingRecipeSerializer<T extends HeatedProcessingRecipe<?
         size = buffer.readVarInt();
 
         for(i = 0; i < size; ++i) {
-            results.add(HeatedProcessingOutput.read(buffer));
+            results.add(DynamicProcessingOutput.read(buffer));
         }
 
         size = buffer.readVarInt();
@@ -187,10 +191,10 @@ public class HeatedProcessingRecipeSerializer<T extends HeatedProcessingRecipe<?
         int processingDuration = buffer.readVarInt();
         int temperature = buffer.readVarInt();
 
-        T recipe = (new HeatedProcessingRecipeBuilder<>(this.factory, recipeId)).withItemIngredients(ingredients)
+        T recipe = (new HeatedProcessingRecipeBuilder<>(this.factory)).withItemIngredients(ingredients)
                 .withItemOutputs(results).withFluidIngredients(fluidIngredients)
                 .withFluidOutputs(fluidResults).duration(processingDuration)
-                .requiresHeat(WoodenCogHeatCondition.deserialize(temperature)).build();
+                .requiresHeat(WoodenCogHeatCondition.of(temperature)).build(recipeId);
         recipe.readAdditional(buffer);
         return recipe;
     }

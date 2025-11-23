@@ -5,8 +5,8 @@ import com.simibubi.create.Create;
 import com.simibubi.create.foundation.fluid.FluidIngredient;
 import com.simibubi.create.foundation.recipe.IRecipeTypeInfo;
 import net.chauvedev.woodencog.WoodenCog;
+import net.chauvedev.woodencog.recipes.heatedRecipes.output.DynamicProcessingOutput;
 import net.chauvedev.woodencog.utils.HeatHandlingUtil;
-import net.dries007.tfc.common.recipes.ingredients.HeatableIngredient;
 import net.minecraft.core.NonNullList;
 import net.minecraft.core.RegistryAccess;
 import net.minecraft.network.FriendlyByteBuf;
@@ -28,7 +28,7 @@ import java.util.function.Supplier;
 public abstract class HeatedProcessingRecipe<T extends Container> implements Recipe<T> {
     protected final ResourceLocation id;
     protected final NonNullList<Ingredient> ingredients;
-    protected final NonNullList<HeatedProcessingOutput> results;
+    protected final NonNullList<DynamicProcessingOutput<?>> results;
     protected final NonNullList<FluidIngredient> fluidIngredients;
     protected final NonNullList<FluidStack> fluidResults;
     protected final int processingDuration;
@@ -120,7 +120,7 @@ public abstract class HeatedProcessingRecipe<T extends Container> implements Rec
         return this.fluidIngredients;
     }
 
-    public List<HeatedProcessingOutput> getRollableResults() {
+    public List<DynamicProcessingOutput<?>> getRollableResults() {
         return this.results;
     }
 
@@ -136,23 +136,27 @@ public abstract class HeatedProcessingRecipe<T extends Container> implements Rec
         return this.rollResults(this.getRollableResults(), usedItems);
     }
 
-    public List<ItemStack> rollResults(List<HeatedProcessingOutput> rollableResults, float temp) {
+    public List<ItemStack> rollResults(List<DynamicProcessingOutput<?>> rollableResults, float temp) {
         List<ItemStack> results = new ArrayList<>();
         for(int i = 0; i < rollableResults.size(); ++i) {
-            HeatedProcessingOutput output = rollableResults.get(i);
-            output.setDynamicOutputTemp(temp);
+            DynamicProcessingOutput<?> output = rollableResults.get(i);
+            DynamicProcessingOutput.setDynamicData(output,temp);
             ItemStack stack = i == 0 && this.forcedResult != null ? this.forcedResult.get() : output.rollOutput();
             results.add(stack);
         }
         return results;
     }
 
-    public List<ItemStack> rollResults(List<HeatedProcessingOutput> rollableResults, List<ItemStack> usedItems) {
+    public List<ItemStack> rollResults(List<DynamicProcessingOutput<?>> rollableResults, List<ItemStack> usedItems) {
         List<ItemStack> results = new ArrayList<>();
         for(int i = 0; i < rollableResults.size(); ++i) {
-            HeatedProcessingOutput output = rollableResults.get(i);
-            output.setDynamicOutputTemp(HeatHandlingUtil.computeThermalEquilibrium(usedItems));
-            output.setDynamicUsedFoodItems(usedItems);
+            DynamicProcessingOutput<?> output = rollableResults.get(i);
+            if(output.getType() == DynamicProcessingOutput.ProcessingOutputTypes.HEATED){
+                float temp = HeatHandlingUtil.computeThermalEquilibrium(usedItems);
+                DynamicProcessingOutput.setDynamicData(output, temp);
+            } else {
+                DynamicProcessingOutput.setDynamicData(output, usedItems);
+            }
             ItemStack stack = i == 0 && this.forcedResult != null ? this.forcedResult.get() : output.rollOutput();
             results.add(stack);
         }

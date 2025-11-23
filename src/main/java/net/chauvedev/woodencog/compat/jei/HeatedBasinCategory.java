@@ -8,9 +8,8 @@ import mezz.jei.api.gui.ingredient.IRecipeSlotsView;
 import mezz.jei.api.recipe.IFocusGroup;
 import mezz.jei.api.recipe.RecipeIngredientRole;
 import net.chauvedev.woodencog.compat.jei.animatedBlocks.AnimatedCharcoalForge;
-import net.chauvedev.woodencog.mixin.recipes.DelegateIngredientAccessor;
 import net.chauvedev.woodencog.mixin.recipes.HeatableIngredientAccessor;
-import net.chauvedev.woodencog.recipes.heatedRecipes.HeatedProcessingOutput;
+import net.chauvedev.woodencog.recipes.heatedRecipes.output.DynamicProcessingOutput;
 import net.chauvedev.woodencog.recipes.heatedRecipes.WoodenCogHeatCondition;
 import net.chauvedev.woodencog.recipes.heatedRecipes.recipes.HeatedBasinRecipe;
 import net.chauvedev.woodencog.utils.Color;
@@ -89,7 +88,7 @@ public abstract class HeatedBasinCategory extends WoodenCogRecipeCategory<Heated
         size = recipe.getRollableResults().size() + recipe.getFluidResults().size();
         i = 0;
 
-        for (HeatedProcessingOutput result : recipe.getRollableResults()) {
+        for (DynamicProcessingOutput<?> result : recipe.getRollableResults()) {
             int xPosition = 142 - (size % 2 != 0 && i == size - 1 ? 0 : i % 2 == 0 ? 10 : -9);
             int yPosition = -19 * (i / 2) + 51;
 

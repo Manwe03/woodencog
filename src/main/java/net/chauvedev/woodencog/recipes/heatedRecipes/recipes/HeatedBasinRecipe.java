@@ -6,6 +6,7 @@ import com.simibubi.create.foundation.blockEntity.behaviour.fluid.SmartFluidTank
 import com.simibubi.create.foundation.fluid.FluidIngredient;
 import com.simibubi.create.foundation.recipe.DummyCraftingContainer;
 import com.simibubi.create.foundation.recipe.IRecipeTypeInfo;
+import net.chauvedev.woodencog.WoodenCog;
 import net.chauvedev.woodencog.config.WoodenCogCommonConfigs;
 import net.chauvedev.woodencog.recipes.heatedRecipes.AllHeatedRecipeTypes;
 import net.chauvedev.woodencog.recipes.heatedRecipes.HeatedProcessingRecipe;
@@ -146,7 +147,10 @@ public class HeatedBasinRecipe extends HeatedProcessingRecipe<Container> {
                         for (int slot = 0; slot < availableItems.getSlots(); slot++) {
                             int amountUsed = extractedItemsFromSlot[slot];
                             if (amountUsed > 0) {
-                                extractedItems.add(availableItems.getStackInSlot(slot));
+                                ItemStack original = availableItems.getStackInSlot(slot);
+                                ItemStack used = original.copy();
+                                used.setCount(amountUsed);
+                                extractedItems.add(used);
                             }
                         }
                         recipeOutputItems.addAll(heatedRecipe.rollResults(extractedItems));

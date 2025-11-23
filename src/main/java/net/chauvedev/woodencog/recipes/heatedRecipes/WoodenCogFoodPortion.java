@@ -27,6 +27,10 @@ public class WoodenCogFoodPortion {
         return new WoodenCogFoodPortion(0,0,0);
     }
 
+    public static WoodenCogFoodPortion flat(float value){
+        return new WoodenCogFoodPortion(value,value,value);
+    }
+
     public static WoodenCogFoodPortion read(JsonObject json) {
         float nutrientModifier = JsonHelpers.getAsFloat(json, "nutrient_modifier", 0.0F);
         float waterModifier = JsonHelpers.getAsFloat(json, "water_modifier", 0.0F);

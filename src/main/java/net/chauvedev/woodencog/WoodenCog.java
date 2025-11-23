@@ -15,15 +15,20 @@ import net.chauvedev.woodencog.ponder.WoodenCogPonderPlugin;
 import net.chauvedev.woodencog.recipes.advancedProcessingRecipe.AllAdvancedRecipeTypes;
 import net.chauvedev.woodencog.recipes.heatedRecipes.AllHeatedRecipeTypes;
 import net.chauvedev.woodencog.block.WoodencogBlocks;
+import net.chauvedev.woodencog.recipes.heatedRecipes.input.HeatedIngredient;
 import net.createmod.ponder.foundation.PonderIndex;
+import net.dries007.tfc.common.recipes.ingredients.HeatableIngredient;
 import net.minecraft.client.renderer.blockentity.BlockEntityRenderers;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraftforge.common.MinecraftForge;
+import net.minecraftforge.common.crafting.CraftingHelper;
 import net.minecraftforge.event.BuildCreativeModeTabContentsEvent;
 import net.minecraftforge.eventbus.api.IEventBus;
+import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.event.lifecycle.*;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
+import net.minecraftforge.registries.ForgeRegistries;
 import net.minecraftforge.registries.RegisterEvent;
 import org.slf4j.Logger;
 
@@ -80,7 +85,7 @@ public class WoodenCog
     }
 
     private void setup(final FMLCommonSetupEvent event) {
-
+        DataGenerators.registerSerializers();
     }
 
     public static void onRegister(final RegisterEvent event) {

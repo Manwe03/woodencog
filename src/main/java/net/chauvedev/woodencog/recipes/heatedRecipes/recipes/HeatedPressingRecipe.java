@@ -32,8 +32,7 @@ public class HeatedPressingRecipe extends HeatedProcessingRecipe<RecipeWrapper> 
     public boolean matches(RecipeWrapper inv, @NotNull Level worldIn) {
         if (inv.isEmpty())
             return false;
-        return ingredients.get(0)
-                .test(inv.getItem(0));
+        return ingredients.get(0).test(inv.getItem(0));
     }
 
     @Override

@@ -6,7 +6,8 @@ import mezz.jei.api.gui.builder.IRecipeLayoutBuilder;
 import mezz.jei.api.gui.ingredient.IRecipeSlotsView;
 import mezz.jei.api.recipe.IFocusGroup;
 import mezz.jei.api.recipe.RecipeIngredientRole;
-import net.chauvedev.woodencog.recipes.heatedRecipes.HeatedProcessingOutput;
+import net.chauvedev.woodencog.recipes.heatedRecipes.output.DynamicProcessingOutput;
+import net.chauvedev.woodencog.recipes.heatedRecipes.output.HeatedProcessingOutput;
 import net.chauvedev.woodencog.recipes.heatedRecipes.recipes.HeatedPressingRecipe;
 import net.chauvedev.woodencog.utils.Color;
 import net.minecraft.client.gui.GuiGraphics;
@@ -29,9 +30,10 @@ public class HeatedPressingCategory extends WoodenCogRecipeCategory<HeatedPressi
                 .setBackground(getRenderedSlot(), -1, -1)
                 .addIngredients(recipe.getHeatedIngredients().get(0));
 
-        List<HeatedProcessingOutput> results = recipe.getRollableResults();
+        List<DynamicProcessingOutput<?>> results = recipe.getRollableResults();
+
         int i = 0;
-        for (HeatedProcessingOutput output : results) {
+        for (DynamicProcessingOutput<?> output : results) {
             builder.addSlot(RecipeIngredientRole.OUTPUT, 131 + 19 * i, 50)
                     .setBackground(getRenderedSlot(output), -1, -1)
                     .addItemStack(output.getStack())

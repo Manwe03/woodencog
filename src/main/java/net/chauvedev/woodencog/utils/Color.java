@@ -3,7 +3,8 @@ package net.chauvedev.woodencog.utils;
 import mezz.jei.api.gui.ingredient.IRecipeSlotView;
 import mezz.jei.api.gui.ingredient.IRecipeSlotsView;
 import mezz.jei.api.recipe.RecipeIngredientRole;
-import net.chauvedev.woodencog.recipes.heatedRecipes.HeatedProcessingOutput;
+import net.chauvedev.woodencog.recipes.heatedRecipes.output.DynamicProcessingOutput;
+import net.chauvedev.woodencog.recipes.heatedRecipes.output.HeatedProcessingOutput;
 import net.chauvedev.woodencog.recipes.heatedRecipes.HeatedProcessingRecipe;
 import net.createmod.catnip.animation.AnimationTickHolder;
 import net.minecraft.client.gui.GuiGraphics;
@@ -27,59 +28,65 @@ public class Color {
         return (a << 24) | (r << 16) | (g << 8) | b;
     }
 
-    /**
-     * Client only
-     * Draws the colored box around items outputs that copy input heat
-     */
     public static void drawCopyHeatBoxPress(HeatedProcessingRecipe<?> recipe, IRecipeSlotsView recipeSlotsView, GuiGraphics guiGraphics) {
-        float time = (AnimationTickHolder.getRenderTime()/100.0f) % 1.0f;
-        List<HeatedProcessingOutput> results = recipe.getRollableResults();
+        drawCopyHeatBoxes(recipe, recipeSlotsView, guiGraphics, (i, size) -> {
+            int x = 131 + 19 * i;
+            int y = 50;
+            return new int[]{x, y};
+        });
+    }
+
+    public static void drawCopyHeatBoxBasin(HeatedProcessingRecipe<?> recipe, IRecipeSlotsView recipeSlotsView, GuiGraphics guiGraphics) {
+        drawCopyHeatBoxes(recipe, recipeSlotsView, guiGraphics, (i, size) -> {
+            int x = 142 - (size % 2 != 0 && i == size - 1 ? 0 : i % 2 == 0 ? 10 : -9);
+            int y = -19 * (i / 2) + 51;
+            return new int[]{x, y};
+        });
+    }
+
+    private static void drawCopyHeatBoxes(
+            HeatedProcessingRecipe<?> recipe,
+            IRecipeSlotsView recipeSlotsView,
+            GuiGraphics guiGraphics,
+            PositionFunction posFunction
+    ) {
+        float time = (AnimationTickHolder.getRenderTime() / 100.0f) % 1.0f;
+        List<DynamicProcessingOutput<?>> results = recipe.getRollableResults();
         List<IRecipeSlotView> views = recipeSlotsView.getSlotViews(RecipeIngredientRole.OUTPUT);
+
         guiGraphics.pose().pushPose();
         guiGraphics.pose().translate(0, 0, 100);
-        int size = recipeSlotsView.getSlotViews(RecipeIngredientRole.OUTPUT).size();
-        int yPosition = 50;
+
+        int size = views.size();
+
         for (int i = 0; i < size; i++) {
-            for (HeatedProcessingOutput output : results){ //find
-                Optional<ItemStack> viewItemStack = views.get(i).getDisplayedItemStack();
-                if(viewItemStack.isPresent() && output.getStack().getItem() == viewItemStack.get().getItem() && output.getCopyHeat()){
-                    int xPosition = 131 + 19 * i;
-                    guiGraphics.fill(xPosition, yPosition, xPosition + 16, yPosition + 1, Color.tempColorgradient(time));
-                    guiGraphics.fill(xPosition, yPosition + 15, xPosition + 16, yPosition + 16, Color.tempColorgradient(time));
-                    guiGraphics.fill(xPosition, yPosition, xPosition + 1, yPosition + 16, Color.tempColorgradient(time));
-                    guiGraphics.fill(xPosition + 15, yPosition, xPosition + 16, yPosition + 16, Color.tempColorgradient(time));
+            for (DynamicProcessingOutput<?> output : results) {
+                if (output instanceof HeatedProcessingOutput heatedOutput) {
+                    Optional<ItemStack> viewItemStack = views.get(i).getDisplayedItemStack();
+                    if (viewItemStack.isPresent() && heatedOutput.getStack().getItem() == viewItemStack.get().getItem() && heatedOutput.getCopyHeat()) {
+                        int[] pos = posFunction.compute(i, size);
+                        int x = pos[0];
+                        int y = pos[1];
+                        drawBorder(guiGraphics, x, y, time);
+                    }
                 }
             }
         }
+
         guiGraphics.pose().popPose();
     }
 
-    /**
-     * Client only
-     * Draws the colored box around items outputs that copy input heat
-     */
-    public static void drawCopyHeatBoxBasin(HeatedProcessingRecipe<?> recipe, IRecipeSlotsView recipeSlotsView, GuiGraphics guiGraphics) {
-        float time = (AnimationTickHolder.getRenderTime()/100.0f) % 1.0f;
-        List<HeatedProcessingOutput> results = recipe.getRollableResults();
-        List<IRecipeSlotView> views = recipeSlotsView.getSlotViews(RecipeIngredientRole.OUTPUT);
-        guiGraphics.pose().pushPose();
-        guiGraphics.pose().translate(0, 0, 100);
-        int size = recipeSlotsView.getSlotViews(RecipeIngredientRole.OUTPUT).size();
-        for (int i = 0; i < size; i++) {
-            for (HeatedProcessingOutput output : results){ //find
-                Optional<ItemStack> viewItemStack = views.get(i).getDisplayedItemStack();
-                if(viewItemStack.isPresent() && output.getStack().getItem() == viewItemStack.get().getItem() && output.getCopyHeat()){
-                    int xPosition = 142 - (size % 2 != 0 && i == size - 1 ? 0 : i % 2 == 0 ? 10 : -9);
-                    int yPosition = -19 * (i / 2) + 51;
+    private static void drawBorder(GuiGraphics guiGraphics, int x, int y, float time) {
+        int color = Color.tempColorgradient(time);
+        guiGraphics.fill(x, y, x + 16, y + 1, color);
+        guiGraphics.fill(x, y + 15, x + 16, y + 16, color);
+        guiGraphics.fill(x, y, x + 1, y + 16, color);
+        guiGraphics.fill(x + 15, y, x + 16, y + 16, color);
+    }
 
-                    guiGraphics.fill(xPosition, yPosition, xPosition + 16, yPosition + 1, Color.tempColorgradient(time));
-                    guiGraphics.fill(xPosition, yPosition + 15, xPosition + 16, yPosition + 16, Color.tempColorgradient(time));
-                    guiGraphics.fill(xPosition, yPosition, xPosition + 1, yPosition + 16, Color.tempColorgradient(time));
-                    guiGraphics.fill(xPosition + 15, yPosition, xPosition + 16, yPosition + 16, Color.tempColorgradient(time));
-                }
-            }
-        }
-        guiGraphics.pose().popPose();
+    @FunctionalInterface
+    private interface PositionFunction {
+        int[] compute(int index, int totalSize);
     }
 
     public enum TextColors {

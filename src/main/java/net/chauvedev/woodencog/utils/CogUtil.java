@@ -54,12 +54,16 @@ public class CogUtil {
         json.addProperty("water", nbt.getFloat("water"));
         json.addProperty("saturation", nbt.getFloat("sat"));
         json.addProperty("decay_modifier", nbt.getFloat("decay"));
-        json.addProperty("grain", nbt.getFloat("grain"));
-        json.addProperty("fruit", nbt.getFloat("fruit"));
-        json.addProperty("veg", nbt.getFloat("veg"));
-        json.addProperty("protein", nbt.getFloat("meat"));
-        json.addProperty("dairy", nbt.getFloat("dairy"));
-
+        float grain = nbt.getFloat("grain");
+        if(grain != 0) json.addProperty("grain", grain);
+        float fruit = nbt.getFloat("fruit");
+        if(fruit != 0)json.addProperty("fruit", fruit);
+        float veg = nbt.getFloat("veg");
+        if(veg != 0)json.addProperty("veg", veg);
+        float protein = nbt.getFloat("meat");
+        if(protein != 0)json.addProperty("protein", protein);
+        float dairy = nbt.getFloat("dairy");
+        if(dairy != 0)json.addProperty("dairy", dairy);
         return json;
     }
 

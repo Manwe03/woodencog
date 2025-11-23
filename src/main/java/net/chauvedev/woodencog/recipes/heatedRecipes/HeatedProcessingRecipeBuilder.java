@@ -3,11 +3,11 @@ package net.chauvedev.woodencog.recipes.heatedRecipes;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import com.simibubi.create.content.processing.recipe.*;
-import com.simibubi.create.foundation.data.recipe.Mods;
 import com.simibubi.create.foundation.fluid.FluidHelper;
 import com.simibubi.create.foundation.fluid.FluidIngredient;
 import com.simibubi.create.foundation.recipe.IRecipeTypeInfo;
-import net.createmod.catnip.data.Pair;
+import net.chauvedev.woodencog.recipes.heatedRecipes.output.DynamicProcessingOutput;
+import net.chauvedev.woodencog.recipes.heatedRecipes.output.HeatedProcessingOutput;
 import net.dries007.tfc.common.recipes.ingredients.HeatableIngredient;
 import net.minecraft.core.NonNullList;
 import net.minecraft.data.recipes.FinishedRecipe;
@@ -26,8 +26,6 @@ import net.minecraftforge.common.crafting.conditions.NotCondition;
 import net.minecraftforge.fluids.FluidStack;
 import org.jetbrains.annotations.NotNull;
 
-import java.io.FileWriter;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Consumer;
@@ -37,14 +35,14 @@ public class HeatedProcessingRecipeBuilder<T extends HeatedProcessingRecipe<?>> 
     protected final HeatedProcessingRecipeParams params;
     protected final List<ICondition> recipeConditions;
 
-    public HeatedProcessingRecipeBuilder(HeatedProcessingRecipeFactory<T> factory, ResourceLocation recipeId) {
-        this.params = new HeatedProcessingRecipeParams(recipeId);
+    public HeatedProcessingRecipeBuilder(HeatedProcessingRecipeFactory<T> factory) {
+        this.params = new HeatedProcessingRecipeParams();
         this.recipeConditions = new ArrayList<>();
         this.factory = factory;
     }
 
-    public HeatedProcessingRecipeBuilder<T> withItemIngredients(HeatableIngredient... ingredients) {
-        return this.withItemIngredients(NonNullList.of((HeatableIngredient) Ingredient.EMPTY, ingredients));
+    public HeatedProcessingRecipeBuilder<T> withItemIngredients(Ingredient... ingredients) {
+        return this.withItemIngredients(NonNullList.of(Ingredient.EMPTY, ingredients));
     }
 
     public HeatedProcessingRecipeBuilder<T> withItemIngredients(NonNullList<Ingredient> ingredients) {
@@ -52,15 +50,11 @@ public class HeatedProcessingRecipeBuilder<T extends HeatedProcessingRecipe<?>> 
         return this;
     }
 
-    public HeatedProcessingRecipeBuilder<T> withSingleItemOutput(ItemStack output) {
-        return this.withItemOutputs(new HeatedProcessingOutput(output, 1.0F,0,true,0));
+    public HeatedProcessingRecipeBuilder<T> withItemOutputs(DynamicProcessingOutput<?>... outputs) {
+        return this.withItemOutputs(NonNullList.of((DynamicProcessingOutput<?>) DynamicProcessingOutput.EMPTY, outputs));
     }
 
-    public HeatedProcessingRecipeBuilder<T> withItemOutputs(HeatedProcessingOutput... outputs) {
-        return this.withItemOutputs(NonNullList.of((HeatedProcessingOutput) ProcessingOutput.EMPTY, outputs));
-    }
-
-    public HeatedProcessingRecipeBuilder<T> withItemOutputs(NonNullList<HeatedProcessingOutput> outputs) {
+    public HeatedProcessingRecipeBuilder<T> withItemOutputs(NonNullList<DynamicProcessingOutput<?>> outputs) {
         this.params.results = outputs;
         return this;
     }
@@ -97,12 +91,13 @@ public class HeatedProcessingRecipeBuilder<T extends HeatedProcessingRecipe<?>> 
         return this;
     }
 
-    public T build() {
+    public T build(ResourceLocation id) {
+        this.params.id = id;
         return this.factory.create(this.params);
     }
 
-    public void build(Consumer<FinishedRecipe> consumer) {
-        consumer.accept(new HeatedProcessingRecipeBuilder.DataGenResult<>(this.build(), this.recipeConditions));
+    public void build(Consumer<FinishedRecipe> consumer, ResourceLocation id) {
+        consumer.accept(new HeatedProcessingRecipeBuilder.DataGenResult<>(this.build(id), this.recipeConditions));
     }
 
     public HeatedProcessingRecipeBuilder<T> require(TagKey<Item> tag) {
@@ -163,18 +158,6 @@ public class HeatedProcessingRecipeBuilder<T extends HeatedProcessingRecipe<?>> 
         return this.output(new HeatedProcessingOutput(output, chance, params));
     }
 
-    public HeatedProcessingRecipeBuilder<T> output(float chance, Mods mod, String id, int amount, HeatedIngridientParams params) {
-        return this.output(new HeatedProcessingOutput(Pair.of(mod.asResource(id), amount), chance, params));
-    }
-
-    public HeatedProcessingRecipeBuilder<T> output(Mods mod, String id, HeatedIngridientParams params) {
-        return this.output(1.0F, mod.asResource(id), 1, params);
-    }
-
-    public HeatedProcessingRecipeBuilder<T> output(float chance, ResourceLocation registryName, int amount, HeatedIngridientParams params) {
-        return this.output(new HeatedProcessingOutput(Pair.of(registryName, amount), chance, params));
-    }
-
     public HeatedProcessingRecipeBuilder<T> output(HeatedProcessingOutput output) {
         this.params.results.add(output);
         return this;
@@ -214,17 +197,17 @@ public class HeatedProcessingRecipeBuilder<T extends HeatedProcessingRecipe<?>> 
     }
 
     public static class HeatedProcessingRecipeParams {
-        protected final ResourceLocation id;
+        protected ResourceLocation id;
         protected NonNullList<Ingredient> ingredients;
-        protected NonNullList<HeatedProcessingOutput> results;
+        protected NonNullList<DynamicProcessingOutput<?>> results;
         protected NonNullList<FluidIngredient> fluidIngredients;
         protected NonNullList<FluidStack> fluidResults;
         protected int processingDuration;
         protected WoodenCogHeatCondition requiredHeat;
         public boolean keepHeldItem;
 
-        protected HeatedProcessingRecipeParams(ResourceLocation id) {
-            this.id = id;
+        protected HeatedProcessingRecipeParams() {
+            this.id = null;
             this.ingredients = NonNullList.create();
             this.results = NonNullList.create();
             this.fluidIngredients = NonNullList.create();
@@ -272,6 +255,7 @@ public class HeatedProcessingRecipeBuilder<T extends HeatedProcessingRecipe<?>> 
 
         @Override
         public void serializeRecipeData(JsonObject json) {
+            System.out.println("serializeRecipeData");
             serializer.write(json, recipe);
             if (recipeConditions.isEmpty())
                 return;

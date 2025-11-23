@@ -4,7 +4,8 @@ import com.simibubi.create.content.processing.recipe.ProcessingRecipe;
 import com.simibubi.create.foundation.recipe.RecipeApplier;
 import net.chauvedev.woodencog.recipes.advancedProcessingRecipe.AllAdvancedRecipeTypes;
 import net.chauvedev.woodencog.recipes.advancedProcessingRecipe.baseRecipes.SetItemStackProvider;
-import net.chauvedev.woodencog.recipes.heatedRecipes.HeatedProcessingOutput;
+import net.chauvedev.woodencog.recipes.heatedRecipes.output.DynamicProcessingOutput;
+import net.chauvedev.woodencog.recipes.heatedRecipes.output.HeatedProcessingOutput;
 import net.chauvedev.woodencog.recipes.heatedRecipes.HeatedProcessingRecipe;
 import net.dries007.tfc.common.capabilities.heat.HeatCapability;
 import net.minecraft.world.item.ItemStack;
@@ -44,7 +45,7 @@ public abstract class MixinRecipeApplier {
 
             stacks = new ArrayList<>();
             for (int i = 0; i < stackIn.getCount(); i++) {
-                List<HeatedProcessingOutput> outputs = pr.getRollableResults(); //get HeatedOutputs
+                List<DynamicProcessingOutput<?>> outputs = pr.getRollableResults(); //get HeatedOutputs
                 for (ItemStack stack : pr.rollResults(outputs,inputTemp)) {
                     for (ItemStack previouslyRolled : stacks) {
                         if (stack.isEmpty())
