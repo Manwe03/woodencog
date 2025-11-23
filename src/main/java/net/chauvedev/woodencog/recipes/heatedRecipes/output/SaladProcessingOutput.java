@@ -34,6 +34,11 @@ public class SaladProcessingOutput extends BowlProcessingOutput{
     }
 
     @Override
+    public List<ItemStack> getStacks() {
+        return TFCItems.SALADS.values().stream().map(ro -> new ItemStack(ro.get())).toList();
+    }
+
+    @Override
     public ItemStack rollOutput() {
         return this.getBowlItem(TFCItems.SALADS, SALAD_DECAY_MODIFIER);
     }

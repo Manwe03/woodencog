@@ -12,6 +12,7 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.GsonHelper;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
+import net.minecraftforge.registries.RegistryObject;
 
 import java.util.List;
 
@@ -24,6 +25,11 @@ public class SoupProcessingOutput extends BowlProcessingOutput{
 
     public SoupProcessingOutput(ItemStack outputBowl, float chance) {
         super(outputBowl, chance);
+    }
+
+    @Override
+    public List<ItemStack> getStacks() {
+        return TFCItems.SOUPS.values().stream().map(ro -> new ItemStack(ro.get())).toList();
     }
 
     @Override

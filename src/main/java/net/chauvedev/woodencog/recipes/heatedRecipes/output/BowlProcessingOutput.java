@@ -22,6 +22,12 @@ public abstract class BowlProcessingOutput extends DynamicProcessingOutput<List<
         super(outputBowl,chance);
     }
 
+    /**
+     * Used only for JEI
+     * @return all posible results for this recipe
+     */
+    public abstract List<ItemStack> getStacks();
+
     public ItemStack getBowlItem(Map<Nutrient, RegistryObject<Item>> map, float decayModifier){
         List<ItemStack> usedItems = this.getDynamicData();
         usedItems.sort(Comparator.comparing(ItemStack::getCount)

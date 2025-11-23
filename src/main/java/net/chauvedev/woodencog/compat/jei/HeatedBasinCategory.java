@@ -9,6 +9,7 @@ import mezz.jei.api.recipe.IFocusGroup;
 import mezz.jei.api.recipe.RecipeIngredientRole;
 import net.chauvedev.woodencog.compat.jei.animatedBlocks.AnimatedCharcoalForge;
 import net.chauvedev.woodencog.mixin.recipes.HeatableIngredientAccessor;
+import net.chauvedev.woodencog.recipes.heatedRecipes.output.BowlProcessingOutput;
 import net.chauvedev.woodencog.recipes.heatedRecipes.output.DynamicProcessingOutput;
 import net.chauvedev.woodencog.recipes.heatedRecipes.WoodenCogHeatCondition;
 import net.chauvedev.woodencog.recipes.heatedRecipes.recipes.HeatedBasinRecipe;
@@ -20,6 +21,8 @@ import net.dries007.tfc.common.capabilities.heat.Heat;
 import net.dries007.tfc.common.capabilities.heat.HeatCapability;
 import net.dries007.tfc.common.recipes.ingredients.HeatableIngredient;
 import net.dries007.tfc.util.Helpers;
+import net.minecraft.ChatFormatting;
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.ItemStack;
@@ -48,8 +51,6 @@ public abstract class HeatedBasinCategory extends WoodenCogRecipeCategory<Heated
     @Override
     public void setRecipe(IRecipeLayoutBuilder builder, HeatedBasinRecipe recipe, IFocusGroup iFocusGroup) {
         List<Pair<Ingredient, MutableInt>> condensedIngredients = HeatedItemHelper.condenseIngredients(recipe.getHeatedIngredients());
-
-        System.out.println("CONDENSED INGREDIENTS "+Arrays.toString(condensedIngredients.toArray()));
 
         int size = condensedIngredients.size() + recipe.getFluidIngredients().size();
         int xOffset = size < 3 ? (3 - size) * 19 / 2 : 9;
@@ -92,11 +93,20 @@ public abstract class HeatedBasinCategory extends WoodenCogRecipeCategory<Heated
             int xPosition = 142 - (size % 2 != 0 && i == size - 1 ? 0 : i % 2 == 0 ? 10 : -9);
             int yPosition = -19 * (i / 2) + 51;
 
-            builder
-                    .addSlot(RecipeIngredientRole.OUTPUT, xPosition, yPosition)
-                    .setBackground(getRenderedSlot(result), -1, -1)
-                    .addItemStack(result.getStack())
-                    .addRichTooltipCallback(addStochasticTooltip(result));
+            if(result instanceof BowlProcessingOutput bowlResult){
+                builder
+                        .addSlot(RecipeIngredientRole.OUTPUT, xPosition, yPosition)
+                        .setBackground(getRenderedSlot(result), -1, -1)
+                        .addItemStacks(bowlResult.getStacks())
+                        .addRichTooltipCallback(addStochasticTooltip(result));
+            }else {
+                builder
+                        .addSlot(RecipeIngredientRole.OUTPUT, xPosition, yPosition)
+                        .setBackground(getRenderedSlot(result), -1, -1)
+                        .addItemStack(result.getStack())
+                        .addRichTooltipCallback(addStochasticTooltip(result));
+            }
+
             i++;
         }
 
@@ -138,9 +148,26 @@ public abstract class HeatedBasinCategory extends WoodenCogRecipeCategory<Heated
         if(!noHeat) heater.draw(guiGraphics, getWidth() / 2 + 3, 55);
 
         if (!noHeat) {
-            int guiTemp = Heat.scaleTemperatureForGui(requiredHeat.getTemperature());
+            int realTemp = requiredHeat.getTemperature();
+            int guiTemp = Heat.scaleTemperatureForGui(realTemp);
             guiGraphics.blit(FORGE_TEXTURE, 0, 0, 7, 14, 17, 74);
             guiGraphics.blit(FORGE_TEXTURE, 1, 60 - Math.min(51, guiTemp), 176, 0, 15, 5);
+
+
+            Heat heat = Heat.getHeat(realTemp);
+            if(heat != null){
+                Integer color = heat.getColor().getColor();
+                if(color!= null){
+                    guiGraphics.drawString(
+                            Minecraft.getInstance().font,
+                            realTemp + "°C",
+                            10,
+                            86,
+                            color,
+                            false
+                    );
+                }
+            }
         }
 
         Color.drawCopyHeatBoxBasin(recipe, recipeSlotsView, guiGraphics);
