@@ -1,17 +1,18 @@
 package net.chauvedev.woodencog.utils;
 
 import com.google.gson.JsonObject;
+import com.simibubi.create.Create;
 import net.chauvedev.woodencog.WoodenCog;
-import net.dries007.tfc.common.capabilities.food.DynamicBowlHandler;
-import net.dries007.tfc.common.capabilities.food.FoodCapability;
-import net.dries007.tfc.common.capabilities.food.FoodData;
-import net.dries007.tfc.common.capabilities.food.IFood;
-import net.dries007.tfc.common.items.TFCItems;
+import net.dries007.tfc.util.Metal;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.Item;
-import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.level.ItemLike;
-import net.minecraftforge.registries.RegistryObject;
+import net.minecraft.world.item.Items;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.material.Fluid;
+import net.minecraft.world.level.material.Fluids;
+import net.minecraftforge.registries.ForgeRegistries;
 import org.jetbrains.annotations.Contract;
 
 import java.util.List;
@@ -87,5 +88,25 @@ public class CogUtil {
             }
         }
         return max_i;
+    }
+
+    public static float toRadPerTick(float rpm) {
+        return (float) (rpm * (2 * Math.PI / 1200.0));
+    }
+
+    public static float toRPM(double radPerTick) {
+        return (float) (radPerTick * 1200.0 / (2 * Math.PI));
+    }
+
+    public static Item findNotNullItem(ResourceLocation rs){
+        return ForgeRegistries.ITEMS.getValue(rs) == null ? Items.BARRIER : ForgeRegistries.ITEMS.getValue(rs);
+    }
+
+    public static Block findNotNullBlock(ResourceLocation rs){
+        return ForgeRegistries.BLOCKS.getValue(rs) == null ? Blocks.BARRIER : ForgeRegistries.BLOCKS.getValue(rs);
+    }
+
+    public static Fluid findNotNullFluid(ResourceLocation rs){
+        return ForgeRegistries.FLUIDS.getValue(rs) == null ? Fluids.EMPTY : ForgeRegistries.FLUIDS.getValue(rs);
     }
 }

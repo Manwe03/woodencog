@@ -31,7 +31,7 @@ public enum AllHeatedRecipeTypes implements IRecipeTypeInfo {
     private final @Nullable RegistryObject<RecipeType<?>> typeObject;
     private final Supplier<RecipeType<?>> type;
 
-    AllHeatedRecipeTypes(Supplier serializerSupplier, Supplier<RecipeType<?>> typeSupplier, boolean registerType) {
+    AllHeatedRecipeTypes(Supplier<RecipeSerializer<?>> serializerSupplier, Supplier<RecipeType<?>> typeSupplier, boolean registerType) {
         String name = this.name().toLowerCase();
         this.id = WoodenCog.asResource(name);
         this.serializerObject = Registers.SERIALIZER_REGISTER.register(name, serializerSupplier);
@@ -44,7 +44,7 @@ public enum AllHeatedRecipeTypes implements IRecipeTypeInfo {
         }
     }
 
-    AllHeatedRecipeTypes(Supplier serializerSupplier) {
+    AllHeatedRecipeTypes(Supplier<RecipeSerializer<?>> serializerSupplier) {
         String name = this.name().toLowerCase();
         this.id = WoodenCog.asResource(name);
         this.serializerObject = Registers.SERIALIZER_REGISTER.register(name, serializerSupplier);

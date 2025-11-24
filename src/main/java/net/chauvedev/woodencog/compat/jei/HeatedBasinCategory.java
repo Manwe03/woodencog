@@ -21,7 +21,6 @@ import net.dries007.tfc.common.capabilities.heat.Heat;
 import net.dries007.tfc.common.capabilities.heat.HeatCapability;
 import net.dries007.tfc.common.recipes.ingredients.HeatableIngredient;
 import net.dries007.tfc.util.Helpers;
-import net.minecraft.ChatFormatting;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.resources.ResourceLocation;
@@ -32,7 +31,6 @@ import org.apache.commons.lang3.mutable.MutableInt;
 
 import javax.annotation.ParametersAreNonnullByDefault;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 /**

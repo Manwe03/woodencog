@@ -4,7 +4,6 @@ import com.simibubi.create.content.kinetics.base.GeneratingKineticBlockEntity;
 import net.chauvedev.woodencog.block.WoodencogBlocks;
 import net.chauvedev.woodencog.config.WoodenCogCommonConfigs;
 import net.chauvedev.woodencog.utils.CogUtil;
-import net.chauvedev.woodencog.utils.RotationUtil;
 import net.dries007.tfc.common.blockentities.rotation.RotatingBlockEntity;
 import net.dries007.tfc.common.blockentities.rotation.WindmillBlockEntity;
 import net.dries007.tfc.common.capabilities.Capabilities;
@@ -50,7 +49,7 @@ public class WoodenGeneratorBlockEntity extends GeneratingKineticBlockEntity {
         }
 
         if(be instanceof RotatingBlockEntity rotatingBlock && rotatingBlock.getRotationNode() instanceof SourceNode sourceNode) {
-            this.speed = - RotationUtil.toRPM(sourceNode.rotation().speed());
+            this.speed = - CogUtil.toRPM(sourceNode.rotation().speed());
             if(rotatingBlock instanceof WindmillBlockEntity windmill){
                 IItemHandler inventory = Helpers.getCapability(windmill, Capabilities.ITEM);
                 int rusticWindmillCount = 0;

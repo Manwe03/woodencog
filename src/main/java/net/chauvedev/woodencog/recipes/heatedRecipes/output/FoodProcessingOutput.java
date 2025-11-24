@@ -43,13 +43,12 @@ public class FoodProcessingOutput extends DynamicProcessingOutput<List<ItemStack
     @Override
     public ItemStack rollOutput() {
         ItemStack outputStack = super.rollOutput();
-        if(baseFoodData != FoodData.EMPTY) return outputStack;
+        if(baseFoodData == FoodData.EMPTY) return outputStack;
         //Sort list to be able to stack results
         this.getDynamicData().sort(Comparator.comparing(ItemStack::getCount)
                 .thenComparing((itemx) -> BuiltInRegistries.ITEM.getKey(itemx.getItem())));
 
         this.setFoodData(outputStack, this.getDynamicData());
-
         return outputStack;
     }
 
@@ -68,13 +67,15 @@ public class FoodProcessingOutput extends DynamicProcessingOutput<List<ItemStack
                         portion = CogUtil.getOrDefault(portions,1, WoodenCogFoodPortion.empty());
                     }
 
-                    FoodData food = FoodCapability.get(usedItem).getData();
+                    IFood cap = FoodCapability.get(usedItem);
+                    if(CogUtil.logConditional(cap == null,this.getClass(),usedItem.getItem()+" : was used in recipe but has no food capability")) continue;
+                    FoodData food = cap.getData();
 
                     for (Nutrient nutrient : Nutrient.VALUES) {
-                        nutrition[nutrient.ordinal()] += food.nutrient(nutrient) * portion.nutrientModifier * usedItem.getCount();
+                        nutrition[nutrient.ordinal()] += food.nutrient(nutrient) * portion.nutrientModifier() * usedItem.getCount();
                     }
-                    water += food.water() * portion.waterModifier * (float) usedItem.getCount();
-                    saturation += food.saturation() * portion.saturationModifier * (float) usedItem.getCount();
+                    water += food.water() * portion.waterModifier() * (float) usedItem.getCount();
+                    saturation += food.saturation() * portion.saturationModifier() * (float) usedItem.getCount();
                 }
             }
 

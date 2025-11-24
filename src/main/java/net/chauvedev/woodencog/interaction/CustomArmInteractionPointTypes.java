@@ -4,6 +4,7 @@ import com.simibubi.create.api.registry.CreateBuiltInRegistries;
 import com.simibubi.create.content.kinetics.mechanicalArm.ArmInteractionPoint;
 import com.simibubi.create.content.kinetics.mechanicalArm.ArmInteractionPointType;
 import net.chauvedev.woodencog.WoodenCog;
+import net.chauvedev.woodencog.utils.CogUtil;
 import net.dries007.tfc.common.blocks.devices.CharcoalForgeBlock;
 import net.dries007.tfc.common.blocks.devices.CrucibleBlock;
 import net.dries007.tfc.common.blocks.devices.FirepitBlock;
@@ -26,8 +27,7 @@ public class CustomArmInteractionPointTypes {
         Registry.register(CreateBuiltInRegistries.ARM_INTERACTION_POINT_TYPE,WoodenCog.MOD_ID + name, type);
     }
 
-    public static void init() {
-    }
+    public static void init() {}
 
     public static class CrucibleType extends ArmInteractionPointType {
         @Override
@@ -93,6 +93,7 @@ public class CustomArmInteractionPointTypes {
         @Override
         public ItemStack insert(ItemStack stack, boolean simulate) {
             PartialItemHandler handler = (PartialItemHandler) this.getHandler();
+            if(CogUtil.logConditional(handler == null,this.getClass(),"Mechanical Arm can not input, interaction point handler is null")) return ItemStack.EMPTY;
             return handler.insert(3).insertItem(3, stack, simulate);
         }
 

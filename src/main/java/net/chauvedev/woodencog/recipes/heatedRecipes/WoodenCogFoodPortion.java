@@ -3,25 +3,13 @@ package net.chauvedev.woodencog.recipes.heatedRecipes;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
-import net.dries007.tfc.common.capabilities.food.FoodData;
-import net.dries007.tfc.common.capabilities.food.Nutrient;
 import net.dries007.tfc.util.JsonHelpers;
 import net.minecraft.network.FriendlyByteBuf;
-import net.minecraft.util.GsonHelper;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class WoodenCogFoodPortion {
-    public final float nutrientModifier;
-    public final float waterModifier;
-    public final float saturationModifier;
-
-    public WoodenCogFoodPortion(float nutrientModifier, float waterModifier, float saturationModifier) {
-        this.nutrientModifier = nutrientModifier;
-        this.waterModifier = waterModifier;
-        this.saturationModifier = saturationModifier;
-    }
+public record WoodenCogFoodPortion(float nutrientModifier, float waterModifier, float saturationModifier) {
 
     public static WoodenCogFoodPortion empty(){
         return new WoodenCogFoodPortion(0,0,0);

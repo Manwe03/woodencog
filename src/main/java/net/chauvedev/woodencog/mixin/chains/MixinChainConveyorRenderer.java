@@ -7,6 +7,7 @@ import com.simibubi.create.content.kinetics.chainConveyor.ChainConveyorRenderer;
 import com.simibubi.create.foundation.render.RenderTypes;
 import dev.engine_room.flywheel.lib.transform.PoseTransformStack;
 import net.chauvedev.woodencog.utils.ChainConveyorBlockEntityExtended;
+import net.chauvedev.woodencog.utils.CogUtil;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.texture.OverlayTexture;
 import net.minecraft.core.BlockPos;
@@ -64,6 +65,7 @@ public abstract class MixinChainConveyorRenderer {
             if(chainTexture == null){
                 Block block = blockItem.getBlock();
                 ResourceLocation rs = level.registryAccess().registryOrThrow(Registries.BLOCK).getKey(block);
+                if(CogUtil.logConditional(rs == null,this.getClass(),"item: "+item+" not found in Registries.BLOCK")) return;
                 chainTexture = ResourceLocation.tryBuild(rs.getNamespace(),"textures/block/"+rs.getPath()+".png");
                 CHAIN_RS.put(blockItem,chainTexture);
             }

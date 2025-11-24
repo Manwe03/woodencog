@@ -65,7 +65,7 @@ public abstract class BowlProcessingOutput extends DynamicProcessingOutput<List<
             saturation *= multiplier;
 
             Nutrient maxNutrient = Nutrient.GRAIN;
-            float maxNutrientValue = 0;
+            float maxNutrientValue = 0.0F;
 
             for (Nutrient nutrient : Nutrient.VALUES) {
                 final int idx = nutrient.ordinal();

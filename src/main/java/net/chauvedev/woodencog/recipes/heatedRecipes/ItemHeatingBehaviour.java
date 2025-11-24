@@ -4,23 +4,11 @@ import com.simibubi.create.content.processing.basin.BasinInventory;
 import com.simibubi.create.foundation.blockEntity.SmartBlockEntity;
 import com.simibubi.create.foundation.blockEntity.behaviour.BehaviourType;
 import com.simibubi.create.foundation.blockEntity.behaviour.BlockEntityBehaviour;
-import net.chauvedev.woodencog.WoodenCog;
 import net.chauvedev.woodencog.datapack.DataPackRegistries;
 import net.chauvedev.woodencog.utils.BasinBlockEntityExtended;
 import net.chauvedev.woodencog.utils.CogUtil;
 import net.dries007.tfc.common.capabilities.heat.HeatCapability;
-import net.minecraft.core.HolderSet;
-import net.minecraft.core.Registry;
-import net.minecraft.core.RegistryAccess;
-import net.minecraft.core.registries.Registries;
-import net.minecraft.resources.ResourceLocation;
-import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
-
-import java.util.HashSet;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
 
 public class ItemHeatingBehaviour extends BlockEntityBehaviour {
     public static final BehaviourType<ItemHeatingBehaviour> TYPE = new BehaviourType<>();

@@ -5,7 +5,6 @@ import com.simibubi.create.foundation.recipe.RecipeApplier;
 import net.chauvedev.woodencog.recipes.advancedProcessingRecipe.AllAdvancedRecipeTypes;
 import net.chauvedev.woodencog.recipes.advancedProcessingRecipe.baseRecipes.SetItemStackProvider;
 import net.chauvedev.woodencog.recipes.heatedRecipes.output.DynamicProcessingOutput;
-import net.chauvedev.woodencog.recipes.heatedRecipes.output.HeatedProcessingOutput;
 import net.chauvedev.woodencog.recipes.heatedRecipes.HeatedProcessingRecipe;
 import net.dries007.tfc.common.capabilities.heat.HeatCapability;
 import net.minecraft.world.item.ItemStack;

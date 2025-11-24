@@ -6,7 +6,6 @@ import com.simibubi.create.content.processing.sequenced.IAssemblyRecipe;
 import net.chauvedev.woodencog.recipes.heatedRecipes.AllHeatedRecipeTypes;
 import net.chauvedev.woodencog.recipes.heatedRecipes.HeatedProcessingRecipe;
 import net.chauvedev.woodencog.recipes.heatedRecipes.HeatedProcessingRecipeBuilder;
-import net.dries007.tfc.common.recipes.ingredients.HeatableIngredient;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.level.ItemLike;

@@ -3,6 +3,7 @@ package net.chauvedev.woodencog.config;
 import net.minecraftforge.common.ForgeConfigSpec;
 import net.minecraftforge.fml.ModLoadingContext;
 import net.minecraftforge.fml.config.ModConfig;
+import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 
 import java.util.Arrays;
 import java.util.HashMap;
@@ -148,8 +149,8 @@ public class WoodenCogCommonConfigs {
         MATERIAL_PROPERTIES.put(itemId, BUILDER.define(itemId, Arrays.asList(density,heatCapacity)));
     }
 
-    public static void register() {
-        ModLoadingContext.get().registerConfig(ModConfig.Type.COMMON, WoodenCogCommonConfigs.SPEC, "woodencog-common.toml");
+    public static void register(FMLJavaModLoadingContext ctx) {
+        ctx.registerConfig(ModConfig.Type.COMMON, WoodenCogCommonConfigs.SPEC, "woodencog-common.toml");
     }
 }
 

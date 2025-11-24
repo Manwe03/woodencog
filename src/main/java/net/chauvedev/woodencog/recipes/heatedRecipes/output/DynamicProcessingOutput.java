@@ -2,22 +2,11 @@ package net.chauvedev.woodencog.recipes.heatedRecipes.output;
 
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
-import com.google.gson.JsonSyntaxException;
-import com.mojang.brigadier.exceptions.CommandSyntaxException;
-import com.simibubi.create.Create;
 import com.simibubi.create.content.processing.recipe.ProcessingOutput;
 import net.chauvedev.woodencog.WoodenCog;
-import net.minecraft.nbt.TagParser;
 import net.minecraft.network.FriendlyByteBuf;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.GsonHelper;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.Items;
-import net.minecraft.world.level.ItemLike;
-import net.minecraftforge.registries.ForgeRegistries;
-
-import java.util.Arrays;
-import java.util.Random;
 
 /**
  * This class obstracts outputs that need world information before calling rollOutput()
@@ -55,7 +44,6 @@ public abstract class DynamicProcessingOutput<T> extends ProcessingOutput {
 
     /**
      * Stores type of output
-     * @return
      */
     @Override
     public JsonElement serialize() {
@@ -66,7 +54,6 @@ public abstract class DynamicProcessingOutput<T> extends ProcessingOutput {
 
     /**
      * All write overrides must call super first
-     * @param buf
      */
     @Override
     public void write(FriendlyByteBuf buf) {

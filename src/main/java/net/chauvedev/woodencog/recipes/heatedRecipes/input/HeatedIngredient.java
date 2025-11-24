@@ -75,17 +75,17 @@ public class HeatedIngredient extends DelegateIngredient {
         return json;
     }
 
-    public static enum Serializer implements IIngredientSerializer<HeatedIngredient> {
+    public enum Serializer implements IIngredientSerializer<HeatedIngredient> {
         INSTANCE;
 
         public static final ResourceLocation location = WoodenCog.asResource("heated");
 
-        private Serializer() {
+        Serializer() {
 
         }
 
         public HeatedIngredient parse(FriendlyByteBuf buffer) {
-            Ingredient internal = (Ingredient) Helpers.decodeNullable(buffer, Ingredient::fromNetwork);
+            Ingredient internal = Helpers.decodeNullable(buffer, Ingredient::fromNetwork);
             int min = buffer.readVarInt();
             int max = buffer.readVarInt();
             return new HeatedIngredient(internal, min, max);

@@ -1,7 +1,6 @@
 package net.chauvedev.woodencog.utils;
 
 import net.createmod.catnip.data.Pair;
-import net.dries007.tfc.common.recipes.ingredients.HeatableIngredient;
 import net.minecraft.core.NonNullList;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.Ingredient;

@@ -2,11 +2,11 @@ package net.chauvedev.woodencog.datapack;
 
 import com.mojang.serialization.Codec;
 import net.chauvedev.woodencog.WoodenCog;
+import net.chauvedev.woodencog.utils.CogUtil;
 import net.minecraft.core.HolderSet;
 import net.minecraft.core.Registry;
 import net.minecraft.core.RegistryAccess;
 import net.minecraft.core.RegistryCodecs;
-import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
@@ -15,11 +15,10 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.registries.DataPackRegistryEvent;
 
 import java.util.*;
-import java.util.stream.Collectors;
 
 public class DataPackRegistries {
-    public static ResourceLocation BLOCK_TEMPERATURE_LOCATION = WoodenCog.asResource("block_temperature");
-    public static ResourceLocation ITEM_TEMPERATURE_BLACKLIST_LOCATION = WoodenCog.asResource("item_temperature_blacklist");
+    public static final ResourceLocation BLOCK_TEMPERATURE_LOCATION = WoodenCog.asResource("block_temperature");
+    public static final ResourceLocation ITEM_TEMPERATURE_BLACKLIST_LOCATION = WoodenCog.asResource("item_temperature_blacklist");
 
     public static final ResourceKey<Registry<Map<ResourceLocation, Integer>>> TEMPERATURE_KEY =
             ResourceKey.createRegistryKey(WoodenCog.asResource("temperature"));
@@ -48,6 +47,8 @@ public class DataPackRegistries {
     }
 
     public static boolean isInTempBlacklist(ItemStack inputStack, RegistryAccess registryAccess){
-        return registryAccess.registryOrThrow(DataPackRegistries.TEMPERATURE_BLACKLIST).get(DataPackRegistries.ITEM_TEMPERATURE_BLACKLIST_LOCATION).contains(inputStack.getItemHolder());
+        HolderSet<Item> blacklist = registryAccess.registryOrThrow(DataPackRegistries.TEMPERATURE_BLACKLIST).get(DataPackRegistries.ITEM_TEMPERATURE_BLACKLIST_LOCATION);
+        if(CogUtil.logConditional(blacklist == null, DataPackRegistries.class,"temperature blacklist file not found, (nothing is blacklisted)")) return false;
+        return blacklist.contains(inputStack.getItemHolder());
     }
 }

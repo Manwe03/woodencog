@@ -8,13 +8,15 @@ import net.minecraft.tags.ItemTags;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.level.block.Block;
-import net.minecraftforge.common.Tags;
 
 import java.util.Objects;
 
 public class ModTags {
     public static class Compat {
         public static final TagKey<Item> BREADS = TagKey.create(Registries.ITEM, Objects.requireNonNull(ResourceLocation.tryBuild("tfc", "foods/breads")));
+        public static final TagKey<Item> USABLE_IN_SANDWICH = TagKey.create(Registries.ITEM, ResourceLocation.tryBuild("tfc", "foods/usable_in_sandwich"));
+        public static final TagKey<Item> USABLE_IN_JAM_SANDWICH = TagKey.create(Registries.ITEM, ResourceLocation.tryBuild("tfc", "foods/usable_in_jam_sandwich"));
+        public static final TagKey<Item> PRESERVES = TagKey.create(Registries.ITEM, ResourceLocation.tryBuild("tfc", "foods/preserves"));
     }
 
     public static class Blocks {
@@ -32,9 +34,9 @@ public class ModTags {
         public static final TagKey<Item> UNBURNABLE = modTag("unburnable");
         public static final TagKey<Item> CHAINS = forgeTag("chains");
 
-        public static TagKey<Item> COLORED_RAW_ALABASTER = tfcTag("colored_raw_alabaster");
-        public static TagKey<Item> COLORED_BRICKS_ALABASTER = tfcTag("colored_bricks_alabaster");
-        public static TagKey<Item> COLORED_POLISHED_ALABASTER = tfcTag("colored_polished_alabaster");
+        public static final TagKey<Item> COLORED_RAW_ALABASTER = tfcTag("colored_raw_alabaster");
+        public static final TagKey<Item> COLORED_BRICKS_ALABASTER = tfcTag("colored_bricks_alabaster");
+        public static final TagKey<Item> COLORED_POLISHED_ALABASTER = tfcTag("colored_polished_alabaster");
 
         private static TagKey<Item> modTag(String name) {
             ResourceLocation tagRS = ResourceLocation.tryBuild(WoodenCog.MOD_ID, name);

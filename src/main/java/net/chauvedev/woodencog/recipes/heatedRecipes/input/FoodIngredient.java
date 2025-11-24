@@ -2,6 +2,8 @@ package net.chauvedev.woodencog.recipes.heatedRecipes.input;
 
 import com.google.gson.JsonObject;
 import net.chauvedev.woodencog.WoodenCog;
+import net.dries007.tfc.common.capabilities.food.FoodCapability;
+import net.dries007.tfc.common.capabilities.food.IFood;
 import net.dries007.tfc.common.recipes.ingredients.DelegateIngredient;
 import net.dries007.tfc.util.Helpers;
 import net.dries007.tfc.util.JsonHelpers;
@@ -31,7 +33,10 @@ public class FoodIngredient extends DelegateIngredient {
 
     @Override
     public boolean test(@Nullable ItemStack stack) {
-        return stack != null && !stack.isEmpty() && this.delegate != null && this.delegate.test(stack);
+        if (stack == null) return false;
+        IFood cap = FoodCapability.get(stack);
+        if(cap != null && cap.isRotten()) return false;
+        return super.test(stack);
     }
 
     @Override
@@ -44,12 +49,12 @@ public class FoodIngredient extends DelegateIngredient {
         return Serializer.INSTANCE;
     }
 
-    public static enum Serializer implements IIngredientSerializer<FoodIngredient> {
+    public enum Serializer implements IIngredientSerializer<FoodIngredient> {
         INSTANCE;
 
         public static final ResourceLocation location = WoodenCog.asResource("food");
 
-        private Serializer() {
+        Serializer() {
 
         }
 

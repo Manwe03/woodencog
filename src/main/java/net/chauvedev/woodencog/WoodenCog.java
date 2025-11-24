@@ -15,20 +15,15 @@ import net.chauvedev.woodencog.ponder.WoodenCogPonderPlugin;
 import net.chauvedev.woodencog.recipes.advancedProcessingRecipe.AllAdvancedRecipeTypes;
 import net.chauvedev.woodencog.recipes.heatedRecipes.AllHeatedRecipeTypes;
 import net.chauvedev.woodencog.block.WoodencogBlocks;
-import net.chauvedev.woodencog.recipes.heatedRecipes.input.HeatedIngredient;
 import net.createmod.ponder.foundation.PonderIndex;
-import net.dries007.tfc.common.recipes.ingredients.HeatableIngredient;
 import net.minecraft.client.renderer.blockentity.BlockEntityRenderers;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraftforge.common.MinecraftForge;
-import net.minecraftforge.common.crafting.CraftingHelper;
 import net.minecraftforge.event.BuildCreativeModeTabContentsEvent;
 import net.minecraftforge.eventbus.api.IEventBus;
-import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.event.lifecycle.*;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
-import net.minecraftforge.registries.ForgeRegistries;
 import net.minecraftforge.registries.RegisterEvent;
 import org.slf4j.Logger;
 
@@ -38,17 +33,15 @@ public class WoodenCog
     public static final String MOD_ID = "woodencog";
     public static final Logger LOGGER = LogUtils.getLogger();
     private static final CreateRegistrate REGISTRATE = CreateRegistrate.create(WoodenCog.MOD_ID);
-    //private static final DeferredRegister<Item> ITEMS = DeferredRegister.create(ForgeRegistries.ITEMS, MOD_ID);
 
-    public WoodenCog()
-    {
-        IEventBus modEventBus = FMLJavaModLoadingContext.get().getModEventBus();
+    public WoodenCog(FMLJavaModLoadingContext ctx) {
+        IEventBus modEventBus = ctx.getModEventBus();
         modEventBus.addListener(this::setup);
         modEventBus.addListener(this::onClientSetup);
         MinecraftForge.EVENT_BUS.register(this);
         REGISTRATE.registerEventListeners(modEventBus);
 
-        WoodenCogCommonConfigs.register();
+        WoodenCogCommonConfigs.register(ctx);
 
         WoodencogItems.register(modEventBus);
         WoodencogBlocks.register();

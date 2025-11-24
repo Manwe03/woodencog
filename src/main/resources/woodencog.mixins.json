@@ -33,7 +33,6 @@
     "recipes.DelegateIngredientAccessor",
     "recipes.HeatableIngredientAccessor",
     "recipes.MixinFillingBySpout",
-    "recipes.MixinHeatableIngredient",
     "recipes.MixinRecipeApplier"
   ],
   "client": [

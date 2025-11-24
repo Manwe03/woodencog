@@ -3,8 +3,6 @@ package net.chauvedev.woodencog.recipes.heatedRecipes.output;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonSyntaxException;
-import net.chauvedev.woodencog.recipes.heatedRecipes.WoodenCogFoodPortion;
-import net.dries007.tfc.common.capabilities.food.FoodData;
 import net.dries007.tfc.common.items.TFCItems;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.network.FriendlyByteBuf;
@@ -12,7 +10,6 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.GsonHelper;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
-import net.minecraftforge.registries.RegistryObject;
 
 import java.util.List;
 

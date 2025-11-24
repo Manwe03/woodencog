@@ -6,7 +6,6 @@ import com.simibubi.create.foundation.blockEntity.behaviour.fluid.SmartFluidTank
 import com.simibubi.create.foundation.fluid.FluidIngredient;
 import com.simibubi.create.foundation.recipe.DummyCraftingContainer;
 import com.simibubi.create.foundation.recipe.IRecipeTypeInfo;
-import net.chauvedev.woodencog.WoodenCog;
 import net.chauvedev.woodencog.config.WoodenCogCommonConfigs;
 import net.chauvedev.woodencog.recipes.heatedRecipes.AllHeatedRecipeTypes;
 import net.chauvedev.woodencog.recipes.heatedRecipes.HeatedProcessingRecipe;
@@ -14,7 +13,6 @@ import net.chauvedev.woodencog.recipes.heatedRecipes.HeatedProcessingRecipeBuild
 import net.chauvedev.woodencog.utils.BasinBlockEntityExtended;
 import net.chauvedev.woodencog.utils.CogUtil;
 import net.createmod.catnip.data.Iterate;
-import net.dries007.tfc.common.recipes.ingredients.HeatableIngredient;
 import net.minecraft.world.Container;
 import net.minecraft.world.inventory.CraftingContainer;
 import net.minecraft.world.item.ItemStack;
@@ -60,8 +58,13 @@ public class HeatedBasinRecipe extends HeatedProcessingRecipe<Container> {
 
     private static boolean apply(BasinBlockEntity basin, Recipe<?> recipe, boolean test) {
         if(recipe instanceof HeatedBasinRecipe heatedRecipe){
-            IItemHandler availableItems = basin.getCapability(ForgeCapabilities.ITEM_HANDLER).orElse(null);
-            IFluidHandler availableFluids = basin.getCapability(ForgeCapabilities.FLUID_HANDLER).orElse(null);
+            Optional<IItemHandler> optionalAvailableItems = basin.getCapability(ForgeCapabilities.ITEM_HANDLER).resolve();
+            if(CogUtil.logConditional(optionalAvailableItems.isEmpty(), HeatedBasinRecipe.class,"blockEntity has no item handling capability")) return false;
+            IItemHandler availableItems = optionalAvailableItems.get();
+
+            Optional<IFluidHandler> optionalAvailableFluids = basin.getCapability(ForgeCapabilities.FLUID_HANDLER).resolve();
+            if(CogUtil.logConditional(optionalAvailableFluids.isEmpty(), HeatedBasinRecipe.class,"blockEntity has no fluid handling capability")) return false;
+            IFluidHandler availableFluids = optionalAvailableFluids.get();
 
             try{
                 float temp = ((BasinBlockEntityExtended) basin).getHeatSourceTemperature();
@@ -71,7 +74,6 @@ public class HeatedBasinRecipe extends HeatedProcessingRecipe<Container> {
             } catch (NullPointerException e){
                 return false; //BE not found
             }
-            //WoodenCog.LOGGER.info("Has enough heat");
 
             List<ItemStack> recipeOutputItems = new ArrayList<>();
             List<FluidStack> recipeOutputFluids = new ArrayList<>();
@@ -91,12 +93,10 @@ public class HeatedBasinRecipe extends HeatedProcessingRecipe<Container> {
                 Ingredients:
                 for (Ingredient ingredient : ingredients) {
                     for (int slot = 0; slot < availableItems.getSlots(); slot++) {
-                        if (simulate && availableItems.getStackInSlot(slot).getCount() <= extractedItemsFromSlot[slot]) {
-                            continue;
-                        }
+                        if (simulate && availableItems.getStackInSlot(slot).getCount() <= extractedItemsFromSlot[slot]) continue;
                         ItemStack extracted = availableItems.extractItem(slot, 1, true);
                         if (!(ingredient.test(extracted))) {
-                            continue; //test item and item temperature
+                            continue;
                         }
                         if (!simulate) availableItems.extractItem(slot, 1, false);
                         extractedItemsFromSlot[slot]++;

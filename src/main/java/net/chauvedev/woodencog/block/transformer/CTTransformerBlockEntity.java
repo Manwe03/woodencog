@@ -2,7 +2,7 @@ package net.chauvedev.woodencog.block.transformer;
 
 import com.simibubi.create.content.kinetics.transmission.SplitShaftBlockEntity;
 import net.chauvedev.woodencog.config.WoodenCogCommonConfigs;
-import net.chauvedev.woodencog.utils.RotationUtil;
+import net.chauvedev.woodencog.utils.CogUtil;
 import net.dries007.tfc.common.blockentities.InventoryBlockEntity;
 import net.dries007.tfc.common.blockentities.rotation.RotatingBlockEntity;
 import net.dries007.tfc.util.rotation.*;
@@ -62,7 +62,7 @@ public class CTTransformerBlockEntity extends SplitShaftBlockEntity implements R
         clientTick();
 
         if (level != null && level.getGameTime() % 20 == 0) {
-            this.speed = getBlockState().getValue(BlockStateProperties.POWERED) ? 0 : RotationUtil.toRadPerTick(getSpeed());
+            this.speed = getBlockState().getValue(BlockStateProperties.POWERED) ? 0 : CogUtil.toRadPerTick(getSpeed());
             this.markForSync();
         }
     }

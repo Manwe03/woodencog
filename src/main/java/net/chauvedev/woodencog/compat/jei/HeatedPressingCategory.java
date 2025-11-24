@@ -7,7 +7,6 @@ import mezz.jei.api.gui.ingredient.IRecipeSlotsView;
 import mezz.jei.api.recipe.IFocusGroup;
 import mezz.jei.api.recipe.RecipeIngredientRole;
 import net.chauvedev.woodencog.recipes.heatedRecipes.output.DynamicProcessingOutput;
-import net.chauvedev.woodencog.recipes.heatedRecipes.output.HeatedProcessingOutput;
 import net.chauvedev.woodencog.recipes.heatedRecipes.recipes.HeatedPressingRecipe;
 import net.chauvedev.woodencog.utils.Color;
 import net.minecraft.client.gui.GuiGraphics;

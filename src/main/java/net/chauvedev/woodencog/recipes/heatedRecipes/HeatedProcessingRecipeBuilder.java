@@ -2,7 +2,6 @@ package net.chauvedev.woodencog.recipes.heatedRecipes;
 
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
-import com.simibubi.create.content.processing.recipe.*;
 import com.simibubi.create.foundation.fluid.FluidHelper;
 import com.simibubi.create.foundation.fluid.FluidIngredient;
 import com.simibubi.create.foundation.recipe.IRecipeTypeInfo;
@@ -219,10 +218,10 @@ public class HeatedProcessingRecipeBuilder<T extends HeatedProcessingRecipe<?>> 
     }
 
     public static class HeatedIngridientParams {
-        public static HeatedIngridientParams DEFAULT = new HeatedIngridientParams(0,true,0);
-        public int temperature;
-        public boolean copyHeat;
-        public int cooling;
+        public static final HeatedIngridientParams DEFAULT = new HeatedIngridientParams(0,true,0);
+        public final int temperature;
+        public final boolean copyHeat;
+        public final int cooling;
 
         HeatedIngridientParams(int temperature, boolean copyHeat, int cooling){
             this.temperature = temperature;

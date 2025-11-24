@@ -7,7 +7,6 @@ import com.google.gson.JsonSyntaxException;
 import com.simibubi.create.foundation.fluid.FluidHelper;
 import com.simibubi.create.foundation.fluid.FluidIngredient;
 import net.chauvedev.woodencog.WoodenCog;
-import net.chauvedev.woodencog.recipes.heatedRecipes.input.HeatedIngredient;
 import net.chauvedev.woodencog.recipes.heatedRecipes.output.DynamicProcessingOutput;
 import net.minecraft.MethodsReturnNonnullByDefault;
 import net.minecraft.core.NonNullList;
@@ -125,7 +124,7 @@ public class HeatedProcessingRecipeSerializer<T extends HeatedProcessingRecipe<?
 
             return recipe;
         } catch (Exception e){
-            WoodenCog.LOGGER.error("FromJson: "+e.getMessage());
+            WoodenCog.LOGGER.error("HeatedProcessingRecipe could not be read from Json: "+e.getMessage());
             return null;
         }
     }
