@@ -20,7 +20,7 @@ import net.chauvedev.woodencog.recipes.heatedRecipes.recipes.HeatedMixingRecipe;
 import net.chauvedev.woodencog.recipes.heatedRecipes.recipes.HeatedPressingRecipe;
 import net.chauvedev.woodencog.utils.CogUtil;
 import net.chauvedev.woodencog.utils.CreateBlocksAccess;
-import net.chauvedev.woodencog.utils.CreateItemAccess;
+import net.chauvedev.woodencog.utils.ItemAccess;
 import net.minecraft.client.Minecraft;
 import net.minecraft.core.RegistryAccess;
 import net.minecraft.network.chat.Component;
@@ -71,7 +71,7 @@ public class WoodenCogJEI implements IModPlugin {
                 new mezz.jei.api.recipe.RecipeType<>(WoodenCog.asResource("heated_pressing"),HeatedPressingRecipe.class),
                 Component.translatable("category.woodencog.heated_pressing"),
                 new EmptyBackground(177,103),
-                new DoubleItemIcon(() -> new ItemStack(CreateBlocksAccess.MECHANICAL_PRESS.asItem()), ()-> new ItemStack(CreateItemAccess.IRON_PLATE)),
+                new DoubleItemIcon(() -> new ItemStack(CreateBlocksAccess.MECHANICAL_PRESS.asItem()), ()-> new ItemStack(ItemAccess.IRON_PLATE)),
                 this.getRecipes(AllHeatedRecipeTypes.HEATED_PRESSING.getType()),
                 List.of(()-> CreateBlocksAccess.MECHANICAL_PRESS.asItem().getDefaultInstance())
         ));
