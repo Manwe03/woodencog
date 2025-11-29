@@ -1,4 +1,4 @@
-package net.chauvedev.woodencog.utils;
+package net.chauvedev.woodencog.blockEntities;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.level.ItemLike;

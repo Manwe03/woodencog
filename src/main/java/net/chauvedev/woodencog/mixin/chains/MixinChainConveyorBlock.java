@@ -3,7 +3,7 @@ package net.chauvedev.woodencog.mixin.chains;
 import com.llamalad7.mixinextras.sugar.Local;
 import com.simibubi.create.content.kinetics.chainConveyor.ChainConveyorBlock;
 import com.simibubi.create.content.kinetics.chainConveyor.ChainConveyorBlockEntity;
-import net.chauvedev.woodencog.utils.ChainConveyorBlockEntityExtended;
+import net.chauvedev.woodencog.blockEntities.ChainConveyorBlockEntityExtended;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;

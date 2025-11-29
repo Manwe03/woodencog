@@ -1,4 +1,4 @@
-package net.chauvedev.woodencog.utils;
+package net.chauvedev.woodencog.blockEntities;
 
 public interface BlazeBurnerBlockentityExtended {
     /**

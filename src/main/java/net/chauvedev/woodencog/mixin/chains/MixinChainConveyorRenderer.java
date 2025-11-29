@@ -6,7 +6,7 @@ import com.simibubi.create.content.kinetics.chainConveyor.ChainConveyorBlockEnti
 import com.simibubi.create.content.kinetics.chainConveyor.ChainConveyorRenderer;
 import com.simibubi.create.foundation.render.RenderTypes;
 import dev.engine_room.flywheel.lib.transform.PoseTransformStack;
-import net.chauvedev.woodencog.utils.ChainConveyorBlockEntityExtended;
+import net.chauvedev.woodencog.blockEntities.ChainConveyorBlockEntityExtended;
 import net.chauvedev.woodencog.utils.CogUtil;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.texture.OverlayTexture;

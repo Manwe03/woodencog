@@ -5,7 +5,7 @@ import com.simibubi.create.foundation.blockEntity.SmartBlockEntity;
 import com.simibubi.create.foundation.blockEntity.behaviour.BehaviourType;
 import com.simibubi.create.foundation.blockEntity.behaviour.BlockEntityBehaviour;
 import net.chauvedev.woodencog.datapack.DataPackRegistries;
-import net.chauvedev.woodencog.utils.BasinBlockEntityExtended;
+import net.chauvedev.woodencog.blockEntities.BasinBlockEntityExtended;
 import net.chauvedev.woodencog.utils.CogUtil;
 import net.dries007.tfc.common.capabilities.heat.HeatCapability;
 import net.minecraft.world.item.ItemStack;
@@ -44,7 +44,7 @@ public class ItemHeatingBehaviour extends BlockEntityBehaviour {
                 ItemStack itemStack = inventory.getItem(i);
                 if(this.blockEntity.getLevel() == null) return;
 
-                if(CogUtil.logConditional(this.blockEntity.getLevel() == null,this.getClass(),"sdfs")) return;
+                if(CogUtil.logConditional(this.blockEntity.getLevel() == null,this.getClass(),"Tried to heat up items in basin level of be is null")) return;
 
                 if(DataPackRegistries.isInTempBlacklist(itemStack,this.blockEntity.getLevel().registryAccess())) continue; //Skip if item is in blacklist
                 itemStack.getCapability(HeatCapability.CAPABILITY).resolve().ifPresent(heat -> {

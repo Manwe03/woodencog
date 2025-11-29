@@ -28,13 +28,14 @@ import net.minecraftforge.registries.RegisterEvent;
 import org.slf4j.Logger;
 
 @Mod(WoodenCog.MOD_ID)
-public class WoodenCog
-{
+public class WoodenCog {
     public static final String MOD_ID = "woodencog";
     public static final Logger LOGGER = LogUtils.getLogger();
     private static final CreateRegistrate REGISTRATE = CreateRegistrate.create(WoodenCog.MOD_ID);
 
-    public WoodenCog(FMLJavaModLoadingContext ctx) {
+    public WoodenCog() {
+        FMLJavaModLoadingContext ctx = FMLJavaModLoadingContext.get();
+
         IEventBus modEventBus = ctx.getModEventBus();
         modEventBus.addListener(this::setup);
         modEventBus.addListener(this::onClientSetup);
@@ -49,23 +50,6 @@ public class WoodenCog
 
         AllAdvancedRecipeTypes.register(modEventBus);
         AllHeatedRecipeTypes.register(modEventBus);
-
-        //if(FMLEnvironment.dist == Dist.CLIENT) {
-            /*PONDER_HELPER.forComponents(FIRECLAY_CRUCIBLE_ITEM).addStoryBoard("heating/heat", Heating::heating).addStoryBoard("heating/cool", Heating::cooling);*/
-        //}
-
-        /*
-        TFCItems.METAL_ITEMS.forEach((aDefault, itemTypeRegistryObjectMap) -> {
-            itemTypeRegistryObjectMap.forEach((itemType, itemRegistryObject) -> {
-                assert itemRegistryObject.getKey() != null;
-                String name = itemRegistryObject.getId().toString();
-                String newname = name.replaceAll("tfc:|minecraft:", "") +"/unfinished";
-                    ITEMS.register(
-                            newname,
-                            () -> new SequencedAssemblyItem(new Item.Properties())
-                    );
-            });
-        });*/
 
         modEventBus.addListener(WoodenCog::onRegister);
         modEventBus.addListener(DataGenerators::gatherData);

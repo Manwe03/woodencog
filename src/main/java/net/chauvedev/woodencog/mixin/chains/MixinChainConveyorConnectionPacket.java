@@ -2,7 +2,7 @@ package net.chauvedev.woodencog.mixin.chains;
 
 import com.simibubi.create.content.kinetics.chainConveyor.ChainConveyorBlockEntity;
 import com.simibubi.create.content.kinetics.chainConveyor.ChainConveyorConnectionPacket;
-import net.chauvedev.woodencog.utils.ChainConveyorBlockEntityExtended;
+import net.chauvedev.woodencog.blockEntities.ChainConveyorBlockEntityExtended;
 import net.chauvedev.woodencog.utils.CogUtil;
 import net.minecraft.core.BlockPos;
 import net.minecraft.server.level.ServerPlayer;

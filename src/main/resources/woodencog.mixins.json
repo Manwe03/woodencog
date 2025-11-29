@@ -16,6 +16,7 @@
     "blockEnitites.MixinBasinOperatingBlockEntity",
     "blockEnitites.MixinMechanicalMixerBlockEntity",
     "blockEnitites.MixinMechanicalPressBlockEntity",
+    "blockEnitites.accessors.BasinBlockEntityAccessor",
     "blockEnitites.accessors.BasinOperatingBlockEntityAccessor",
     "blockEnitites.accessors.BlockEntityAccessor",
     "blockEnitites.accessors.SmartBlockEntityAccessor",

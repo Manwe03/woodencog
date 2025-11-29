@@ -7,13 +7,13 @@ import com.simibubi.create.content.kinetics.fan.processing.FanProcessing;
 import com.simibubi.create.content.kinetics.fan.processing.FanProcessingType;
 import net.chauvedev.woodencog.config.WoodenCogCommonConfigs;
 import net.chauvedev.woodencog.datapack.DataPackRegistries;
-import net.chauvedev.woodencog.utils.ModTags;
 import net.dries007.tfc.common.capabilities.food.FoodCapability;
 import net.dries007.tfc.common.capabilities.food.FoodTraits;
 import net.dries007.tfc.common.capabilities.heat.HeatCapability;
 import net.dries007.tfc.common.capabilities.heat.IHeat;
 import net.dries007.tfc.common.recipes.HeatingRecipe;
 import net.dries007.tfc.common.recipes.inventory.ItemStackInventory;
+import net.minecraft.core.RegistryAccess;
 import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
@@ -28,58 +28,42 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 public class MixinFanProcessing {
 
     @Unique
-    private static ItemStack applyProcessingTCF(ItemStack inputStack, FanProcessingType type, Level world) {
-        if (
-                !inputStack.getCapability(HeatCapability.CAPABILITY).isPresent()
-                || type.equals(AllFanProcessingTypes.HAUNTING)
-        ) {
-            return inputStack;
-        }
+    private static void applyTemp(ItemStack inputStack, IHeat cap, FanProcessingType type, RegistryAccess registryAccess) {
+        if(!inputStack.getCapability(HeatCapability.CAPABILITY).isPresent()) return;
 
-        IHeat cap = inputStack.getCapability(HeatCapability.CAPABILITY).resolve().get();
-
-        float itemTemp = cap.getTemperature();
         if(type.equals(AllFanProcessingTypes.BLASTING)) {
-            if(!DataPackRegistries.isInTempBlacklist(inputStack,world.registryAccess())) {
+            if(!DataPackRegistries.isInTempBlacklist(inputStack, registryAccess)) {
                 HeatCapability.addTemp(cap, 1700);
             }
         } else if (type.equals(AllFanProcessingTypes.SMOKING)) {
-            if(!DataPackRegistries.isInTempBlacklist(inputStack,world.registryAccess())) {
+            if(!DataPackRegistries.isInTempBlacklist(inputStack, registryAccess)) {
                 HeatCapability.addTemp(cap, 200);
             }
         } else if (type.equals(AllFanProcessingTypes.SPLASHING)) {
-            cap.setTemperature(cap.getTemperature() - 5F);
-            if(cap.getTemperature() <= 0F) {
-                cap.setTemperature(0F);
-            }
+            cap.setTemperature(HeatCapability.adjustTempTowards(cap.getTemperature(),0,8));
         } else {
             cap.setTemperature(cap.getTemperature() - 2F);
             if(cap.getTemperature() <= 0F) {
                 cap.setTemperature(0F);
             }
         }
+    }
 
+    @Unique
+    private static ItemStack applyTFCHeatingRecipe(ItemStack inputStack, IHeat cap){
         HeatingRecipe recipe = HeatingRecipe.getRecipe(inputStack);
 
         if (recipe!=null){
-            if ((double) itemTemp > 1.1 * (double) recipe.getTemperature()) {
-                if (recipe.assemble(new ItemStackInventory(inputStack), null).isEmpty()){
-                    return null;
-                }
-            }
             if (recipe.isValidTemperature(cap.getTemperature())) {
                 ItemStack output = recipe.assemble(new ItemStackInventory(inputStack), null);
+                if(output.isEmpty()) return inputStack; //No output for this recipe do not change input
                 FluidStack fluidStack = recipe.assembleFluid(new ItemStackInventory(inputStack));
-                if(!fluidStack.isEmpty()) {
-                    return ItemStack.EMPTY;
-                }
-                FoodCapability.applyTrait(output, FoodTraits.WOOD_GRILLED);
-                if (!output.isEmpty()){
-                    output.setCount(inputStack.getCount());
-                    return output;
-                }else{
-                    return inputStack;
-                }
+                if(!fluidStack.isEmpty()) return ItemStack.EMPTY; //Melting recipe input is distorted
+
+                if(FoodCapability.has(output)) FoodCapability.applyTrait(output, FoodTraits.WOOD_GRILLED);
+
+                output.setCount(inputStack.getCount());
+                return output;
             }
         }
         return inputStack;
@@ -91,33 +75,27 @@ public class MixinFanProcessing {
             cancellable = true
     )
     private static void applyProcessing(TransportedItemStack transported, Level world, FanProcessingType type,CallbackInfoReturnable<TransportedItemStackHandlerBehaviour.TransportedResult> cir) {
-        boolean hasHeat = transported.stack.getCapability(HeatCapability.CAPABILITY).isPresent();
 
-        boolean isUnburnable = ModTags.Items.UNBURNABLE != null && transported.stack.is(ModTags.Items.UNBURNABLE);
+        ItemStack inputStack = transported.stack;
 
-        if(isUnburnable) {
-            cir.setReturnValue(TransportedItemStackHandlerBehaviour.TransportedResult.doNothing());
-            return;
-        }
+        if(inputStack.getCapability(HeatCapability.CAPABILITY).isPresent() && WoodenCogCommonConfigs.HANDLE_TEMPERATURE.get()){
+            if(inputStack.getCapability(HeatCapability.CAPABILITY).resolve().isEmpty()) return;
 
-        if (hasHeat && WoodenCogCommonConfigs.HANDLE_TEMPERATURE.get()) {
-            ItemStack oldStack = transported.stack;
-            ItemStack newStack = MixinFanProcessing.applyProcessingTCF(transported.stack, type, world);
-            if(newStack != null) {
-                if(newStack.isEmpty()) {
+            IHeat cap = inputStack.getCapability(HeatCapability.CAPABILITY).resolve().get();
+
+            MixinFanProcessing.applyTemp(inputStack, cap, type, world.registryAccess());
+            ItemStack result = MixinFanProcessing.applyTFCHeatingRecipe(inputStack, cap);
+
+            if(!result.equals(inputStack)){ //Recipe was found change item and cancel apply
+                if (result == ItemStack.EMPTY){
                     cir.setReturnValue(TransportedItemStackHandlerBehaviour.TransportedResult.removeItem());
-                    return;
+                }else{
+                    TransportedItemStack newTransportedStack = transported.getSimilar();
+                    newTransportedStack.stack = result;
+                    cir.setReturnValue(TransportedItemStackHandlerBehaviour.TransportedResult.convertTo(newTransportedStack));
                 }
-                if(oldStack.is(newStack.getItem())) {
-                    cir.setReturnValue(TransportedItemStackHandlerBehaviour.TransportedResult.doNothing());
-                    return;
-                }
-                TransportedItemStack newTransportedStack = transported.getSimilar();
-                newTransportedStack.stack = newStack;
-                cir.setReturnValue(TransportedItemStackHandlerBehaviour.TransportedResult.convertTo(newTransportedStack));
-                return;
+                cir.cancel();
             }
-            cir.setReturnValue(TransportedItemStackHandlerBehaviour.TransportedResult.removeItem());
         }
     }
 
@@ -130,24 +108,34 @@ public class MixinFanProcessing {
     private static void applyProcessing(ItemEntity entity, FanProcessingType type, CallbackInfoReturnable<Boolean> cir) {
         ItemStack inputStack = entity.getItem();
 
-        boolean hasHeat = inputStack.getCapability(HeatCapability.CAPABILITY).isPresent();
+        if(inputStack.getCapability(HeatCapability.CAPABILITY).isPresent() && WoodenCogCommonConfigs.HANDLE_TEMPERATURE.get()){
+            if(inputStack.getCapability(HeatCapability.CAPABILITY).resolve().isEmpty()) return;
 
-        boolean isUnburnable = ModTags.Items.UNBURNABLE != null && inputStack.is(ModTags.Items.UNBURNABLE);
+            IHeat cap = inputStack.getCapability(HeatCapability.CAPABILITY).resolve().get();
 
-        if(isUnburnable) {
-            cir.cancel();
-        }
+            MixinFanProcessing.applyTemp(inputStack, cap, type, entity.level().registryAccess());
+            ItemStack result = MixinFanProcessing.applyTFCHeatingRecipe(inputStack, cap);
 
-        if (hasHeat && WoodenCogCommonConfigs.HANDLE_TEMPERATURE.get()) {
-            ItemStack result = MixinFanProcessing.applyProcessingTCF(inputStack, type, entity.level());
-
-            if (result == null){
-                entity.kill();
-            }else{
-                entity.setItem(result);
+            if(!result.equals(inputStack)){ //Recipe was found change item and cancel apply
+                if (result == ItemStack.EMPTY){
+                    System.out.println("Kill entity");
+                    entity.kill();
+                }else{
+                    entity.setItem(result);
+                }
+                cir.setReturnValue(false);
+                cir.cancel();
             }
-            cir.setReturnValue(false);
-            cir.cancel();
         }
     }
+
+    @Inject(
+            method = "applyProcessing(Lnet/minecraft/world/entity/item/ItemEntity;Lcom/simibubi/create/content/kinetics/fan/processing/FanProcessingType;)Z",
+            at = @At(value = "INVOKE", target = "Lnet/minecraft/world/entity/item/ItemEntity;discard()V"),
+            cancellable = true
+    )
+    private static void cancelDiscard(ItemEntity entity, FanProcessingType type, CallbackInfoReturnable<Boolean> cir){
+        cir.cancel();
+    }
+
 }

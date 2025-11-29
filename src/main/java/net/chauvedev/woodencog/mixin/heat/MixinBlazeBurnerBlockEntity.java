@@ -4,7 +4,7 @@ import com.simibubi.create.content.processing.burner.BlazeBurnerBlock;
 import com.simibubi.create.content.processing.burner.BlazeBurnerBlockEntity;
 import net.chauvedev.woodencog.config.WoodenCogCommonConfigs;
 import net.chauvedev.woodencog.mixin.blockEnitites.accessors.BlockEntityAccessor;
-import net.chauvedev.woodencog.utils.BlazeBurnerBlockentityExtended;
+import net.chauvedev.woodencog.blockEntities.BlazeBurnerBlockentityExtended;
 import net.dries007.tfc.common.capabilities.heat.HeatCapability;
 import net.minecraft.world.level.Level;
 import org.spongepowered.asm.mixin.Mixin;
