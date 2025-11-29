@@ -5,13 +5,15 @@ import com.simibubi.create.content.processing.burner.BlazeBurnerBlock;
 import com.simibubi.create.foundation.blockEntity.behaviour.BehaviourType;
 import com.simibubi.create.foundation.blockEntity.behaviour.BlockEntityBehaviour;
 import com.simibubi.create.foundation.blockEntity.behaviour.fluid.SmartFluidTankBehaviour;
+import com.simibubi.create.foundation.blockEntity.behaviour.scrollValue.ScrollOptionBehaviour;
 import com.simibubi.create.foundation.utility.CreateLang;
 import net.chauvedev.woodencog.datapack.DataPackRegistries;
+import net.chauvedev.woodencog.mixin.blockEnitites.accessors.BasinBlockEntityAccessor;
 import net.chauvedev.woodencog.mixin.blockEnitites.accessors.SmartBlockEntityAccessor;
 import net.chauvedev.woodencog.mixin.blockEnitites.accessors.BlockEntityAccessor;
 import net.chauvedev.woodencog.recipes.heatedRecipes.ItemHeatingBehaviour;
-import net.chauvedev.woodencog.utils.BasinBlockEntityExtended;
-import net.chauvedev.woodencog.utils.BlazeBurnerBlockentityExtended;
+import net.chauvedev.woodencog.blockEntities.BasinBlockEntityExtended;
+import net.chauvedev.woodencog.blockEntities.BlazeBurnerBlockentityExtended;
 import net.dries007.tfc.common.blockentities.AbstractFirepitBlockEntity;
 import net.dries007.tfc.common.blockentities.CharcoalForgeBlockEntity;
 import net.dries007.tfc.common.blocks.devices.CharcoalForgeBlock;
@@ -27,6 +29,8 @@ import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraftforge.fluids.FluidStack;
+import net.minecraftforge.fluids.capability.IFluidHandler;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.Unique;
@@ -44,7 +48,14 @@ public abstract class MixinBasinBlockEntity implements BasinBlockEntityExtended 
     @Shadow public SmartFluidTankBehaviour inputTank;
     @Shadow private boolean contentsChanged;
 
+    ScrollOptionBehaviour selectionMode;
+
     public MixinBasinBlockEntity() {}
+
+    @Unique
+    public ScrollOptionBehaviour getSelectionMode(){
+        return this.selectionMode;
+    }
 
     /**
      * Called on heated recipes and passive item heating on basins
@@ -73,6 +84,22 @@ public abstract class MixinBasinBlockEntity implements BasinBlockEntityExtended 
         return temp == null ? 0.0f : temp;
     }
 
+    @Unique
+    public void autoChainRecipes(){
+        if(this.getSelectionMode().get() == BasinBlockEntityExtended.SelectionMode.AUTO_FEED){
+            IFluidHandler ouputHandler = ((BasinBlockEntityAccessor) this).getOutputTank().getCapability().resolve().get();
+            IFluidHandler inputHandler = this.inputTank.getCapability().resolve().get();
+
+            for(int slot = 0; slot < ouputHandler.getTanks(); ++slot) {
+                FluidStack fs = ouputHandler.getFluidInTank(slot).copy();
+                if (!fs.isEmpty()) {
+                    ouputHandler.drain(fs, IFluidHandler.FluidAction.EXECUTE);
+                    inputHandler.fill(fs, IFluidHandler.FluidAction.EXECUTE);
+                }
+            }
+        }
+    }
+
     /**
      * @author Manwe
      * AddHeatingBehaviour to basinBlock
@@ -81,8 +108,12 @@ public abstract class MixinBasinBlockEntity implements BasinBlockEntityExtended 
     private void onInit(BlockEntityType type, BlockPos pos, BlockState state, CallbackInfo ci){
         BasinBlockEntity blockEntity = (BasinBlockEntity) (Object) this;
         Map<BehaviourType<?>, BlockEntityBehaviour> behaviours = ((SmartBlockEntityAccessor) blockEntity).getBehaviours();
+
         ItemHeatingBehaviour itemHeatingBehaviour = new ItemHeatingBehaviour(blockEntity,blockEntity.inputInventory);
         behaviours.put(itemHeatingBehaviour.getType(), itemHeatingBehaviour); //A little hack, directly access behaviour map and add behaviour
+
+        this.selectionMode = new ScrollOptionBehaviour(BasinBlockEntityExtended.SelectionMode.class, Component.translatable("woodencog.recipes.chain"), (BasinBlockEntity)(Object)this, new BasinBlockEntityExtended.SelectionModeValueBox());
+        behaviours.put(selectionMode.getType(), selectionMode);
     }
 
     /**

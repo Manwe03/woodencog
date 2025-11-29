@@ -7,10 +7,11 @@ import com.simibubi.create.foundation.fluid.FluidIngredient;
 import com.simibubi.create.foundation.recipe.DummyCraftingContainer;
 import com.simibubi.create.foundation.recipe.IRecipeTypeInfo;
 import net.chauvedev.woodencog.config.WoodenCogCommonConfigs;
+import net.chauvedev.woodencog.mixin.blockEnitites.accessors.BasinBlockEntityAccessor;
 import net.chauvedev.woodencog.recipes.heatedRecipes.AllHeatedRecipeTypes;
 import net.chauvedev.woodencog.recipes.heatedRecipes.HeatedProcessingRecipe;
 import net.chauvedev.woodencog.recipes.heatedRecipes.HeatedProcessingRecipeBuilder;
-import net.chauvedev.woodencog.utils.BasinBlockEntityExtended;
+import net.chauvedev.woodencog.blockEntities.BasinBlockEntityExtended;
 import net.chauvedev.woodencog.utils.CogUtil;
 import net.createmod.catnip.data.Iterate;
 import net.minecraft.world.Container;
@@ -53,8 +54,11 @@ public class HeatedBasinRecipe extends HeatedProcessingRecipe<Container> {
     }
 
     public static boolean apply(BasinBlockEntity basin, Recipe<?> recipe) {
-        return apply(basin, recipe, false);
+        boolean success = apply(basin, recipe, false);
+        if(success) ((BasinBlockEntityExtended) basin).autoChainRecipes();
+        return success;
     }
+
 
     private static boolean apply(BasinBlockEntity basin, Recipe<?> recipe, boolean test) {
         if(recipe instanceof HeatedBasinRecipe heatedRecipe){
