@@ -214,6 +214,8 @@ dependencies {
     //Compatibility
     //implementation fg.deobf("curse.maven:create-diesel-generators-869316:6920093")
     //implementation fg.deobf("curse.maven:farmers-delight-tfc-951750:5956017")
+    implementation fg.deobf("curse.maven:createaddition-439890:7208610")
+    implementation fg.deobf("curse.maven:create-low-heated-873945:6789818")
 
     //PATCHOULI
     compileOnly fg.deobf("vazkii.patchouli:Patchouli:${minecraft_version}-${patchouli_version}:api")

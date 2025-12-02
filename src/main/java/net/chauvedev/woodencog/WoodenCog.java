@@ -6,6 +6,7 @@ import com.simibubi.create.foundation.data.CreateRegistrate;
 import net.chauvedev.woodencog.block.generator.WoodenGeneratorRenderer;
 import net.chauvedev.woodencog.block.transformer.CTTransformerRenderer;
 import net.chauvedev.woodencog.block.WoodencogBlockEntityTypes;
+import net.chauvedev.woodencog.compat.Compat;
 import net.chauvedev.woodencog.config.WoodenCogCommonConfigs;
 import net.chauvedev.woodencog.datagen.DataGenerators;
 import net.chauvedev.woodencog.datapack.DataPackRegistries;
@@ -34,6 +35,8 @@ public class WoodenCog {
     private static final CreateRegistrate REGISTRATE = CreateRegistrate.create(WoodenCog.MOD_ID);
 
     public WoodenCog() {
+        Compat.init(); //Load addon compatibility
+
         FMLJavaModLoadingContext ctx = FMLJavaModLoadingContext.get();
 
         IEventBus modEventBus = ctx.getModEventBus();
