@@ -7,6 +7,7 @@ import com.simibubi.create.foundation.blockEntity.behaviour.BlockEntityBehaviour
 import com.simibubi.create.foundation.blockEntity.behaviour.fluid.SmartFluidTankBehaviour;
 import com.simibubi.create.foundation.blockEntity.behaviour.scrollValue.ScrollOptionBehaviour;
 import com.simibubi.create.foundation.utility.CreateLang;
+import net.chauvedev.woodencog.compat.Compat;
 import net.chauvedev.woodencog.datapack.DataPackRegistries;
 import net.chauvedev.woodencog.mixin.blockEnitites.accessors.BasinBlockEntityAccessor;
 import net.chauvedev.woodencog.mixin.blockEnitites.accessors.SmartBlockEntityAccessor;
@@ -14,6 +15,7 @@ import net.chauvedev.woodencog.mixin.blockEnitites.accessors.BlockEntityAccessor
 import net.chauvedev.woodencog.recipes.heatedRecipes.ItemHeatingBehaviour;
 import net.chauvedev.woodencog.blockEntities.BasinBlockEntityExtended;
 import net.chauvedev.woodencog.blockEntities.BlazeBurnerBlockentityExtended;
+import net.chauvedev.woodencog.utils.CogUtil;
 import net.dries007.tfc.common.blockentities.AbstractFirepitBlockEntity;
 import net.dries007.tfc.common.blockentities.CharcoalForgeBlockEntity;
 import net.dries007.tfc.common.blocks.devices.CharcoalForgeBlock;
@@ -74,6 +76,12 @@ public abstract class MixinBasinBlockEntity implements BasinBlockEntityExtended 
             return firepitBlockEntityl.getTemperature() / 2.0f;
         }
 
+        //Optional Compatibility
+        float t = Compat.CCA_INSTANCE.getTFCTemperatureOf(source);
+        if (t > 0) return t;
+        t = Compat.CLH_INSTANCE.getTFCTemperatureOf(source);
+        if (t > 0) return t;
+
         //Blocks
         Block sourceBlock = level.getBlockState(((BlockEntityAccessor) this).getBlockPos().below()).getBlock();
         RegistryAccess registry = level.registryAccess();
@@ -127,6 +135,9 @@ public abstract class MixinBasinBlockEntity implements BasinBlockEntityExtended 
         });
     }
 
+    /**
+     *     Default Create HeatLevel
+     */
     @Inject(
             method = {"getHeatLevelOf"},
             at = {@At("HEAD")},
@@ -135,15 +146,9 @@ public abstract class MixinBasinBlockEntity implements BasinBlockEntityExtended 
     private static void getHeatLevelOf(BlockState state, CallbackInfoReturnable<BlazeBurnerBlock.HeatLevel> cir) {
         if (state.getBlock() instanceof CharcoalForgeBlock) {
             int heat = state.getValue(CharcoalForgeBlock.HEAT);
-            if (heat >= 7) {
-                cir.setReturnValue(BlazeBurnerBlock.HeatLevel.SEETHING);
-            } else if (heat >= 3) {
-                cir.setReturnValue(BlazeBurnerBlock.HeatLevel.KINDLED);
-            } else {
-                cir.setReturnValue(BlazeBurnerBlock.HeatLevel.NONE);
-            }
+            BlazeBurnerBlock.HeatLevel level = CogUtil.tempToHeatLevel(CogUtil.tempFromBlockstate(heat));
+            cir.setReturnValue(level);
         }
-
     }
 
     @Inject(

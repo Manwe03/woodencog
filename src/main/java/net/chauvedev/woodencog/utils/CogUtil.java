@@ -1,9 +1,11 @@
 package net.chauvedev.woodencog.utils;
 
 import com.google.gson.JsonObject;
-import com.simibubi.create.Create;
+import com.simibubi.create.content.processing.burner.BlazeBurnerBlock;
 import net.chauvedev.woodencog.WoodenCog;
-import net.dries007.tfc.util.Metal;
+import net.chauvedev.woodencog.compat.Compat;
+import net.chauvedev.woodencog.config.WoodenCogCommonConfigs;
+import net.dries007.tfc.common.capabilities.heat.Heat;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.Item;
@@ -88,6 +90,53 @@ public class CogUtil {
             }
         }
         return max_i;
+    }
+
+    public static float heatLevelToTemp(BlazeBurnerBlock.HeatLevel heatLevel){
+        switch (heatLevel) {
+            case NONE -> {
+                return WoodenCogCommonConfigs.BLAZE_BURNER_NONE.get();
+            }
+            case SMOULDERING -> {
+                return WoodenCogCommonConfigs.BLAZE_BURNER_SMOULDERING.get();
+            }
+            case FADING -> {
+                return WoodenCogCommonConfigs.BLAZE_BURNER_FADING.get();
+            }
+            case KINDLED -> {
+                return WoodenCogCommonConfigs.BLAZE_BURNER_KINDLED.get();
+            }
+            case SEETHING -> {
+                return WoodenCogCommonConfigs.BLAZE_BURNER_SEETHING.get();
+            }
+        }
+
+        float t = Compat.CLH_INSTANCE.lowHeatTemp(heatLevel);
+        if (t>0) return t;
+        return 0;
+    }
+
+    public static BlazeBurnerBlock.HeatLevel tempToHeatLevel(float temperature){
+        if(temperature >= WoodenCogCommonConfigs.BLAZE_BURNER_SEETHING.get()){
+            return BlazeBurnerBlock.HeatLevel.SEETHING;
+        } else if(temperature >= WoodenCogCommonConfigs.BLAZE_BURNER_KINDLED.get()){
+            return BlazeBurnerBlock.HeatLevel.KINDLED;
+        } else if(temperature >= WoodenCogCommonConfigs.BLAZE_BURNER_FADING.get()){
+            return BlazeBurnerBlock.HeatLevel.FADING;
+        } else if(temperature >= WoodenCogCommonConfigs.BLAZE_BURNER_SMOULDERING.get()){
+            return BlazeBurnerBlock.HeatLevel.SMOULDERING;
+        } else if(temperature >= WoodenCogCommonConfigs.BLAZE_BURNER_NONE.get()){
+            return BlazeBurnerBlock.HeatLevel.NONE;
+        } else {
+            return BlazeBurnerBlock.HeatLevel.NONE;
+        }
+    }
+
+    /**
+     * Use with precaution as this method temperature handling is not precise and has very limited temp values
+     */
+    public static float tempFromBlockstate(int blockstateHeat){
+        return ((blockstateHeat - 1)/6.0F)*Heat.maxVisibleTemperature();
     }
 
     public static float toRadPerTick(float rpm) {
