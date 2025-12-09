@@ -11,6 +11,7 @@
     "MixinCrucibleBlock",
     "MixinDrinkable",
     "MixinFanProcessing",
+    "MixinGhostItemMenu",
     "MixinNetheriteDivingHandler",
     "armor.MixinBacktankItemLayered",
     "armor.MixinBaseArmorItem",
