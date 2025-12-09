@@ -1,13 +1,27 @@
 package net.chauvedev.woodencog.compat;
 
+import com.google.common.collect.ImmutableMap;
 import org.objectweb.asm.tree.ClassNode;
 import org.spongepowered.asm.mixin.extensibility.IMixinConfigPlugin;
 import org.spongepowered.asm.mixin.extensibility.IMixinInfo;
 
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
+import java.util.function.Supplier;
 
 public class WoodenCogMixinPlugin implements IMixinConfigPlugin {
+
+    //Thanks to Adorn :) https://github.com/Juuxel/Adorn/tree/bd70a2955640897bc68ff1f4f201fe5e6c10bc32
+    private static final Map<String, Supplier<Boolean>> CONDITIONS = ImmutableMap.of(
+            "net.chauvedev.woodencog.mixin.heat.MixinBasicBurnerBlockEntity", Compat::isCLHInstalled,
+            "net.chauvedev.woodencog.mixin.heat.MixinLiquidBlazeBurnerBlockEntity", Compat::isCCAInstalled
+    );
+
+    @Override
+    public boolean shouldApplyMixin(String targetClassName, String mixinClassName) {
+        return CONDITIONS.getOrDefault(mixinClassName,()->true).get();
+    }
 
     @Override
     public void onLoad(String mixinPackage) {}
@@ -15,13 +29,6 @@ public class WoodenCogMixinPlugin implements IMixinConfigPlugin {
     @Override
     public String getRefMapperConfig() {
         return null;
-    }
-
-    @Override
-    public boolean shouldApplyMixin(String targetClassName, String mixinClassName) {
-        if (targetClassName.equals("zeh/createlowheated/content/processing/basicburner/BasicBurnerBlockEntity") && !Compat.isCLHInstalled())
-            return false;
-        return true;
     }
 
     @Override
