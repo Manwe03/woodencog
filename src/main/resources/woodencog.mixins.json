@@ -13,6 +13,7 @@
     "MixinFanProcessing",
     "MixinGhostItemMenu",
     "MixinNetheriteDivingHandler",
+    "MixinSmokingType",
     "armor.MixinBacktankItemLayered",
     "armor.MixinBaseArmorItem",
     "blockEnitites.MixinBasinOperatingBlockEntity",
