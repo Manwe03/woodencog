@@ -24,7 +24,7 @@ public abstract class MixinBlazeBurnerBlockEntity implements BlazeBurnerBlockent
 
     @Unique
     public float getTemperature(){
-        return isCreative ? WoodenCogCommonConfigs.BLAZE_BURNER_SEETHING.get() : CogUtil.heatLevelToTemp(getHeatLevel());
+        return isCreative ? WoodenCogCommonConfigs.BLAZE_BURNER_SEETHING.get().floatValue() : CogUtil.heatLevelToTemp(getHeatLevel());
     }
 
     /**

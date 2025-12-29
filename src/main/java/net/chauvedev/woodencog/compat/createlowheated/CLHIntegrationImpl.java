@@ -9,7 +9,7 @@ import zeh.createlowheated.content.processing.basicburner.BasicBurnerBlockEntity
 public class CLHIntegrationImpl implements ICLHIntegration {
 
     public float lowHeatTemp(BlazeBurnerBlock.HeatLevel heatLevel){
-        if(heatLevel.name().equals("LOW")) return WoodenCogCommonConfigs.BLAZE_BURNER_FADING.get();
+        if(heatLevel.name().equals("LOW")) return WoodenCogCommonConfigs.BLAZE_BURNER_FADING.get().floatValue();
         return 0;
     }
 

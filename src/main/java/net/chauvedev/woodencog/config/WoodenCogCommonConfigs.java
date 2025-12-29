@@ -17,11 +17,11 @@ public class WoodenCogCommonConfigs {
     public static final ForgeConfigSpec.ConfigValue<Boolean> HANDLE_TEMPERATURE;
     public static final ForgeConfigSpec.ConfigValue<Boolean> DEPLOYER_COPY_TEMPERATURE;
 
-    public static final ForgeConfigSpec.ConfigValue<Float> BLAZE_BURNER_NONE;
-    public static final ForgeConfigSpec.ConfigValue<Float> BLAZE_BURNER_SMOULDERING;
-    public static final ForgeConfigSpec.ConfigValue<Float> BLAZE_BURNER_FADING;
-    public static final ForgeConfigSpec.ConfigValue<Float> BLAZE_BURNER_KINDLED;
-    public static final ForgeConfigSpec.ConfigValue<Float> BLAZE_BURNER_SEETHING;
+    public static final ForgeConfigSpec.ConfigValue<Double> BLAZE_BURNER_NONE;
+    public static final ForgeConfigSpec.ConfigValue<Double> BLAZE_BURNER_SMOULDERING;
+    public static final ForgeConfigSpec.ConfigValue<Double> BLAZE_BURNER_FADING;
+    public static final ForgeConfigSpec.ConfigValue<Double> BLAZE_BURNER_KINDLED;
+    public static final ForgeConfigSpec.ConfigValue<Double> BLAZE_BURNER_SEETHING;
 
     public static final ForgeConfigSpec.ConfigValue<Boolean> NETHERITE_RESKIN;
 
@@ -46,11 +46,11 @@ public class WoodenCogCommonConfigs {
 
             BUILDER.comment("Blaze Burner Temperature");
 
-            BLAZE_BURNER_NONE = BUILDER.define("blaze_burner_none", 0.0f);
-            BLAZE_BURNER_SMOULDERING = BUILDER.define("blaze_burner_smouldering", 80.0f);
-            BLAZE_BURNER_FADING = BUILDER.define("blaze_burner_fading", 580.0f);
-            BLAZE_BURNER_KINDLED = BUILDER.define("blaze_burner_kindled", 930.0f);
-            BLAZE_BURNER_SEETHING = BUILDER.define("blaze_burner_seething", 1600.0f);
+            BLAZE_BURNER_NONE = BUILDER.define("blaze_burner_none", 0.0D);
+            BLAZE_BURNER_SMOULDERING = BUILDER.define("blaze_burner_smouldering", 80.0D);
+            BLAZE_BURNER_FADING = BUILDER.define("blaze_burner_fading", 750.0D);
+            BLAZE_BURNER_KINDLED = BUILDER.define("blaze_burner_kindled", 1350.0D);
+            BLAZE_BURNER_SEETHING = BUILDER.define("blaze_burner_seething", 2000.0D);
 
         BUILDER.pop();
 

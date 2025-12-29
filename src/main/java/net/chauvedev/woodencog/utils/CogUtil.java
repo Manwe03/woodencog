@@ -95,19 +95,19 @@ public class CogUtil {
     public static float heatLevelToTemp(BlazeBurnerBlock.HeatLevel heatLevel){
         switch (heatLevel) {
             case NONE -> {
-                return WoodenCogCommonConfigs.BLAZE_BURNER_NONE.get();
+                return WoodenCogCommonConfigs.BLAZE_BURNER_NONE.get().floatValue();
             }
             case SMOULDERING -> {
-                return WoodenCogCommonConfigs.BLAZE_BURNER_SMOULDERING.get();
+                return WoodenCogCommonConfigs.BLAZE_BURNER_SMOULDERING.get().floatValue();
             }
             case FADING -> {
-                return WoodenCogCommonConfigs.BLAZE_BURNER_FADING.get();
+                return WoodenCogCommonConfigs.BLAZE_BURNER_FADING.get().floatValue();
             }
             case KINDLED -> {
-                return WoodenCogCommonConfigs.BLAZE_BURNER_KINDLED.get();
+                return WoodenCogCommonConfigs.BLAZE_BURNER_KINDLED.get().floatValue();
             }
             case SEETHING -> {
-                return WoodenCogCommonConfigs.BLAZE_BURNER_SEETHING.get();
+                return WoodenCogCommonConfigs.BLAZE_BURNER_SEETHING.get().floatValue();
             }
         }
 
