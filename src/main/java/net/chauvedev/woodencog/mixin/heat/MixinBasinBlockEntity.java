@@ -101,6 +101,9 @@ public abstract class MixinBasinBlockEntity implements BasinBlockEntityExtended 
             for(int slot = 0; slot < ouputHandler.getTanks(); ++slot) {
                 FluidStack fs = ouputHandler.getFluidInTank(slot).copy();
                 if (!fs.isEmpty()) {
+                    int fluidTranfered = inputHandler.fill(fs, IFluidHandler.FluidAction.SIMULATE);
+                    if(fluidTranfered == 0) continue;
+                    fs.setAmount(fluidTranfered);
                     ouputHandler.drain(fs, IFluidHandler.FluidAction.EXECUTE);
                     inputHandler.fill(fs, IFluidHandler.FluidAction.EXECUTE);
                 }
