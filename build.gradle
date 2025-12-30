@@ -216,6 +216,7 @@ dependencies {
     //implementation fg.deobf("curse.maven:farmers-delight-tfc-951750:5956017")
     implementation fg.deobf("curse.maven:createaddition-439890:7208610")
     implementation fg.deobf("curse.maven:create-low-heated-873945:6789818")
+    implementation fg.deobf("curse.maven:more-create-burners-1111030:7395216")
 
     //PATCHOULI
     compileOnly fg.deobf("vazkii.patchouli:Patchouli:${minecraft_version}-${patchouli_version}:api")

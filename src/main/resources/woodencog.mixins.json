@@ -28,6 +28,7 @@
     "chains.MixinChainConveyorConnectionHandler",
     "chains.MixinChainConveyorConnectionPacket",
     "chains.MixinChainConveyorRenderer",
+    "heat.MixinBaseBurnerBlockEntity",
     "heat.MixinBasicBurnerBlockEntity",
     "heat.MixinBasinBlockEntity",
     "heat.MixinBlazeBurnerBlockEntity",

@@ -81,6 +81,8 @@ public abstract class MixinBasinBlockEntity implements BasinBlockEntityExtended 
         if (t > 0) return t;
         t = Compat.CLH_INSTANCE.getTFCTemperatureOf(source);
         if (t > 0) return t;
+        t = Compat.CMB_INSTANCE.getTFCTemperatureOf(source);
+        if (t > 0) return t;
 
         //Blocks
         Block sourceBlock = level.getBlockState(((BlockEntityAccessor) this).getBlockPos().below()).getBlock();
