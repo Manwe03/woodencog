@@ -35,7 +35,7 @@ public abstract class MixinBlazeBurnerBlockEntity implements BlazeBurnerBlockent
 
         Level level = ((BlockEntityAccessor) this).getLevel();
         if(!level.isClientSide()){
-            HeatCapability.provideHeatTo(level, ((BlockEntityAccessor) this).getBlockPos().above(), getTemperature());
+            HeatCapability.provideHeatTo(level, ((BlockEntityAccessor) this).getWorldPosition().above(), getTemperature());
         }
     }
 }

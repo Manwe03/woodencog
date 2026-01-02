@@ -17,6 +17,6 @@ public class MixinBasicBurnerBlockEntity {
     void tick(CallbackInfo ci){
         Level level = ((BlockEntityAccessor) this).getLevel();
         float temp = Compat.CLH_INSTANCE.getTFCTemperatureOf((BasicBurnerBlockEntity)(Object)this);
-        HeatCapability.provideHeatTo(level, ((BlockEntityAccessor) this).getBlockPos().above(), temp);
+        HeatCapability.provideHeatTo(level, ((BlockEntityAccessor) this).getWorldPosition().above(), temp);
     }
 }

@@ -13,7 +13,4 @@ public interface BlockEntityAccessor {
 
     @Accessor("level")
     Level getLevel();
-
-    @Accessor("worldPosition")
-    BlockPos getBlockPos();
 }

@@ -67,7 +67,7 @@ public abstract class MixinBasinBlockEntity implements BasinBlockEntityExtended 
     public float getHeatSourceTemperature(){
         Level level = ((BlockEntityAccessor) this).getLevel();
         //BlockEntities
-        BlockEntity source = level.getBlockEntity(((BlockEntityAccessor) this).getBlockPos().below());
+        BlockEntity source = level.getBlockEntity(((BlockEntityAccessor) this).getWorldPosition().below());
         if (source instanceof CharcoalForgeBlockEntity charcoalForgeBlockEntity) {
             return charcoalForgeBlockEntity.getTemperature();
         } else if(source instanceof BlazeBurnerBlockentityExtended blazeBurnerBlockEntity){
@@ -85,7 +85,7 @@ public abstract class MixinBasinBlockEntity implements BasinBlockEntityExtended 
         if (t > 0) return t;
 
         //Blocks
-        Block sourceBlock = level.getBlockState(((BlockEntityAccessor) this).getBlockPos().below()).getBlock();
+        Block sourceBlock = level.getBlockState(((BlockEntityAccessor) this).getWorldPosition().below()).getBlock();
         RegistryAccess registry = level.registryAccess();
         Map<ResourceLocation, Integer> temperatureData = registry.registryOrThrow(DataPackRegistries.TEMPERATURE_KEY).get(DataPackRegistries.BLOCK_TEMPERATURE_LOCATION);
         ResourceLocation id = registry.registryOrThrow(Registries.BLOCK).getKey(sourceBlock);

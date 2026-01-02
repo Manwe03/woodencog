@@ -17,6 +17,6 @@ public class MixinLiquidBlazeBurnerBlockEntity {
     void tick(CallbackInfo ci){
         Level level = ((BlockEntityAccessor) this).getLevel();
         float temp = Compat.CCA_INSTANCE.getTFCTemperatureOf((LiquidBlazeBurnerBlockEntity)(Object)this);
-        HeatCapability.provideHeatTo(level, ((BlockEntityAccessor) this).getBlockPos().above(), temp);
+        HeatCapability.provideHeatTo(level, ((BlockEntityAccessor) this).getWorldPosition().above(), temp);
     }
 }

@@ -18,6 +18,6 @@ public class MixinBaseBurnerBlockEntity {
     @Inject(method = "tick", at = @At("HEAD"))
     void tick(Level level, BlockPos pos, BlockState state, CallbackInfo ci){
         float temp = Compat.CMB_INSTANCE.getTFCTemperatureOf((BaseBurnerBlockEntity)(Object)this);
-        HeatCapability.provideHeatTo(level, ((BlockEntityAccessor) this).getBlockPos().above(), temp);
+        HeatCapability.provideHeatTo(level, ((BlockEntityAccessor) this).getWorldPosition().above(), temp);
     }
 }
