@@ -58,7 +58,9 @@ public class MixinFanProcessing {
                 ItemStack output = recipe.assemble(new ItemStackInventory(inputStack), null);
                 if(output.isEmpty()) return inputStack; //No output for this recipe do not change input
                 FluidStack fluidStack = recipe.assembleFluid(new ItemStackInventory(inputStack));
-                if(!fluidStack.isEmpty()) return ItemStack.EMPTY; //Melting recipe input is distorted
+                if(!fluidStack.isEmpty()) {
+                    return ItemStack.EMPTY; //Melting recipe input is distorted
+                }
 
                 if(FoodCapability.has(output)) FoodCapability.applyTrait(output, FoodTraits.WOOD_GRILLED);
 
@@ -79,23 +81,29 @@ public class MixinFanProcessing {
         ItemStack inputStack = transported.stack;
 
         if(inputStack.getCapability(HeatCapability.CAPABILITY).isPresent() && WoodenCogCommonConfigs.HANDLE_TEMPERATURE.get()){
-            if(inputStack.getCapability(HeatCapability.CAPABILITY).resolve().isEmpty()) return;
+            if(inputStack.getCapability(HeatCapability.CAPABILITY).resolve().isEmpty()) {
+                cir.setReturnValue(TransportedItemStackHandlerBehaviour.TransportedResult.doNothing());
+                return;
+            }
 
             IHeat cap = inputStack.getCapability(HeatCapability.CAPABILITY).resolve().get();
 
             MixinFanProcessing.applyTemp(inputStack, cap, type, world.registryAccess());
             ItemStack result = MixinFanProcessing.applyTFCHeatingRecipe(inputStack, cap);
 
-            if(!result.equals(inputStack)){ //Recipe was found change item and cancel apply
-                if (result == ItemStack.EMPTY){
-                    cir.setReturnValue(TransportedItemStackHandlerBehaviour.TransportedResult.removeItem());
-                }else{
-                    TransportedItemStack newTransportedStack = transported.getSimilar();
-                    newTransportedStack.stack = result;
-                    cir.setReturnValue(TransportedItemStackHandlerBehaviour.TransportedResult.convertTo(newTransportedStack));
-                }
-                cir.cancel();
+            if(result.equals(inputStack)){
+                cir.setReturnValue(TransportedItemStackHandlerBehaviour.TransportedResult.doNothing());
+                return;
             }
+
+            if(result == ItemStack.EMPTY){
+                cir.setReturnValue(TransportedItemStackHandlerBehaviour.TransportedResult.removeItem());
+            }else{
+                TransportedItemStack newTransportedStack = transported.getSimilar();
+                newTransportedStack.stack = result;
+                cir.setReturnValue(TransportedItemStackHandlerBehaviour.TransportedResult.convertTo(newTransportedStack));
+            }
+            cir.cancel();
         }
     }
 
@@ -116,16 +124,18 @@ public class MixinFanProcessing {
             MixinFanProcessing.applyTemp(inputStack, cap, type, entity.level().registryAccess());
             ItemStack result = MixinFanProcessing.applyTFCHeatingRecipe(inputStack, cap);
 
-            if(!result.equals(inputStack)){ //Recipe was found change item and cancel apply
-                if (result == ItemStack.EMPTY){
-                    System.out.println("Kill entity");
-                    entity.kill();
-                }else{
-                    entity.setItem(result);
-                }
+            if(result.equals(inputStack)){
                 cir.setReturnValue(false);
-                cir.cancel();
+                return;
             }
+
+            if (result == ItemStack.EMPTY){
+                entity.kill();
+            }else{
+                entity.setItem(result);
+            }
+            cir.setReturnValue(true);
+            cir.cancel();
         }
     }
 

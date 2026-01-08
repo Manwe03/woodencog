@@ -28,11 +28,11 @@ public abstract class MixinRecipeApplier {
      * @reason Inject handling heated recipes in world (pressing recipes)
      */
     @Inject(
-            method = "applyRecipeOn(Lnet/minecraft/world/level/Level;Lnet/minecraft/world/item/ItemStack;Lnet/minecraft/world/item/crafting/Recipe;)Ljava/util/List;",
+            method = "applyRecipeOn(Lnet/minecraft/world/level/Level;Lnet/minecraft/world/item/ItemStack;Lnet/minecraft/world/item/crafting/Recipe;Z)Ljava/util/List;",
             at = @At("HEAD"),
             cancellable = true
     )
-    private static void onApplyRecipeOnAtHead(Level level, ItemStack stackIn, Recipe<?> recipe, CallbackInfoReturnable<List<ItemStack>> cir) {
+    private static void onApplyRecipeOnAtHead(Level level, ItemStack stackIn, Recipe<?> recipe, boolean returnProcessingRemainder, CallbackInfoReturnable<List<ItemStack>> cir) {
         List<ItemStack> stacks;
         if (recipe instanceof HeatedProcessingRecipe<?> pr) {
             float inputTemp = 0;
@@ -74,12 +74,12 @@ public abstract class MixinRecipeApplier {
      * @reason Replace method to allow usage of current item not referenced item
      */
     @Inject(
-            method = "applyRecipeOn(Lnet/minecraft/world/level/Level;Lnet/minecraft/world/item/ItemStack;Lnet/minecraft/world/item/crafting/Recipe;)Ljava/util/List;",
+            method = "applyRecipeOn(Lnet/minecraft/world/level/Level;Lnet/minecraft/world/item/ItemStack;Lnet/minecraft/world/item/crafting/Recipe;Z)Ljava/util/List;",
             at = @At("RETURN"),
             locals = LocalCapture.CAPTURE_FAILSOFT,
             cancellable = true
     )
-    private static void onApplyRecipeOnAtReturn(Level level, ItemStack stackIn, Recipe<?> recipe, CallbackInfoReturnable<List<ItemStack>> cir, List<ItemStack> stacks, ItemStack out) {
+    private static void onApplyRecipeOnAtReturn(Level level, ItemStack stackIn, Recipe<?> recipe, boolean returnProcessingRemainder, CallbackInfoReturnable<List<ItemStack>> cir, List<ItemStack> stacks, ItemStack out) {
         //Handles the recipe if (advanced recipe)
         if (recipe instanceof ProcessingRecipe<?> pr) {
             boolean is_advanced_recipe = AllAdvancedRecipeTypes.CACHES.containsKey(pr.getId().toString());
