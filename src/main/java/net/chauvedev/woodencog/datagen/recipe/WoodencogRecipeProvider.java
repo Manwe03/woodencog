@@ -221,7 +221,7 @@ public class WoodencogRecipeProvider extends RecipeProvider {
             if(metal.hasDoubleIngot()){
                 //Sheet recipes
                 new HeatedProcessingRecipeBuilder<>(HeatedPressingRecipe::new)
-                        .withItemIngredients(HeatedIngredient.of(Ingredient.of(doubleIngot),metal.getMeltTemperature(),3000))
+                        .withItemIngredients(HeatedIngredient.of(Ingredient.of(doubleIngot), metal.getForginTemperature(),3000))
                         .withItemOutputs(HeatedProcessingOutput.of(sheet,1,1,0,true,0))
                         .build(consumer, WoodenCog.asResource("sheet_"+metal.id()));
 
