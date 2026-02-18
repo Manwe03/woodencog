@@ -3,7 +3,7 @@
   "barrel_crafting": "Crafting",
 
   "block.woodencog.ct_transformer": "Wooden Transformer",
-  "block.woodencog.ct_transformer.tooltip.summary": "Wooden Transformers are a new TFC rotation source. Convert form Create to TFC rotation. Rotation speed is matched from input to output.",
+  "block.woodencog.ct_transformer.tooltip.summary": "Wooden Transformers are a new TFC rotation source. Convert from Create to TFC rotation. Rotation speed is matched from input to output.",
 
   "block.woodencog.wooden_generator": "Wooden Generator",
 
