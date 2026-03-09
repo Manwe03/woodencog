@@ -88,7 +88,6 @@ public abstract class MixinChainConveyorBlockEntity implements ChainConveyorBloc
     public void addConnectionToWithChain(BlockPos target, ItemLike chain) {
         BlockPos localTarget = target.subtract(((BlockEntityAccessor)this).getWorldPosition());
         connectionsChain.put(localTarget, chain);
-        System.out.println(((BlockEntityAccessor)this).getWorldPosition() + "Add chain "+localTarget);
     }
     //Add Connection
 
