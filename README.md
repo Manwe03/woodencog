@@ -23,7 +23,6 @@ currently it includes :
 
 I'm currently working on a partial (maybe entire) rewrite of the project to make it more compatible with JEI and other create addons
 - (WIP) Sequenced assembly recipes.
-- (WIP) Move js recipe generation to java
 
 If you know any issue with other mods open an issue on this repo I'll look into it
 
