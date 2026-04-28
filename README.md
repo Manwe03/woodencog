@@ -9,9 +9,6 @@ go check him out his videos are pretty cool. Also, here's the original [mod](htt
 
 Some of the code also came from the [Tinker's construct](https://github.com/SlimeKnights/TinkersConstruct) mod (the small crucible) I updated it to my needs.
 
-This mod is still in early stages and probably need a lot refactoring but still can be used.
-I'll soon update my generators (yeah the Node.js mess in generators dir) to generate all missing crafts in this mod.
-
 currently it includes :
 - Mixer alloying recipes
 - Custom basin to allow more fluids into it (4)
