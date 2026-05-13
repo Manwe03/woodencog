@@ -109,8 +109,7 @@ public abstract class HeatedProcessingRecipe<T extends Container> implements Rec
      */
     public @NotNull NonNullList<Ingredient> getIngredients() {
         WoodenCog.LOGGER.warn("Fetched [Ingredients] instead of [HeatableIngredients] for: " + this.id);
-        //Thread.dumpStack();
-        return NonNullList.create();
+        return this.getHeatedIngredients();
     }
     public NonNullList<Ingredient> getHeatedIngredients(){
         return this.ingredients;

@@ -136,7 +136,7 @@ public class CogUtil {
      * Use with precaution as this method temperature handling is not precise and has very limited temp values
      */
     public static float tempFromBlockstate(int blockstateHeat){
-        return ((blockstateHeat - 1)/6.0F)*Heat.maxVisibleTemperature();
+        return ((blockstateHeat - 1)/6.0F) * WoodenCogCommonConfigs.BLAZE_BURNER_SEETHING.get().floatValue(); // set max temperature as max config
     }
 
     public static float toRadPerTick(float rpm) {
