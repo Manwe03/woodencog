@@ -47,16 +47,16 @@ import static com.simibubi.create.compat.jei.category.CreateRecipeCategory.addFl
  * @see com.simibubi.create.compat.jei.category.BasinCategory
  */
 @ParametersAreNonnullByDefault
-public abstract class HeatedBasinCategory extends WoodenCogRecipeCategory<HeatedBasinRecipe> {
+public abstract class HeatedBasinCategory<T extends HeatedBasinRecipe> extends WoodenCogRecipeCategory<T> {
     private static final ResourceLocation FORGE_TEXTURE = Helpers.identifier("textures/gui/charcoal_forge.png");
     private final AnimatedCharcoalForge heater = new AnimatedCharcoalForge();
 
-    public HeatedBasinCategory(Info<HeatedBasinRecipe> info) {
+    public HeatedBasinCategory(Info<T> info) {
         super(info);
     }
 
     @Override
-    public void setRecipe(IRecipeLayoutBuilder builder, RecipeHolder<HeatedBasinRecipe> recipe, IFocusGroup focuses) {
+    public void setRecipe(IRecipeLayoutBuilder builder, RecipeHolder<T> recipe, IFocusGroup focuses) {
         List<Pair<Ingredient, MutableInt>> condensedIngredients = ItemHelper.condenseIngredients(recipe.value().getIngredients());
 
         int size = condensedIngredients.size() + recipe.value().getFluidIngredients().size();
@@ -133,7 +133,7 @@ public abstract class HeatedBasinCategory extends WoodenCogRecipeCategory<Heated
     }
 
     @Override
-    public void draw(RecipeHolder<HeatedBasinRecipe> recipe, IRecipeSlotsView recipeSlotsView, GuiGraphics guiGraphics, double mouseX, double mouseY) {
+    public void draw(RecipeHolder<T> recipe, IRecipeSlotsView recipeSlotsView, GuiGraphics guiGraphics, double mouseX, double mouseY) {
         WoodenCogHeatCondition requiredHeat = recipe.value().getRequiredHeat();
 
         boolean noHeat = !requiredHeat.hasTemp();

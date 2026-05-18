@@ -75,26 +75,29 @@ public class WoodenCogJEI implements IModPlugin {
     private void loadCategories() {
         allCategories.clear();
 
-        WoodenCogRecipeCategory<?> heatedMixin = builder(HeatedBasinRecipe.class)
+        WoodenCogRecipeCategory<?> heatedMixing = builder(HeatedMixingRecipe.class)
                 .addTypedRecipes(AllHeatedRecipeTypes.HEATED_MIXING)
-                //.catalyst(AllBlocks.MILLSTONE::get)
+                .catalyst(AllBlocks.MECHANICAL_MIXER::get)
+                .catalyst(AllBlocks.BASIN::get)
                 .doubleItemIcon(AllBlocks.MECHANICAL_MIXER.get(), AllBlocks.BASIN.get())
                 .emptyBackground(177, 103)
-                .build("heated_mixin", HeatedMixingCategory::new);
+                .build("heated_mixing", HeatedMixingCategory::new);
 
-        WoodenCogRecipeCategory<?> heatedPressing = builder(HeatedBasinRecipe.class)
+        WoodenCogRecipeCategory<?> heatedPressing = builder(HeatedPressingRecipe.class)
                 .addTypedRecipes(AllHeatedRecipeTypes.HEATED_PRESSING)
-                //.catalyst(AllBlocks.MILLSTONE::get)
+                .catalyst(AllBlocks.MECHANICAL_PRESS::get)
+                .catalyst(AllBlocks.BASIN::get)
                 .doubleItemIcon(AllBlocks.MECHANICAL_PRESS.get(), AllItems.IRON_SHEET.get())
                 .emptyBackground(177, 103)
-                .build("heated_mixin", HeatedMixingCategory::new);
+                .build("heated_pressing", HeatedPressingCategory::new);
 
-        WoodenCogRecipeCategory<?> heatedCompacting = builder(HeatedBasinRecipe.class)
+        WoodenCogRecipeCategory<?> heatedCompacting = builder(HeatedCompactingRecipe.class)
                 .addTypedRecipes(AllHeatedRecipeTypes.HEATED_COMPACTING)
-                //.catalyst(AllBlocks.MILLSTONE::get)
+                .catalyst(AllBlocks.MECHANICAL_PRESS::get)
+                .catalyst(AllBlocks.BASIN::get)
                 .doubleItemIcon(AllBlocks.MECHANICAL_PRESS.get(), AllBlocks.BASIN.get())
                 .emptyBackground(177, 103)
-                .build("heated_mixin", HeatedMixingCategory::new);
+                .build("heated_compacting", HeatedCompactingCategory::new);
     }
 
     @Override
