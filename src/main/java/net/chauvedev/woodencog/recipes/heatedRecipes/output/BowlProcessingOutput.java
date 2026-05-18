@@ -1,11 +1,17 @@
 package net.chauvedev.woodencog.recipes.heatedRecipes.output;
 
-import net.dries007.tfc.common.capabilities.food.*;
+import com.simibubi.create.content.processing.recipe.ProcessingOutput;
+import net.dries007.tfc.common.component.TFCComponents;
+import net.dries007.tfc.common.component.food.FoodCapability;
+import net.dries007.tfc.common.component.food.FoodData;
+import net.dries007.tfc.common.component.food.IFood;
+import net.dries007.tfc.common.component.food.Nutrient;
+import net.dries007.tfc.common.component.item.ItemListComponent;
+import net.dries007.tfc.common.items.TFCItems;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
-import net.minecraftforge.registries.RegistryObject;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.*;
@@ -14,12 +20,16 @@ public abstract class BowlProcessingOutput extends DynamicProcessingOutput<List<
 
     public static final int HUNGER_VALUE = 4;
 
+    public BowlProcessingOutput(ProcessingOutput internal) {
+        super(internal);
+    }
+
     public BowlProcessingOutput(Item outputBowl, int count, float chance) {
-        super(new ItemStack(outputBowl, count), chance);
+        super(new ProcessingOutput(outputBowl,count,chance));
     }
 
     public BowlProcessingOutput(ItemStack outputBowl, float chance) {
-        super(outputBowl,chance);
+        this(new ProcessingOutput(outputBowl,chance));
     }
 
     /**
@@ -28,7 +38,7 @@ public abstract class BowlProcessingOutput extends DynamicProcessingOutput<List<
      */
     public abstract List<ItemStack> getStacks();
 
-    public ItemStack getBowlItem(Map<Nutrient, RegistryObject<Item>> map, float decayModifier){
+    public ItemStack getBowlItem(Map<Nutrient, TFCItems.ItemId> map, float decayModifier){
         List<ItemStack> usedItems = this.getDynamicData();
         usedItems.sort(Comparator.comparing(ItemStack::getCount)
                 .thenComparing((itemx) -> BuiltInRegistries.ITEM.getKey(itemx.getItem())));
@@ -77,25 +87,24 @@ public abstract class BowlProcessingOutput extends DynamicProcessingOutput<List<
                 }
             }
 
-            FoodData data = FoodData.create(HUNGER_VALUE, water, saturation, nutrition, decayModifier);
+            FoodData data = new FoodData(HUNGER_VALUE, water, saturation, 0, nutrition, decayModifier);
 
             long created = FoodCapability.getRoundedCreationDate();
 
-            resultStack = new ItemStack(map.get(maxNutrient).get(), getStack().getCount());
 
-            final @Nullable IFood food = FoodCapability.get(resultStack);
-            if (food instanceof DynamicBowlHandler handler) {
-                handler.setCreationDate(created);
-                handler.setIngredients(itemIngredients);
-                handler.setFood(data);
-            }
+            resultStack = new ItemStack(map.get(maxNutrient).get(), this.getStack().getCount());
 
+            FoodCapability.setFoodForDynamicItemOnCreate(resultStack, data);
+            resultStack.set(TFCComponents.INGREDIENTS, ItemListComponent.of(itemIngredients));
+            FoodCapability.setCreationDate(resultStack,created);
+
+            /* TODO es necesario con la nueva version?
             CompoundTag bowlTag = new CompoundTag();
             bowlTag.putString("id", BuiltInRegistries.ITEM.getKey(getStack().getItem()).toString());
             bowlTag.putByte("Count", (byte) 1);
 
             CompoundTag custom = resultStack.getOrCreateTag();
-            custom.put("bowl", bowlTag);
+            custom.put("bowl", bowlTag);*/
         }
 
         return resultStack;

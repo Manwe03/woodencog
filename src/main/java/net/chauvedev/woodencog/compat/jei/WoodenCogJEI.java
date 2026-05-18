@@ -1,8 +1,20 @@
 package net.chauvedev.woodencog.compat.jei;
 
+import com.simibubi.create.AllBlocks;
+import com.simibubi.create.AllFluids;
+import com.simibubi.create.AllItems;
+import com.simibubi.create.AllRecipeTypes;
 import com.simibubi.create.compat.jei.*;
+import com.simibubi.create.compat.jei.category.BasinCategory;
+import com.simibubi.create.compat.jei.category.CreateRecipeCategory;
+import com.simibubi.create.compat.jei.category.MillingCategory;
 import com.simibubi.create.content.equipment.blueprint.BlueprintScreen;
+import com.simibubi.create.content.fluids.potion.PotionFluid;
+import com.simibubi.create.content.kinetics.crusher.AbstractCrushingRecipe;
+import com.simibubi.create.content.logistics.factoryBoard.FactoryPanelSetItemScreen;
 import com.simibubi.create.content.logistics.filter.AbstractFilterScreen;
+import com.simibubi.create.content.logistics.redstoneRequester.RedstoneRequesterScreen;
+import com.simibubi.create.content.logistics.stockTicker.StockKeeperRequestScreen;
 import com.simibubi.create.content.redstone.link.controller.LinkedControllerScreen;
 import com.simibubi.create.content.trains.schedule.ScheduleScreen;
 import com.simibubi.create.foundation.gui.menu.AbstractSimiContainerScreen;
@@ -10,11 +22,16 @@ import com.simibubi.create.foundation.item.ItemHelper;
 import mezz.jei.api.IModPlugin;
 import mezz.jei.api.JeiPlugin;
 import mezz.jei.api.constants.RecipeTypes;
+import mezz.jei.api.helpers.IPlatformFluidHelper;
+import mezz.jei.api.neoforge.NeoForgeTypes;
+import mezz.jei.api.recipe.category.IRecipeCategory;
 import mezz.jei.api.registration.*;
 import mezz.jei.api.runtime.IIngredientManager;
 import net.chauvedev.woodencog.WoodenCog;
 import net.chauvedev.woodencog.recipes.heatedRecipes.AllHeatedRecipeTypes;
 import net.chauvedev.woodencog.recipes.heatedRecipes.HeatedProcessingRecipe;
+import net.chauvedev.woodencog.recipes.heatedRecipes.HeatedProcessingRecipeParams;
+import net.chauvedev.woodencog.recipes.heatedRecipes.recipes.HeatedBasinRecipe;
 import net.chauvedev.woodencog.recipes.heatedRecipes.recipes.HeatedCompactingRecipe;
 import net.chauvedev.woodencog.recipes.heatedRecipes.recipes.HeatedMixingRecipe;
 import net.chauvedev.woodencog.recipes.heatedRecipes.recipes.HeatedPressingRecipe;
@@ -22,15 +39,22 @@ import net.chauvedev.woodencog.utils.CogUtil;
 import net.chauvedev.woodencog.utils.CreateBlocksAccess;
 import net.chauvedev.woodencog.utils.ItemAccess;
 import net.minecraft.client.Minecraft;
+import net.minecraft.core.Holder;
 import net.minecraft.core.RegistryAccess;
+import net.minecraft.core.registries.Registries;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.Container;
+import net.minecraft.world.effect.MobEffect;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.alchemy.Potion;
+import net.minecraft.world.item.alchemy.PotionContents;
 import net.minecraft.world.item.crafting.*;
 import net.minecraft.world.level.Level;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
+import net.neoforged.api.distmarker.Dist;
+import net.neoforged.api.distmarker.OnlyIn;
+import net.neoforged.neoforge.fluids.FluidStack;
+import org.jetbrains.annotations.NotNull;
 
 import javax.annotation.Nonnull;
 import javax.annotation.ParametersAreNonnullByDefault;
@@ -48,77 +72,104 @@ public class WoodenCogJEI implements IModPlugin {
     private final List<WoodenCogRecipeCategory<?>> allCategories = new ArrayList<>();
     private IIngredientManager ingredientManager;
 
+    private void loadCategories() {
+        allCategories.clear();
+
+        WoodenCogRecipeCategory<?> heatedMixin = builder(HeatedBasinRecipe.class)
+                .addTypedRecipes(AllHeatedRecipeTypes.HEATED_MIXING)
+                //.catalyst(AllBlocks.MILLSTONE::get)
+                .doubleItemIcon(AllBlocks.MECHANICAL_MIXER.get(), AllBlocks.BASIN.get())
+                .emptyBackground(177, 103)
+                .build("heated_mixin", HeatedMixingCategory::new);
+
+        WoodenCogRecipeCategory<?> heatedPressing = builder(HeatedBasinRecipe.class)
+                .addTypedRecipes(AllHeatedRecipeTypes.HEATED_PRESSING)
+                //.catalyst(AllBlocks.MILLSTONE::get)
+                .doubleItemIcon(AllBlocks.MECHANICAL_PRESS.get(), AllItems.IRON_SHEET.get())
+                .emptyBackground(177, 103)
+                .build("heated_mixin", HeatedMixingCategory::new);
+
+        WoodenCogRecipeCategory<?> heatedCompacting = builder(HeatedBasinRecipe.class)
+                .addTypedRecipes(AllHeatedRecipeTypes.HEATED_COMPACTING)
+                //.catalyst(AllBlocks.MILLSTONE::get)
+                .doubleItemIcon(AllBlocks.MECHANICAL_PRESS.get(), AllBlocks.BASIN.get())
+                .emptyBackground(177, 103)
+                .build("heated_mixin", HeatedMixingCategory::new);
+    }
+
     @Override
-    @Nonnull
+    @NotNull
     public ResourceLocation getPluginUid() {
         return ID;
     }
 
     @Override
     public void registerCategories(IRecipeCategoryRegistration registration) {
-        HeatedMixingCategory mixing = new HeatedMixingCategory(new WoodenCogRecipeCategory.Info<>(
-                new mezz.jei.api.recipe.RecipeType<>(WoodenCog.asResource("heated_mixin"),HeatedMixingRecipe.class),
-                Component.translatable("category.woodencog.heated_mixing"),
-                new EmptyBackground(177,103),
-                new DoubleItemIcon(() -> new ItemStack(CreateBlocksAccess.MECHANICAL_MIXER.asItem()), () -> new ItemStack(CreateBlocksAccess.BASIN.asItem())),
-                this.getRecipes(AllHeatedRecipeTypes.HEATED_MIXING.getType()),
-                List.of(()-> CreateBlocksAccess.MECHANICAL_MIXER.asItem().getDefaultInstance(), ()-> CreateBlocksAccess.BASIN.asItem().getDefaultInstance())
-        ));
-        allCategories.add(mixing);
-        registration.addRecipeCategories(mixing);
-
-        HeatedPressingCategory pressing = new HeatedPressingCategory(new WoodenCogRecipeCategory.Info<>(
-                new mezz.jei.api.recipe.RecipeType<>(WoodenCog.asResource("heated_pressing"),HeatedPressingRecipe.class),
-                Component.translatable("category.woodencog.heated_pressing"),
-                new EmptyBackground(177,103),
-                new DoubleItemIcon(() -> new ItemStack(CreateBlocksAccess.MECHANICAL_PRESS.asItem()), ()-> new ItemStack(ItemAccess.IRON_PLATE)),
-                this.getRecipes(AllHeatedRecipeTypes.HEATED_PRESSING.getType()),
-                List.of(()-> CreateBlocksAccess.MECHANICAL_PRESS.asItem().getDefaultInstance())
-        ));
-        allCategories.add(pressing);
-        registration.addRecipeCategories(pressing);
-
-        HeatedCompactingCategory compacting = new HeatedCompactingCategory(new WoodenCogRecipeCategory.Info<>(
-                new mezz.jei.api.recipe.RecipeType<>(WoodenCog.asResource("heated_compacting"),HeatedCompactingRecipe.class),
-                Component.translatable("category.woodencog.heated_compacting"),
-                new EmptyBackground(177,103),
-                new DoubleItemIcon(() -> new ItemStack(CreateBlocksAccess.MECHANICAL_PRESS.asItem()), () -> new ItemStack(CreateBlocksAccess.BASIN.asItem())),
-                this.getRecipes(AllHeatedRecipeTypes.HEATED_COMPACTING.getType()),
-                List.of(()-> CreateBlocksAccess.MECHANICAL_PRESS.asItem().getDefaultInstance())
-        ));
-        allCategories.add(compacting);
-        registration.addRecipeCategories(compacting);
-
-
+        loadCategories();
+        registration.addRecipeCategories(allCategories.toArray(IRecipeCategory[]::new));
     }
 
     @Override
     public void registerRecipes(IRecipeRegistration registration) {
-        allCategories.forEach(woodenCogRecipeCategory -> woodenCogRecipeCategory.registerRecipes(registration)); //register recipe list in category
+        ingredientManager = registration.getIngredientManager();
+
+        allCategories.forEach(c -> c.registerRecipes(registration));
+
+        registration.addRecipes(RecipeTypes.CRAFTING, ToolboxColoringRecipeMaker.createRecipes().toList());
     }
 
     @Override
     public void registerRecipeCatalysts(IRecipeCatalystRegistration registration) {
-        allCategories.forEach(createRecipeCategory -> createRecipeCategory.registerCatalysts(registration));
+        allCategories.forEach(c -> c.registerCatalysts(registration));
     }
 
     @Override
     public void registerRecipeTransferHandlers(IRecipeTransferRegistration registration) {
         registration.addRecipeTransferHandler(new BlueprintTransferHandler(), RecipeTypes.CRAFTING);
+        registration.addUniversalRecipeTransferHandler(new StockKeeperTransferHandler(registration.getJeiHelpers()));
     }
 
-    private <C extends Container, T extends HeatedProcessingRecipe<C>> Supplier<List<T>> getRecipes(RecipeType<T> type){
-        Level level = Minecraft.getInstance().level;
-        if(level != null && level.isClientSide){
-            return () -> // Filter specific recipes
-                    level.getRecipeManager().getAllRecipesFor(type).stream()
-                            .filter(recipe -> recipe instanceof HeatedProcessingRecipe<?>) //filter
-                            .toList();
+    @Override
+    public <T> void registerFluidSubtypes(ISubtypeRegistration registration, IPlatformFluidHelper<T> platformFluidHelper) {
+        PotionFluidSubtypeInterpreter interpreter = new PotionFluidSubtypeInterpreter();
+        PotionFluid potionFluid = AllFluids.POTION.get();
+        registration.registerSubtypeInterpreter(NeoForgeTypes.FLUID_STACK, potionFluid.getSource(), interpreter);
+        registration.registerSubtypeInterpreter(NeoForgeTypes.FLUID_STACK, potionFluid.getFlowing(), interpreter);
+    }
+
+    @Override
+    public void registerExtraIngredients(IExtraIngredientRegistration registration) {
+        RegistryAccess registryAccess = Minecraft.getInstance().level.registryAccess();
+        List<Holder.Reference<Potion>> potions = registryAccess.lookupOrThrow(Registries.POTION)
+                .listElements()
+                .toList();
+        Collection<FluidStack> potionFluids = new ArrayList<>(potions.size() * 3);
+        Set<Set<Holder<MobEffect>>> visitedEffects = new HashSet<>();
+        for (Holder.Reference<Potion> potion : potions) {
+            // @goshante: Ingame potion fluids always have Bottle tag that specifies
+            // to what bottle type this potion belongs
+            // Potion fluid without this tag wouldn't be recognized by other mods
+
+//			for (PotionFluid.BottleType bottleType : PotionFluid.BottleType.values()) {
+//				FluidStack potionFluid = PotionFluid.of(1000, new PotionContents(potion), bottleType);
+//				potionFluids.add(potionFluid);
+//			}
+
+            PotionContents potionContents = new PotionContents(potion);
+
+            if (potionContents.hasEffects()) {
+                Set<Holder<MobEffect>> effectSet = new HashSet<>();
+                potionContents.forEachEffect(mei -> effectSet.add(mei.getEffect()));
+                if (!visitedEffects.add(effectSet))
+                    continue;
+            }
+
+            potionFluids.add(PotionFluid.of(1000, potionContents, PotionFluid.BottleType.REGULAR));
         }
-        return List::of;
+        registration.addExtraIngredients(NeoForgeTypes.FLUID_STACK, potionFluids);
     }
 
-    @SuppressWarnings({ "unchecked", "rawtypes" })
+    @SuppressWarnings({"unchecked", "rawtypes"})
     @Override
     public void registerGuiHandlers(IGuiHandlerRegistration registration) {
         registration.addGenericGuiContainerHandler(AbstractSimiContainerScreen.class, new SlotMover());
@@ -127,13 +178,48 @@ public class WoodenCogJEI implements IModPlugin {
         registration.addGhostIngredientHandler(BlueprintScreen.class, new GhostIngredientHandler());
         registration.addGhostIngredientHandler(LinkedControllerScreen.class, new GhostIngredientHandler());
         registration.addGhostIngredientHandler(ScheduleScreen.class, new GhostIngredientHandler());
+        registration.addGhostIngredientHandler(RedstoneRequesterScreen.class, new GhostIngredientHandler());
+        registration.addGhostIngredientHandler(FactoryPanelSetItemScreen.class, new GhostIngredientHandler());
+
+        registration.addGuiContainerHandler(StockKeeperRequestScreen.class, new StockKeeperGuiContainerHandler(ingredientManager));
     }
 
+    //FACTORY//
+    private <T extends HeatedProcessingRecipe<?,?>> CategoryBuilder<T> builder(Class<T> recipeClass) {
+        return new CategoryBuilder<>(recipeClass);
+    }
+
+    private class CategoryBuilder<T extends HeatedProcessingRecipe<?,?>> extends WoodenCogRecipeCategory.Builder<T> {
+        public CategoryBuilder(Class<? extends T> recipeClass) {
+            super(recipeClass);
+        }
+
+        @Override
+        public WoodenCogRecipeCategory<T> build(ResourceLocation id, WoodenCogRecipeCategory.Factory<T> factory) {
+            WoodenCogRecipeCategory<T> category = super.build(id, factory);
+            allCategories.add(category);
+            return category;
+        }
+    }
+
+    private <C extends Container, T extends HeatedProcessingRecipe<RecipeInput, HeatedProcessingRecipeParams>> Supplier<List<RecipeHolder<T>>> getRecipes(RecipeType<T> type){
+        Level level = Minecraft.getInstance().level;
+        if(level != null && level.isClientSide){
+            return () -> // Filter specific recipes
+                    level.getRecipeManager().getAllRecipesFor(type).stream()
+                            .filter(recipe -> recipe.value() instanceof HeatedProcessingRecipe<?,?>) //filter
+                            .toList();
+        }
+        return List::of;
+    }
+
+
+    //UTILITIES
     public static boolean doInputsMatch(Recipe<?> recipe1, Recipe<?> recipe2) {
         if(recipe1 instanceof HeatedPressingRecipe recipe1H && recipe2 instanceof HeatedPressingRecipe recipe2H){
-            if (recipe1H.getHeatedIngredients().isEmpty() || recipe2H.getHeatedIngredients().isEmpty()) return false;
+            if (recipe1H.getIngredients().isEmpty() || recipe2H.getIngredients().isEmpty()) return false;
 
-            ItemStack[] matchingStacks = recipe1H.getHeatedIngredients().get(0).getItems();
+            ItemStack[] matchingStacks = recipe1H.getIngredients().get(0).getItems();
             if (matchingStacks.length == 0) {
                 return false;
             }

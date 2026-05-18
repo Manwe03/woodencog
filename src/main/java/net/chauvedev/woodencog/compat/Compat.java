@@ -9,10 +9,8 @@ import net.chauvedev.woodencog.compat.createlowheated.ICLHIntegration;
 import net.chauvedev.woodencog.compat.createmoreburners.CMBIntegration;
 import net.chauvedev.woodencog.compat.createmoreburners.CMBIntegrationImpl;
 import net.chauvedev.woodencog.compat.createmoreburners.EmptyCMBIntegration;
-import net.minecraftforge.fml.ModList;
-import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
-import net.minecraftforge.fml.loading.FMLLoader;
-import net.minecraftforge.fml.loading.LoadingModList;
+import net.neoforged.fml.ModList;
+import net.neoforged.fml.loading.LoadingModList;
 
 public class Compat {
 

@@ -5,15 +5,15 @@ import com.simibubi.create.compat.jei.category.sequencedAssembly.SequencedAssemb
 import com.simibubi.create.content.processing.sequenced.IAssemblyRecipe;
 import net.chauvedev.woodencog.recipes.heatedRecipes.AllHeatedRecipeTypes;
 import net.chauvedev.woodencog.recipes.heatedRecipes.HeatedProcessingRecipe;
-import net.chauvedev.woodencog.recipes.heatedRecipes.HeatedProcessingRecipeBuilder;
+import net.chauvedev.woodencog.recipes.heatedRecipes.HeatedProcessingRecipeParams;
+import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.item.crafting.Ingredient;
+import net.minecraft.world.item.crafting.SingleRecipeInput;
 import net.minecraft.world.level.ItemLike;
 import net.minecraft.world.level.Level;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
-import net.minecraftforge.items.wrapper.RecipeWrapper;
-import net.minecraftforge.registries.ForgeRegistries;
+import net.neoforged.api.distmarker.Dist;
+import net.neoforged.api.distmarker.OnlyIn;
 import org.jetbrains.annotations.NotNull;
 
 
@@ -21,14 +21,14 @@ import java.util.List;
 import java.util.Set;
 import java.util.function.Supplier;
 
-public class HeatedPressingRecipe extends HeatedProcessingRecipe<RecipeWrapper> implements IAssemblyRecipe {
+public class HeatedPressingRecipe extends HeatedProcessingRecipe<SingleRecipeInput, HeatedProcessingRecipeParams> implements IAssemblyRecipe {
 
-    public HeatedPressingRecipe(HeatedProcessingRecipeBuilder.HeatedProcessingRecipeParams params) {
+    public HeatedPressingRecipe(HeatedProcessingRecipeParams params) {
         super(AllHeatedRecipeTypes.HEATED_PRESSING, params);
     }
 
     @Override
-    public boolean matches(RecipeWrapper inv, @NotNull Level worldIn) {
+    public boolean matches(SingleRecipeInput inv, @NotNull Level worldIn) {
         if (inv.isEmpty())
             return false;
         return ingredients.get(0).test(inv.getItem(0));
@@ -54,7 +54,7 @@ public class HeatedPressingRecipe extends HeatedProcessingRecipe<RecipeWrapper> 
     }
 
     public void addRequiredMachines(Set<ItemLike> list) {
-        list.add(ForgeRegistries.BLOCKS.getValue(Create.asResource("mechanical_press")));
+        list.add(BuiltInRegistries.BLOCK.get(Create.asResource("mechanical_press")));
     }
 
     @Override

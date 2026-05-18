@@ -4,6 +4,7 @@ import com.simibubi.create.compat.jei.category.animations.AnimatedMixer;
 import mezz.jei.api.gui.ingredient.IRecipeSlotsView;
 import net.chauvedev.woodencog.recipes.heatedRecipes.recipes.HeatedBasinRecipe;
 import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.world.item.crafting.RecipeHolder;
 
 /**
  * Near copy of - credit to the Create team
@@ -23,7 +24,7 @@ public class HeatedMixingCategory extends HeatedBasinCategory {
     }
 
     @Override
-    public void draw(HeatedBasinRecipe recipe, IRecipeSlotsView recipeSlotsView, GuiGraphics guiGraphics, double mouseX, double mouseY) {
+    public void draw(RecipeHolder<HeatedBasinRecipe> recipe, IRecipeSlotsView recipeSlotsView, GuiGraphics guiGraphics, double mouseX, double mouseY) {
         super.draw(recipe, recipeSlotsView, guiGraphics, mouseX, mouseY);
         mixer.draw(guiGraphics, getWidth() / 2 + 3, 34);
     }

@@ -6,14 +6,17 @@ import net.dries007.tfc.common.blocks.TFCBlocks;
 import net.dries007.tfc.common.blocks.rock.Ore;
 import net.dries007.tfc.common.blocks.rock.Rock;
 import net.dries007.tfc.common.items.TFCItems;
+import net.minecraft.core.HolderLookup;
 import net.minecraft.data.PackOutput;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.level.block.Block;
 
+import java.util.concurrent.CompletableFuture;
+
 public class WoodenCogCrushingRecipeGen extends CrushingRecipeGen {
-    public WoodenCogCrushingRecipeGen(PackOutput output) {
-        super(output, WoodenCog.MOD_ID);
+    public WoodenCogCrushingRecipeGen(PackOutput output, CompletableFuture<HolderLookup.Provider> registries) {
+        super(output, registries, WoodenCog.MOD_ID);
 
         TFCBlocks.ROCK_BLOCKS.keySet().forEach(this::crushingRawRock);
     }

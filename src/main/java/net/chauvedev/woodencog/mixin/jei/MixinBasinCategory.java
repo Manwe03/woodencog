@@ -4,7 +4,7 @@ import com.simibubi.create.compat.jei.category.BasinCategory;
 import com.simibubi.create.content.processing.basin.BasinRecipe;
 import com.simibubi.create.content.processing.recipe.HeatCondition;
 import mezz.jei.api.recipe.IFocusGroup;
-import net.dries007.tfc.common.capabilities.heat.Heat;
+import net.dries007.tfc.common.component.heat.Heat;
 import net.dries007.tfc.config.TFCConfig;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Font;

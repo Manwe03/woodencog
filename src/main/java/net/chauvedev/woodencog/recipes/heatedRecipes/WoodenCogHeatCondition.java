@@ -1,6 +1,19 @@
 package net.chauvedev.woodencog.recipes.heatedRecipes;
 
+import com.mojang.serialization.Codec;
+import net.minecraft.network.RegistryFriendlyByteBuf;
+import net.minecraft.network.codec.StreamCodec;
+
 public class WoodenCogHeatCondition {
+
+    public static final WoodenCogHeatCondition NONE = new WoodenCogHeatCondition(0);
+    public static final Codec<WoodenCogHeatCondition> CODEC =
+            Codec.INT.xmap(WoodenCogHeatCondition::of, WoodenCogHeatCondition::serialize);
+    public static final StreamCodec<RegistryFriendlyByteBuf, WoodenCogHeatCondition> STREAM_CODEC =
+            StreamCodec.of(
+                    (buffer, condition) -> buffer.writeVarInt(condition.serialize()),
+                    buffer -> WoodenCogHeatCondition.of(buffer.readVarInt())
+            );
 
     private final int color;
     private final int temperature;

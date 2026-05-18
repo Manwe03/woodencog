@@ -10,6 +10,7 @@ import net.chauvedev.woodencog.recipes.heatedRecipes.output.DynamicProcessingOut
 import net.chauvedev.woodencog.recipes.heatedRecipes.recipes.HeatedPressingRecipe;
 import net.chauvedev.woodencog.utils.Color;
 import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.world.item.crafting.RecipeHolder;
 
 import java.util.List;
 
@@ -21,15 +22,24 @@ public class HeatedPressingCategory extends WoodenCogRecipeCategory<HeatedPressi
         super(info);
     }
 
+
+    /**
+     * Sets all the recipe's ingredients by filling out an instance of {@link IRecipeLayoutBuilder}.
+     * This is used by JEI for lookups, to figure out what ingredients are inputs and outputs for a recipe.
+     *
+     * @param builder
+     * @param recipe
+     * @param focuses
+     * @since 9.4.0
+     */
     @Override
-    public void setRecipe(IRecipeLayoutBuilder builder, HeatedPressingRecipe recipe, IFocusGroup iFocusGroup) {
-        //WoodenCog.LOGGER.info("SET RECIPE FOR PRESSING RECIPES");
+    public void setRecipe(IRecipeLayoutBuilder builder, RecipeHolder<HeatedPressingRecipe> recipe, IFocusGroup focuses) {
         builder
                 .addSlot(RecipeIngredientRole.INPUT, 27, 51)
                 .setBackground(getRenderedSlot(), -1, -1)
-                .addIngredients(recipe.getHeatedIngredients().get(0));
+                .addIngredients(recipe.value().getIngredients().get(0));
 
-        List<DynamicProcessingOutput<?>> results = recipe.getRollableResults();
+        List<DynamicProcessingOutput<?>> results = recipe.value().getRollableResults();
 
         int i = 0;
         for (DynamicProcessingOutput<?> output : results) {
@@ -42,13 +52,13 @@ public class HeatedPressingCategory extends WoodenCogRecipeCategory<HeatedPressi
     }
 
     @Override
-    public void draw(HeatedPressingRecipe recipe, IRecipeSlotsView recipeSlotsView, GuiGraphics guiGraphics, double mouseX, double mouseY) {
+    public void draw(RecipeHolder<HeatedPressingRecipe> recipe, IRecipeSlotsView recipeSlotsView, GuiGraphics guiGraphics, double mouseX, double mouseY) {
         super.draw(recipe, recipeSlotsView, guiGraphics, mouseX, mouseY);
         AllGuiTextures.JEI_SHADOW.render(guiGraphics, 61, 41);
         AllGuiTextures.JEI_LONG_ARROW.render(guiGraphics, 52, 54);
 
         press.draw(guiGraphics, getWidth() / 2 - 17, 22);
 
-        Color.drawCopyHeatBoxPress(recipe,recipeSlotsView,guiGraphics);
+        Color.drawCopyHeatBoxPress(recipe.value(),recipeSlotsView,guiGraphics);
     }
 }

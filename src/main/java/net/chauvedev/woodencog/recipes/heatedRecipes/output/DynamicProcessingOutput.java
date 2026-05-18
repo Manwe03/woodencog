@@ -2,10 +2,15 @@ package net.chauvedev.woodencog.recipes.heatedRecipes.output;
 
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
+import com.mojang.serialization.Codec;
+import com.mojang.serialization.DataResult;
+import com.mojang.serialization.JsonOps;
+import com.mojang.serialization.MapCodec;
 import com.simibubi.create.content.processing.recipe.ProcessingOutput;
-import net.chauvedev.woodencog.WoodenCog;
-import net.minecraft.network.FriendlyByteBuf;
-import net.minecraft.util.GsonHelper;
+import net.minecraft.network.RegistryFriendlyByteBuf;
+import net.minecraft.network.codec.ByteBufCodecs;
+import net.minecraft.network.codec.StreamCodec;
+import net.minecraft.util.RandomSource;
 import net.minecraft.world.item.ItemStack;
 
 /**
@@ -13,14 +18,22 @@ import net.minecraft.world.item.ItemStack;
  * setDynamicData() must be called before rollOutput()
  * @param <T> type of the dynamic data
  */
-public abstract class DynamicProcessingOutput<T> extends ProcessingOutput {
+public abstract class DynamicProcessingOutput<T> {
 
     public static final DynamicProcessingOutput<?> EMPTY;
 
+    public static final Codec<DynamicProcessingOutput<?>> CODEC = ProcessingOutputTypes.CODEC.dispatch(
+            "type", DynamicProcessingOutput::getType, ProcessingOutputTypes::codec);
+
+    public static final StreamCodec<RegistryFriendlyByteBuf, DynamicProcessingOutput<?>> STREAM_CODEC = StreamCodec.of(
+            DynamicProcessingOutput::encode,
+            DynamicProcessingOutput::decode);
+
+    private final ProcessingOutput internal;
     private T data;
 
-    public DynamicProcessingOutput(ItemStack stack, float chance) {
-        super(stack, chance);
+    public DynamicProcessingOutput(ProcessingOutput internal) {
+        this.internal = internal;
     }
 
     public void setDynamicData(T data){
@@ -28,10 +41,30 @@ public abstract class DynamicProcessingOutput<T> extends ProcessingOutput {
     }
 
     public T getDynamicData(){
-        return data;
+        return this.data;
     }
 
     public abstract ProcessingOutputTypes getType();
+
+    public ProcessingOutput getInternal() {
+        return this.internal;
+    }
+
+    public ItemStack getStack() {
+        return internal.getStack();
+    }
+
+    public float getChance() {
+        return internal.getChance();
+    }
+
+    public ItemStack rollOutput() {
+        return rollOutput(RandomSource.create());
+    }
+
+    public ItemStack rollOutput(RandomSource randomSource) {
+        return internal.rollOutput(randomSource);
+    }
 
     public static <T> void setDynamic(DynamicProcessingOutput<T> output, T data) {
         output.setDynamicData(data);
@@ -42,78 +75,59 @@ public abstract class DynamicProcessingOutput<T> extends ProcessingOutput {
         output.setDynamicData((T) data);
     }
 
-    /**
-     * Stores type of output
-     */
-    @Override
-    public JsonElement serialize() {
-        JsonObject json = (JsonObject) super.serialize();
-        json.addProperty("type", this.getType().name().toLowerCase());
-        return json;
-    }
-
-    /**
-     * All write overrides must call super first
-     */
-    @Override
-    public void write(FriendlyByteBuf buf) {
-        buf.writeInt(this.getType().ordinal()); //Save type before anyThing
-        super.write(buf);
-    }
-
-    public static DynamicProcessingOutput<?> deserialize(JsonElement je) {
-        String type = GsonHelper.getAsString((JsonObject) je, "type").toUpperCase();
-        WoodenCog.LOGGER.info("DynamicProcessingOutput deserialize json type: "+type);
-        switch (ProcessingOutputTypes.valueOf(type)){
-            case SALAD -> {
-                return SaladProcessingOutput.deserialize(je);
-            }
-            case SOUP -> {
-                return SoupProcessingOutput.deserialize(je);
-            }
-            case FOOD -> {
-                return FoodProcessingOutput.deserialize(je);
-            }
-            case HEATED -> {
-                return HeatedProcessingOutput.deserialize(je);
-            }
-            default -> {
-                WoodenCog.LOGGER.warn("Could not deserialize output in recipe:\n"+je.getAsString());
-                return null;
-            }
+    private static void encode(RegistryFriendlyByteBuf buffer, DynamicProcessingOutput<?> output) {
+        ByteBufCodecs.VAR_INT.encode(buffer, output.getType().ordinal());
+        switch (output.getType()) {
+            case HEATED -> HeatedProcessingOutput.STREAM_CODEC.encode(buffer, (HeatedProcessingOutput) output);
+            case FOOD -> FoodProcessingOutput.STREAM_CODEC.encode(buffer, (FoodProcessingOutput) output);
+            case SALAD -> SaladProcessingOutput.STREAM_CODEC.encode(buffer, (SaladProcessingOutput) output);
+            case SOUP -> SoupProcessingOutput.STREAM_CODEC.encode(buffer, (SoupProcessingOutput) output);
         }
     }
 
-    public static DynamicProcessingOutput<?> read(FriendlyByteBuf buf) {
-        switch (ProcessingOutputTypes.values()[buf.readInt()]){
-            case SALAD -> {
-                return SaladProcessingOutput.read(buf);
-            }
-            case SOUP -> {
-                return SoupProcessingOutput.read(buf);
-            }
-            case FOOD -> {
-                return FoodProcessingOutput.read(buf);
-            }
-            case HEATED -> {
-                return HeatedProcessingOutput.read(buf);
-            }
-            default -> {
-                WoodenCog.LOGGER.warn("Could not read output in recipe");
-                return null;
-            }
-        }
+    private static DynamicProcessingOutput<?> decode(RegistryFriendlyByteBuf buffer) {
+        return switch (ProcessingOutputTypes.values()[ByteBufCodecs.VAR_INT.decode(buffer)]) {
+            case HEATED -> HeatedProcessingOutput.STREAM_CODEC.decode(buffer);
+            case FOOD -> FoodProcessingOutput.STREAM_CODEC.decode(buffer);
+            case SALAD -> SaladProcessingOutput.STREAM_CODEC.decode(buffer);
+            case SOUP -> SoupProcessingOutput.STREAM_CODEC.decode(buffer);
+        };
     }
 
-    public enum ProcessingOutputTypes{
-        HEATED,
-        FOOD,
-        SALAD,
-        SOUP
+    public enum ProcessingOutputTypes {
+        HEATED("heated", HeatedProcessingOutput.CODEC),
+        FOOD("food", FoodProcessingOutput.CODEC),
+        SALAD("salad", SaladProcessingOutput.CODEC),
+        SOUP("soup", SoupProcessingOutput.CODEC);
+
+        public static final Codec<ProcessingOutputTypes> CODEC = Codec.STRING.comapFlatMap(
+                name -> {
+                    for (ProcessingOutputTypes type : values())
+                        if (type.serializedName.equals(name))
+                            return DataResult.success(type);
+                    return DataResult.error(() -> "Unknown dynamic processing output type: " + name);
+                },
+                ProcessingOutputTypes::serializedName);
+
+        private final String serializedName;
+        private final MapCodec<? extends DynamicProcessingOutput<?>> codec;
+
+        ProcessingOutputTypes(String serializedName, MapCodec<? extends DynamicProcessingOutput<?>> codec) {
+            this.serializedName = serializedName;
+            this.codec = codec;
+        }
+
+        public String serializedName() {
+            return serializedName;
+        }
+
+        public MapCodec<? extends DynamicProcessingOutput<?>> codec() {
+            return codec;
+        }
     }
 
     static {
-        EMPTY = new DynamicProcessingOutput<>(ItemStack.EMPTY, 1.0F) {
+        EMPTY = new DynamicProcessingOutput<>(new ProcessingOutput(ItemStack.EMPTY, 1.0F)) {
             @Override
             public ProcessingOutputTypes getType() {
                 return null;

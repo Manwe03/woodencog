@@ -8,24 +8,26 @@ import net.chauvedev.woodencog.block.transformer.CTTransformerRenderer;
 import net.chauvedev.woodencog.block.WoodencogBlockEntityTypes;
 import net.chauvedev.woodencog.compat.Compat;
 import net.chauvedev.woodencog.config.WoodenCogCommonConfigs;
-import net.chauvedev.woodencog.datagen.DataGenerators;
+import net.chauvedev.woodencog.datagen.WoodenCogDatagen;
 import net.chauvedev.woodencog.datapack.DataPackRegistries;
 import net.chauvedev.woodencog.interaction.CustomArmInteractionPointTypes;
 import net.chauvedev.woodencog.item.WoodencogItems;
 import net.chauvedev.woodencog.ponder.WoodenCogPonderPlugin;
-import net.chauvedev.woodencog.recipes.advancedProcessingRecipe.AllAdvancedRecipeTypes;
 import net.chauvedev.woodencog.recipes.heatedRecipes.AllHeatedRecipeTypes;
 import net.chauvedev.woodencog.block.WoodencogBlocks;
+import net.chauvedev.woodencog.recipes.heatedRecipes.input.WoodenCogIngredients;
 import net.createmod.ponder.foundation.PonderIndex;
+import net.dries007.tfc.common.TFCTags;
 import net.minecraft.client.renderer.blockentity.BlockEntityRenderers;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraftforge.common.MinecraftForge;
-import net.minecraftforge.event.BuildCreativeModeTabContentsEvent;
-import net.minecraftforge.eventbus.api.IEventBus;
-import net.minecraftforge.fml.common.Mod;
-import net.minecraftforge.fml.event.lifecycle.*;
-import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
-import net.minecraftforge.registries.RegisterEvent;
+
+import net.neoforged.bus.api.IEventBus;
+import net.neoforged.fml.ModContainer;
+import net.neoforged.fml.common.Mod;
+import net.neoforged.fml.config.ModConfig;
+import net.neoforged.fml.event.lifecycle.FMLClientSetupEvent;
+import net.neoforged.neoforge.event.BuildCreativeModeTabContentsEvent;
+import net.neoforged.neoforge.registries.RegisterEvent;
 import org.slf4j.Logger;
 
 @Mod(WoodenCog.MOD_ID)
@@ -34,38 +36,31 @@ public class WoodenCog {
     public static final Logger LOGGER = LogUtils.getLogger();
     private static final CreateRegistrate REGISTRATE = CreateRegistrate.create(WoodenCog.MOD_ID);
 
-    public WoodenCog() {
+    public WoodenCog(ModContainer container) {
         Compat.init(); //Load addon compatibility
 
-        FMLJavaModLoadingContext ctx = FMLJavaModLoadingContext.get();
-
-        IEventBus modEventBus = ctx.getModEventBus();
-        modEventBus.addListener(this::setup);
+        IEventBus modEventBus = container.getEventBus();
         modEventBus.addListener(this::onClientSetup);
-        MinecraftForge.EVENT_BUS.register(this);
         REGISTRATE.registerEventListeners(modEventBus);
 
-        WoodenCogCommonConfigs.register(ctx);
+        WoodenCogCommonConfigs.register(container);
 
         WoodencogItems.register(modEventBus);
         WoodencogBlocks.register();
         WoodencogBlockEntityTypes.register();
 
-        AllAdvancedRecipeTypes.register(modEventBus);
         AllHeatedRecipeTypes.register(modEventBus);
 
+        WoodenCogIngredients.register(modEventBus);
+
         modEventBus.addListener(WoodenCog::onRegister);
-        modEventBus.addListener(DataGenerators::gatherData);
+        modEventBus.addListener(WoodenCogDatagen::gatherData);
         modEventBus.addListener(DataPackRegistries::register);
-        modEventBus.addListener(this::addCreative);
+        //modEventBus.addListener(this::addCreative);
     }
 
     public static CreateRegistrate registrate() {
         return REGISTRATE;
-    }
-
-    private void setup(final FMLCommonSetupEvent event) {
-        DataGenerators.registerSerializers();
     }
 
     public static void onRegister(final RegisterEvent event) {

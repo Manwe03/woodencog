@@ -13,6 +13,8 @@ import net.minecraft.sounds.SoundSource;
 import net.minecraft.util.Mth;
 import net.minecraft.world.Container;
 import net.minecraft.world.item.crafting.Recipe;
+import net.minecraft.world.item.crafting.RecipeHolder;
+import net.minecraft.world.item.crafting.RecipeInput;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
@@ -30,8 +32,8 @@ public abstract class MixinMechanicalMixerBlockEntity {
      * @reason Also match for heatedMixing
      */
     @Inject( method = "matchStaticFilters", at = @At("RETURN"), cancellable = true)
-    private <C extends Container> void matchStaticFilters(Recipe<C> recipe, CallbackInfoReturnable<Boolean> cir) {
-        if(!cir.getReturnValue() && recipe.getType() == AllHeatedRecipeTypes.HEATED_MIXING.getType()) cir.setReturnValue(true);
+    private <I extends RecipeInput> void matchStaticFilters(RecipeHolder<? extends Recipe<?>> recipe, CallbackInfoReturnable<Boolean> cir) {
+        if(!cir.getReturnValue() && recipe.value().getType() == AllHeatedRecipeTypes.HEATED_MIXING.getType()) cir.setReturnValue(true);
     }
 
     /**
@@ -97,13 +99,13 @@ public abstract class MixinMechanicalMixerBlockEntity {
         float recipeSpeed = 1.0F;
         Recipe<?> currentRecipe = ((BasinOperatingBlockEntityAccessor) this).getCurrentRecipe();
 
-        if (currentRecipe instanceof ProcessingRecipe<?> processingRecipe) {
+        if (currentRecipe instanceof ProcessingRecipe<?,?> processingRecipe) {
             int t = processingRecipe.getProcessingDuration();
             if (t != 0) {
                 recipeSpeed = (float)t / 100.0F;
             }
         }
-        if (currentRecipe instanceof HeatedProcessingRecipe<?> processingRecipe){
+        if (currentRecipe instanceof HeatedProcessingRecipe<?,?> processingRecipe){
             int t = processingRecipe.getProcessingDuration();
             if (t != 0) {
                 recipeSpeed = (float)t / 100.0F;

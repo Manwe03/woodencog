@@ -2,13 +2,10 @@ package net.chauvedev.woodencog.mixin;
 
 import com.simibubi.create.compat.jei.category.CreateRecipeCategory;
 import com.simibubi.create.content.fluids.transfer.FillingRecipe;
-import net.dries007.tfc.common.capabilities.heat.HeatCapability;
 import net.dries007.tfc.common.recipes.outputs.ItemStackProvider;
-import net.minecraftforge.common.capabilities.ForgeCapabilities;
 import net.dries007.tfc.util.Metal;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.Recipe;
-import net.minecraftforge.fluids.capability.IFluidHandler;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
@@ -19,6 +16,7 @@ public abstract class MixinCreateRecipeCategory {
     public MixinCreateRecipeCategory() {
     }
 
+    /* TODO Re-implementation of AdvancedRecipes
     @Inject(method = {"getResultItem(Lnet/minecraft/world/item/crafting/Recipe;)Lnet/minecraft/world/item/ItemStack;"}, at = {@At(value = "RETURN")}, cancellable = true, remap = false)
     private static void woodencog$getResultItem(Recipe<?> recipe, CallbackInfoReturnable<ItemStack> cir) {
         var output = cir.getReturnValue();
@@ -38,5 +36,5 @@ public abstract class MixinCreateRecipeCategory {
                 }
             }
         }
-    }
+    }*/
 }

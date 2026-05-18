@@ -1,9 +1,8 @@
 package net.chauvedev.woodencog.config;
 
-import net.minecraftforge.common.ForgeConfigSpec;
-import net.minecraftforge.fml.ModLoadingContext;
-import net.minecraftforge.fml.config.ModConfig;
-import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
+import net.neoforged.fml.ModContainer;
+import net.neoforged.fml.config.ModConfig;
+import net.neoforged.neoforge.common.ModConfigSpec;
 
 import java.util.Arrays;
 import java.util.HashMap;
@@ -11,26 +10,26 @@ import java.util.List;
 import java.util.Map;
 
 public class WoodenCogCommonConfigs {
-    public static final ForgeConfigSpec.Builder BUILDER = new ForgeConfigSpec.Builder();
-    public static final ForgeConfigSpec SPEC;
+    public static final ModConfigSpec.Builder BUILDER = new ModConfigSpec.Builder();
+    public static final ModConfigSpec SPEC;
 
-    public static final ForgeConfigSpec.ConfigValue<Boolean> HANDLE_TEMPERATURE;
-    public static final ForgeConfigSpec.ConfigValue<Boolean> DEPLOYER_COPY_TEMPERATURE;
+    public static final ModConfigSpec.ConfigValue<Boolean> HANDLE_TEMPERATURE;
+    public static final ModConfigSpec.ConfigValue<Boolean> DEPLOYER_COPY_TEMPERATURE;
 
-    public static final ForgeConfigSpec.ConfigValue<Double> BLAZE_BURNER_NONE;
-    public static final ForgeConfigSpec.ConfigValue<Double> BLAZE_BURNER_SMOULDERING;
-    public static final ForgeConfigSpec.ConfigValue<Double> BLAZE_BURNER_FADING;
-    public static final ForgeConfigSpec.ConfigValue<Double> BLAZE_BURNER_KINDLED;
-    public static final ForgeConfigSpec.ConfigValue<Double> BLAZE_BURNER_SEETHING;
+    public static final ModConfigSpec.ConfigValue<Double> BLAZE_BURNER_NONE;
+    public static final ModConfigSpec.ConfigValue<Double> BLAZE_BURNER_SMOULDERING;
+    public static final ModConfigSpec.ConfigValue<Double> BLAZE_BURNER_FADING;
+    public static final ModConfigSpec.ConfigValue<Double> BLAZE_BURNER_KINDLED;
+    public static final ModConfigSpec.ConfigValue<Double> BLAZE_BURNER_SEETHING;
 
-    public static final ForgeConfigSpec.ConfigValue<Boolean> NETHERITE_RESKIN;
+    public static final ModConfigSpec.ConfigValue<Boolean> NETHERITE_RESKIN;
 
-    public static final ForgeConfigSpec.ConfigValue<Integer> CT_TRANSFORMER_IMPACT;
-    public static final ForgeConfigSpec.ConfigValue<Integer> WOODEN_GENERATOR_BASE_SU;
-    public static final ForgeConfigSpec.ConfigValue<Integer> WOODEN_GENERATOR_WIND_FACTOR;
-    public static final ForgeConfigSpec.ConfigValue<Integer> WOODEN_GENERATOR_SPEED_FACTOR;
+    public static final ModConfigSpec.ConfigValue<Integer> CT_TRANSFORMER_IMPACT;
+    public static final ModConfigSpec.ConfigValue<Integer> WOODEN_GENERATOR_BASE_SU;
+    public static final ModConfigSpec.ConfigValue<Integer> WOODEN_GENERATOR_WIND_FACTOR;
+    public static final ModConfigSpec.ConfigValue<Integer> WOODEN_GENERATOR_SPEED_FACTOR;
 
-    public static final Map<String, ForgeConfigSpec.ConfigValue<List<Integer>>> MATERIAL_PROPERTIES = new HashMap<>();
+    public static final Map<String, ModConfigSpec.ConfigValue<List<Integer>>> MATERIAL_PROPERTIES = new HashMap<>();
 
     static {
         BUILDER.push("woodencog");
@@ -149,8 +148,8 @@ public class WoodenCogCommonConfigs {
         MATERIAL_PROPERTIES.put(itemId, BUILDER.define(itemId, Arrays.asList(density,heatCapacity)));
     }
 
-    public static void register(FMLJavaModLoadingContext ctx) {
-        ctx.registerConfig(ModConfig.Type.COMMON, WoodenCogCommonConfigs.SPEC, "woodencog-common.toml");
+    public static void register(ModContainer container) {
+        container.registerConfig(ModConfig.Type.COMMON, WoodenCogCommonConfigs.SPEC, "woodencog-common.toml");
     }
 }
 

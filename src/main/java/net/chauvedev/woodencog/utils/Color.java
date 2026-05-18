@@ -28,7 +28,7 @@ public class Color {
         return (a << 24) | (r << 16) | (g << 8) | b;
     }
 
-    public static void drawCopyHeatBoxPress(HeatedProcessingRecipe<?> recipe, IRecipeSlotsView recipeSlotsView, GuiGraphics guiGraphics) {
+    public static void drawCopyHeatBoxPress(HeatedProcessingRecipe<?,?> recipe, IRecipeSlotsView recipeSlotsView, GuiGraphics guiGraphics) {
         drawCopyHeatBoxes(recipe, recipeSlotsView, guiGraphics, (i, size) -> {
             int x = 131 + 19 * i;
             int y = 50;
@@ -36,7 +36,7 @@ public class Color {
         });
     }
 
-    public static void drawCopyHeatBoxBasin(HeatedProcessingRecipe<?> recipe, IRecipeSlotsView recipeSlotsView, GuiGraphics guiGraphics) {
+    public static void drawCopyHeatBoxBasin(HeatedProcessingRecipe<?,?> recipe, IRecipeSlotsView recipeSlotsView, GuiGraphics guiGraphics) {
         drawCopyHeatBoxes(recipe, recipeSlotsView, guiGraphics, (i, size) -> {
             int x = 142 - (size % 2 != 0 && i == size - 1 ? 0 : i % 2 == 0 ? 10 : -9);
             int y = -19 * (i / 2) + 51;
@@ -45,7 +45,7 @@ public class Color {
     }
 
     private static void drawCopyHeatBoxes(
-            HeatedProcessingRecipe<?> recipe,
+            HeatedProcessingRecipe<?,?> recipe,
             IRecipeSlotsView recipeSlotsView,
             GuiGraphics guiGraphics,
             PositionFunction posFunction

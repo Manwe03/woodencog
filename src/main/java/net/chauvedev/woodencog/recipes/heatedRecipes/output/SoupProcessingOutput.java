@@ -3,9 +3,16 @@ package net.chauvedev.woodencog.recipes.heatedRecipes.output;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonSyntaxException;
+import com.mojang.serialization.Codec;
+import com.mojang.serialization.MapCodec;
+import com.mojang.serialization.codecs.RecordCodecBuilder;
+import com.simibubi.create.content.processing.recipe.ProcessingOutput;
+import net.chauvedev.woodencog.recipes.heatedRecipes.input.FoodIngredient;
 import net.dries007.tfc.common.items.TFCItems;
 import net.minecraft.core.registries.BuiltInRegistries;
-import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.network.RegistryFriendlyByteBuf;
+import net.minecraft.network.codec.ByteBufCodecs;
+import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.GsonHelper;
 import net.minecraft.world.item.Item;
@@ -15,6 +22,17 @@ import java.util.List;
 
 public class SoupProcessingOutput extends BowlProcessingOutput{
     public static final float SOUP_DECAY_MODIFIER = 3.5F;
+
+    public static final MapCodec<SoupProcessingOutput> CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(
+            ProcessingOutput.CODEC_NEW.fieldOf("internal").forGetter(DynamicProcessingOutput::getInternal)
+    ).apply(instance, SoupProcessingOutput::new));
+
+    public static final StreamCodec<RegistryFriendlyByteBuf, SoupProcessingOutput> STREAM_CODEC =
+            ByteBufCodecs.fromCodecWithRegistries(CODEC.codec());
+
+    private SoupProcessingOutput(ProcessingOutput internal) {
+        super(internal);
+    }
 
     public SoupProcessingOutput(Item outputBowl, int count, float chance) {
         super(outputBowl, count, chance);
@@ -44,16 +62,11 @@ public class SoupProcessingOutput extends BowlProcessingOutput{
             throw new JsonSyntaxException("ProcessingOutput must be a json object");
         } else {
             JsonObject json = je.getAsJsonObject();
-            String itemId = GsonHelper.getAsString(json, "item");
+            String itemId = GsonHelper.getAsString(json, json.has("id") ? "id" : "item");
             int count = GsonHelper.getAsInt(json, "count", 1);
             float chance = GsonHelper.getAsFloat(json, "chance", 1F);
             return new SoupProcessingOutput(BuiltInRegistries.ITEM.get(ResourceLocation.parse(itemId)), count, chance);
         }
     }
 
-    public static SoupProcessingOutput read(FriendlyByteBuf buf) {
-        ItemStack itemstack = buf.readItem();
-        float chance = buf.readFloat();
-        return new SoupProcessingOutput(itemstack, chance);
-    }
 }

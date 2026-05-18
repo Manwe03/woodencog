@@ -1,34 +1,45 @@
 package net.chauvedev.woodencog.recipes.heatedRecipes.output;
 
 import com.google.gson.*;
-import com.mojang.brigadier.exceptions.CommandSyntaxException;
-import com.simibubi.create.Create;
-import net.chauvedev.woodencog.WoodenCog;
+import com.mojang.serialization.Codec;
+import com.mojang.serialization.MapCodec;
+import com.mojang.serialization.codecs.RecordCodecBuilder;
+import com.simibubi.create.content.processing.recipe.ProcessingOutput;
 import net.chauvedev.woodencog.config.WoodenCogCommonConfigs;
 import net.chauvedev.woodencog.recipes.heatedRecipes.HeatedProcessingRecipeBuilder;
-import net.dries007.tfc.common.capabilities.heat.HeatCapability;
-import net.minecraft.nbt.TagParser;
-import net.minecraft.network.FriendlyByteBuf;
-import net.minecraft.resources.ResourceLocation;
-import net.minecraft.util.GsonHelper;
+import net.dries007.tfc.common.component.heat.HeatCapability;
+import net.minecraft.network.RegistryFriendlyByteBuf;
+import net.minecraft.network.codec.ByteBufCodecs;
+import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.level.ItemLike;
-import net.minecraftforge.registries.ForgeRegistries;
 
 import java.util.*;
 
 public class HeatedProcessingOutput extends DynamicProcessingOutput<Float> {
 
+    public static final MapCodec<HeatedProcessingOutput> CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(
+            ProcessingOutput.CODEC_NEW.fieldOf("internal").forGetter(DynamicProcessingOutput::getInternal),
+            Codec.INT.optionalFieldOf("temperature", 0).forGetter(HeatedProcessingOutput::getTemperature),
+            Codec.BOOL.optionalFieldOf("copy_heat", false).forGetter(HeatedProcessingOutput::getCopyHeat),
+            Codec.INT.optionalFieldOf("cooling", 0).forGetter(HeatedProcessingOutput::getCooling)
+    ).apply(instance, HeatedProcessingOutput::new));
+    public static final StreamCodec<RegistryFriendlyByteBuf, HeatedProcessingOutput> STREAM_CODEC =
+            ByteBufCodecs.fromCodecWithRegistries(CODEC.codec());
+
     private final int temperature;
     private final boolean copyHeat;
     private final int cooling;
 
-    public HeatedProcessingOutput(ItemStack stack, float chance, int temperature, boolean copyHeat, int cooling) {
-        super(stack, chance);
+    public HeatedProcessingOutput(ProcessingOutput processingOutput, int temperature, boolean copyHeat, int cooling) {
+        super(processingOutput);
         this.temperature = temperature;
         this.copyHeat = copyHeat;
         this.cooling = cooling;
+    }
+
+    public HeatedProcessingOutput(ItemStack stack, float chance, int temperature, boolean copyHeat, int cooling) {
+        this(new ProcessingOutput(stack,chance),temperature,copyHeat,cooling);
     }
 
     public HeatedProcessingOutput(ItemStack stack, float chance, HeatedProcessingRecipeBuilder.HeatedIngridientParams params) {
@@ -76,84 +87,5 @@ public class HeatedProcessingOutput extends DynamicProcessingOutput<Float> {
             }
         }
         return outputStack;
-    }
-
-    @Override
-    public JsonElement serialize() {
-        JsonObject json = (JsonObject) super.serialize();
-        json.addProperty("temperature", this.getTemperature());
-        json.addProperty("copy_heat",this.getCopyHeat());
-        json.addProperty("cooling",this.getCooling());
-        return json;
-    }
-
-    @Override
-    public void write(FriendlyByteBuf buf) {
-        super.write(buf);
-        buf.writeInt(getTemperature());
-        buf.writeBoolean(getCopyHeat());
-        buf.writeInt(getCooling());
-    }
-
-    public static HeatedProcessingOutput deserialize(JsonElement je) {
-
-        if (!je.isJsonObject()) {
-            throw new JsonSyntaxException("ProcessingOutput must be a json object");
-        } else {
-            JsonObject json = je.getAsJsonObject();
-            String itemId = GsonHelper.getAsString(json, "item");
-            int count = GsonHelper.getAsInt(json, "count", 1);
-            float chance = GsonHelper.isValidNode(json, "chance") ? GsonHelper.getAsFloat(json, "chance") : 1.0F;
-
-            WoodenCog.LOGGER.info("[WoodenCog] Create Resource Location from: " + itemId);
-            try {
-                ResourceLocation rl = ResourceLocation.tryParse(itemId);
-            } catch (Exception e) {
-                WoodenCog.LOGGER.error("[WoodenCog] Invalid Resource Location: " + itemId, e);
-            }
-
-            ItemLike item = ForgeRegistries.ITEMS.getValue(ResourceLocation.tryParse(itemId));
-            if (item == null) {
-                WoodenCog.LOGGER.error("[WoodenCog] Unknown item in registry: " + ResourceLocation.tryParse(itemId));
-                return null;
-            }
-
-            ItemStack itemstack = new ItemStack(item, count);
-
-            if (GsonHelper.isValidNode(json, "nbt")) {
-                try {
-                    JsonElement element = json.get("nbt");
-                    itemstack.setTag(TagParser.parseTag(element.isJsonObject() ? Create.GSON.toJson(element) : GsonHelper.convertToString(element, "nbt")));
-                } catch (CommandSyntaxException var7) {
-                    WoodenCog.LOGGER.error(Arrays.toString(var7.getStackTrace()));
-                }
-            }
-
-            int temperature = 0;
-            boolean copyHeat = false;
-            int cooling = 0;
-            try {
-                temperature = GsonHelper.getAsInt(json, "temperature");
-            }catch (JsonSyntaxException ignored){}
-            try {
-                copyHeat = GsonHelper.getAsBoolean(json, "copy_heat");
-            }catch (JsonSyntaxException ignored){}
-            try {
-                cooling = GsonHelper.getAsInt(json, "cooling");
-            }catch (JsonSyntaxException ignored){}
-
-            return new HeatedProcessingOutput(itemstack, chance, temperature, copyHeat, cooling);
-        }
-    }
-
-    public static HeatedProcessingOutput read(FriendlyByteBuf buf) {
-
-        ItemStack stack = buf.readItem();
-        float chance = buf.readFloat();
-        int temperature = buf.readInt();
-        boolean copyHeat = buf.readBoolean();
-        int cooling = buf.readInt();
-
-        return new HeatedProcessingOutput(stack, chance, temperature, copyHeat, cooling);
     }
 }

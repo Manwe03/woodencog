@@ -9,8 +9,8 @@ public class CCAIntegrationImpl implements ICCAIntegration{
 
     @Override
     public float getTFCTemperatureOf(BlockEntity be) {
-        if(be instanceof LiquidBlazeBurnerBlockEntity){
-            return CogUtil.heatLevelToTemp(be.getBlockState().getValue(LiquidBlazeBurnerBlock.HEAT_LEVEL));
+        if(be instanceof LiquidBlazeBurnerBlockEntity liquidBurner){
+            return CogUtil.heatLevelToTemp(liquidBurner.getHeatLevelFromBlock());
         }
         return 0;
     }

@@ -3,32 +3,32 @@ package net.chauvedev.woodencog.recipes.heatedRecipes.recipes;
 import com.simibubi.create.content.processing.basin.BasinBlockEntity;
 import com.simibubi.create.foundation.blockEntity.behaviour.filtering.FilteringBehaviour;
 import com.simibubi.create.foundation.blockEntity.behaviour.fluid.SmartFluidTankBehaviour;
-import com.simibubi.create.foundation.fluid.FluidIngredient;
 import com.simibubi.create.foundation.recipe.DummyCraftingContainer;
 import com.simibubi.create.foundation.recipe.IRecipeTypeInfo;
 import net.chauvedev.woodencog.config.WoodenCogCommonConfigs;
-import net.chauvedev.woodencog.mixin.blockEnitites.accessors.BasinBlockEntityAccessor;
 import net.chauvedev.woodencog.recipes.heatedRecipes.AllHeatedRecipeTypes;
 import net.chauvedev.woodencog.recipes.heatedRecipes.HeatedProcessingRecipe;
-import net.chauvedev.woodencog.recipes.heatedRecipes.HeatedProcessingRecipeBuilder;
 import net.chauvedev.woodencog.blockEntities.BasinBlockEntityExtended;
+import net.chauvedev.woodencog.recipes.heatedRecipes.HeatedProcessingRecipeParams;
 import net.chauvedev.woodencog.utils.CogUtil;
 import net.createmod.catnip.data.Iterate;
-import net.minecraft.world.Container;
 import net.minecraft.world.inventory.CraftingContainer;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.crafting.CraftingInput;
 import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.item.crafting.Recipe;
+import net.minecraft.world.item.crafting.RecipeInput;
 import net.minecraft.world.level.Level;
-import net.minecraftforge.common.capabilities.ForgeCapabilities;
-import net.minecraftforge.fluids.FluidStack;
-import net.minecraftforge.fluids.capability.IFluidHandler;
-import net.minecraftforge.items.IItemHandler;
+import net.neoforged.neoforge.capabilities.Capabilities;
+import net.neoforged.neoforge.fluids.FluidStack;
+import net.neoforged.neoforge.fluids.capability.IFluidHandler;
+import net.neoforged.neoforge.fluids.crafting.FluidIngredient;
+import net.neoforged.neoforge.fluids.crafting.SizedFluidIngredient;
+import net.neoforged.neoforge.items.IItemHandler;
 
-import javax.annotation.Nonnull;
 import java.util.*;
 
-public class HeatedBasinRecipe extends HeatedProcessingRecipe<Container> {
+public class HeatedBasinRecipe extends HeatedProcessingRecipe<RecipeInput, HeatedProcessingRecipeParams> {
 
     public static boolean match(BasinBlockEntity basin, Recipe<?> recipe) {
         FilteringBehaviour filter = basin.getFilter();
@@ -62,13 +62,9 @@ public class HeatedBasinRecipe extends HeatedProcessingRecipe<Container> {
 
     private static boolean apply(BasinBlockEntity basin, Recipe<?> recipe, boolean test) {
         if(recipe instanceof HeatedBasinRecipe heatedRecipe){
-            Optional<IItemHandler> optionalAvailableItems = basin.getCapability(ForgeCapabilities.ITEM_HANDLER).resolve();
-            if(CogUtil.logConditional(optionalAvailableItems.isEmpty(), HeatedBasinRecipe.class,"blockEntity has no item handling capability")) return false;
-            IItemHandler availableItems = optionalAvailableItems.get();
-
-            Optional<IFluidHandler> optionalAvailableFluids = basin.getCapability(ForgeCapabilities.FLUID_HANDLER).resolve();
-            if(CogUtil.logConditional(optionalAvailableFluids.isEmpty(), HeatedBasinRecipe.class,"blockEntity has no fluid handling capability")) return false;
-            IFluidHandler availableFluids = optionalAvailableFluids.get();
+            assert basin.getLevel() != null;
+            IItemHandler availableItems = basin.getLevel().getCapability(Capabilities.ItemHandler.BLOCK, basin.getBlockPos(), null);
+            IFluidHandler availableFluids = basin.getLevel().getCapability(Capabilities.FluidHandler.BLOCK, basin.getBlockPos(), null);
 
             try{
                 float temp = ((BasinBlockEntityExtended) basin).getHeatSourceTemperature();
@@ -82,8 +78,8 @@ public class HeatedBasinRecipe extends HeatedProcessingRecipe<Container> {
             List<ItemStack> recipeOutputItems = new ArrayList<>();
             List<FluidStack> recipeOutputFluids = new ArrayList<>();
 
-            List<Ingredient> ingredients = new ArrayList<>(heatedRecipe.getHeatedIngredients());
-            List<FluidIngredient> fluidIngredients = heatedRecipe.getFluidIngredients();
+            List<Ingredient> ingredients = new ArrayList<>(heatedRecipe.getIngredients());
+            List<SizedFluidIngredient> fluidIngredients = heatedRecipe.getFluidIngredients();
 
             for (boolean simulate : Iterate.trueAndFalse) {
 
@@ -113,8 +109,8 @@ public class HeatedBasinRecipe extends HeatedProcessingRecipe<Container> {
 
                 boolean fluidsAffected = false;
                 FluidIngredients:
-                for (FluidIngredient fluidIngredient : fluidIngredients) {
-                    int amountRequired = fluidIngredient.getRequiredAmount();
+                for (SizedFluidIngredient fluidIngredient : fluidIngredients) {
+                    int amountRequired = fluidIngredient.amount();
 
                     for (int tank = 0; tank < availableFluids.getTanks(); tank++) {
                         FluidStack fluidStack = availableFluids.getFluidInTank(tank);
@@ -146,6 +142,8 @@ public class HeatedBasinRecipe extends HeatedProcessingRecipe<Container> {
                 }
 
                 if (simulate) {
+                    CraftingInput remainderInput = new DummyCraftingContainer(availableItems, extractedItemsFromSlot).asCraftInput();
+
                     if (WoodenCogCommonConfigs.HANDLE_TEMPERATURE.get()) {
                         List<ItemStack> extractedItems = new ArrayList<>();
                         for (int slot = 0; slot < availableItems.getSlots(); slot++) {
@@ -157,22 +155,18 @@ public class HeatedBasinRecipe extends HeatedProcessingRecipe<Container> {
                                 extractedItems.add(used);
                             }
                         }
-                        recipeOutputItems.addAll(heatedRecipe.rollResults(extractedItems));
+                        recipeOutputItems.addAll(heatedRecipe.rollResults(extractedItems,basin.getLevel().random));
                     } else {
-                        recipeOutputItems.addAll(heatedRecipe.rollResults(null));
+                        recipeOutputItems.addAll(heatedRecipe.rollResults(List.of(),basin.getLevel().random));
                     }
-
-
-                    CraftingContainer remainderContainer = new DummyCraftingContainer(availableItems, extractedItemsFromSlot);
 
                     for (FluidStack fluidStack : heatedRecipe.getFluidResults())
                         if (!fluidStack.isEmpty()) recipeOutputFluids.add(fluidStack);
-                    for (ItemStack stack : heatedRecipe.getRemainingItems(remainderContainer))
+                    for (ItemStack stack : heatedRecipe.getRemainingItems(remainderInput))
                         if (!stack.isEmpty()) recipeOutputItems.add(stack);
                 }
 
                 if (!basin.acceptOutputs(recipeOutputItems, recipeOutputFluids, simulate)){
-                    //WoodenCog.LOGGER.info("Basin cant accept outputs");
                     return false;
                 }
             }
@@ -181,11 +175,11 @@ public class HeatedBasinRecipe extends HeatedProcessingRecipe<Container> {
         return false;
     }
 
-    protected HeatedBasinRecipe(IRecipeTypeInfo type, HeatedProcessingRecipeBuilder.HeatedProcessingRecipeParams params) {
+    protected HeatedBasinRecipe(IRecipeTypeInfo type, HeatedProcessingRecipeParams params) {
         super(type, params);
     }
 
-    public HeatedBasinRecipe(HeatedProcessingRecipeBuilder.HeatedProcessingRecipeParams params) {
+    public HeatedBasinRecipe(HeatedProcessingRecipeParams params) {
         this(AllHeatedRecipeTypes.HEATED_BASIN, params);
     }
 
@@ -220,7 +214,7 @@ public class HeatedBasinRecipe extends HeatedProcessingRecipe<Container> {
     }
 
     @Override
-    public boolean matches(Container inv, @Nonnull Level worldIn) {
+    public boolean matches(RecipeInput input, Level level) {
         return false;
     }
 }

@@ -9,15 +9,21 @@ import net.dries007.tfc.common.fluids.SimpleFluid;
 import net.dries007.tfc.common.fluids.TFCFluids;
 import net.dries007.tfc.common.items.Powder;
 import net.dries007.tfc.common.items.TFCItems;
+import net.minecraft.core.HolderLookup;
 import net.minecraft.data.PackOutput;
 import net.minecraft.world.item.DyeColor;
 import net.minecraft.world.item.Item;
+import net.minecraft.world.level.material.FlowingFluid;
 import net.minecraft.world.level.material.Fluid;
 import net.minecraft.world.level.material.Fluids;
+import net.neoforged.neoforge.fluids.FluidStack;
+import net.neoforged.neoforge.fluids.crafting.FluidIngredient;
+
+import java.util.concurrent.CompletableFuture;
 
 public class WoodenCogMixingRecipeGen extends MixingRecipeGen {
-    public WoodenCogMixingRecipeGen(PackOutput output) {
-        super(output, WoodenCog.MOD_ID);
+    public WoodenCogMixingRecipeGen(PackOutput output, CompletableFuture<HolderLookup.Provider> registries) {
+        super(output, registries, WoodenCog.MOD_ID);
 
         TFCFluids.COLORED_FLUIDS.keySet().forEach(this::dyeing);
     }
@@ -27,12 +33,12 @@ public class WoodenCogMixingRecipeGen extends MixingRecipeGen {
     LIMEWATER_FROM_LIME = create("limewater_from_lime", b ->
             b.require(Fluids.WATER, 500)
             .require(getPowderItem(Powder.LIME))
-            .output(getSimpleFluid(SimpleFluid.LIMEWATER), 500)),
+            .output(getFlowingFluid(SimpleFluid.LIMEWATER), 500)),
 
     LIMEWATER_FROM_FLUX = create("limewater_from_flux", b ->
             b.require(Fluids.WATER, 500)
             .require(getPowderItem(Powder.FLUX))
-            .output(getSimpleFluid(SimpleFluid.LIMEWATER), 500)),
+            .output(getFlowingFluid(SimpleFluid.LIMEWATER), 500)),
 
     LYE = create("lye", b ->
             b.require(Fluids.WATER, 1000)
@@ -42,22 +48,22 @@ public class WoodenCogMixingRecipeGen extends MixingRecipeGen {
             .require(getPowderItem(Powder.WOOD_ASH))
             .require(getPowderItem(Powder.WOOD_ASH))
             .requiresHeat(HeatCondition.HEATED)
-            .output(getSimpleFluid(SimpleFluid.LYE), 1000)),
+            .output(getFlowingFluid(SimpleFluid.LYE), 1000)),
 
     LYE_RAW_ALABASTER = create("lye_raw_alabaster", b ->
-            b.require(getSimpleFluid(SimpleFluid.LYE), 25)
+            b.require(getFlowingFluid(SimpleFluid.LYE), 25)
             .require(ModTags.Items.COLORED_RAW_ALABASTER)
             .output(TFCBlocks.PLAIN_ALABASTER.get())
             .duration(600)),
 
     LYE_ALABASTER_BRICKS = create("lye_alabaster_bricks", b ->
-            b.require(getSimpleFluid(SimpleFluid.LYE), 25)
+            b.require(getFlowingFluid(SimpleFluid.LYE), 25)
             .require(ModTags.Items.COLORED_BRICKS_ALABASTER)
             .output(TFCBlocks.PLAIN_ALABASTER_BRICKS.get())
             .duration(600)),
 
     LYE_POLISHED_ALABASTER = create("lye_polished_alabaster", b ->
-            b.require(getSimpleFluid(SimpleFluid.LYE), 25)
+            b.require(getFlowingFluid(SimpleFluid.LYE), 25)
             .require(ModTags.Items.COLORED_POLISHED_ALABASTER)
             .output(TFCBlocks.PLAIN_POLISHED_ALABASTER.get())
             .duration(600));
@@ -92,7 +98,7 @@ public class WoodenCogMixingRecipeGen extends MixingRecipeGen {
         return TFCItems.POWDERS.get(powder).get();
     }
 
-    private Fluid getSimpleFluid(SimpleFluid fluid) {
+    private FlowingFluid getFlowingFluid(SimpleFluid fluid) {
         return TFCFluids.SIMPLE_FLUIDS.get(fluid).getSource();
     }
 }

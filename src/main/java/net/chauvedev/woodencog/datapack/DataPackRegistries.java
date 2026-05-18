@@ -12,7 +12,7 @@ import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
-import net.minecraftforge.registries.DataPackRegistryEvent;
+import net.neoforged.neoforge.registries.DataPackRegistryEvent;
 
 import java.util.*;
 

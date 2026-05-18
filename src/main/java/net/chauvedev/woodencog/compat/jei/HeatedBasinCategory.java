@@ -1,14 +1,19 @@
 package net.chauvedev.woodencog.compat.jei;
 
-import com.simibubi.create.foundation.fluid.FluidIngredient;
+import com.simibubi.create.AllBlocks;
+import com.simibubi.create.AllItems;
+import com.simibubi.create.content.processing.basin.BasinRecipe;
+import com.simibubi.create.content.processing.burner.BlazeBurnerBlock;
+import com.simibubi.create.content.processing.recipe.HeatCondition;
+import com.simibubi.create.content.processing.recipe.ProcessingOutput;
 import com.simibubi.create.foundation.gui.AllGuiTextures;
-import mezz.jei.api.forge.ForgeTypes;
+import com.simibubi.create.foundation.item.ItemHelper;
 import mezz.jei.api.gui.builder.IRecipeLayoutBuilder;
 import mezz.jei.api.gui.ingredient.IRecipeSlotsView;
 import mezz.jei.api.recipe.IFocusGroup;
 import mezz.jei.api.recipe.RecipeIngredientRole;
 import net.chauvedev.woodencog.compat.jei.animatedBlocks.AnimatedCharcoalForge;
-import net.chauvedev.woodencog.mixin.recipes.HeatableIngredientAccessor;
+import net.chauvedev.woodencog.recipes.heatedRecipes.input.HeatedIngredient;
 import net.chauvedev.woodencog.recipes.heatedRecipes.output.BowlProcessingOutput;
 import net.chauvedev.woodencog.recipes.heatedRecipes.output.DynamicProcessingOutput;
 import net.chauvedev.woodencog.recipes.heatedRecipes.WoodenCogHeatCondition;
@@ -17,21 +22,25 @@ import net.chauvedev.woodencog.utils.Color;
 import net.chauvedev.woodencog.utils.HeatedItemHelper;
 import net.createmod.catnip.data.Pair;
 import net.dries007.tfc.common.blocks.TFCBlocks;
-import net.dries007.tfc.common.capabilities.heat.Heat;
-import net.dries007.tfc.common.capabilities.heat.HeatCapability;
-import net.dries007.tfc.common.recipes.ingredients.HeatableIngredient;
+import net.dries007.tfc.common.component.heat.Heat;
+import net.dries007.tfc.common.component.heat.HeatCapability;
 import net.dries007.tfc.util.Helpers;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.Ingredient;
-import net.minecraftforge.fluids.FluidStack;
+import net.minecraft.world.item.crafting.RecipeHolder;
+import net.neoforged.neoforge.fluids.FluidStack;
+import net.neoforged.neoforge.fluids.crafting.FluidIngredient;
+import net.neoforged.neoforge.fluids.crafting.SizedFluidIngredient;
 import org.apache.commons.lang3.mutable.MutableInt;
 
 import javax.annotation.ParametersAreNonnullByDefault;
 import java.util.ArrayList;
 import java.util.List;
+
+import static com.simibubi.create.compat.jei.category.CreateRecipeCategory.addFluidSlot;
 
 /**
  * Near copy of - credit to the Create team
@@ -47,47 +56,49 @@ public abstract class HeatedBasinCategory extends WoodenCogRecipeCategory<Heated
     }
 
     @Override
-    public void setRecipe(IRecipeLayoutBuilder builder, HeatedBasinRecipe recipe, IFocusGroup iFocusGroup) {
-        List<Pair<Ingredient, MutableInt>> condensedIngredients = HeatedItemHelper.condenseIngredients(recipe.getHeatedIngredients());
+    public void setRecipe(IRecipeLayoutBuilder builder, RecipeHolder<HeatedBasinRecipe> recipe, IFocusGroup focuses) {
+        List<Pair<Ingredient, MutableInt>> condensedIngredients = ItemHelper.condenseIngredients(recipe.value().getIngredients());
 
-        int size = condensedIngredients.size() + recipe.getFluidIngredients().size();
-        int xOffset = size < 3 ? (3 - size) * 19 / 2 : 9;
+        int size = condensedIngredients.size() + recipe.value().getFluidIngredients().size();
+        int xOffset = size < 3 ? (3 - size) * 19 / 2 : 0;
         int i = 0;
 
         for (Pair<Ingredient, MutableInt> pair : condensedIngredients) {
-            List<ItemStack> stacks = new ArrayList<>();
+
             Ingredient ingredient = pair.getFirst();
             int minTemp = 0;
-            if(ingredient instanceof HeatableIngredient heatableIngredient){
-                minTemp = ((HeatableIngredientAccessor) heatableIngredient).getMinTemp();
+
+            if(ingredient.isCustom()){
+                if(ingredient.getCustomIngredient() instanceof HeatedIngredient heatedIngredient){
+                    minTemp = heatedIngredient.getMinTemp();
+                }
             }
 
-            for (ItemStack inmutable : ingredient.getItems()) {
-                ItemStack itemStack = inmutable.copy();
+            List<ItemStack> stacks = new ArrayList<>();
+            for (ItemStack itemStack : pair.getFirst().getItems()) {
+                ItemStack copy = itemStack.copy();
                 if(minTemp > 0) HeatCapability.setTemperature(itemStack,minTemp);
-                itemStack.setCount(pair.getSecond().getValue());
-                stacks.add(itemStack);
+                copy.setCount(pair.getSecond().getValue());
+                stacks.add(copy);
             }
 
-            builder.addSlot(RecipeIngredientRole.INPUT, 17 + xOffset + (i % 3) * 19, 51 - (i / 3) * 19)
-                .setBackground(getRenderedSlot(), -1, -1)
-                .addItemStacks(stacks);
-            i++;
-        }
-
-        for (FluidIngredient fluidIngredient : recipe.getFluidIngredients()) {
             builder
                     .addSlot(RecipeIngredientRole.INPUT, 17 + xOffset + (i % 3) * 19, 51 - (i / 3) * 19)
                     .setBackground(getRenderedSlot(), -1, -1)
-                    .addIngredients(ForgeTypes.FLUID_STACK, withImprovedVisibility(fluidIngredient.getMatchingFluidStacks()))
-                    .addRichTooltipCallback(addFluidTooltip(fluidIngredient.getRequiredAmount()));
+                    .addItemStacks(stacks);
+            i++;
+        }
+        for (SizedFluidIngredient fluidIngredient : recipe.value().getFluidIngredients()) {
+            int x = 17 + xOffset + (i % 3) * 19;
+            int y = 51 - (i / 3) * 19;
+            addFluidSlot(builder, x, y, fluidIngredient);
             i++;
         }
 
-        size = recipe.getRollableResults().size() + recipe.getFluidResults().size();
+        size = recipe.value().getRollableResults().size() + recipe.value().getFluidResults().size();
         i = 0;
 
-        for (DynamicProcessingOutput<?> result : recipe.getRollableResults()) {
+        for (DynamicProcessingOutput<?> result : recipe.value().getRollableResults()) {
             int xPosition = 142 - (size % 2 != 0 && i == size - 1 ? 0 : i % 2 == 0 ? 10 : -9);
             int yPosition = -19 * (i / 2) + 51;
 
@@ -108,32 +119,27 @@ public abstract class HeatedBasinCategory extends WoodenCogRecipeCategory<Heated
             i++;
         }
 
-        for (FluidStack fluidResult : recipe.getFluidResults()) {
+        for (FluidStack fluidResult : recipe.value().getFluidResults()) {
             int xPosition = 142 - (size % 2 != 0 && i == size - 1 ? 0 : i % 2 == 0 ? 10 : -9);
             int yPosition = -19 * (i / 2) + 51;
-
-            builder
-                    .addSlot(RecipeIngredientRole.OUTPUT, xPosition, yPosition)
-                    .setBackground(getRenderedSlot(), -1, -1)
-                    .addIngredient(ForgeTypes.FLUID_STACK, withImprovedVisibility(fluidResult))
-                    .addRichTooltipCallback(addFluidTooltip(fluidResult.getAmount()));
+            addFluidSlot(builder, xPosition, yPosition, fluidResult);
             i++;
         }
 
-        WoodenCogHeatCondition requiredHeat = recipe.getRequiredHeat();
+        WoodenCogHeatCondition requiredHeat = recipe.value().getRequiredHeat();
         if (requiredHeat.getTemperature() > 0) {
             builder.addSlot(RecipeIngredientRole.RENDER_ONLY, 134, 81).addItemStack(TFCBlocks.CHARCOAL_FORGE.get().asItem().getDefaultInstance());
         }
     }
 
     @Override
-    public void draw(HeatedBasinRecipe recipe, IRecipeSlotsView recipeSlotsView, GuiGraphics guiGraphics, double mouseX, double mouseY) {
-        WoodenCogHeatCondition requiredHeat = recipe.getRequiredHeat();
+    public void draw(RecipeHolder<HeatedBasinRecipe> recipe, IRecipeSlotsView recipeSlotsView, GuiGraphics guiGraphics, double mouseX, double mouseY) {
+        WoodenCogHeatCondition requiredHeat = recipe.value().getRequiredHeat();
 
         boolean noHeat = !requiredHeat.hasTemp();
 
 
-        int vRows = (1 + recipe.getFluidResults().size() + recipe.getRollableResults().size()) / 2;
+        int vRows = (1 + recipe.value().getFluidResults().size() + recipe.value().getRollableResults().size()) / 2;
 
         if (vRows <= 2) AllGuiTextures.JEI_DOWN_ARROW.render(guiGraphics, 136, -19 * (vRows - 1) + 32);
 
@@ -168,7 +174,7 @@ public abstract class HeatedBasinCategory extends WoodenCogRecipeCategory<Heated
             }
         }
 
-        Color.drawCopyHeatBoxBasin(recipe, recipeSlotsView, guiGraphics);
+        Color.drawCopyHeatBoxBasin(recipe.value(), recipeSlotsView, guiGraphics);
     }
 
 }

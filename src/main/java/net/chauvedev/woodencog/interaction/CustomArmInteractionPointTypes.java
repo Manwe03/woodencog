@@ -1,6 +1,7 @@
 package net.chauvedev.woodencog.interaction;
 
 import com.simibubi.create.api.registry.CreateBuiltInRegistries;
+import com.simibubi.create.content.kinetics.mechanicalArm.ArmBlockEntity;
 import com.simibubi.create.content.kinetics.mechanicalArm.ArmInteractionPoint;
 import com.simibubi.create.content.kinetics.mechanicalArm.ArmInteractionPointType;
 import net.chauvedev.woodencog.WoodenCog;
@@ -14,6 +15,7 @@ import net.minecraft.core.Registry;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
+import net.neoforged.neoforge.items.IItemHandler;
 
 public class CustomArmInteractionPointTypes {
 
@@ -47,26 +49,8 @@ public class CustomArmInteractionPointTypes {
         }
         @Override
         public ArmInteractionPoint createPoint(Level level, BlockPos pos, BlockState state) {
-            return new CharcoalForgePoint(this, level, pos, state);
+            return new ArmInteractionPoint(this, level, pos, state);
         }
-    }
-
-    public static class CharcoalForgePoint extends ArmInteractionPoint {
-        public CharcoalForgePoint(ArmInteractionPointType type, Level level, BlockPos pos, BlockState state) {
-            super(type, level, pos, state);
-        }
-
-        @Override
-        public ItemStack extract(int slot, int amount, boolean simulate) {
-            getHandler();
-            return super.extract(slot, amount, simulate);
-        }
-
-        @Override
-        public ItemStack insert(ItemStack stack, boolean simulate) {
-            return super.insert(stack, simulate);
-        }
-
     }
 
     public static class FirePitType extends ArmInteractionPointType {
@@ -86,16 +70,10 @@ public class CustomArmInteractionPointTypes {
         }
 
         @Override
-        public ItemStack extract(int slot, int amount, boolean simulate) {
-            return super.extract(slot, amount, simulate);
-        }
-
-        @Override
-        public ItemStack insert(ItemStack stack, boolean simulate) {
-            PartialItemHandler handler = (PartialItemHandler) this.getHandler();
+        public ItemStack insert(ArmBlockEntity armBlockEntity, ItemStack stack, boolean simulate) {
+            IItemHandler handler = getHandler(armBlockEntity);
             if(CogUtil.logConditional(handler == null,this.getClass(),"Mechanical Arm can not input, interaction point handler is null")) return ItemStack.EMPTY;
-            return handler.insert(3).insertItem(3, stack, simulate);
+            return handler.insertItem(3,stack,simulate);
         }
-
     }
 }

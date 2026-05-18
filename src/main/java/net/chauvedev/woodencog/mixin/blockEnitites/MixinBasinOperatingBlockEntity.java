@@ -8,6 +8,7 @@ import net.chauvedev.woodencog.recipes.heatedRecipes.recipes.HeatedBasinRecipe;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.Container;
 import net.minecraft.world.item.crafting.Recipe;
+import net.minecraft.world.item.crafting.RecipeInput;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
 import org.spongepowered.asm.mixin.Mixin;
@@ -77,7 +78,7 @@ public abstract class MixinBasinOperatingBlockEntity extends KineticBlockEntity 
     @Inject(method = "matchBasinRecipe",
             at = @At(value = "INVOKE", target = "Lcom/simibubi/create/content/processing/basin/BasinRecipe;match(Lcom/simibubi/create/content/processing/basin/BasinBlockEntity;Lnet/minecraft/world/item/crafting/Recipe;)Z"),
             cancellable = true)
-    private <C extends Container> void matchHeatBasinRecipe(Recipe<C> recipe, CallbackInfoReturnable<Boolean> cir) {
+    private <C extends RecipeInput> void matchHeatBasinRecipe(Recipe<C> recipe, CallbackInfoReturnable<Boolean> cir) {
         Optional<BasinBlockEntity> basin = this.getBasin();
         assert basin.isPresent();
         if (recipe instanceof HeatedBasinRecipe){

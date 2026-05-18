@@ -6,16 +6,19 @@ import net.chauvedev.woodencog.WoodenCog;
 import net.dries007.tfc.TerraFirmaCraft;
 import net.dries007.tfc.common.blocks.TFCBlocks;
 import net.dries007.tfc.common.blocks.rock.Rock;
+import net.minecraft.core.HolderLookup;
+import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.data.PackOutput;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
-import net.minecraftforge.registries.ForgeRegistries;
+
+import java.util.concurrent.CompletableFuture;
 
 public class WoodenCogCompactingRecipeGen extends CompactingRecipeGen {
-    public WoodenCogCompactingRecipeGen(PackOutput output) {
-        super(output, WoodenCog.MOD_ID);
+    public WoodenCogCompactingRecipeGen(PackOutput output, CompletableFuture<HolderLookup.Provider>registries) {
+        super(output, registries, WoodenCog.MOD_ID);
 
         TFCBlocks.ROCK_BLOCKS.keySet().forEach(this::createCompactingRawRock);
         createCompactingVanillaRock();
@@ -85,7 +88,7 @@ public class WoodenCogCompactingRecipeGen extends CompactingRecipeGen {
     }
 
     private Item getLooseRock(Rock rock) {
-        return ForgeRegistries.ITEMS.getValue(ResourceLocation.tryBuild(TerraFirmaCraft.MOD_ID,"rock/loose/"+rock.getSerializedName()));
+        return BuiltInRegistries.ITEM.get(ResourceLocation.fromNamespaceAndPath(TerraFirmaCraft.MOD_ID,"rock/loose/"+rock.getSerializedName()));
     }
 
 }

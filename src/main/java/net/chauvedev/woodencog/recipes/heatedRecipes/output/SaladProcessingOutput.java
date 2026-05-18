@@ -3,21 +3,39 @@ package net.chauvedev.woodencog.recipes.heatedRecipes.output;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonSyntaxException;
-import net.dries007.tfc.common.capabilities.food.*;
+import com.mojang.serialization.MapCodec;
+import com.mojang.serialization.codecs.RecordCodecBuilder;
+import com.simibubi.create.content.processing.recipe.ProcessingOutput;
+import net.dries007.tfc.common.component.TFCComponents;
+import net.dries007.tfc.common.component.food.*;
+import net.dries007.tfc.common.component.item.ItemComponent;
+import net.dries007.tfc.common.component.item.ItemListComponent;
 import net.dries007.tfc.common.items.TFCItems;
 import net.minecraft.core.registries.BuiltInRegistries;
-import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.network.RegistryFriendlyByteBuf;
+import net.minecraft.network.codec.ByteBufCodecs;
+import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.GsonHelper;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
-import net.minecraftforge.registries.RegistryObject;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.*;
 
 public class SaladProcessingOutput extends BowlProcessingOutput{
     public static final float SALAD_DECAY_MODIFIER = 4.0F;
+
+    public static final MapCodec<SaladProcessingOutput> CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(
+            ProcessingOutput.CODEC_NEW.fieldOf("internal").forGetter(DynamicProcessingOutput::getInternal)
+    ).apply(instance, SaladProcessingOutput::new));
+
+    public static final StreamCodec<RegistryFriendlyByteBuf, SaladProcessingOutput> STREAM_CODEC =
+            ByteBufCodecs.fromCodecWithRegistries(CODEC.codec());
+
+    private SaladProcessingOutput(ProcessingOutput internal) {
+        super(internal);
+    }
 
     public SaladProcessingOutput(Item bowlOutput, int count, float chance) {
         super(bowlOutput, count, chance);
@@ -38,7 +56,7 @@ public class SaladProcessingOutput extends BowlProcessingOutput{
     }
 
     @Override
-    public ItemStack getBowlItem(Map<Nutrient, RegistryObject<Item>> map, float decayModifier) {
+    public ItemStack getBowlItem(Map<Nutrient, TFCItems.ItemId> map, float decayModifier) {
         List<ItemStack> usedItems = this.getDynamicData();
         usedItems.sort(Comparator.comparing(ItemStack::getCount)
                 .thenComparing((itemx) -> BuiltInRegistries.ITEM.getKey(itemx.getItem())));
@@ -88,15 +106,12 @@ public class SaladProcessingOutput extends BowlProcessingOutput{
             }
 
             if (maxNutrient != null) {
-                resultStack = new ItemStack(TFCItems.SALADS.get(maxNutrient).get(), getStack().getCount());
-                final @Nullable IFood saladCap = FoodCapability.get(resultStack);
-                if (saladCap instanceof DynamicBowlHandler handler)
-                {
-                    handler.setCreationDate(FoodCapability.getRoundedCreationDate());
-                    handler.setIngredients(itemIngredients);
-                    handler.setBowl(getStack());
-                    handler.setFood(FoodData.create(4, water, saturation, nutrition, 4.0f));
-                }
+                resultStack = new ItemStack(TFCItems.SALADS.get(maxNutrient).get(), this.getInternal().getStack().getCount());
+
+                FoodCapability.setCreationDate(resultStack,FoodCapability.getRoundedCreationDate());
+                resultStack.set(TFCComponents.BOWL, new ItemComponent(this.getInternal().getStack())); //TODO revisar bowl item
+                resultStack.set(TFCComponents.INGREDIENTS, ItemListComponent.of(itemIngredients));
+                FoodCapability.setFoodForDynamicItemOnCreate(resultStack, new FoodData(4, water, saturation, 0, nutrition, SALAD_DECAY_MODIFIER));
             }
         }
         return resultStack;
@@ -112,16 +127,11 @@ public class SaladProcessingOutput extends BowlProcessingOutput{
             throw new JsonSyntaxException("ProcessingOutput must be a json object");
         } else {
             JsonObject json = je.getAsJsonObject();
-            String itemId = GsonHelper.getAsString(json, "item");
+            String itemId = GsonHelper.getAsString(json, json.has("id") ? "id" : "item");
             int count = GsonHelper.getAsInt(json, "count", 1);
             float chance = GsonHelper.getAsFloat(json, "chance", 1F);
             return new SaladProcessingOutput(BuiltInRegistries.ITEM.get(ResourceLocation.parse(itemId)), count, chance);
         }
     }
 
-    public static SaladProcessingOutput read(FriendlyByteBuf buf) {
-        ItemStack itemstack = buf.readItem();
-        float chance = buf.readFloat();
-        return new SaladProcessingOutput(itemstack, chance);
-    }
 }

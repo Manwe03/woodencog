@@ -8,6 +8,7 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.ArmorMaterial;
 import net.minecraft.world.item.ItemStack;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
@@ -28,14 +29,14 @@ public class MixinBaseArmorItem {
             at = @At("HEAD"),
             cancellable = true
     )
-    private void injectGetArmorTexture(ItemStack stack, Entity entity, EquipmentSlot slot, String type, CallbackInfoReturnable<String> cir) {
+    private void injectGetArmorTexture(ItemStack stack, Entity entity, EquipmentSlot slot, ArmorMaterial.Layer layer, boolean innerModel, CallbackInfoReturnable<ResourceLocation> cir) {
         if(entity instanceof Player player &&
                 DivingGearUtil.isDivingGear(stack.getItem()) &&
                 !DivingGearUtil.isWearingNetheritePants(player) &&
                 stack.getItem() != AllItems.COPPER_DIVING_BOOTS.get() &&
                 WoodenCogCommonConfigs.NETHERITE_RESKIN.get()
         ) {
-            cir.setReturnValue(String.format(Locale.ROOT, "woodencog:textures/models/armor/%s_layer_%d%s.png", textureLoc.getPath(), slot == EquipmentSlot.LEGS ? 2 : 1, type == null ? "" : String.format(Locale.ROOT, "_%s", type)));
+            cir.setReturnValue(ResourceLocation.parse(String.format(Locale.ROOT, "woodencog:textures/models/armor/%s_layer_%d.png", textureLoc.getPath(), slot == EquipmentSlot.LEGS ? 2 : 1)));
         }
     }
 }

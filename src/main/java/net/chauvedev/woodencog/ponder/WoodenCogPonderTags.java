@@ -9,7 +9,7 @@ import net.minecraft.resources.ResourceLocation;
 public class WoodenCogPonderTags {
 
     public static void register(PonderTagRegistrationHelper<ResourceLocation> helper) {
-        PonderTagRegistrationHelper<RegistryEntry<?>> entryHelper = helper.withKeyFunction(RegistryEntry::getId);
+        PonderTagRegistrationHelper<RegistryEntry<?,?>> entryHelper = helper.withKeyFunction(RegistryEntry::getId);
 
         entryHelper.addToTag(AllCreatePonderTags.KINETIC_SOURCES)
                 .add(WoodencogBlocks.WOODEN_GENERATOR);

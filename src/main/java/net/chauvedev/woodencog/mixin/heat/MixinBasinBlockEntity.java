@@ -19,7 +19,7 @@ import net.chauvedev.woodencog.utils.CogUtil;
 import net.dries007.tfc.common.blockentities.AbstractFirepitBlockEntity;
 import net.dries007.tfc.common.blockentities.CharcoalForgeBlockEntity;
 import net.dries007.tfc.common.blocks.devices.CharcoalForgeBlock;
-import net.dries007.tfc.common.capabilities.heat.Heat;
+import net.dries007.tfc.common.component.heat.Heat;
 import net.minecraft.ChatFormatting;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.RegistryAccess;
@@ -31,8 +31,8 @@ import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
-import net.minecraftforge.fluids.FluidStack;
-import net.minecraftforge.fluids.capability.IFluidHandler;
+import net.neoforged.neoforge.fluids.FluidStack;
+import net.neoforged.neoforge.fluids.capability.IFluidHandler;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.Unique;
@@ -97,8 +97,8 @@ public abstract class MixinBasinBlockEntity implements BasinBlockEntityExtended 
     @Unique
     public void autoChainRecipes(){
         if(this.getSelectionMode().get() == BasinBlockEntityExtended.SelectionMode.AUTO_FEED){
-            IFluidHandler ouputHandler = ((BasinBlockEntityAccessor) this).getOutputTank().getCapability().resolve().get();
-            IFluidHandler inputHandler = this.inputTank.getCapability().resolve().get();
+            IFluidHandler ouputHandler = ((BasinBlockEntityAccessor) this).getOutputTank().getCapability();
+            IFluidHandler inputHandler = this.inputTank.getCapability();
 
             for(int slot = 0; slot < ouputHandler.getTanks(); ++slot) {
                 FluidStack fs = ouputHandler.getFluidInTank(slot).copy();
@@ -165,10 +165,10 @@ public abstract class MixinBasinBlockEntity implements BasinBlockEntityExtended 
         if(temp <= 0) return;
         ChatFormatting color = ChatFormatting.GRAY;
         Component displayName = Component.literal("");
-        for(Heat heat :Heat.values()){
+        for(Heat heat : Heat.values()){
             if(temp > heat.getMin() && temp <= heat.getMax()){
                 color = heat.getColor();
-                displayName = heat.getDisplayName();
+                displayName = Component.literal(heat.name());
                 break;
             }
         }
