@@ -77,7 +77,7 @@ public abstract class WoodenCogRecipeCategory<T extends HeatedProcessingRecipe<?
             if (ingredient.isCustom() && ingredient.getCustomIngredient() instanceof HeatedIngredient heatedIngredient) {
                 minTemp = heatedIngredient.getMinTemp();
                 for (ItemStack itemStack : ingredient.getItems()) {
-                    if(minTemp > 0) HeatCapability.setTemperature(itemStack,minTemp);
+                    if(minTemp > 0) HeatCapability.setStaticTemperature(itemStack,minTemp);
                 }
             }
         }
