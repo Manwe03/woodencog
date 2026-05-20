@@ -7,9 +7,9 @@
 
   "block.woodencog.wooden_generator": "Wooden Generator",
 
-  "category.woodencog.heated_mixing": "Heated Mixing",
-  "category.woodencog.heated_pressing": "Heated Pressing",
-  "category.woodencog.heated_compacting": "Heated Compacting",
+  "woodencog.recipe.heated_mixing": "Heated Mixing",
+  "woodencog.recipe.heated_pressing": "Heated Pressing",
+  "woodencog.recipe.heated_compacting": "Heated Compacting",
 
   "woodencog.ponder.wooden_generator.water_wheel.header" : "Generating rotation from TFC sources",
   "woodencog.ponder.wooden_generator.water_wheel.text_1" : "The Generator needs to be placed besides a TFC rotation source",

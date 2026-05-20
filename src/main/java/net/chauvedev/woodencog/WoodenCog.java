@@ -17,14 +17,14 @@ import net.chauvedev.woodencog.recipes.heatedRecipes.AllHeatedRecipeTypes;
 import net.chauvedev.woodencog.block.WoodencogBlocks;
 import net.chauvedev.woodencog.recipes.heatedRecipes.input.WoodenCogIngredients;
 import net.createmod.ponder.foundation.PonderIndex;
-import net.dries007.tfc.common.TFCTags;
 import net.minecraft.client.renderer.blockentity.BlockEntityRenderers;
+import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.resources.ResourceLocation;
 
+import net.minecraft.world.item.Item;
 import net.neoforged.bus.api.IEventBus;
 import net.neoforged.fml.ModContainer;
 import net.neoforged.fml.common.Mod;
-import net.neoforged.fml.config.ModConfig;
 import net.neoforged.fml.event.lifecycle.FMLClientSetupEvent;
 import net.neoforged.neoforge.event.BuildCreativeModeTabContentsEvent;
 import net.neoforged.neoforge.registries.RegisterEvent;
@@ -82,10 +82,18 @@ public class WoodenCog {
     }
 
     public static ResourceLocation asResource(String path) {
-        WoodenCog.LOGGER.info("ResourceLocation created: "+ ResourceLocation.tryBuild(WoodenCog.MOD_ID, path));
-        return ResourceLocation.tryBuild(WoodenCog.MOD_ID, path);
+        WoodenCog.LOGGER.info("ResourceLocation created: "+ ResourceLocation.fromNamespaceAndPath(WoodenCog.MOD_ID, path));
+        return ResourceLocation.fromNamespaceAndPath(WoodenCog.MOD_ID, path);
     }
 
+    /**
+     * Returns the input ResourceLocation as a WoodenCog ResourceLocation
+     * @param item
+     * @return modified item ResourceLocation
+     */
+    public static ResourceLocation asWoodencogResource(Item item){
+        return WoodenCog.asResource(BuiltInRegistries.ITEM.getKey(item).getPath());
+    }
 }
 
 

@@ -26,16 +26,12 @@ public class HeatedPressingCategory extends WoodenCogRecipeCategory<HeatedPressi
     /**
      * Sets all the recipe's ingredients by filling out an instance of {@link IRecipeLayoutBuilder}.
      * This is used by JEI for lookups, to figure out what ingredients are inputs and outputs for a recipe.
-     *
-     * @param builder
-     * @param recipe
-     * @param focuses
      * @since 9.4.0
      */
     @Override
     public void setRecipe(IRecipeLayoutBuilder builder, RecipeHolder<HeatedPressingRecipe> recipe, IFocusGroup focuses) {
-        builder
-                .addSlot(RecipeIngredientRole.INPUT, 27, 51)
+        super.setRecipe(builder, recipe, focuses);
+        builder.addSlot(RecipeIngredientRole.INPUT, 27, 51)
                 .setBackground(getRenderedSlot(), -1, -1)
                 .addIngredients(recipe.value().getIngredients().get(0));
 

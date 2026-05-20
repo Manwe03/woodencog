@@ -14,9 +14,11 @@ import java.util.Objects;
 public class ModTags {
     public static class Compat {
         public static final TagKey<Item> BREADS = TagKey.create(Registries.ITEM, Objects.requireNonNull(ResourceLocation.tryBuild("tfc", "foods/breads")));
-        public static final TagKey<Item> USABLE_IN_SANDWICH = TagKey.create(Registries.ITEM, ResourceLocation.tryBuild("tfc", "foods/usable_in_sandwich"));
-        public static final TagKey<Item> USABLE_IN_JAM_SANDWICH = TagKey.create(Registries.ITEM, ResourceLocation.tryBuild("tfc", "foods/usable_in_jam_sandwich"));
-        public static final TagKey<Item> PRESERVES = TagKey.create(Registries.ITEM, ResourceLocation.tryBuild("tfc", "foods/preserves"));
+        public static final TagKey<Item> PRESERVES = TagKey.create(Registries.ITEM, Objects.requireNonNull(ResourceLocation.tryBuild("tfc", "foods/preserves")));
+        public static final TagKey<Item> USABLE_IN_SANDWICH = TagKey.create(Registries.ITEM, Objects.requireNonNull(ResourceLocation.tryBuild("tfc", "usable_in_sandwich")));
+        public static final TagKey<Item> USABLE_IN_JAM_SANDWICH = TagKey.create(Registries.ITEM, Objects.requireNonNull(ResourceLocation.tryBuild("tfc", "usable_in_jam_sandwich")));
+        public static final TagKey<Item> USABLE_IN_SALAD = TagKey.create(Registries.ITEM, Objects.requireNonNull(ResourceLocation.tryBuild("tfc", "usable_in_salad")));
+        public static final TagKey<Item> USABLE_IN_SOUP = TagKey.create(Registries.ITEM, Objects.requireNonNull(ResourceLocation.tryBuild("tfc", "usable_in_soup")));
     }
 
     public static class Blocks {

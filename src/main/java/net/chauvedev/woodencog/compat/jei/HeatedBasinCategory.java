@@ -1,11 +1,5 @@
 package net.chauvedev.woodencog.compat.jei;
 
-import com.simibubi.create.AllBlocks;
-import com.simibubi.create.AllItems;
-import com.simibubi.create.content.processing.basin.BasinRecipe;
-import com.simibubi.create.content.processing.burner.BlazeBurnerBlock;
-import com.simibubi.create.content.processing.recipe.HeatCondition;
-import com.simibubi.create.content.processing.recipe.ProcessingOutput;
 import com.simibubi.create.foundation.gui.AllGuiTextures;
 import com.simibubi.create.foundation.item.ItemHelper;
 import mezz.jei.api.gui.builder.IRecipeLayoutBuilder;
@@ -13,17 +7,14 @@ import mezz.jei.api.gui.ingredient.IRecipeSlotsView;
 import mezz.jei.api.recipe.IFocusGroup;
 import mezz.jei.api.recipe.RecipeIngredientRole;
 import net.chauvedev.woodencog.compat.jei.animatedBlocks.AnimatedCharcoalForge;
-import net.chauvedev.woodencog.recipes.heatedRecipes.input.HeatedIngredient;
 import net.chauvedev.woodencog.recipes.heatedRecipes.output.BowlProcessingOutput;
 import net.chauvedev.woodencog.recipes.heatedRecipes.output.DynamicProcessingOutput;
 import net.chauvedev.woodencog.recipes.heatedRecipes.WoodenCogHeatCondition;
 import net.chauvedev.woodencog.recipes.heatedRecipes.recipes.HeatedBasinRecipe;
 import net.chauvedev.woodencog.utils.Color;
-import net.chauvedev.woodencog.utils.HeatedItemHelper;
 import net.createmod.catnip.data.Pair;
 import net.dries007.tfc.common.blocks.TFCBlocks;
 import net.dries007.tfc.common.component.heat.Heat;
-import net.dries007.tfc.common.component.heat.HeatCapability;
 import net.dries007.tfc.util.Helpers;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
@@ -32,7 +23,6 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.item.crafting.RecipeHolder;
 import net.neoforged.neoforge.fluids.FluidStack;
-import net.neoforged.neoforge.fluids.crafting.FluidIngredient;
 import net.neoforged.neoforge.fluids.crafting.SizedFluidIngredient;
 import org.apache.commons.lang3.mutable.MutableInt;
 
@@ -57,6 +47,7 @@ public abstract class HeatedBasinCategory<T extends HeatedBasinRecipe> extends W
 
     @Override
     public void setRecipe(IRecipeLayoutBuilder builder, RecipeHolder<T> recipe, IFocusGroup focuses) {
+        super.setRecipe(builder, recipe, focuses);
         List<Pair<Ingredient, MutableInt>> condensedIngredients = ItemHelper.condenseIngredients(recipe.value().getIngredients());
 
         int size = condensedIngredients.size() + recipe.value().getFluidIngredients().size();
@@ -64,32 +55,21 @@ public abstract class HeatedBasinCategory<T extends HeatedBasinRecipe> extends W
         int i = 0;
 
         for (Pair<Ingredient, MutableInt> pair : condensedIngredients) {
-
-            Ingredient ingredient = pair.getFirst();
-            int minTemp = 0;
-
-            if(ingredient.isCustom()){
-                if(ingredient.getCustomIngredient() instanceof HeatedIngredient heatedIngredient){
-                    minTemp = heatedIngredient.getMinTemp();
-                }
-            }
-
             List<ItemStack> stacks = new ArrayList<>();
             for (ItemStack itemStack : pair.getFirst().getItems()) {
                 ItemStack copy = itemStack.copy();
-                if(minTemp > 0) HeatCapability.setTemperature(itemStack,minTemp);
                 copy.setCount(pair.getSecond().getValue());
                 stacks.add(copy);
             }
 
             builder
-                    .addSlot(RecipeIngredientRole.INPUT, 17 + xOffset + (i % 3) * 19, 51 - (i / 3) * 19)
+                    .addSlot(RecipeIngredientRole.INPUT, 22 + xOffset + (i % 3) * 19, 51 - (i / 3) * 19)
                     .setBackground(getRenderedSlot(), -1, -1)
                     .addItemStacks(stacks);
             i++;
         }
         for (SizedFluidIngredient fluidIngredient : recipe.value().getFluidIngredients()) {
-            int x = 17 + xOffset + (i % 3) * 19;
+            int x = 22 + xOffset + (i % 3) * 19;
             int y = 51 - (i / 3) * 19;
             addFluidSlot(builder, x, y, fluidIngredient);
             i++;

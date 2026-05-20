@@ -17,11 +17,9 @@ import net.chauvedev.woodencog.utils.ModTags;
 import net.dries007.tfc.common.component.heat.Heat;
 import net.dries007.tfc.common.items.Food;
 import net.dries007.tfc.common.items.TFCItems;
-import net.dries007.tfc.common.recipes.ingredients.HeatIngredient;
 import net.dries007.tfc.util.Metal;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.core.registries.BuiltInRegistries;
-import net.minecraft.core.registries.Registries;
 import net.minecraft.data.CachedOutput;
 import net.minecraft.data.DataGenerator;
 import net.minecraft.data.DataProvider;
@@ -38,7 +36,6 @@ import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.level.material.Fluid;
 import net.minecraft.world.level.material.Fluids;
 import net.neoforged.neoforge.fluids.FluidStack;
-import net.neoforged.neoforge.fluids.crafting.FluidIngredient;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -283,7 +280,7 @@ public class WoodencogRecipeProvider extends RecipeProvider {
                                         WoodenCogFoodPortion.flat(0.8F),
                                         WoodenCogFoodPortion.flat(0.5F)))
                                 .build())
-                .build(recipeOutput, WoodenCog.asResource(sandwich.toString()));
+                .build(recipeOutput, WoodenCog.asWoodencogResource(sandwich));
     }
 
     private void foods(RecipeOutput recipeOutput){
@@ -296,7 +293,7 @@ public class WoodencogRecipeProvider extends RecipeProvider {
                 .withItemOutputs(
                         FoodProcessingOutput.Builder.create().withItem(ItemAccess.boiledEgg, 1).build())
                 .requiresHeat(WoodenCogHeatCondition.of(150))
-                .build(recipeOutput, WoodenCog.asResource(ItemAccess.boiledEgg.toString()));
+                .build(recipeOutput, WoodenCog.asWoodencogResource(ItemAccess.boiledEgg));
 
         new HeatedProcessingRecipeBuilder<>(HeatedMixingRecipe::new)
                 .withItemIngredients(
@@ -306,33 +303,31 @@ public class WoodencogRecipeProvider extends RecipeProvider {
                 .withItemOutputs(
                         FoodProcessingOutput.Builder.create().withItem(ItemAccess.cookedRice, 1).build())
                 .requiresHeat(WoodenCogHeatCondition.of(150))
-                .build(recipeOutput, WoodenCog.asResource(ItemAccess.cookedRice.toString()));
+                .build(recipeOutput, WoodenCog.asWoodencogResource(ItemAccess.cookedRice));
 
         //Wood bowl
-        TagKey<Item> usableInSalad = TagKey.create(Registries.ITEM, ResourceLocation.tryBuild("tfc", "foods/usable_in_salad"));
         new HeatedProcessingRecipeBuilder<>(HeatedMixingRecipe::new)
                 .withItemIngredients(
                         FoodIngredient.of(Ingredient.of(Items.BOWL)),
-                        FoodIngredient.of(Ingredient.of(usableInSalad)),
-                        FoodIngredient.of(Ingredient.of(usableInSalad)),
-                        FoodIngredient.of(Ingredient.of(usableInSalad)),
-                        FoodIngredient.of(Ingredient.of(usableInSalad)),
-                        FoodIngredient.of(Ingredient.of(usableInSalad)))
+                        FoodIngredient.of(Ingredient.of(ModTags.Compat.USABLE_IN_SALAD)),
+                        FoodIngredient.of(Ingredient.of(ModTags.Compat.USABLE_IN_SALAD)),
+                        FoodIngredient.of(Ingredient.of(ModTags.Compat.USABLE_IN_SALAD)),
+                        FoodIngredient.of(Ingredient.of(ModTags.Compat.USABLE_IN_SALAD)),
+                        FoodIngredient.of(Ingredient.of(ModTags.Compat.USABLE_IN_SALAD)))
                 .withItemOutputs(new SaladProcessingOutput(Items.BOWL,1,1))
                 .duration(500)
                 .build(recipeOutput, WoodenCog.asResource("food/salads"));
 
-        TagKey<Item> usableInSoup = TagKey.create(Registries.ITEM, ResourceLocation.tryBuild("tfc", "foods/usable_in_soup"));
         new HeatedProcessingRecipeBuilder<>(HeatedMixingRecipe::new)
                 .withItemIngredients(
                         FoodIngredient.of(Ingredient.of(Items.BOWL)),
                         FoodIngredient.of(Ingredient.of(Items.BOWL)),
                         FoodIngredient.of(Ingredient.of(Items.BOWL)),
-                        FoodIngredient.of(Ingredient.of(usableInSoup)),
-                        FoodIngredient.of(Ingredient.of(usableInSoup)),
-                        FoodIngredient.of(Ingredient.of(usableInSoup)),
-                        FoodIngredient.of(Ingredient.of(usableInSoup)),
-                        FoodIngredient.of(Ingredient.of(usableInSoup)))
+                        FoodIngredient.of(Ingredient.of(ModTags.Compat.USABLE_IN_SOUP)),
+                        FoodIngredient.of(Ingredient.of(ModTags.Compat.USABLE_IN_SOUP)),
+                        FoodIngredient.of(Ingredient.of(ModTags.Compat.USABLE_IN_SOUP)),
+                        FoodIngredient.of(Ingredient.of(ModTags.Compat.USABLE_IN_SOUP)),
+                        FoodIngredient.of(Ingredient.of(ModTags.Compat.USABLE_IN_SOUP)))
                 .withFluidIngredients(CogFluidUtil.ingredient(Fluids.WATER.getFlowing(),100))
                 .withItemOutputs(new SoupProcessingOutput(Items.BOWL,3,1))
                 .requiresHeat(WoodenCogHeatCondition.of(150))
@@ -343,11 +338,11 @@ public class WoodencogRecipeProvider extends RecipeProvider {
         new HeatedProcessingRecipeBuilder<>(HeatedMixingRecipe::new)
                 .withItemIngredients(
                         FoodIngredient.of(Ingredient.of(ItemAccess.ceramicBowl)),
-                        FoodIngredient.of(Ingredient.of(usableInSalad)),
-                        FoodIngredient.of(Ingredient.of(usableInSalad)),
-                        FoodIngredient.of(Ingredient.of(usableInSalad)),
-                        FoodIngredient.of(Ingredient.of(usableInSalad)),
-                        FoodIngredient.of(Ingredient.of(usableInSalad)))
+                        FoodIngredient.of(Ingredient.of(ModTags.Compat.USABLE_IN_SALAD)),
+                        FoodIngredient.of(Ingredient.of(ModTags.Compat.USABLE_IN_SALAD)),
+                        FoodIngredient.of(Ingredient.of(ModTags.Compat.USABLE_IN_SALAD)),
+                        FoodIngredient.of(Ingredient.of(ModTags.Compat.USABLE_IN_SALAD)),
+                        FoodIngredient.of(Ingredient.of(ModTags.Compat.USABLE_IN_SALAD)))
                 .withItemOutputs(new SaladProcessingOutput(ItemAccess.ceramicBowl, 1,1))
                 .duration(500)
                 .build(recipeOutput, WoodenCog.asResource("food/salads_ceramic"));
@@ -357,11 +352,11 @@ public class WoodencogRecipeProvider extends RecipeProvider {
                         FoodIngredient.of(Ingredient.of(ItemAccess.ceramicBowl)),
                         FoodIngredient.of(Ingredient.of(ItemAccess.ceramicBowl)),
                         FoodIngredient.of(Ingredient.of(ItemAccess.ceramicBowl)),
-                        FoodIngredient.of(Ingredient.of(usableInSoup)),
-                        FoodIngredient.of(Ingredient.of(usableInSoup)),
-                        FoodIngredient.of(Ingredient.of(usableInSoup)),
-                        FoodIngredient.of(Ingredient.of(usableInSoup)),
-                        FoodIngredient.of(Ingredient.of(usableInSoup)))
+                        FoodIngredient.of(Ingredient.of(ModTags.Compat.USABLE_IN_SOUP)),
+                        FoodIngredient.of(Ingredient.of(ModTags.Compat.USABLE_IN_SOUP)),
+                        FoodIngredient.of(Ingredient.of(ModTags.Compat.USABLE_IN_SOUP)),
+                        FoodIngredient.of(Ingredient.of(ModTags.Compat.USABLE_IN_SOUP)),
+                        FoodIngredient.of(Ingredient.of(ModTags.Compat.USABLE_IN_SOUP)))
                 .withFluidIngredients(CogFluidUtil.ingredient(Fluids.WATER.getFlowing(),100))
                 .withItemOutputs(new SoupProcessingOutput(ItemAccess.ceramicBowl,3,1))
                 .requiresHeat(WoodenCogHeatCondition.of(150))

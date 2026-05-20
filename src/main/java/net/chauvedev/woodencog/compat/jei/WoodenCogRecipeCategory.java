@@ -1,19 +1,17 @@
 package net.chauvedev.woodencog.compat.jei;
 
-import com.simibubi.create.AllFluids;
 import com.simibubi.create.AllRecipeTypes;
-import com.simibubi.create.Create;
 import com.simibubi.create.compat.jei.CreateJEI;
 import com.simibubi.create.compat.jei.DoubleItemIcon;
 import com.simibubi.create.compat.jei.EmptyBackground;
 import com.simibubi.create.compat.jei.ItemIcon;
-import com.simibubi.create.content.fluids.potion.PotionFluidHandler;
-import com.simibubi.create.content.processing.recipe.ProcessingOutput;
 import com.simibubi.create.foundation.gui.AllGuiTextures;
 import com.simibubi.create.foundation.recipe.IRecipeTypeInfo;
 import com.simibubi.create.foundation.utility.CreateLang;
+import mezz.jei.api.gui.builder.IRecipeLayoutBuilder;
 import mezz.jei.api.gui.drawable.IDrawable;
 import mezz.jei.api.gui.ingredient.IRecipeSlotRichTooltipCallback;
+import mezz.jei.api.recipe.IFocusGroup;
 import mezz.jei.api.recipe.RecipeType;
 import mezz.jei.api.recipe.category.IRecipeCategory;
 import mezz.jei.api.registration.IRecipeCatalystRegistration;
@@ -21,13 +19,16 @@ import mezz.jei.api.registration.IRecipeRegistration;
 import net.chauvedev.woodencog.WoodenCog;
 import net.chauvedev.woodencog.recipes.heatedRecipes.HeatedProcessingRecipe;
 import net.chauvedev.woodencog.recipes.heatedRecipes.HeatedProcessingRecipeParams;
+import net.chauvedev.woodencog.recipes.heatedRecipes.input.HeatedIngredient;
 import net.chauvedev.woodencog.recipes.heatedRecipes.output.DynamicProcessingOutput;
 import net.createmod.catnip.config.ConfigBase;
+import net.dries007.tfc.common.component.heat.HeatCapability;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.item.crafting.Recipe;
 import net.minecraft.world.item.crafting.RecipeHolder;
 import net.minecraft.world.item.crafting.RecipeInput;
@@ -63,6 +64,23 @@ public abstract class WoodenCogRecipeCategory<T extends HeatedProcessingRecipe<?
         this.icon = info.icon();
         this.recipes = info.recipes();
         this.catalysts = info.catalysts();
+    }
+
+    /**
+     * Set item ingredient temperature as the minimum temperature required by the recipe
+     * This method should be called in all children classes
+     */
+    @Override
+    public void setRecipe(IRecipeLayoutBuilder builder, RecipeHolder<T> recipe, IFocusGroup focuses) {
+        for (Ingredient ingredient : recipe.value().getIngredients()) {
+            int minTemp;
+            if (ingredient.isCustom() && ingredient.getCustomIngredient() instanceof HeatedIngredient heatedIngredient) {
+                minTemp = heatedIngredient.getMinTemp();
+                for (ItemStack itemStack : ingredient.getItems()) {
+                    if(minTemp > 0) HeatCapability.setTemperature(itemStack,minTemp);
+                }
+            }
+        }
     }
 
     @Override
