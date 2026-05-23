@@ -1,0 +1,9 @@
+{
+    "type": "minecraft:smelting",
+    "ingredient": {
+        "item": "tfc:kaolin_clay"
+    },
+    "result": "tfc:powder/kaolinite",
+    "experience": 0,
+    "cookingtime": 200
+}

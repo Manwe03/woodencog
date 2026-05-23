@@ -1,0 +1,9 @@
+{
+    "type": "minecraft:smoking",
+    "ingredient": {
+        "item": "tfc:food/rice_dough"
+    },
+    "result": "tfc:food/rice_bread",
+    "experience": 0,
+    "cookingtime": 200
+}

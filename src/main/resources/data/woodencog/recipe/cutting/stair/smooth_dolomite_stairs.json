@@ -1,0 +1,13 @@
+{
+    "type": "create:cutting",
+    "ingredients": [
+        {
+            "item": "tfc:rock/smooth/dolomite"
+        }
+    ],
+    "results": [
+        {
+            "id": "tfc:rock/smooth/dolomite_stairs"
+        }
+    ]
+}

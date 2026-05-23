@@ -1,0 +1,13 @@
+{
+    "type": "create:cutting",
+    "ingredients": [
+        {
+            "item": "tfc:rock/smooth/granite"
+        }
+    ],
+    "results": [
+        {
+            "id": "tfc:rock/smooth/granite_stairs"
+        }
+    ]
+}

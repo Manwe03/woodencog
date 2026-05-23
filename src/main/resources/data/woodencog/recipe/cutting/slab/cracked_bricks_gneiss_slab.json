@@ -1,0 +1,16 @@
+{
+    "type": "create:cutting",
+    "ingredients": [
+        {
+            "item": "tfc:rock/cracked_bricks/gneiss"
+        }
+    ],
+    "results": [
+        {
+            "id": "tfc:rock/cracked_bricks/gneiss_slab"
+        },
+        {
+            "id": "tfc:rock/cracked_bricks/gneiss_slab"
+        }
+    ]
+}

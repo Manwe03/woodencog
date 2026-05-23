@@ -1,0 +1,17 @@
+{
+    "type": "create:crushing",
+    "ingredients": [
+        {
+            "tag": "tfc:makes_yellow_dye"
+        }
+    ],
+    "results": [
+        {
+            "id": "minecraft:yellow_dye"
+        },
+        {
+            "id": "minecraft:yellow_dye"
+        }
+    ],
+    "processing_time": 400
+}

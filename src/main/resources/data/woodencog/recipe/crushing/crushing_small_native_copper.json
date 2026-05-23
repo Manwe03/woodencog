@@ -1,0 +1,17 @@
+{
+    "type": "create:crushing",
+    "ingredients": [
+        {
+            "item": "tfc:ore/small_native_copper"
+        }
+    ],
+    "results": [
+        {
+            "id": "tfc:powder/native_copper"
+        },
+        {
+            "id": "tfc:powder/native_copper"
+        }
+    ],
+    "processing_time": 400
+}

@@ -1,0 +1,21 @@
+{
+  "conditions": [
+    {
+      "type": "forge:mod_loaded",
+      "modid": "ae2"
+    }
+  ],
+  "type": "create:milling",
+  "ingredients": [
+    {
+      "item": "ae2:fluix_crystal"
+    }
+  ],
+  "results": [
+    {
+      "item": "ae2:fluix_dust",
+      "count": 1
+    }
+  ],
+  "processing_time": 200
+}

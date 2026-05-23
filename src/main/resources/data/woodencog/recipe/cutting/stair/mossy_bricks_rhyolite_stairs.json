@@ -1,0 +1,13 @@
+{
+    "type": "create:cutting",
+    "ingredients": [
+        {
+            "item": "tfc:rock/mossy_bricks/rhyolite"
+        }
+    ],
+    "results": [
+        {
+            "id": "tfc:rock/mossy_bricks/rhyolite_stairs"
+        }
+    ]
+}

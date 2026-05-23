@@ -1,0 +1,13 @@
+{
+    "type": "create:cutting",
+    "ingredients": [
+        {
+            "item": "tfc:rock/bricks/dacite"
+        }
+    ],
+    "results": [
+        {
+            "id": "tfc:rock/chiseled/dacite"
+        }
+    ]
+}

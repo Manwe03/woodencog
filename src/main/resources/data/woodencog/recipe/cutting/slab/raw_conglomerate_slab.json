@@ -1,0 +1,16 @@
+{
+    "type": "create:cutting",
+    "ingredients": [
+        {
+            "item": "tfc:rock/raw/conglomerate"
+        }
+    ],
+    "results": [
+        {
+            "id": "tfc:rock/raw/conglomerate_slab"
+        },
+        {
+            "id": "tfc:rock/raw/conglomerate_slab"
+        }
+    ]
+}

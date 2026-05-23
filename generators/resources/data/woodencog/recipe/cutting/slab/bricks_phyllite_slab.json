@@ -1,0 +1,16 @@
+{
+    "type": "create:cutting",
+    "ingredients": [
+        {
+            "item": "tfc:rock/bricks/phyllite"
+        }
+    ],
+    "results": [
+        {
+            "id": "tfc:rock/bricks/phyllite_slab"
+        },
+        {
+            "id": "tfc:rock/bricks/phyllite_slab"
+        }
+    ]
+}

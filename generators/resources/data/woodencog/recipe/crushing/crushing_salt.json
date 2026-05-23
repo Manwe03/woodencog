@@ -1,0 +1,23 @@
+{
+    "type": "create:crushing",
+    "ingredients": [
+        {
+            "item": "tfc:ore/halite"
+        }
+    ],
+    "results": [
+        {
+            "id": "tfc:powder/salt"
+        },
+        {
+            "id": "tfc:powder/salt"
+        },
+        {
+            "id": "tfc:powder/salt"
+        },
+        {
+            "id": "tfc:powder/salt"
+        }
+    ],
+    "processing_time": 400
+}

@@ -1,0 +1,23 @@
+{
+    "type": "create:milling",
+    "ingredients": [
+        {
+            "item": "tfc:ore/lapis_lazuli"
+        }
+    ],
+    "results": [
+        {
+            "id": "tfc:powder/lapis_lazuli"
+        },
+        {
+            "id": "tfc:powder/lapis_lazuli"
+        },
+        {
+            "id": "tfc:powder/lapis_lazuli"
+        },
+        {
+            "id": "tfc:powder/lapis_lazuli"
+        }
+    ],
+    "processing_time": 400
+}

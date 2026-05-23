@@ -1,0 +1,16 @@
+{
+    "type": "create:cutting",
+    "ingredients": [
+        {
+            "item": "tfc:rock/cobble/marble"
+        }
+    ],
+    "results": [
+        {
+            "id": "tfc:rock/cobble/marble_slab"
+        },
+        {
+            "id": "tfc:rock/cobble/marble_slab"
+        }
+    ]
+}

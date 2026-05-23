@@ -1,0 +1,16 @@
+{
+    "type": "create:cutting",
+    "ingredients": [
+        {
+            "item": "tfc:rock/cobble/gabbro"
+        }
+    ],
+    "results": [
+        {
+            "id": "tfc:rock/cobble/gabbro_slab"
+        },
+        {
+            "id": "tfc:rock/cobble/gabbro_slab"
+        }
+    ]
+}

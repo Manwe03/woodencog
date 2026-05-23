@@ -1,0 +1,20 @@
+{
+    "type": "create:mixing",
+    "ingredients": [
+        {
+            "item": "tfc:medium_raw_hide"
+        },
+        {
+            "type": "neoforge:single",
+            "amount": 400,
+            "fluid": "tfc:limewater"
+        }
+    ],
+    "results": [
+        {
+            "count": 1,
+            "id": "tfc:medium_soaked_hide"
+        }
+    ],
+    "processing_time": 800
+}

@@ -1,0 +1,13 @@
+{
+    "type": "create:cutting",
+    "ingredients": [
+        {
+            "item": "tfc:raw_sandstone/pink"
+        }
+    ],
+    "results": [
+        {
+            "id": "tfc:raw_sandstone/pink_stairs"
+        }
+    ]
+}

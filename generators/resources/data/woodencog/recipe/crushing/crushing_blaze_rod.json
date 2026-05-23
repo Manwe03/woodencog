@@ -1,0 +1,17 @@
+{
+    "type": "create:crushing",
+    "ingredients": [
+        {
+            "item": "minecraft:blaze_rod"
+        }
+    ],
+    "results": [
+        {
+            "id": "minecraft:blaze_powder"
+        },
+        {
+            "id": "minecraft:blaze_powder"
+        }
+    ],
+    "processing_time": 400
+}

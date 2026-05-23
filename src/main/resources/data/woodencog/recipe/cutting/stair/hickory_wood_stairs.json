@@ -1,0 +1,13 @@
+{
+    "type": "create:cutting",
+    "ingredients": [
+        {
+            "item": "tfc:wood/planks/hickory"
+        }
+    ],
+    "results": [
+        {
+            "id": "tfc:wood/planks/hickory_stairs"
+        }
+    ]
+}

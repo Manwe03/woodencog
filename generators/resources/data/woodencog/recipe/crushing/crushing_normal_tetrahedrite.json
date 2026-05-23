@@ -1,0 +1,26 @@
+{
+    "type": "create:crushing",
+    "ingredients": [
+        {
+            "item": "tfc:ore/normal_tetrahedrite"
+        }
+    ],
+    "results": [
+        {
+            "id": "tfc:powder/tetrahedrite"
+        },
+        {
+            "id": "tfc:powder/tetrahedrite"
+        },
+        {
+            "id": "tfc:powder/tetrahedrite"
+        },
+        {
+            "id": "tfc:powder/tetrahedrite"
+        },
+        {
+            "id": "tfc:powder/tetrahedrite"
+        }
+    ],
+    "processing_time": 400
+}

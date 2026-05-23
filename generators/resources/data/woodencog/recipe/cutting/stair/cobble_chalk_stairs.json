@@ -1,0 +1,13 @@
+{
+    "type": "create:cutting",
+    "ingredients": [
+        {
+            "item": "tfc:rock/cobble/chalk"
+        }
+    ],
+    "results": [
+        {
+            "id": "tfc:rock/cobble/chalk_stairs"
+        }
+    ]
+}

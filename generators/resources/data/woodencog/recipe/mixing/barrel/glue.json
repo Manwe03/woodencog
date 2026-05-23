@@ -1,0 +1,20 @@
+{
+    "type": "create:mixing",
+    "ingredients": [
+        {
+            "item": "minecraft:bone_meal"
+        },
+        {
+            "type": "neoforge:single",
+            "amount": 500,
+            "fluid": "tfc:limewater"
+        }
+    ],
+    "results": [
+        {
+            "count": 1,
+            "id": "tfc:glue"
+        }
+    ],
+    "processing_time": 800
+}

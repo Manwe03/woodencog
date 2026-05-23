@@ -1,0 +1,16 @@
+{
+    "type": "create:cutting",
+    "ingredients": [
+        {
+            "item": "tfc:rock/smooth/limestone"
+        }
+    ],
+    "results": [
+        {
+            "id": "tfc:rock/smooth/limestone_slab"
+        },
+        {
+            "id": "tfc:rock/smooth/limestone_slab"
+        }
+    ]
+}

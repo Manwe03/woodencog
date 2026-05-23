@@ -1,0 +1,13 @@
+{
+    "type": "create:cutting",
+    "ingredients": [
+        {
+            "item": "tfc:mud_bricks/silt"
+        }
+    ],
+    "results": [
+        {
+            "id": "tfc:mud_bricks/silt_stairs"
+        }
+    ]
+}

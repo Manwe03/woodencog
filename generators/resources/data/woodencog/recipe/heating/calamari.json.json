@@ -1,0 +1,9 @@
+{
+    "type": "minecraft:smoking",
+    "ingredient": {
+        "item": "tfc:food/calamari"
+    },
+    "result": "tfc:food/cooked_calamari",
+    "experience": 0,
+    "cookingtime": 200
+}

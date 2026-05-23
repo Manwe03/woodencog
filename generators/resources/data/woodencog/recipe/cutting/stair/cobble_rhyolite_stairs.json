@@ -1,0 +1,13 @@
+{
+    "type": "create:cutting",
+    "ingredients": [
+        {
+            "item": "tfc:rock/cobble/rhyolite"
+        }
+    ],
+    "results": [
+        {
+            "id": "tfc:rock/cobble/rhyolite_stairs"
+        }
+    ]
+}

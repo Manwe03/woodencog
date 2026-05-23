@@ -1,0 +1,13 @@
+{
+    "type": "create:cutting",
+    "ingredients": [
+        {
+            "item": "tfc:alabaster/polished/lime"
+        }
+    ],
+    "results": [
+        {
+            "id": "tfc:alabaster/polished/lime_stairs"
+        }
+    ]
+}

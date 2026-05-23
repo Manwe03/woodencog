@@ -1,0 +1,16 @@
+{
+    "type": "create:cutting",
+    "ingredients": [
+        {
+            "item": "tfc:rock/raw/schist"
+        }
+    ],
+    "results": [
+        {
+            "id": "tfc:rock/raw/schist_slab"
+        },
+        {
+            "id": "tfc:rock/raw/schist_slab"
+        }
+    ]
+}

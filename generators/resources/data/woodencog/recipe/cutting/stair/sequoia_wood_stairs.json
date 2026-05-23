@@ -1,0 +1,13 @@
+{
+    "type": "create:cutting",
+    "ingredients": [
+        {
+            "item": "tfc:wood/planks/sequoia"
+        }
+    ],
+    "results": [
+        {
+            "id": "tfc:wood/planks/sequoia_stairs"
+        }
+    ]
+}

@@ -1,0 +1,9 @@
+{
+    "type": "minecraft:smelting",
+    "ingredient": {
+        "item": "tfc:ceramic/unfired_chisel_head_mold"
+    },
+    "result": "tfc:ceramic/chisel_head_mold",
+    "experience": 0,
+    "cookingtime": 200
+}

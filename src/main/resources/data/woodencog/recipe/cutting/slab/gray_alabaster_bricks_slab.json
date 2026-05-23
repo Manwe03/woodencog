@@ -1,0 +1,16 @@
+{
+    "type": "create:cutting",
+    "ingredients": [
+        {
+            "item": "tfc:alabaster/bricks/gray"
+        }
+    ],
+    "results": [
+        {
+            "id": "tfc:alabaster/bricks/gray_slab"
+        },
+        {
+            "id": "tfc:alabaster/bricks/gray_slab"
+        }
+    ]
+}

@@ -1,0 +1,16 @@
+{
+    "type": "create:cutting",
+    "ingredients": [
+        {
+            "item": "tfc:rock/mossy_bricks/gneiss"
+        }
+    ],
+    "results": [
+        {
+            "id": "tfc:rock/mossy_bricks/gneiss_slab"
+        },
+        {
+            "id": "tfc:rock/mossy_bricks/gneiss_slab"
+        }
+    ]
+}

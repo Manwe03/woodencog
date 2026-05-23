@@ -1,0 +1,9 @@
+{
+    "type": "minecraft:smelting",
+    "ingredient": {
+        "item": "tfc:ceramic/black_unfired_vessel"
+    },
+    "result": "tfc:ceramic/black_glazed_vessel",
+    "experience": 0,
+    "cookingtime": 200
+}

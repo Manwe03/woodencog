@@ -1,0 +1,9 @@
+{
+    "type": "minecraft:smelting",
+    "ingredient": {
+        "item": "tfc:ceramic/unfired_hammer_head_mold"
+    },
+    "result": "tfc:ceramic/hammer_head_mold",
+    "experience": 0,
+    "cookingtime": 200
+}

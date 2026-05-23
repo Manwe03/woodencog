@@ -1,0 +1,13 @@
+{
+    "type": "create:cutting",
+    "ingredients": [
+        {
+            "item": "tfc:rock/bricks/gneiss"
+        }
+    ],
+    "results": [
+        {
+            "id": "tfc:rock/bricks/gneiss_stairs"
+        }
+    ]
+}

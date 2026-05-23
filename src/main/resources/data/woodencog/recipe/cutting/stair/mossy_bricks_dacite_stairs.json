@@ -1,0 +1,13 @@
+{
+    "type": "create:cutting",
+    "ingredients": [
+        {
+            "item": "tfc:rock/mossy_bricks/dacite"
+        }
+    ],
+    "results": [
+        {
+            "id": "tfc:rock/mossy_bricks/dacite_stairs"
+        }
+    ]
+}

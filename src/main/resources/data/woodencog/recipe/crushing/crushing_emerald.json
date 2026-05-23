@@ -1,0 +1,23 @@
+{
+    "type": "create:crushing",
+    "ingredients": [
+        {
+            "item": "tfc:ore/emerald"
+        }
+    ],
+    "results": [
+        {
+            "id": "tfc:powder/emerald"
+        },
+        {
+            "id": "tfc:powder/emerald"
+        },
+        {
+            "id": "tfc:powder/emerald"
+        },
+        {
+            "id": "tfc:powder/emerald"
+        }
+    ],
+    "processing_time": 400
+}

@@ -1,0 +1,13 @@
+{
+    "type": "create:cutting",
+    "ingredients": [
+        {
+            "item": "tfc:rock/raw/conglomerate"
+        }
+    ],
+    "results": [
+        {
+            "id": "tfc:rock/smooth/conglomerate"
+        }
+    ]
+}

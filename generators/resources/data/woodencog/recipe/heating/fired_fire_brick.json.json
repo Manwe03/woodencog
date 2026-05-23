@@ -1,0 +1,9 @@
+{
+    "type": "minecraft:smelting",
+    "ingredient": {
+        "item": "tfc:ceramic/unfired_fire_brick"
+    },
+    "result": "tfc:ceramic/fire_brick",
+    "experience": 0,
+    "cookingtime": 200
+}

@@ -1,0 +1,13 @@
+{
+    "type": "create:cutting",
+    "ingredients": [
+        {
+            "item": "tfc:rock/cracked_bricks/marble"
+        }
+    ],
+    "results": [
+        {
+            "id": "tfc:rock/cracked_bricks/marble_stairs"
+        }
+    ]
+}

@@ -1,0 +1,16 @@
+{
+    "type": "create:cutting",
+    "ingredients": [
+        {
+            "item": "tfc:wood/planks/pine"
+        }
+    ],
+    "results": [
+        {
+            "id": "tfc:wood/planks/pine_slab"
+        },
+        {
+            "id": "tfc:wood/planks/pine_slab"
+        }
+    ]
+}

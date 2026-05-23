@@ -1,0 +1,13 @@
+{
+    "type": "create:cutting",
+    "ingredients": [
+        {
+            "item": "tfc:rock/mossy_bricks/conglomerate"
+        }
+    ],
+    "results": [
+        {
+            "id": "tfc:rock/mossy_bricks/conglomerate_stairs"
+        }
+    ]
+}

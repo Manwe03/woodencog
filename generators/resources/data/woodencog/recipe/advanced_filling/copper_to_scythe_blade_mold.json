@@ -1,0 +1,21 @@
+{
+    "type": "woodencog:filling",
+    "ingredients": [
+        {
+            "item": "tfc:ceramic/scythe_blade_mold"
+        },
+        {
+            "fluid": "tfc:metal/copper",
+            "nbt": {},
+            "amount": 100
+        }
+    ],
+    "results": [
+        {
+            "stack": {
+                "item": "tfc:ceramic/scythe_blade_mold",
+                "count": 1
+            }
+        }
+    ]
+}

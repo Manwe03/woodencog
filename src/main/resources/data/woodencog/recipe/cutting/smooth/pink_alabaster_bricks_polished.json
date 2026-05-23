@@ -1,0 +1,13 @@
+{
+    "type": "create:cutting",
+    "ingredients": [
+        {
+            "item": "tfc:alabaster/raw/pink"
+        }
+    ],
+    "results": [
+        {
+            "id": "tfc:alabaster/polished/pink"
+        }
+    ]
+}

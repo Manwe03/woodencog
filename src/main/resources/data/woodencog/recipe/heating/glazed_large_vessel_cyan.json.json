@@ -1,0 +1,9 @@
+{
+    "type": "minecraft:smelting",
+    "ingredient": {
+        "item": "tfc:ceramic/unfired_large_vessel/cyan"
+    },
+    "result": "tfc:ceramic/large_vessel/cyan",
+    "experience": 0,
+    "cookingtime": 200
+}

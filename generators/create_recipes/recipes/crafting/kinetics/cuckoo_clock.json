@@ -1,0 +1,22 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "S",
+    "C",
+    "A"
+  ],
+  "key": {
+    "S": {
+      "tag": "minecraft:planks"
+    },
+    "A": {
+      "item": "minecraft:clock"
+    },
+    "C": {
+      "item": "create:andesite_casing"
+    }
+  },
+  "result": {
+    "item": "create:cuckoo_clock"
+  }
+}

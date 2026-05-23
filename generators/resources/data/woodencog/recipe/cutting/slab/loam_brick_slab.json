@@ -1,0 +1,16 @@
+{
+    "type": "create:cutting",
+    "ingredients": [
+        {
+            "item": "tfc:mud_bricks/loam"
+        }
+    ],
+    "results": [
+        {
+            "id": "tfc:mud_bricks/loam_slab"
+        },
+        {
+            "id": "tfc:mud_bricks/loam_slab"
+        }
+    ]
+}

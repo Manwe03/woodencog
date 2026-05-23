@@ -1,0 +1,26 @@
+{
+    "type": "create:crushing",
+    "ingredients": [
+        {
+            "item": "tfc:ore/normal_limonite"
+        }
+    ],
+    "results": [
+        {
+            "id": "tfc:powder/limonite"
+        },
+        {
+            "id": "tfc:powder/limonite"
+        },
+        {
+            "id": "tfc:powder/limonite"
+        },
+        {
+            "id": "tfc:powder/limonite"
+        },
+        {
+            "id": "tfc:powder/limonite"
+        }
+    ],
+    "processing_time": 400
+}

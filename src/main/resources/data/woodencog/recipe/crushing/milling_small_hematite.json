@@ -1,0 +1,17 @@
+{
+    "type": "create:milling",
+    "ingredients": [
+        {
+            "item": "tfc:ore/small_hematite"
+        }
+    ],
+    "results": [
+        {
+            "id": "tfc:powder/hematite"
+        },
+        {
+            "id": "tfc:powder/hematite"
+        }
+    ],
+    "processing_time": 400
+}

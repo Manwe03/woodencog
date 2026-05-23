@@ -1,0 +1,16 @@
+{
+    "type": "create:cutting",
+    "ingredients": [
+        {
+            "item": "tfc:rock/mossy_cobble/diorite"
+        }
+    ],
+    "results": [
+        {
+            "id": "tfc:rock/mossy_cobble/diorite_slab"
+        },
+        {
+            "id": "tfc:rock/mossy_cobble/diorite_slab"
+        }
+    ]
+}

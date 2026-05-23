@@ -1,0 +1,16 @@
+{
+    "type": "create:cutting",
+    "ingredients": [
+        {
+            "item": "tfc:wood/planks/mangrove"
+        }
+    ],
+    "results": [
+        {
+            "id": "tfc:wood/planks/mangrove_slab"
+        },
+        {
+            "id": "tfc:wood/planks/mangrove_slab"
+        }
+    ]
+}

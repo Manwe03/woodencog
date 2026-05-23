@@ -1,0 +1,9 @@
+{
+    "type": "minecraft:smoking",
+    "ingredient": {
+        "item": "tfc:stick_bunch"
+    },
+    "result": "tfc:torch",
+    "experience": 0,
+    "cookingtime": 200
+}

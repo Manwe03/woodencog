@@ -1,0 +1,16 @@
+{
+    "type": "create:cutting",
+    "ingredients": [
+        {
+            "item": "tfc:rock/cobble/andesite"
+        }
+    ],
+    "results": [
+        {
+            "id": "tfc:rock/cobble/andesite_slab"
+        },
+        {
+            "id": "tfc:rock/cobble/andesite_slab"
+        }
+    ]
+}

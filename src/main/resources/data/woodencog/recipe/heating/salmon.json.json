@@ -1,0 +1,9 @@
+{
+    "type": "minecraft:smoking",
+    "ingredient": {
+        "item": "tfc:food/salmon"
+    },
+    "result": "tfc:food/cooked_salmon",
+    "experience": 0,
+    "cookingtime": 200
+}

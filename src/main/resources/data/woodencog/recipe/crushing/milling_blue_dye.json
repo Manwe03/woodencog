@@ -1,0 +1,17 @@
+{
+    "type": "create:milling",
+    "ingredients": [
+        {
+            "tag": "tfc:makes_blue_dye"
+        }
+    ],
+    "results": [
+        {
+            "id": "minecraft:blue_dye"
+        },
+        {
+            "id": "minecraft:blue_dye"
+        }
+    ],
+    "processing_time": 400
+}

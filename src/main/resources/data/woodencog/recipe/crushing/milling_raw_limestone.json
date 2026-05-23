@@ -1,0 +1,14 @@
+{
+    "type": "create:milling",
+    "ingredients": [
+        {
+            "item": "tfc:rock/raw/limestone"
+        }
+    ],
+    "results": [
+        {
+            "id": "tfc:ore/gypsum"
+        }
+    ],
+    "processing_time": 400
+}

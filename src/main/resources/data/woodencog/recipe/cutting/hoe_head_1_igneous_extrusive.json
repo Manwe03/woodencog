@@ -1,0 +1,14 @@
+{
+    "type": "create:cutting",
+    "ingredients": [
+        {
+            "tag": "tfc:rock_knapping"
+        }
+    ],
+    "results": [
+        {
+            "count": 2,
+            "id": "tfc:stone/hoe_head/igneous_extrusive"
+        }
+    ]
+}

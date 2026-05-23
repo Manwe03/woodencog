@@ -1,0 +1,16 @@
+{
+    "type": "create:cutting",
+    "ingredients": [
+        {
+            "item": "tfc:wood/planks/hickory"
+        }
+    ],
+    "results": [
+        {
+            "id": "tfc:wood/planks/hickory_slab"
+        },
+        {
+            "id": "tfc:wood/planks/hickory_slab"
+        }
+    ]
+}

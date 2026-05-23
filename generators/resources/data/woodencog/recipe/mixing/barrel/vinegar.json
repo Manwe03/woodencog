@@ -1,0 +1,20 @@
+{
+    "type": "create:mixing",
+    "ingredients": [
+        {
+            "tag": "tfc:foods/fruits"
+        },
+        {
+            "type": "neoforge:tag",
+            "amount": 250,
+            "tag": "tfc:alcohols"
+        }
+    ],
+    "results": [
+        {
+            "fluid": "tfc:vinegar",
+            "amount": 250
+        }
+    ],
+    "processing_time": 800
+}

@@ -1,0 +1,9 @@
+{
+    "type": "minecraft:smelting",
+    "ingredient": {
+        "item": "tfc:ceramic/cyan_unfired_vessel"
+    },
+    "result": "tfc:ceramic/cyan_glazed_vessel",
+    "experience": 0,
+    "cookingtime": 200
+}

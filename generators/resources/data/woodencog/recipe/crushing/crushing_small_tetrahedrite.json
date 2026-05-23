@@ -1,0 +1,17 @@
+{
+    "type": "create:crushing",
+    "ingredients": [
+        {
+            "item": "tfc:ore/small_tetrahedrite"
+        }
+    ],
+    "results": [
+        {
+            "id": "tfc:powder/tetrahedrite"
+        },
+        {
+            "id": "tfc:powder/tetrahedrite"
+        }
+    ],
+    "processing_time": 400
+}

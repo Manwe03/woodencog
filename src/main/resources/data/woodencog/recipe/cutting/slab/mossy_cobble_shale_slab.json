@@ -1,0 +1,16 @@
+{
+    "type": "create:cutting",
+    "ingredients": [
+        {
+            "item": "tfc:rock/mossy_cobble/shale"
+        }
+    ],
+    "results": [
+        {
+            "id": "tfc:rock/mossy_cobble/shale_slab"
+        },
+        {
+            "id": "tfc:rock/mossy_cobble/shale_slab"
+        }
+    ]
+}

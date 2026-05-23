@@ -1,0 +1,13 @@
+{
+    "type": "create:cutting",
+    "ingredients": [
+        {
+            "item": "tfc:mud_bricks/sandy_loam"
+        }
+    ],
+    "results": [
+        {
+            "id": "tfc:mud_bricks/sandy_loam_stairs"
+        }
+    ]
+}

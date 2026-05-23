@@ -1,0 +1,16 @@
+{
+    "type": "create:cutting",
+    "ingredients": [
+        {
+            "item": "tfc:wood/planks/douglas_fir"
+        }
+    ],
+    "results": [
+        {
+            "id": "tfc:wood/planks/douglas_fir_slab"
+        },
+        {
+            "id": "tfc:wood/planks/douglas_fir_slab"
+        }
+    ]
+}

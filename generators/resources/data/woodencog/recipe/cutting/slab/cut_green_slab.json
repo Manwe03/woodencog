@@ -1,0 +1,16 @@
+{
+    "type": "create:cutting",
+    "ingredients": [
+        {
+            "item": "tfc:cut_sandstone/green"
+        }
+    ],
+    "results": [
+        {
+            "id": "tfc:cut_sandstone/green_slab"
+        },
+        {
+            "id": "tfc:cut_sandstone/green_slab"
+        }
+    ]
+}

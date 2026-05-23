@@ -1,0 +1,9 @@
+{
+    "type": "minecraft:smoking",
+    "ingredient": {
+        "item": "tfc:food/maize_dough"
+    },
+    "result": "tfc:food/maize_bread",
+    "experience": 0,
+    "cookingtime": 200
+}

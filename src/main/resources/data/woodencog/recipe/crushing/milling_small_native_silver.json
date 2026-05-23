@@ -1,0 +1,17 @@
+{
+    "type": "create:milling",
+    "ingredients": [
+        {
+            "item": "tfc:ore/small_native_silver"
+        }
+    ],
+    "results": [
+        {
+            "id": "tfc:powder/native_silver"
+        },
+        {
+            "id": "tfc:powder/native_silver"
+        }
+    ],
+    "processing_time": 400
+}

@@ -1,0 +1,20 @@
+{
+    "type": "create:mixing",
+    "ingredients": [
+        {
+            "item": "tfc:food/rice_flour"
+        },
+        {
+            "type": "neoforge:single",
+            "amount": 500,
+            "fluid": "minecraft:water"
+        }
+    ],
+    "results": [
+        {
+            "fluid": "tfc:sake",
+            "amount": 500
+        }
+    ],
+    "processing_time": 7200
+}

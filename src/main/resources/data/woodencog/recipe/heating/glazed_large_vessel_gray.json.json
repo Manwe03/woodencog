@@ -1,0 +1,9 @@
+{
+    "type": "minecraft:smelting",
+    "ingredient": {
+        "item": "tfc:ceramic/unfired_large_vessel/gray"
+    },
+    "result": "tfc:ceramic/large_vessel/gray",
+    "experience": 0,
+    "cookingtime": 200
+}

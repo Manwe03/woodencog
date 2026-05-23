@@ -1,0 +1,9 @@
+{
+    "type": "minecraft:smoking",
+    "ingredient": {
+        "item": "tfc:food/chicken"
+    },
+    "result": "tfc:food/cooked_chicken",
+    "experience": 0,
+    "cookingtime": 200
+}

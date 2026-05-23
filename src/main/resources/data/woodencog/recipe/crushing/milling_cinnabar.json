@@ -1,0 +1,35 @@
+{
+    "type": "create:milling",
+    "ingredients": [
+        {
+            "item": "tfc:ore/cinnabar"
+        }
+    ],
+    "results": [
+        {
+            "id": "minecraft:redstone"
+        },
+        {
+            "id": "minecraft:redstone"
+        },
+        {
+            "id": "minecraft:redstone"
+        },
+        {
+            "id": "minecraft:redstone"
+        },
+        {
+            "id": "minecraft:redstone"
+        },
+        {
+            "id": "minecraft:redstone"
+        },
+        {
+            "id": "minecraft:redstone"
+        },
+        {
+            "id": "minecraft:redstone"
+        }
+    ],
+    "processing_time": 400
+}

@@ -1,0 +1,16 @@
+{
+    "type": "create:cutting",
+    "ingredients": [
+        {
+            "item": "tfc:wood/planks/ash"
+        }
+    ],
+    "results": [
+        {
+            "id": "tfc:wood/planks/ash_slab"
+        },
+        {
+            "id": "tfc:wood/planks/ash_slab"
+        }
+    ]
+}

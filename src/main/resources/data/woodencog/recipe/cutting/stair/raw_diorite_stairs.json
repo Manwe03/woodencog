@@ -1,0 +1,13 @@
+{
+    "type": "create:cutting",
+    "ingredients": [
+        {
+            "item": "tfc:rock/raw/diorite"
+        }
+    ],
+    "results": [
+        {
+            "id": "tfc:rock/raw/diorite_stairs"
+        }
+    ]
+}

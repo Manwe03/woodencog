@@ -1,0 +1,23 @@
+{
+    "type": "create:milling",
+    "ingredients": [
+        {
+            "item": "tfc:ore/graphite"
+        }
+    ],
+    "results": [
+        {
+            "id": "tfc:powder/graphite"
+        },
+        {
+            "id": "tfc:powder/graphite"
+        },
+        {
+            "id": "tfc:powder/graphite"
+        },
+        {
+            "id": "tfc:powder/graphite"
+        }
+    ],
+    "processing_time": 400
+}

@@ -1,0 +1,13 @@
+{
+    "type": "create:cutting",
+    "ingredients": [
+        {
+            "item": "tfc:smooth_sandstone/white"
+        }
+    ],
+    "results": [
+        {
+            "id": "tfc:cut_sandstone/white"
+        }
+    ]
+}

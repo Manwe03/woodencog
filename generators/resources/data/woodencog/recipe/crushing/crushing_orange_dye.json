@@ -1,0 +1,17 @@
+{
+    "type": "create:crushing",
+    "ingredients": [
+        {
+            "tag": "tfc:makes_orange_dye"
+        }
+    ],
+    "results": [
+        {
+            "id": "minecraft:orange_dye"
+        },
+        {
+            "id": "minecraft:orange_dye"
+        }
+    ],
+    "processing_time": 400
+}

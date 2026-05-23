@@ -1,0 +1,13 @@
+{
+    "type": "create:cutting",
+    "ingredients": [
+        {
+            "item": "tfc:rock/hardened/dacite"
+        }
+    ],
+    "results": [
+        {
+            "id": "tfc:rock/smooth/dacite"
+        }
+    ]
+}

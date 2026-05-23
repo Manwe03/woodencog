@@ -1,0 +1,13 @@
+{
+    "type": "create:cutting",
+    "ingredients": [
+        {
+            "item": "tfc:wood/planks/sycamore"
+        }
+    ],
+    "results": [
+        {
+            "id": "tfc:wood/planks/sycamore_stairs"
+        }
+    ]
+}

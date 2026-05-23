@@ -1,0 +1,9 @@
+{
+    "type": "minecraft:smoking",
+    "ingredient": {
+        "item": "tfc:food/crappie"
+    },
+    "result": "tfc:food/cooked_crappie",
+    "experience": 0,
+    "cookingtime": 200
+}

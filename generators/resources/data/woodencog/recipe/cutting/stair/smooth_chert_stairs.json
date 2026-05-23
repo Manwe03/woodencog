@@ -1,0 +1,13 @@
+{
+    "type": "create:cutting",
+    "ingredients": [
+        {
+            "item": "tfc:rock/smooth/chert"
+        }
+    ],
+    "results": [
+        {
+            "id": "tfc:rock/smooth/chert_stairs"
+        }
+    ]
+}

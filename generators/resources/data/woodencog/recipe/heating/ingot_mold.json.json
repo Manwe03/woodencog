@@ -1,0 +1,9 @@
+{
+    "type": "minecraft:smelting",
+    "ingredient": {
+        "item": "tfc:ceramic/unfired_ingot_mold"
+    },
+    "result": "tfc:ceramic/ingot_mold",
+    "experience": 0,
+    "cookingtime": 200
+}

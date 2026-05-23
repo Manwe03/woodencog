@@ -1,0 +1,26 @@
+{
+    "type": "create:crushing",
+    "ingredients": [
+        {
+            "item": "tfc:ore/normal_hematite"
+        }
+    ],
+    "results": [
+        {
+            "id": "tfc:powder/hematite"
+        },
+        {
+            "id": "tfc:powder/hematite"
+        },
+        {
+            "id": "tfc:powder/hematite"
+        },
+        {
+            "id": "tfc:powder/hematite"
+        },
+        {
+            "id": "tfc:powder/hematite"
+        }
+    ],
+    "processing_time": 400
+}

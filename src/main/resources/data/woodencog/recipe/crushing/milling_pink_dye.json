@@ -1,0 +1,17 @@
+{
+    "type": "create:milling",
+    "ingredients": [
+        {
+            "tag": "tfc:makes_pink_dye"
+        }
+    ],
+    "results": [
+        {
+            "id": "minecraft:pink_dye"
+        },
+        {
+            "id": "minecraft:pink_dye"
+        }
+    ],
+    "processing_time": 400
+}

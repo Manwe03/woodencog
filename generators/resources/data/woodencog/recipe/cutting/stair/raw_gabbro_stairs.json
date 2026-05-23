@@ -1,0 +1,13 @@
+{
+    "type": "create:cutting",
+    "ingredients": [
+        {
+            "item": "tfc:rock/raw/gabbro"
+        }
+    ],
+    "results": [
+        {
+            "id": "tfc:rock/raw/gabbro_stairs"
+        }
+    ]
+}

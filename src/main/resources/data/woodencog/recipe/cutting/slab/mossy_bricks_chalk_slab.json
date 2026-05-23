@@ -1,0 +1,16 @@
+{
+    "type": "create:cutting",
+    "ingredients": [
+        {
+            "item": "tfc:rock/mossy_bricks/chalk"
+        }
+    ],
+    "results": [
+        {
+            "id": "tfc:rock/mossy_bricks/chalk_slab"
+        },
+        {
+            "id": "tfc:rock/mossy_bricks/chalk_slab"
+        }
+    ]
+}

@@ -1,0 +1,16 @@
+{
+    "type": "create:cutting",
+    "ingredients": [
+        {
+            "item": "tfc:rock/bricks/dacite"
+        }
+    ],
+    "results": [
+        {
+            "id": "tfc:rock/bricks/dacite_slab"
+        },
+        {
+            "id": "tfc:rock/bricks/dacite_slab"
+        }
+    ]
+}

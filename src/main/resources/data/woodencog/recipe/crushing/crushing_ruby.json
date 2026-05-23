@@ -1,0 +1,23 @@
+{
+    "type": "create:crushing",
+    "ingredients": [
+        {
+            "item": "tfc:ore/ruby"
+        }
+    ],
+    "results": [
+        {
+            "id": "tfc:powder/ruby"
+        },
+        {
+            "id": "tfc:powder/ruby"
+        },
+        {
+            "id": "tfc:powder/ruby"
+        },
+        {
+            "id": "tfc:powder/ruby"
+        }
+    ],
+    "processing_time": 400
+}

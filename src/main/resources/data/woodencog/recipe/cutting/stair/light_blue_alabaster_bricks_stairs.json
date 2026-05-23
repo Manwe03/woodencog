@@ -1,0 +1,13 @@
+{
+    "type": "create:cutting",
+    "ingredients": [
+        {
+            "item": "tfc:alabaster/bricks/light_blue"
+        }
+    ],
+    "results": [
+        {
+            "id": "tfc:alabaster/bricks/light_blue_stairs"
+        }
+    ]
+}

@@ -1,0 +1,17 @@
+{
+    "type": "create:mixing",
+    "ingredients": [
+        {
+            "type": "neoforge:single",
+            "amount": 1,
+            "fluid": "tfc:milk_vinegar"
+        }
+    ],
+    "results": [
+        {
+            "fluid": "tfc:curdled_milk",
+            "amount": 1
+        }
+    ],
+    "processing_time": 800
+}

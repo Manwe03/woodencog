@@ -1,0 +1,22 @@
+{
+    "type": "create:mixing",
+    "ingredients": [
+        {
+            "type": "neoforge:single",
+            "amount": 9,
+            "fluid": "tfc:salt_water"
+        },
+        {
+            "type": "neoforge:single",
+            "amount": 1,
+            "fluid": "tfc:vinegar"
+        }
+    ],
+    "results": [
+        {
+            "fluid": "tfc:brine",
+            "amount": 10
+        }
+    ],
+    "processing_time": 1
+}

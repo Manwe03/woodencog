@@ -1,0 +1,16 @@
+{
+    "type": "create:cutting",
+    "ingredients": [
+        {
+            "item": "tfc:rock/cobble/diorite"
+        }
+    ],
+    "results": [
+        {
+            "id": "tfc:rock/cobble/diorite_slab"
+        },
+        {
+            "id": "tfc:rock/cobble/diorite_slab"
+        }
+    ]
+}

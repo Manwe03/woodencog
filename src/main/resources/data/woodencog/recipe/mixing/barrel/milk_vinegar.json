@@ -1,0 +1,22 @@
+{
+    "type": "create:mixing",
+    "ingredients": [
+        {
+            "type": "neoforge:tag",
+            "amount": 9,
+            "tag": "tfc:milks"
+        },
+        {
+            "type": "neoforge:single",
+            "amount": 1,
+            "fluid": "tfc:vinegar"
+        }
+    ],
+    "results": [
+        {
+            "fluid": "tfc:milk_vinegar",
+            "amount": 10
+        }
+    ],
+    "processing_time": 1
+}

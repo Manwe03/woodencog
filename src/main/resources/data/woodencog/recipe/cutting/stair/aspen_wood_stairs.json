@@ -1,0 +1,13 @@
+{
+    "type": "create:cutting",
+    "ingredients": [
+        {
+            "item": "tfc:wood/planks/aspen"
+        }
+    ],
+    "results": [
+        {
+            "id": "tfc:wood/planks/aspen_stairs"
+        }
+    ]
+}

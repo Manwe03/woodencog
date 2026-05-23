@@ -1,0 +1,16 @@
+{
+    "type": "create:cutting",
+    "ingredients": [
+        {
+            "item": "tfc:wood/planks/willow"
+        }
+    ],
+    "results": [
+        {
+            "id": "tfc:wood/planks/willow_slab"
+        },
+        {
+            "id": "tfc:wood/planks/willow_slab"
+        }
+    ]
+}

@@ -1,0 +1,20 @@
+{
+    "type": "create:mixing",
+    "ingredients": [
+        {
+            "tag": "minecraft:sand"
+        },
+        {
+            "type": "neoforge:single",
+            "amount": 100,
+            "fluid": "tfc:limewater"
+        }
+    ],
+    "results": [
+        {
+            "count": 16,
+            "id": "tfc:mortar"
+        }
+    ],
+    "processing_time": 800
+}

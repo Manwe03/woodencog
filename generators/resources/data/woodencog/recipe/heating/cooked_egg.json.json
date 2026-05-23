@@ -1,0 +1,9 @@
+{
+    "type": "minecraft:smoking",
+    "ingredient": {
+        "item": "minecraft:egg"
+    },
+    "result": "tfc:food/cooked_egg",
+    "experience": 0,
+    "cookingtime": 200
+}

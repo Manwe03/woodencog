@@ -1,0 +1,23 @@
+{
+    "type": "create:milling",
+    "ingredients": [
+        {
+            "item": "minecraft:charcoal"
+        }
+    ],
+    "results": [
+        {
+            "id": "tfc:powder/charcoal"
+        },
+        {
+            "id": "tfc:powder/charcoal"
+        },
+        {
+            "id": "tfc:powder/charcoal"
+        },
+        {
+            "id": "tfc:powder/charcoal"
+        }
+    ],
+    "processing_time": 400
+}

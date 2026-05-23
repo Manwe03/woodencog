@@ -1,0 +1,9 @@
+{
+    "type": "minecraft:smoking",
+    "ingredient": {
+        "item": "tfc:food/smallmouth_bass"
+    },
+    "result": "tfc:food/cooked_smallmouth_bass",
+    "experience": 0,
+    "cookingtime": 200
+}

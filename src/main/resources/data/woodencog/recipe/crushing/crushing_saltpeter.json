@@ -1,0 +1,23 @@
+{
+    "type": "create:crushing",
+    "ingredients": [
+        {
+            "item": "tfc:ore/saltpeter"
+        }
+    ],
+    "results": [
+        {
+            "id": "tfc:powder/saltpeter"
+        },
+        {
+            "id": "tfc:powder/saltpeter"
+        },
+        {
+            "id": "tfc:powder/saltpeter"
+        },
+        {
+            "id": "tfc:powder/saltpeter"
+        }
+    ],
+    "processing_time": 400
+}

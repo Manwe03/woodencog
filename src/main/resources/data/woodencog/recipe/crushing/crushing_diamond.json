@@ -1,0 +1,23 @@
+{
+    "type": "create:crushing",
+    "ingredients": [
+        {
+            "item": "tfc:ore/diamond"
+        }
+    ],
+    "results": [
+        {
+            "id": "tfc:powder/diamond"
+        },
+        {
+            "id": "tfc:powder/diamond"
+        },
+        {
+            "id": "tfc:powder/diamond"
+        },
+        {
+            "id": "tfc:powder/diamond"
+        }
+    ],
+    "processing_time": 400
+}

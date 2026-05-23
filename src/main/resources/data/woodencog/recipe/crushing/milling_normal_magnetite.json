@@ -1,0 +1,26 @@
+{
+    "type": "create:milling",
+    "ingredients": [
+        {
+            "item": "tfc:ore/normal_magnetite"
+        }
+    ],
+    "results": [
+        {
+            "id": "tfc:powder/magnetite"
+        },
+        {
+            "id": "tfc:powder/magnetite"
+        },
+        {
+            "id": "tfc:powder/magnetite"
+        },
+        {
+            "id": "tfc:powder/magnetite"
+        },
+        {
+            "id": "tfc:powder/magnetite"
+        }
+    ],
+    "processing_time": 400
+}

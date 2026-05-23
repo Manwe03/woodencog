@@ -1,0 +1,13 @@
+{
+    "type": "create:cutting",
+    "ingredients": [
+        {
+            "item": "tfc:wood/planks/chestnut"
+        }
+    ],
+    "results": [
+        {
+            "id": "tfc:wood/planks/chestnut_stairs"
+        }
+    ]
+}

@@ -1,0 +1,16 @@
+{
+    "type": "create:cutting",
+    "ingredients": [
+        {
+            "item": "tfc:cut_sandstone/pink"
+        }
+    ],
+    "results": [
+        {
+            "id": "tfc:cut_sandstone/pink_slab"
+        },
+        {
+            "id": "tfc:cut_sandstone/pink_slab"
+        }
+    ]
+}

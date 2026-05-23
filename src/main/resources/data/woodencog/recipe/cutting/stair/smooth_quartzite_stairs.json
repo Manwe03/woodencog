@@ -1,0 +1,13 @@
+{
+    "type": "create:cutting",
+    "ingredients": [
+        {
+            "item": "tfc:rock/smooth/quartzite"
+        }
+    ],
+    "results": [
+        {
+            "id": "tfc:rock/smooth/quartzite_stairs"
+        }
+    ]
+}

@@ -1,0 +1,21 @@
+{
+    "type": "woodencog:filling",
+    "ingredients": [
+        {
+            "item": "tfc:ceramic/axe_head_mold"
+        },
+        {
+            "fluid": "tfc:metal/copper",
+            "nbt": {},
+            "amount": 100
+        }
+    ],
+    "results": [
+        {
+            "stack": {
+                "item": "tfc:ceramic/axe_head_mold",
+                "count": 1
+            }
+        }
+    ]
+}

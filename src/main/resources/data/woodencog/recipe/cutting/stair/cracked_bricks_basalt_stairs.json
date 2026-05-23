@@ -1,0 +1,13 @@
+{
+    "type": "create:cutting",
+    "ingredients": [
+        {
+            "item": "tfc:rock/cracked_bricks/basalt"
+        }
+    ],
+    "results": [
+        {
+            "id": "tfc:rock/cracked_bricks/basalt_stairs"
+        }
+    ]
+}

@@ -1,0 +1,13 @@
+{
+    "type": "create:cutting",
+    "ingredients": [
+        {
+            "item": "tfc:wood/planks/palm"
+        }
+    ],
+    "results": [
+        {
+            "id": "tfc:wood/planks/palm_stairs"
+        }
+    ]
+}

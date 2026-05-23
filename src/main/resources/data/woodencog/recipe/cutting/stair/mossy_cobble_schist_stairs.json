@@ -1,0 +1,13 @@
+{
+    "type": "create:cutting",
+    "ingredients": [
+        {
+            "item": "tfc:rock/mossy_cobble/schist"
+        }
+    ],
+    "results": [
+        {
+            "id": "tfc:rock/mossy_cobble/schist_stairs"
+        }
+    ]
+}

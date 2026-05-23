@@ -1,0 +1,16 @@
+{
+    "type": "create:cutting",
+    "ingredients": [
+        {
+            "item": "tfc:rock/cracked_bricks/limestone"
+        }
+    ],
+    "results": [
+        {
+            "id": "tfc:rock/cracked_bricks/limestone_slab"
+        },
+        {
+            "id": "tfc:rock/cracked_bricks/limestone_slab"
+        }
+    ]
+}

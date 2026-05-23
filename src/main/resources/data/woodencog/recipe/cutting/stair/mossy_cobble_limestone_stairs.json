@@ -1,0 +1,13 @@
+{
+    "type": "create:cutting",
+    "ingredients": [
+        {
+            "item": "tfc:rock/mossy_cobble/limestone"
+        }
+    ],
+    "results": [
+        {
+            "id": "tfc:rock/mossy_cobble/limestone_stairs"
+        }
+    ]
+}

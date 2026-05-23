@@ -1,0 +1,9 @@
+{
+    "type": "minecraft:smoking",
+    "ingredient": {
+        "item": "tfc:food/rye_dough"
+    },
+    "result": "tfc:food/rye_bread",
+    "experience": 0,
+    "cookingtime": 200
+}

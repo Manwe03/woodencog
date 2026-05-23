@@ -1,0 +1,32 @@
+{
+    "type": "create:crushing",
+    "ingredients": [
+        {
+            "item": "tfc:ore/rich_native_silver"
+        }
+    ],
+    "results": [
+        {
+            "id": "tfc:powder/native_silver"
+        },
+        {
+            "id": "tfc:powder/native_silver"
+        },
+        {
+            "id": "tfc:powder/native_silver"
+        },
+        {
+            "id": "tfc:powder/native_silver"
+        },
+        {
+            "id": "tfc:powder/native_silver"
+        },
+        {
+            "id": "tfc:powder/native_silver"
+        },
+        {
+            "id": "tfc:powder/native_silver"
+        }
+    ],
+    "processing_time": 400
+}

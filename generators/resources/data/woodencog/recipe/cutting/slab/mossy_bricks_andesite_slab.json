@@ -1,0 +1,16 @@
+{
+    "type": "create:cutting",
+    "ingredients": [
+        {
+            "item": "tfc:rock/mossy_bricks/andesite"
+        }
+    ],
+    "results": [
+        {
+            "id": "tfc:rock/mossy_bricks/andesite_slab"
+        },
+        {
+            "id": "tfc:rock/mossy_bricks/andesite_slab"
+        }
+    ]
+}

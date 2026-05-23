@@ -1,0 +1,9 @@
+{
+    "type": "minecraft:smelting",
+    "ingredient": {
+        "item": "tfc:ceramic/unfired_bowl"
+    },
+    "result": "tfc:ceramic/bowl",
+    "experience": 0,
+    "cookingtime": 200
+}

@@ -1,0 +1,14 @@
+{
+  "type": "tfc:rock_knapping",
+  "outside_slot_required": false,
+  "pattern": [
+    "XXXX ",
+    "XXXX "
+  ],
+  "result": {
+    "item": "create:andesite_alloy"
+  },
+  "ingredient": {
+    "tag": "tfc:igneous_extrusive_rock"
+  }
+}

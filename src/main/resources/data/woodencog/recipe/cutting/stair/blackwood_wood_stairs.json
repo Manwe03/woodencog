@@ -1,0 +1,13 @@
+{
+    "type": "create:cutting",
+    "ingredients": [
+        {
+            "item": "tfc:wood/planks/blackwood"
+        }
+    ],
+    "results": [
+        {
+            "id": "tfc:wood/planks/blackwood_stairs"
+        }
+    ]
+}

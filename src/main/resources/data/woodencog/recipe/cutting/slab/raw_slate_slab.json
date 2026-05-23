@@ -1,0 +1,16 @@
+{
+    "type": "create:cutting",
+    "ingredients": [
+        {
+            "item": "tfc:rock/raw/slate"
+        }
+    ],
+    "results": [
+        {
+            "id": "tfc:rock/raw/slate_slab"
+        },
+        {
+            "id": "tfc:rock/raw/slate_slab"
+        }
+    ]
+}

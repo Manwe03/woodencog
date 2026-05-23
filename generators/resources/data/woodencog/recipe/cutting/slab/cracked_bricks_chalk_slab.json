@@ -1,0 +1,16 @@
+{
+    "type": "create:cutting",
+    "ingredients": [
+        {
+            "item": "tfc:rock/cracked_bricks/chalk"
+        }
+    ],
+    "results": [
+        {
+            "id": "tfc:rock/cracked_bricks/chalk_slab"
+        },
+        {
+            "id": "tfc:rock/cracked_bricks/chalk_slab"
+        }
+    ]
+}

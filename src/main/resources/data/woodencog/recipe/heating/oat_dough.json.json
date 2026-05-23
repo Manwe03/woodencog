@@ -1,0 +1,9 @@
+{
+    "type": "minecraft:smoking",
+    "ingredient": {
+        "item": "tfc:food/oat_dough"
+    },
+    "result": "tfc:food/oat_bread",
+    "experience": 0,
+    "cookingtime": 200
+}

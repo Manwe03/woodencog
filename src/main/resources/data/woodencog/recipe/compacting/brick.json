@@ -1,0 +1,23 @@
+{
+    "type": "create:compacting",
+    "ingredients": [
+        {
+            "tag": "tfc:fire_clay_knapping"
+        },
+        {
+            "tag": "tfc:fire_clay_knapping"
+        },
+        {
+            "tag": "tfc:fire_clay_knapping"
+        },
+        {
+            "tag": "tfc:fire_clay_knapping"
+        }
+    ],
+    "results": [
+        {
+            "count": 3,
+            "id": "tfc:ceramic/unfired_fire_brick"
+        }
+    ]
+}

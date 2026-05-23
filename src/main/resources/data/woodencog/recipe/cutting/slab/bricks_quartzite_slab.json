@@ -1,0 +1,16 @@
+{
+    "type": "create:cutting",
+    "ingredients": [
+        {
+            "item": "tfc:rock/bricks/quartzite"
+        }
+    ],
+    "results": [
+        {
+            "id": "tfc:rock/bricks/quartzite_slab"
+        },
+        {
+            "id": "tfc:rock/bricks/quartzite_slab"
+        }
+    ]
+}

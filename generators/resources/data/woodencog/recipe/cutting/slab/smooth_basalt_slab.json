@@ -1,0 +1,16 @@
+{
+    "type": "create:cutting",
+    "ingredients": [
+        {
+            "item": "tfc:rock/smooth/basalt"
+        }
+    ],
+    "results": [
+        {
+            "id": "tfc:rock/smooth/basalt_slab"
+        },
+        {
+            "id": "tfc:rock/smooth/basalt_slab"
+        }
+    ]
+}

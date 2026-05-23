@@ -1,0 +1,13 @@
+{
+    "type": "create:cutting",
+    "ingredients": [
+        {
+            "item": "tfc:rock/hardened/limestone"
+        }
+    ],
+    "results": [
+        {
+            "id": "tfc:rock/smooth/limestone"
+        }
+    ]
+}

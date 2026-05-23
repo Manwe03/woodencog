@@ -1,0 +1,13 @@
+{
+    "type": "create:cutting",
+    "ingredients": [
+        {
+            "item": "tfc:rock/bricks/gabbro"
+        }
+    ],
+    "results": [
+        {
+            "id": "tfc:rock/chiseled/gabbro"
+        }
+    ]
+}

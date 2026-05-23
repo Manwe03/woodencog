@@ -1,0 +1,13 @@
+{
+    "type": "create:cutting",
+    "ingredients": [
+        {
+            "item": "tfc:rock/mossy_bricks/shale"
+        }
+    ],
+    "results": [
+        {
+            "id": "tfc:rock/mossy_bricks/shale_stairs"
+        }
+    ]
+}

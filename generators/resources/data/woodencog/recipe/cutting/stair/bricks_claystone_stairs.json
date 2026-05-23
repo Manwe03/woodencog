@@ -1,0 +1,13 @@
+{
+    "type": "create:cutting",
+    "ingredients": [
+        {
+            "item": "tfc:rock/bricks/claystone"
+        }
+    ],
+    "results": [
+        {
+            "id": "tfc:rock/bricks/claystone_stairs"
+        }
+    ]
+}

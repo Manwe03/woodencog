@@ -1,0 +1,20 @@
+{
+    "type": "create:mixing",
+    "ingredients": [
+        {
+            "tag": "tfc:foods/apples"
+        },
+        {
+            "type": "neoforge:single",
+            "amount": 500,
+            "fluid": "minecraft:water"
+        }
+    ],
+    "results": [
+        {
+            "fluid": "tfc:cider",
+            "amount": 500
+        }
+    ],
+    "processing_time": 7200
+}

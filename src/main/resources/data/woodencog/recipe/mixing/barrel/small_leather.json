@@ -1,0 +1,20 @@
+{
+    "type": "create:mixing",
+    "ingredients": [
+        {
+            "item": "tfc:small_prepared_hide"
+        },
+        {
+            "type": "neoforge:single",
+            "amount": 300,
+            "fluid": "tfc:tannin"
+        }
+    ],
+    "results": [
+        {
+            "count": 1,
+            "id": "minecraft:leather"
+        }
+    ],
+    "processing_time": 800
+}

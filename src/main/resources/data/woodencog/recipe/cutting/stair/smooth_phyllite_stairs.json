@@ -1,0 +1,13 @@
+{
+    "type": "create:cutting",
+    "ingredients": [
+        {
+            "item": "tfc:rock/smooth/phyllite"
+        }
+    ],
+    "results": [
+        {
+            "id": "tfc:rock/smooth/phyllite_stairs"
+        }
+    ]
+}

@@ -1,0 +1,13 @@
+{
+    "type": "create:cutting",
+    "ingredients": [
+        {
+            "item": "tfc:wood/planks/acacia"
+        }
+    ],
+    "results": [
+        {
+            "id": "tfc:wood/planks/acacia_stairs"
+        }
+    ]
+}
