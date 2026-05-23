@@ -62,12 +62,12 @@ public class WoodenCogHeatedMixingRecipeGen extends WoodenCogProcessinRecipeGen{
 
     private void oreMeltingRecipes(RecipeOutput recipeOutput){
 
-        forEachGradedOre((ore, oreItem, oreMetalFluid, oreDust, oreDustAmount, heatDefinition) -> {
+        forEachGradedOre((ore, oreItem, oreMetalFluid, oreDust, oreDustAmount, metalFluidAmount, heatDefinition) -> {
             if(oreMetalFluid == null) return;
 
             this.builder()
                     .withItemIngredients(HeatedIngredient.of(Ingredient.of(oreItem),heatDefinition.weldingTemperature(),3000))
-                    .withFluidOutputs(new FluidStack(oreMetalFluid,10))
+                    .withFluidOutputs(new FluidStack(oreMetalFluid,metalFluidAmount))
                     .requiresHeat(WoodenCogHeatCondition.of(heatDefinition.meltingTemperature()))
                     .build(recipeOutput, WoodenCog.asWoodencogResource(LOCATION,oreItem,"_to_liquid"));
         });

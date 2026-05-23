@@ -89,7 +89,8 @@ public abstract class WoodenCogProcessinRecipeGen {
             gradeItemIdMap.forEach((grade, itemId) -> {
                 Item oreItem = itemId.asItem();
                 int oreDustAmount = grade == Ore.Grade.POOR ? 3 : (grade == Ore.Grade.NORMAL ? 5 : 7);
-                action.accept(ore, oreItem, oreMetalFluid, oreDust, oreDustAmount, heatDefinition);
+                int metalFluidAmount = grade == Ore.Grade.POOR ? 15 : (grade == Ore.Grade.NORMAL ? 25 : 35);
+                action.accept(ore, oreItem, oreMetalFluid, oreDust, oreDustAmount, metalFluidAmount, heatDefinition);
             });
         });
     }
@@ -150,7 +151,7 @@ public abstract class WoodenCogProcessinRecipeGen {
 
     @FunctionalInterface
     public interface GradedOreAction {
-        void accept(Ore ore, Item oreItem, Fluid oreMetalFluid, Item oreDust, int oreDustAmount, DataGenStaticData.WoodencogHeatDefinition heatDefinition);
+        void accept(Ore ore, Item oreItem, Fluid oreMetalFluid, Item oreDust, int oreDustAmount, int metalFluidAmount, DataGenStaticData.WoodencogHeatDefinition heatDefinition);
     }
 
     @FunctionalInterface
