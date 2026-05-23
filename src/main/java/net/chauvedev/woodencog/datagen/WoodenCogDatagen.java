@@ -1,9 +1,7 @@
 package net.chauvedev.woodencog.datagen;
 
 import com.simibubi.create.foundation.data.recipe.CreateRecipeProvider;
-import com.simibubi.create.infrastructure.data.*;
 import net.chauvedev.woodencog.WoodenCog;
-import net.chauvedev.woodencog.datagen.recipe.WoodencogRecipeProvider;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.data.DataGenerator;
 import net.minecraft.data.PackOutput;
@@ -21,7 +19,6 @@ public class WoodenCogDatagen {
         CompletableFuture<HolderLookup.Provider> lookupProvider = event.getLookupProvider();
 
         if (event.includeServer()) {
-            CreateRecipeProvider.registerAllProcessing(generator, output, lookupProvider);
             generator.addProvider(true, new WoodencogRecipeProvider(output, lookupProvider));
             WoodencogRecipeProvider.registerAllProcessing(generator, output, lookupProvider);
         }

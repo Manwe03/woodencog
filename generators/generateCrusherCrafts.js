@@ -1,5 +1,5 @@
 import fs from "fs";
-import {crushing_path, tfcPaths} from "./generators.js";
+import {crushing_path, itemResult, tfcPaths, writeRecipe} from "./generators.js";
 import path from "path";
 
 export const generateCrusherCrafts = () => {
@@ -36,14 +36,10 @@ export const generateCrusherCrafts = () => {
                     "item": ingredient
                 }
             ],
-            "results": Array(quantity).fill(
-                {
-                    "item": result
-                }
-            ),
-            "processingTime": 400
+            "results": Array(quantity).fill(itemResult(result)),
+            "processing_time": 400
         }
-        fs.writeFileSync(`${crushing_path}/crushing_${file}`, JSON.stringify(data_crushing, null, 4), 'utf8')
+        writeRecipe(`${crushing_path}/crushing_${file}`, data_crushing)
 
         let data_milling = {
             "type": "create:milling",
@@ -57,14 +53,10 @@ export const generateCrusherCrafts = () => {
                         "item": ingredient
                     }
             ],
-            "results": Array(quantity).fill(
-                {
-                    "item": result
-                }
-            ),
-            "processingTime": 400
+            "results": Array(quantity).fill(itemResult(result)),
+            "processing_time": 400
         }
-        fs.writeFileSync(`${crushing_path}/milling_${file}`, JSON.stringify(data_milling, null, 4), 'utf8')
+        writeRecipe(`${crushing_path}/milling_${file}`, data_milling)
 
     });
 }

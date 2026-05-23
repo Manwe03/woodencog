@@ -1,5 +1,5 @@
 import fs from "fs";
-import {deploying_path} from "./generators.js";
+import {deploying_path, itemResult, writeRecipe} from "./generators.js";
 import {moldable_metals, moldables, metal_temps} from "./data.mjs";
 
 export const generateMoldToItem = () => {
@@ -27,16 +27,11 @@ export const generateMoldToItem = () => {
                     }
                 ],
                 "results": [
-                    {
-                        "item": `tfc:metal/${moldable.name}/${metal}`
-                    },
-                    {
-                        "item": `tfc:ceramic/${moldable.name}_mold`,
-                        "chance": 0.75
-                    }
+                    itemResult(`tfc:metal/${moldable.name}/${metal}`),
+                    itemResult(`tfc:ceramic/${moldable.name}_mold`, {"chance": 0.75})
                 ]
             }
-            fs.writeFileSync(`${deploying_path}/${moldable.name}_mold_of_${metal}_to_item.json`, JSON.stringify(craft, null, 4), 'utf8')
+            writeRecipe(`${deploying_path}/${moldable.name}_mold_of_${metal}_to_item.json`, craft)
         })
     })
 }

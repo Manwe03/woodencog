@@ -17,6 +17,7 @@ import net.chauvedev.woodencog.recipes.heatedRecipes.AllHeatedRecipeTypes;
 import net.chauvedev.woodencog.block.WoodencogBlocks;
 import net.chauvedev.woodencog.recipes.heatedRecipes.input.WoodenCogIngredients;
 import net.createmod.ponder.foundation.PonderIndex;
+import net.dries007.tfc.TerraFirmaCraft;
 import net.minecraft.client.renderer.blockentity.BlockEntityRenderers;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.resources.ResourceLocation;
@@ -93,6 +94,21 @@ public class WoodenCog {
      */
     public static ResourceLocation asWoodencogResource(Item item){
         return WoodenCog.asResource(BuiltInRegistries.ITEM.getKey(item).getPath());
+    }
+    /**
+     * Returns the input ResourceLocation as a WoodenCog ResourceLocation
+     * @param item
+     * @return modified item ResourceLocation
+     */
+    public static ResourceLocation asWoodencogResource(Item item, String additional){
+        return WoodenCog.asResource(BuiltInRegistries.ITEM.getKey(item).getPath()+ additional);
+    }
+    public static ResourceLocation asWoodencogResource(String prefix, Item item, String additional){
+        return WoodenCog.asResource(prefix + BuiltInRegistries.ITEM.getKey(item).getPath() + additional);
+    }
+
+    public static ResourceLocation asTFCResource(String path){
+        return ResourceLocation.fromNamespaceAndPath(TerraFirmaCraft.MOD_ID, path.toLowerCase());
     }
 }
 

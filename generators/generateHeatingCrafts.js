@@ -1,5 +1,5 @@
 import fs from "fs";
-import {heating_path, tfcPaths} from "./generators.js";
+import {heating_path, tfcPaths, writeRecipe} from "./generators.js";
 import path from "path";
 
 export const generateHeatingCrafts = () => {
@@ -20,6 +20,6 @@ export const generateHeatingCrafts = () => {
             "experience": 0.0,
             "cookingtime": 200
         }
-        fs.writeFileSync(`${heating_path}/${file}.json`, JSON.stringify(data, null, 4), 'utf8')
+        writeRecipe(`${heating_path}/${file}.json`, data)
     });
 }

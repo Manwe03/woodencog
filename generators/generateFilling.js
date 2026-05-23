@@ -1,6 +1,6 @@
 import {moldable_metals, moldables, metals, metal_temps} from "./data.mjs";
 import fs from "fs";
-import {advanced_filling_path} from "./generators.js";
+import {advanced_filling_path, writeRecipe} from "./generators.js";
 
 export const generateFilling = () => {
     metals.forEach(metal => {
@@ -27,7 +27,7 @@ export const generateFilling = () => {
         }
 
 
-        fs.writeFileSync(`${advanced_filling_path}/${metal}_to_mold.json`, JSON.stringify(craft, null, 4), 'utf8')
+        writeRecipe(`${advanced_filling_path}/${metal}_to_mold.json`, craft)
     });
 
     moldable_metals.forEach(metal => {
@@ -53,7 +53,7 @@ export const generateFilling = () => {
                     }
                 ]
             }
-            fs.writeFileSync(`${advanced_filling_path}/${metal}_to_${moldable.name}_mold.json`, JSON.stringify(craft, null, 4), 'utf8')
+            writeRecipe(`${advanced_filling_path}/${metal}_to_${moldable.name}_mold.json`, craft)
         })
     })
 }

@@ -1,6 +1,6 @@
 import fs from "fs";
 import path from "path";
-import {cutting_path, tfcPaths} from "./generators.js";
+import {cutting_path, itemResult, tfcPaths, writeRecipe} from "./generators.js";
 
 export const generateChiselCrafts = () => {
     ["slab", "smooth", "stair"].forEach(type => {
@@ -16,20 +16,16 @@ export const generateChiselCrafts = () => {
                     }
                 ],
                 "results": [
-                    {
-                        "item": json.result
-                    },
+                    itemResult(json.result),
                     (() => {
                         if(json?.extra_drop?.item !== undefined){
-                            return {
-                                "item": json?.extra_drop?.item
-                            }
+                            return itemResult(json?.extra_drop?.item)
                         }
                     })()
                 ].filter(result => result !== undefined)
             }
 
-            fs.writeFileSync(`${cutting_path}/${type}/${file}`, JSON.stringify(craft, null, 4), 'utf8')
+            writeRecipe(`${cutting_path}/${type}/${file}`, craft)
         });
     });
 }

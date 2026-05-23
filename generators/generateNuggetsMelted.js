@@ -1,5 +1,5 @@
 import fs from "fs";
-import {heated_mixing_path} from "./generators.js";
+import {heated_mixing_path, writeRecipe} from "./generators.js";
 
 export const generateNuggetsMelted = (name, result, min_temp) => {
     [
@@ -26,6 +26,6 @@ export const generateNuggetsMelted = (name, result, min_temp) => {
             ],
             "heatRequirement": min_temp
         }
-        fs.writeFileSync(`${heated_mixing_path}/nugget_${type.type}_to_liquid_${name}.json`, JSON.stringify(data, null, 4))
+        writeRecipe(`${heated_mixing_path}/nugget_${type.type}_to_liquid_${name}.json`, data)
     });
 }

@@ -1,9 +1,23 @@
 package net.chauvedev.woodencog.datagen;
 
+import net.chauvedev.woodencog.WoodenCog;
+import net.dries007.tfc.common.blocks.TFCBlocks;
+import net.dries007.tfc.common.blocks.rock.Ore;
+import net.dries007.tfc.common.items.TFCItems;
+import net.dries007.tfc.util.Helpers;
+import net.minecraft.core.registries.BuiltInRegistries;
+import net.minecraft.world.item.BlockItem;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.crafting.Ingredient;
+import net.minecraft.world.level.block.Block;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
+import java.util.function.Function;
+import java.util.function.Supplier;
 
 public class DataGenStaticData {
 
@@ -37,8 +51,8 @@ public class DataGenStaticData {
     public static Metal HIGH_CARBON_BLUE_STEEL = new Metal("high_carbon_blue_steel", 924, 1232,1540, 7850, 466, false);
     public static Metal HIGH_CARBON_RED_STEEL = new Metal("high_carbon_red_steel", 924, 1232,1540, 7850, 466, false);
 
-    public static final List<Ore> ORE_REGISTRY = new ArrayList<>();
-
+    public static final Map<Ore, Metal> ORE_REGISTRY = new HashMap<Ore, Metal>();
+/*
     public static Ore BISMUTHINITE = new Ore("bismuthinite",270,"bismuth");
     public static Ore CASSITERITE = new Ore("cassiterite",230,"tin");
     public static Ore GARNIERITE = new Ore("garnierite",1453,"nickel");
@@ -61,6 +75,7 @@ public class DataGenStaticData {
                 ORE_REGISTRY.add(this);
             }
         }
+*/
 
     public static class Metal {
         private final String name;
@@ -110,5 +125,32 @@ public class DataGenStaticData {
         public boolean hasDoubleIngot() {
             return doubleIngot;
         }
+    }
+
+    public static final Map<Ore, Item> SMALl_ORES = Helpers.mapOf(Ore.class, Ore::isGraded, (type) -> BuiltInRegistries.ITEM.get(WoodenCog.asTFCResource("ore/small_" + type.name())));
+
+    public record WoodencogHeatDefinition(int forgingTemperature, int weldingTemperature, int meltingTemperature) { }
+
+    public static Map<Ore, WoodencogHeatDefinition> ORE_HEAT_DEFINITION = new HashMap<>();
+
+    static {
+        ORE_HEAT_DEFINITION.put(Ore.NATIVE_COPPER, new WoodencogHeatDefinition(750, 900, 1085));
+        ORE_HEAT_DEFINITION.put(Ore.MALACHITE, new WoodencogHeatDefinition(750, 900, 1085));
+
+        ORE_HEAT_DEFINITION.put(Ore.NATIVE_SILVER, new WoodencogHeatDefinition(650, 800, 962));
+
+        ORE_HEAT_DEFINITION.put(Ore.NATIVE_GOLD, new WoodencogHeatDefinition(700, 850, 1064));
+
+        ORE_HEAT_DEFINITION.put(Ore.HEMATITE, new WoodencogHeatDefinition(1100, 1350, 1538));
+        ORE_HEAT_DEFINITION.put(Ore.MAGNETITE, new WoodencogHeatDefinition(1100, 1350, 1538));
+        ORE_HEAT_DEFINITION.put(Ore.LIMONITE, new WoodencogHeatDefinition(1050, 1300, 1530));
+
+        ORE_HEAT_DEFINITION.put(Ore.CASSITERITE, new WoodencogHeatDefinition(150, 200, 232));
+
+        ORE_HEAT_DEFINITION.put(Ore.BISMUTHINITE, new WoodencogHeatDefinition(180, 240, 271));
+
+        ORE_HEAT_DEFINITION.put(Ore.GARNIERITE, new WoodencogHeatDefinition(1100, 1300, 1455));
+        ORE_HEAT_DEFINITION.put(Ore.SPHALERITE, new WoodencogHeatDefinition(300, 380, 419));
+        ORE_HEAT_DEFINITION.put(Ore.TETRAHEDRITE, new WoodencogHeatDefinition(700, 850, 950));
     }
 }

@@ -1,6 +1,6 @@
 import fs from "fs";
 import path from "path";
-import {mixing_path, tfcPaths} from "./generators.js";
+import {fluidIngredient, itemResult, mixing_path, tfcPaths, writeRecipe} from "./generators.js";
 
 export const generateBarrelCrafts = () => {
     const barrel_crafts = fs.readdirSync(`${tfcPaths}/barrel`).filter(file => path.extname(file) === ".json");
@@ -72,25 +72,16 @@ export const generateBarrelCrafts = () => {
                     (() => {
                         if (ingredient_fluid) {
                             if (isfluidtag) {
-                                return {
-                                    "fluidTag": ingredient_fluid,
-                                    "amount": json.input_fluid.amount
-                                }
+                                return fluidIngredient(ingredient_fluid, json.input_fluid.amount, true)
                             }
-                            return {
-                                "fluid": ingredient_fluid,
-                                "amount": json.input_fluid.amount
-                            }
+                            return fluidIngredient(ingredient_fluid, json.input_fluid.amount)
                         }
                     })(),
                 ].filter(ingredient => ingredient !== undefined),
                 "results": [
                     (() => {
                         if (output_item_item) {
-                            return {
-                                "item": output_item_item,
-                                "count": output_item_count ?? 1
-                            }
+                            return itemResult(output_item_item, {"count": output_item_count ?? 1})
                         }
                     })(),
                     (() => {
@@ -102,9 +93,9 @@ export const generateBarrelCrafts = () => {
                         }
                     })(),
                 ].filter(item => item !== undefined),
-                "processingTime": duration
+                "processing_time": duration
             }
-            fs.writeFileSync(`${mixing_path}/barrel/${file}`, JSON.stringify(craft, null, 4), 'utf8')
+            writeRecipe(`${mixing_path}/barrel/${file}`, craft)
         } else if (json.type === "tfc:barrel_instant_fluid") {
             let {primary_fluid, added_fluid, output_fluid} = json;
             const craft = {
@@ -112,28 +103,16 @@ export const generateBarrelCrafts = () => {
                 "ingredients": [
                     (() => {
                         if (primary_fluid.ingredient?.tag !== undefined) {
-                            return {
-                                "fluidTag": primary_fluid.ingredient.tag,
-                                "amount": primary_fluid.amount
-                            }
+                            return fluidIngredient(primary_fluid.ingredient.tag, primary_fluid.amount, true)
                         } else {
-                            return {
-                                "fluid": primary_fluid.ingredient,
-                                "amount": primary_fluid.amount
-                            }
+                            return fluidIngredient(primary_fluid.ingredient, primary_fluid.amount)
                         }
                     })(),
                     (() => {
                         if (added_fluid.ingredient?.tag !== undefined) {
-                            return {
-                                "fluidTag": added_fluid.ingredient.tag,
-                                "amount": added_fluid.amount
-                            }
+                            return fluidIngredient(added_fluid.ingredient.tag, added_fluid.amount, true)
                         } else {
-                            return {
-                                "fluid": added_fluid.ingredient,
-                                "amount": added_fluid.amount
-                            }
+                            return fluidIngredient(added_fluid.ingredient, added_fluid.amount)
                         }
                     })()
                 ].filter(ingredient => ingredient !== undefined),
@@ -143,9 +122,9 @@ export const generateBarrelCrafts = () => {
                         "amount": output_fluid.amount
                     },
                 ],
-                "processingTime": 1
+                "processing_time": 1
             }
-            fs.writeFileSync(`${mixing_path}/barrel/${file}`, JSON.stringify(craft, null, 4), 'utf8')
+            writeRecipe(`${mixing_path}/barrel/${file}`, craft)
         }
     });
 }

@@ -1,0 +1,15 @@
+{
+  "type": "tfc:knapping",
+  "knapping_type": "tfc:rock",
+  "outside_slot_required": false,
+  "pattern": [
+    "XXXX ",
+    "XXXX "
+  ],
+  "result": {
+    "item": "create:andesite_alloy"
+  },
+  "ingredient": {
+    "tag": "woodencog:rocks/andesite"
+  }
+}

@@ -1,6 +1,6 @@
 import fs from "fs";
 import path from "path";
-import {compacting_path, cutting_path, tfcPaths} from "./generators.js";
+import {compacting_path, cutting_path, tfcPaths, writeRecipe} from "./generators.js";
 
 export const generateKnappingCrafts = () => {
     [
@@ -25,7 +25,7 @@ export const generateKnappingCrafts = () => {
                 ]
             }
 
-            fs.writeFileSync(`${type.path}/${file}`, JSON.stringify(craft, null, 4), 'utf8');
+            writeRecipe(`${type.path}/${file}`, craft);
         });
     });
 }

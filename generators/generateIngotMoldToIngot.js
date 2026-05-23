@@ -1,5 +1,5 @@
 import fs from "fs";
-import {deploying_path} from "./generators.js";
+import {deploying_path, itemResult, writeRecipe} from "./generators.js";
 
 export const generateIngotMoldToIngot = (name) => {
     let data = {
@@ -24,14 +24,9 @@ export const generateIngotMoldToIngot = (name) => {
             }
         ],
         "results": [
-            {
-                "item": `tfc:metal/ingot/${name}`
-            },
-            {
-                "item": "tfc:ceramic/ingot_mold",
-                "chance": 0.75
-            }
+            itemResult(`tfc:metal/ingot/${name}`),
+            itemResult("tfc:ceramic/ingot_mold", {"chance": 0.75})
         ]
     }
-    fs.writeFileSync(`${deploying_path}/mold_to_ingot_${name}.json`, JSON.stringify(data, null, 4), 'utf8')
+    writeRecipe(`${deploying_path}/mold_to_ingot_${name}.json`, data)
 }

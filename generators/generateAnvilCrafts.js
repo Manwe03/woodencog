@@ -1,6 +1,6 @@
 import fs from "fs";
 import path from "path";
-import {assetsPath, cutting_path, sequenced_assembly_path, tfcPaths} from "./generators.js";
+import {assetsPath, itemResult, sequenced_assembly_path, tfcPaths, writeRecipe} from "./generators.js";
 
 const anvils_translation = {
     // hit two time
@@ -14,9 +14,7 @@ const anvils_translation = {
                     }
                 ],
                 "results": [
-                    {
-                        "item": transitional
-                    }
+                    itemResult(transitional)
                 ]
             },
             {
@@ -64,9 +62,7 @@ const anvils_translation = {
                 }
             ],
             "results": [
-                {
-                    "item": transitional
-                }
+                itemResult(transitional)
             ]
         }
     },
@@ -82,9 +78,7 @@ const anvils_translation = {
                 }
             ],
             "results": [
-                {
-                    "item": transitional
-                }
+                itemResult(transitional)
             ]
         }
     },
@@ -100,9 +94,7 @@ const anvils_translation = {
                 }
             ],
             "results": [
-                {
-                    "item": transitional
-                }
+                itemResult(transitional)
             ]
         }
     },
@@ -118,9 +110,7 @@ const anvils_translation = {
                 }
             ],
             "results": [
-                {
-                    "item": transitional
-                }
+                itemResult(transitional)
             ]
         }
     }
@@ -139,7 +129,7 @@ export const generateAnvilCrafts = () => {
             "type": "create:sequenced_assembly",
             "ingredient": json.input,
             "loops": 1,
-            "results": [json.result],
+            "results": [itemResult(json.result.item, {"count": json.result.count})],
             "sequence": [
                 {
                     "type": "create:deploying",
@@ -152,24 +142,20 @@ export const generateAnvilCrafts = () => {
                         }
                     ],
                     "results": [
-                        {
-                            "item": transitional_name
-                        }
+                        itemResult(transitional_name)
                     ],
                     "keepHeldItem": true
                 },
                 types.map(type => anvils_translation[type](transitional_name)).flat()
             ].flat(),
-            "transitionalItem": {
-                "item": transitional_name
-            }
+            "transitional_item": itemResult(transitional_name)
         }
 
         const texture_id = json.result.item.replace("tfc:", "tfc:item/").replace("minecraft:", "item/");
         const path2 = transitional_name.replace("woodencog:", "").slice(0, -11);
         fs.mkdirSync(`${assetsPath}/woodencog/models/item/${path2}/`, { recursive: true }, (err) => console.error(err))
         fs.writeFileSync(`${assetsPath}/woodencog/models/item/${path2}/unfinished.json`, JSON.stringify({parent: texture_id}, null, 4), 'utf8');
-        fs.writeFileSync(`${sequenced_assembly_path}/${file}`, JSON.stringify(craft, null, 4), 'utf8')
+        writeRecipe(`${sequenced_assembly_path}/${file}`, craft)
     });
 }
 
