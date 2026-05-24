@@ -1,9 +1,0 @@
-{
-    "type": "minecraft:smoking",
-    "ingredient": {
-        "item": "tfc:food/wheat_dough"
-    },
-    "result": "tfc:food/wheat_bread",
-    "experience": 0,
-    "cookingtime": 200
-}

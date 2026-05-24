@@ -3,14 +3,10 @@ package net.chauvedev.woodencog.compat.jei;
 import com.simibubi.create.AllBlocks;
 import com.simibubi.create.AllFluids;
 import com.simibubi.create.AllItems;
-import com.simibubi.create.AllRecipeTypes;
 import com.simibubi.create.compat.jei.*;
-import com.simibubi.create.compat.jei.category.BasinCategory;
-import com.simibubi.create.compat.jei.category.CreateRecipeCategory;
-import com.simibubi.create.compat.jei.category.MillingCategory;
 import com.simibubi.create.content.equipment.blueprint.BlueprintScreen;
 import com.simibubi.create.content.fluids.potion.PotionFluid;
-import com.simibubi.create.content.kinetics.crusher.AbstractCrushingRecipe;
+import com.simibubi.create.content.kinetics.fan.processing.AllFanProcessingTypes;
 import com.simibubi.create.content.logistics.factoryBoard.FactoryPanelSetItemScreen;
 import com.simibubi.create.content.logistics.filter.AbstractFilterScreen;
 import com.simibubi.create.content.logistics.redstoneRequester.RedstoneRequesterScreen;
@@ -31,18 +27,19 @@ import net.chauvedev.woodencog.WoodenCog;
 import net.chauvedev.woodencog.recipes.heatedRecipes.AllHeatedRecipeTypes;
 import net.chauvedev.woodencog.recipes.heatedRecipes.HeatedProcessingRecipe;
 import net.chauvedev.woodencog.recipes.heatedRecipes.HeatedProcessingRecipeParams;
-import net.chauvedev.woodencog.recipes.heatedRecipes.recipes.HeatedBasinRecipe;
 import net.chauvedev.woodencog.recipes.heatedRecipes.recipes.HeatedCompactingRecipe;
 import net.chauvedev.woodencog.recipes.heatedRecipes.recipes.HeatedMixingRecipe;
 import net.chauvedev.woodencog.recipes.heatedRecipes.recipes.HeatedPressingRecipe;
 import net.chauvedev.woodencog.utils.CogUtil;
-import net.chauvedev.woodencog.utils.CreateBlocksAccess;
-import net.chauvedev.woodencog.utils.ItemAccess;
+import net.dries007.tfc.common.component.heat.HeatCapability;
+import net.dries007.tfc.common.recipes.HeatingRecipe;
+import net.dries007.tfc.common.recipes.TFCRecipeTypes;
+import net.dries007.tfc.common.recipes.outputs.ItemStackProvider;
+import net.dries007.tfc.compat.jei.category.HeatingRecipeCategory;
 import net.minecraft.client.Minecraft;
 import net.minecraft.core.Holder;
 import net.minecraft.core.RegistryAccess;
 import net.minecraft.core.registries.Registries;
-import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.Container;
 import net.minecraft.world.effect.MobEffect;
@@ -56,7 +53,6 @@ import net.neoforged.api.distmarker.OnlyIn;
 import net.neoforged.neoforge.fluids.FluidStack;
 import org.jetbrains.annotations.NotNull;
 
-import javax.annotation.Nonnull;
 import javax.annotation.ParametersAreNonnullByDefault;
 import java.util.*;
 import java.util.function.Supplier;
@@ -119,6 +115,53 @@ public class WoodenCogJEI implements IModPlugin {
         allCategories.forEach(c -> c.registerRecipes(registration));
 
         registration.addRecipes(RecipeTypes.CRAFTING, ToolboxColoringRecipeMaker.createRecipes().toList());
+        //Register dynamic blasting recipes in JEI
+        registration.addRecipes(CREATE_FAN_BLASTING, getTFCHeatingAsCreateFanBlasting());
+    }
+
+    private static final mezz.jei.api.recipe.RecipeType<RecipeHolder<AbstractCookingRecipe>> CREATE_FAN_BLASTING =
+            mezz.jei.api.recipe.RecipeType.createRecipeHolderType(
+                    ResourceLocation.fromNamespaceAndPath("create", "fan_blasting")
+            );
+
+    private List<RecipeHolder<AbstractCookingRecipe>> getTFCHeatingAsCreateFanBlasting() {
+        Level level = Minecraft.getInstance().level;
+        if (level == null) return List.of();
+
+        return level.getRecipeManager()
+                .getAllRecipesFor(TFCRecipeTypes.HEATING.get())
+                .stream()
+                .map(this::toFanBlastingRecipe)
+                .filter(Objects::nonNull)
+                .toList();
+    }
+
+    private RecipeHolder<AbstractCookingRecipe> toFanBlastingRecipe(RecipeHolder<HeatingRecipe> holder) {
+        HeatingRecipe heating = holder.value();
+
+        ItemStack[] inputs = heating.getIngredient().getItems();
+        if (inputs.length == 0) return null;
+
+        ItemStack input = inputs[0].copy();
+        ItemStack output = heating.assembleItem(input);
+
+        if (output.isEmpty()) return null;
+        if (!heating.assembleFluid(input).isEmpty()) return null;
+
+        for(ItemStack itemStack : heating.getIngredient().getItems()){
+            HeatCapability.setStaticTemperature(itemStack,heating.getTemperature());
+        }
+
+        AbstractCookingRecipe recipe = new BlastingRecipe(
+                "",
+                CookingBookCategory.MISC,
+                heating.getIngredient(),
+                output,
+                0.0F, 0
+        );
+
+        ResourceLocation id = WoodenCog.asWoodencogResource("as_fan_blasting",holder.id(),"");
+        return new RecipeHolder<>(id, recipe);
     }
 
     @Override

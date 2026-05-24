@@ -106,9 +106,18 @@ public class WoodenCog {
     public static ResourceLocation asWoodencogResource(String prefix, Item item, String additional){
         return WoodenCog.asResource(prefix + BuiltInRegistries.ITEM.getKey(item).getPath() + additional);
     }
-
     public static ResourceLocation asTFCResource(String path){
         return ResourceLocation.fromNamespaceAndPath(TerraFirmaCraft.MOD_ID, path.toLowerCase());
+    }
+
+    public static ResourceLocation asWoodencogResource(ResourceLocation resourceLocation){
+        return WoodenCog.asResource(resourceLocation.getPath());
+    }
+    public static ResourceLocation asWoodencogResource(String prefix, ResourceLocation resourceLocation){
+        return WoodenCog.asResource(prefix + resourceLocation.getPath());
+    }
+    public static ResourceLocation asWoodencogResource(String prefix, ResourceLocation resourceLocation, String sufix){
+        return WoodenCog.asResource(prefix + resourceLocation.getPath() + sufix);
     }
 }
 

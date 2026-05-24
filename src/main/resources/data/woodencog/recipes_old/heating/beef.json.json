@@ -1,9 +1,0 @@
-{
-    "type": "minecraft:smoking",
-    "ingredient": {
-        "item": "tfc:food/beef"
-    },
-    "result": "tfc:food/cooked_beef",
-    "experience": 0,
-    "cookingtime": 200
-}

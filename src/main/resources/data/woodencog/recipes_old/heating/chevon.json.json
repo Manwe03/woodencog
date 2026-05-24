@@ -1,9 +1,0 @@
-{
-    "type": "minecraft:smoking",
-    "ingredient": {
-        "item": "tfc:food/chevon"
-    },
-    "result": "tfc:food/cooked_chevon",
-    "experience": 0,
-    "cookingtime": 200
-}

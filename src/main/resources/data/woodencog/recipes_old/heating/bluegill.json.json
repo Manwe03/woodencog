@@ -1,9 +1,0 @@
-{
-    "type": "minecraft:smoking",
-    "ingredient": {
-        "item": "tfc:food/bluegill"
-    },
-    "result": "tfc:food/cooked_bluegill",
-    "experience": 0,
-    "cookingtime": 200
-}

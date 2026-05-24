@@ -1,9 +1,0 @@
-{
-    "type": "minecraft:smoking",
-    "ingredient": {
-        "item": "tfc:food/quail"
-    },
-    "result": "tfc:food/cooked_quail",
-    "experience": 0,
-    "cookingtime": 200
-}

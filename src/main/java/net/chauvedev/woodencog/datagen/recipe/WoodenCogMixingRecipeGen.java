@@ -2,6 +2,7 @@ package net.chauvedev.woodencog.datagen.recipe;
 
 import com.simibubi.create.api.data.recipe.MixingRecipeGen;
 import com.simibubi.create.content.processing.recipe.HeatCondition;
+import com.simibubi.create.content.processing.recipe.StandardProcessingRecipe;
 import net.chauvedev.woodencog.WoodenCog;
 import net.chauvedev.woodencog.utils.ModTags;
 import net.dries007.tfc.common.blocks.TFCBlocks;
@@ -10,14 +11,20 @@ import net.dries007.tfc.common.fluids.TFCFluids;
 import net.dries007.tfc.common.items.Powder;
 import net.dries007.tfc.common.items.TFCItems;
 import net.minecraft.core.HolderLookup;
+import net.minecraft.core.registries.BuiltInRegistries;
+import net.minecraft.core.registries.Registries;
 import net.minecraft.data.PackOutput;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.tags.TagKey;
 import net.minecraft.world.item.DyeColor;
 import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.crafting.Ingredient;
+import net.minecraft.world.level.ItemLike;
 import net.minecraft.world.level.material.FlowingFluid;
 import net.minecraft.world.level.material.Fluid;
 import net.minecraft.world.level.material.Fluids;
-import net.neoforged.neoforge.fluids.FluidStack;
-import net.neoforged.neoforge.fluids.crafting.FluidIngredient;
+import net.neoforged.neoforge.fluids.crafting.SizedFluidIngredient;
 
 import java.util.concurrent.CompletableFuture;
 
@@ -25,7 +32,44 @@ public class WoodenCogMixingRecipeGen extends MixingRecipeGen {
     public WoodenCogMixingRecipeGen(PackOutput output, CompletableFuture<HolderLookup.Provider> registries) {
         super(output, registries, WoodenCog.MOD_ID);
 
+        this.barrelRecipes();
         TFCFluids.COLORED_FLUIDS.keySet().forEach(this::dyeing);
+    }
+
+    private void barrelRecipes(){
+        GeneratedTFCBarrelMixingData.RECIPES.forEach(barrelRecipe -> {
+
+            GeneratedTFCBarrelMixingData.ItemInput inputItem = barrelRecipe.inputItem();
+            SizedFluidIngredient fluidIngredient1 = barrelRecipe.inputFluid();
+            SizedFluidIngredient fluidIngredient2 = barrelRecipe.addedFluid();
+
+            GeneratedTFCBarrelMixingData.FluidResult outputFluid = barrelRecipe.outputFluid();
+            GeneratedTFCBarrelMixingData.ItemResult outputItem = barrelRecipe.outputItem();
+
+            create(barrelRecipe.id(), b -> {
+                if (inputItem != null && inputItem.tag() != null) {
+                    b.require(inputItem.tag());
+                }
+                if(inputItem != null && !inputItem.items().isEmpty()){
+                    for (ItemLike input : inputItem.items()){
+                        b.require(input);
+                    }
+                }
+                if (fluidIngredient1 != null) {
+                    b.require(fluidIngredient1);
+                }
+                if (fluidIngredient2 != null) {
+                    b.require(fluidIngredient2);
+                }
+                if (outputFluid != null) {
+                    b.output(outputFluid.fluid(),outputFluid.amount());
+                }
+                if (outputItem != null) {
+                    b.output(outputItem.item(),outputItem.count());
+                }
+                return b.duration(barrelRecipe.processingTime()*20);
+            });
+        });
     }
 
     GeneratedRecipe
@@ -93,6 +137,8 @@ public class WoodenCogMixingRecipeGen extends MixingRecipeGen {
                         .output(TFCBlocks.POLISHED_ALABASTER.get(dyeColor).get())
                         .duration(600));
     }
+
+
 
     private Item getPowderItem(Powder powder) {
         return TFCItems.POWDERS.get(powder).get();

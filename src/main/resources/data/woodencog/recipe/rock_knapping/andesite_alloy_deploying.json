@@ -5,9 +5,10 @@
       "tag": "woodencog:rocks/andesite"
     },
     {
-      "tag": "tfc:chisels"
+      "tag": "c:tools/chisel"
     }
   ],
+  "keep_held_item": true,
   "results": [
     {
       "id": "create:andesite_alloy"

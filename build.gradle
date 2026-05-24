@@ -120,7 +120,8 @@ dependencies {
     implementation "com.tterrag.registrate:Registrate:${registrate_version}"
 
     //TERRAFIRMA-CRAFT
-    implementation "curse.maven:terrafirmacraft-302973:8063726"
+    implementation files("libs/TerraFirmaCraft-NeoForge-1.21.1-4.1.2.jar")
+    //implementation "curse.maven:terrafirmacraft-302973:8063726"
 
     //PATCHOULI
     compileOnly "vazkii.patchouli:Patchouli:${minecraft_version}-${patchouli_version}:api"
@@ -181,10 +182,12 @@ tasks.withType(JavaCompile).configureEach {
     options.encoding = 'UTF-8' // Use the UTF-8 charset for Java compilation
 }
 
-// IDEA no longer automatically downloads sources/javadoc jars for dependencies, so we need to explicitly enable the behavior.
+// CurseMaven artifacts generally do not publish sources/javadocs. Leaving automatic
+// downloads enabled makes IntelliJ create ijDownloadArtifact tasks for missing
+// -sources.jar files, which also prevents Gradle's configuration cache from being stored.
 idea {
     module {
-        downloadSources = true
-        downloadJavadoc = true
+        downloadSources = false
+        downloadJavadoc = false
     }
 }
