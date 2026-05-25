@@ -42,12 +42,8 @@ public class MixinBlockHelper {
             return tempList;
         } else {
             if (pState.getBlock() instanceof BloomBlock) {
-                int layerCount = pState.getValue(BloomBlock.LAYERS);
-                BloomBlockEntity bloomBlockEntity = (BloomBlockEntity)pLevel.getBlockEntity(pPos);
-                if (bloomBlockEntity != null) {
-                    for(int i = 0; i < layerCount; ++i) {
-                        bloomBlockEntity.dropBloom();
-                    }
+                if (pLevel.getBlockEntity(pPos) instanceof BloomBlockEntity bloomBlockEntity) {
+                    while (bloomBlockEntity.dropBloom()) {}
                 }
             }
 
