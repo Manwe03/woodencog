@@ -91,19 +91,16 @@ public class MixinFanProcessing {
             MixinFanProcessing.applyTemp(inputStack, cap, type, world.registryAccess());
             ItemStack result = MixinFanProcessing.applyTFCHeatingRecipe(inputStack, cap);
 
-            if(result.equals(inputStack)){
-                cir.setReturnValue(TransportedItemStackHandlerBehaviour.TransportedResult.doNothing());
-                return;
+            if(!result.equals(inputStack)) {
+                if (result == ItemStack.EMPTY) {
+                    cir.setReturnValue(TransportedItemStackHandlerBehaviour.TransportedResult.removeItem());
+                } else {
+                    TransportedItemStack newTransportedStack = transported.getSimilar();
+                    newTransportedStack.stack = result;
+                    cir.setReturnValue(TransportedItemStackHandlerBehaviour.TransportedResult.convertTo(newTransportedStack));
+                }
+                cir.cancel();
             }
-
-            if(result == ItemStack.EMPTY){
-                cir.setReturnValue(TransportedItemStackHandlerBehaviour.TransportedResult.removeItem());
-            }else{
-                TransportedItemStack newTransportedStack = transported.getSimilar();
-                newTransportedStack.stack = result;
-                cir.setReturnValue(TransportedItemStackHandlerBehaviour.TransportedResult.convertTo(newTransportedStack));
-            }
-            cir.cancel();
         }
     }
 
