@@ -8,6 +8,7 @@ import com.simibubi.create.content.processing.recipe.ProcessingRecipe;
 import com.simibubi.create.foundation.recipe.IRecipeTypeInfo;
 import net.chauvedev.woodencog.recipes.heatedRecipes.output.DynamicProcessingOutput;
 import net.chauvedev.woodencog.utils.HeatHandlingUtil;
+import net.dries007.tfc.common.component.heat.HeatCapability;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.core.NonNullList;
 import net.minecraft.network.FriendlyByteBuf;
@@ -144,8 +145,9 @@ public abstract class HeatedProcessingRecipe<I extends RecipeInput, P extends He
         List<ItemStack> results = new ArrayList<>();
         for(int i = 0; i < rollableResults.size(); ++i) {
             DynamicProcessingOutput<?> output = rollableResults.get(i);
-            DynamicProcessingOutput.setDynamicData(output,temp);
+            //DynamicProcessingOutput.setDynamicData(output,temp);
             ItemStack stack = i == 0 && this.forcedResult != null ? this.forcedResult.get() : output.rollOutput(randomSource);
+            HeatCapability.setTemperature(stack,temp);
             results.add(stack);
         }
         return results;

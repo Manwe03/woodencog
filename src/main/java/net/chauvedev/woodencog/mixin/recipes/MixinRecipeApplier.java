@@ -1,6 +1,7 @@
 package net.chauvedev.woodencog.mixin.recipes;
 
 import com.simibubi.create.foundation.recipe.RecipeApplier;
+import net.chauvedev.woodencog.WoodenCog;
 import net.chauvedev.woodencog.recipes.heatedRecipes.output.DynamicProcessingOutput;
 import net.chauvedev.woodencog.recipes.heatedRecipes.HeatedProcessingRecipe;
 import net.dries007.tfc.common.component.heat.HeatCapability;
@@ -44,8 +45,7 @@ public abstract class MixinRecipeApplier {
                             continue;
                         if (!ItemStack.isSameItemSameComponents(stack, previouslyRolled))
                             continue;
-                        int amount = Math.min(previouslyRolled.getMaxStackSize() - previouslyRolled.getCount(),
-                                stack.getCount());
+                        int amount = Math.min(previouslyRolled.getMaxStackSize() - previouslyRolled.getCount(), stack.getCount());
                         previouslyRolled.grow(amount);
                         stack.shrink(amount);
                     }
