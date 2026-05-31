@@ -13,7 +13,9 @@ import net.minecraft.core.registries.Registries;
 import net.minecraft.world.level.material.MapColor;
 
 public class WoodencogBlocks {
-    private static final CreateRegistrate REGISTRATE = WoodenCog.registrate();
+    private static final WoodenCogRegistrate REGISTRATE = WoodenCog.registrate();
+
+    static { REGISTRATE.setCreativeTab(WoodenCogCreativeModeTabs.WOODENCOG_TAB); }
 
     public static final BlockEntry<CTTransformerBlock> CT_TRANSFORMER = REGISTRATE.block("ct_transformer", CTTransformerBlock::new)
             .initialProperties(SharedProperties::stone)

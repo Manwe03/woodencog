@@ -35,5 +35,6 @@
   "woodencog.basin.selection_mode.auto_feed": "Use output fluids as input fluids",
   "woodencog.recipes.chain": "Mode",
 
-  "recipe.assembly.pressing": "Assembly Pressing"
+  "recipe.assembly.pressing": "Assembly Pressing",
+  "creativetab.woodencog": "WoodenCog"
 }

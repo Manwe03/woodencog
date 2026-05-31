@@ -1,0 +1,18 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "ingredients": [
+    {
+      "item": "create:clutch"
+    },
+    {
+      "tag": "minecraft:logs"
+    },
+    {
+      "tag": "tfc:axles"
+    }
+  ],
+  "result": {
+    "id": "woodencog:ct_transformer",
+    "count": 1
+  }
+}
