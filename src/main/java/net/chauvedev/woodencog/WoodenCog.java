@@ -1,8 +1,8 @@
 package net.chauvedev.woodencog;
 
 import com.mojang.logging.LogUtils;
-import com.simibubi.create.AllCreativeModeTabs;
-import com.simibubi.create.foundation.data.CreateRegistrate;
+import net.chauvedev.woodencog.block.WoodenCogCreativeModeTabs;
+import net.chauvedev.woodencog.block.WoodenCogRegistrate;
 import net.chauvedev.woodencog.block.generator.WoodenGeneratorRenderer;
 import net.chauvedev.woodencog.block.transformer.CTTransformerRenderer;
 import net.chauvedev.woodencog.block.WoodencogBlockEntityTypes;
@@ -20,14 +20,14 @@ import net.createmod.ponder.foundation.PonderIndex;
 import net.dries007.tfc.TerraFirmaCraft;
 import net.minecraft.client.renderer.blockentity.BlockEntityRenderers;
 import net.minecraft.core.registries.BuiltInRegistries;
+import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
-
+import net.minecraft.world.item.CreativeModeTab;
 import net.minecraft.world.item.Item;
 import net.neoforged.bus.api.IEventBus;
 import net.neoforged.fml.ModContainer;
 import net.neoforged.fml.common.Mod;
 import net.neoforged.fml.event.lifecycle.FMLClientSetupEvent;
-import net.neoforged.neoforge.event.BuildCreativeModeTabContentsEvent;
 import net.neoforged.neoforge.registries.RegisterEvent;
 import org.slf4j.Logger;
 
@@ -35,7 +35,8 @@ import org.slf4j.Logger;
 public class WoodenCog {
     public static final String MOD_ID = "woodencog";
     public static final Logger LOGGER = LogUtils.getLogger();
-    private static final CreateRegistrate REGISTRATE = CreateRegistrate.create(WoodenCog.MOD_ID);
+    private static final WoodenCogRegistrate REGISTRATE = WoodenCogRegistrate.create(WoodenCog.MOD_ID)
+            .defaultCreativeTab((ResourceKey<CreativeModeTab>) null);
 
     public WoodenCog(ModContainer container) {
         Compat.init(); //Load addon compatibility
@@ -43,6 +44,7 @@ public class WoodenCog {
         IEventBus modEventBus = container.getEventBus();
         modEventBus.addListener(this::onClientSetup);
         REGISTRATE.registerEventListeners(modEventBus);
+        WoodenCogCreativeModeTabs.register(modEventBus);
 
         WoodenCogCommonConfigs.register(container);
 
@@ -57,22 +59,14 @@ public class WoodenCog {
         modEventBus.addListener(WoodenCog::onRegister);
         modEventBus.addListener(WoodenCogDatagen::gatherData);
         modEventBus.addListener(DataPackRegistries::register);
-        //modEventBus.addListener(this::addCreative);
     }
 
-    public static CreateRegistrate registrate() {
+    public static WoodenCogRegistrate registrate() {
         return REGISTRATE;
     }
 
     public static void onRegister(final RegisterEvent event) {
         CustomArmInteractionPointTypes.init();
-    }
-
-    private void addCreative(BuildCreativeModeTabContentsEvent event){
-        if(event.getTabKey() == AllCreativeModeTabs.BASE_CREATIVE_TAB.getKey()){
-            event.accept(WoodencogBlocks.CT_TRANSFORMER.get());
-            event.accept(WoodencogBlocks.WOODEN_GENERATOR.get());
-        }
     }
 
     public void onClientSetup(final FMLClientSetupEvent event) {

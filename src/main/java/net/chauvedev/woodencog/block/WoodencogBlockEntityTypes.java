@@ -13,7 +13,7 @@ import net.chauvedev.woodencog.block.transformer.CTTransformerRenderer;
 
 public class WoodencogBlockEntityTypes {
 
-    private static final CreateRegistrate REGISTRATE = WoodenCog.registrate();
+    private static final WoodenCogRegistrate REGISTRATE = WoodenCog.registrate();
 
     public WoodencogBlockEntityTypes(){}
 
