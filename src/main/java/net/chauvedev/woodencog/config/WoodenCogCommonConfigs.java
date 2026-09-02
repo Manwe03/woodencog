@@ -4,7 +4,6 @@ import net.neoforged.fml.ModContainer;
 import net.neoforged.fml.config.ModConfig;
 import net.neoforged.neoforge.common.ModConfigSpec;
 
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -29,7 +28,7 @@ public class WoodenCogCommonConfigs {
     public static final ModConfigSpec.ConfigValue<Integer> WOODEN_GENERATOR_WIND_FACTOR;
     public static final ModConfigSpec.ConfigValue<Integer> WOODEN_GENERATOR_SPEED_FACTOR;
 
-    public static final Map<String, ModConfigSpec.ConfigValue<List<Integer>>> MATERIAL_PROPERTIES = new HashMap<>();
+    public static final Map<String, ModConfigSpec.ConfigValue<List<? extends Integer>>> MATERIAL_PROPERTIES = new HashMap<>();
 
     static {
         BUILDER.push("woodencog");
@@ -145,7 +144,13 @@ public class WoodenCogCommonConfigs {
     }
 
     private static void addDensityConfig(String itemId, int density, int heatCapacity) {
-        MATERIAL_PROPERTIES.put(itemId, BUILDER.define(itemId, Arrays.asList(density,heatCapacity)));
+        MATERIAL_PROPERTIES.put(itemId, BUILDER.defineList(
+            List.of(itemId),
+            () -> List.of(density, heatCapacity),
+            () -> 0,
+            element -> element instanceof Integer,
+            ModConfigSpec.Range.of(2, 2)
+        ));
     }
 
     public static void register(ModContainer container) {

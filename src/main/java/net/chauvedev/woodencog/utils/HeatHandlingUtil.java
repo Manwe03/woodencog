@@ -30,9 +30,9 @@ public class HeatHandlingUtil {
                 DataGenStaticData.Metal metal = DataGenStaticData.METAL_REGISTRY.get(key);
                 if(metal != null) return metal.getDensity() * metal.getHeatCapacity();
 
-                ModConfigSpec.ConfigValue<List<Integer>> configValue = WoodenCogCommonConfigs.MATERIAL_PROPERTIES.get(key);
+                ModConfigSpec.ConfigValue<List<? extends Integer>> configValue = WoodenCogCommonConfigs.MATERIAL_PROPERTIES.get(key);
                 if(configValue == null) return DEFAULT_VALUE;
-                List<Integer> properties = configValue.get();
+                List<? extends Integer> properties = configValue.get();
                 if(properties.size() != 2) {
                     return DEFAULT_VALUE;
                 }
